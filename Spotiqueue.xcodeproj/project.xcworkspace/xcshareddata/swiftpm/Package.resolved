@@ -9,6 +9,51 @@
           "revision": "96fb84f45a96630e7583903bd7e08cf095c7a7ef",
           "version": "19.0.0"
         }
+      },
+      {
+        "package": "OpenCombine",
+        "repositoryURL": "https://github.com/OpenCombine/OpenCombine.git",
+        "state": {
+          "branch": null,
+          "revision": "28993ae57de5a4ea7e164787636cafad442d568c",
+          "version": "0.12.0"
+        }
+      },
+      {
+        "package": "RegularExpressions",
+        "repositoryURL": "https://github.com/Peter-Schorn/RegularExpressions.git",
+        "state": {
+          "branch": null,
+          "revision": "0bd4269744f621931721a833b8ad228639d681f3",
+          "version": "2.1.3"
+        }
+      },
+      {
+        "package": "SpotifyAPI",
+        "repositoryURL": "https://github.com/Peter-Schorn/SpotifyAPI.git",
+        "state": {
+          "branch": "swift-tools-5-1",
+          "revision": "9272cf3da069cb5e684767f0c60277d426dbc481",
+          "version": null
+        }
+      },
+      {
+        "package": "swift-crypto",
+        "repositoryURL": "https://github.com/apple/swift-crypto.git",
+        "state": {
+          "branch": null,
+          "revision": "3bea268b223651c4ab7b7b9ad62ef9b2d4143eb6",
+          "version": "1.1.6"
+        }
+      },
+      {
+        "package": "swift-log",
+        "repositoryURL": "https://github.com/apple/swift-log.git",
+        "state": {
+          "branch": null,
+          "revision": "5d66f7ba25daf4f94100e7022febf3c75e37a6c7",
+          "version": "1.4.2"
+        }
       }
     ]
   },

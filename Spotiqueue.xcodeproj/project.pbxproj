@@ -10,6 +10,7 @@
 		DABEC90D2653534300CA3F67 /* SpotifySongTableRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABEC90C2653534300CA3F67 /* SpotifySongTableRow.swift */; };
 		DABEC90F26536F5800CA3F67 /* Secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABEC90E26536F5800CA3F67 /* Secrets.swift */; };
 		DABEC9122653799100CA3F67 /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = DABEC9112653799100CA3F67 /* KeychainSwift */; };
+		DABEC9172653878000CA3F67 /* SpotifyAPI in Frameworks */ = {isa = PBXBuildFile; productRef = DABEC9162653878000CA3F67 /* SpotifyAPI */; };
 		DAE1F18226534D660013704F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE1F18126534D660013704F /* AppDelegate.swift */; };
 		DAE1F18426534D670013704F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DAE1F18326534D670013704F /* Assets.xcassets */; };
 		DAE1F18726534D670013704F /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = DAE1F18526534D670013704F /* MainMenu.xib */; };
@@ -31,6 +32,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DABEC9172653878000CA3F67 /* SpotifyAPI in Frameworks */,
 				DABEC9122653799100CA3F67 /* KeychainSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -86,6 +88,7 @@
 			name = Spotiqueue;
 			packageProductDependencies = (
 				DABEC9112653799100CA3F67 /* KeychainSwift */,
+				DABEC9162653878000CA3F67 /* SpotifyAPI */,
 			);
 			productName = Spotiqueue;
 			productReference = DAE1F17E26534D660013704F /* Spotiqueue.app */;
@@ -117,6 +120,7 @@
 			mainGroup = DAE1F17526534D660013704F;
 			packageReferences = (
 				DABEC9102653799100CA3F67 /* XCRemoteSwiftPackageReference "keychain-swift" */,
+				DABEC9152653878000CA3F67 /* XCRemoteSwiftPackageReference "SpotifyAPI" */,
 			);
 			productRefGroup = DAE1F17F26534D660013704F /* Products */;
 			projectDirPath = "";
@@ -355,6 +359,14 @@
 				minimumVersion = 19.0.0;
 			};
 		};
+		DABEC9152653878000CA3F67 /* XCRemoteSwiftPackageReference "SpotifyAPI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Peter-Schorn/SpotifyAPI.git";
+			requirement = {
+				branch = "swift-tools-5-1";
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -362,6 +374,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = DABEC9102653799100CA3F67 /* XCRemoteSwiftPackageReference "keychain-swift" */;
 			productName = KeychainSwift;
+		};
+		DABEC9162653878000CA3F67 /* SpotifyAPI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DABEC9152653878000CA3F67 /* XCRemoteSwiftPackageReference "SpotifyAPI" */;
+			productName = SpotifyAPI;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
