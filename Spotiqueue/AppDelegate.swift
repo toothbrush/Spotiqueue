@@ -17,7 +17,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @objc dynamic var searchResults: Array<SpotifySongTableRow> = []
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
-        // Insert code here to initialize your application
+        initialiseSpotifyLibrary()
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {
@@ -31,6 +31,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
 
         searchResults.append(SpotifySongTableRow(songId: searchString))
+
+    }
+
+    func initialiseSpotifyLibrary() {
+        let client_id = Secrets.getSecret(s: .clientId)
+        let client_secret = Secrets.getSecret(s: .clientSecret)
 
     }
 

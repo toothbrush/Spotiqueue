@@ -3,11 +3,13 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		DABEC90D2653534300CA3F67 /* SpotifySongTableRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABEC90C2653534300CA3F67 /* SpotifySongTableRow.swift */; };
+		DABEC90F26536F5800CA3F67 /* Secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABEC90E26536F5800CA3F67 /* Secrets.swift */; };
+		DABEC9122653799100CA3F67 /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = DABEC9112653799100CA3F67 /* KeychainSwift */; };
 		DAE1F18226534D660013704F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE1F18126534D660013704F /* AppDelegate.swift */; };
 		DAE1F18426534D670013704F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DAE1F18326534D670013704F /* Assets.xcassets */; };
 		DAE1F18726534D670013704F /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = DAE1F18526534D670013704F /* MainMenu.xib */; };
@@ -15,6 +17,7 @@
 
 /* Begin PBXFileReference section */
 		DABEC90C2653534300CA3F67 /* SpotifySongTableRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifySongTableRow.swift; sourceTree = "<group>"; };
+		DABEC90E26536F5800CA3F67 /* Secrets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secrets.swift; sourceTree = "<group>"; };
 		DAE1F17E26534D660013704F /* Spotiqueue.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Spotiqueue.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAE1F18126534D660013704F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DAE1F18326534D670013704F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -28,6 +31,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DABEC9122653799100CA3F67 /* KeychainSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -59,6 +63,7 @@
 				DAE1F18826534D670013704F /* Info.plist */,
 				DAE1F18926534D670013704F /* Spotiqueue.entitlements */,
 				DABEC90C2653534300CA3F67 /* SpotifySongTableRow.swift */,
+				DABEC90E26536F5800CA3F67 /* Secrets.swift */,
 			);
 			path = Spotiqueue;
 			sourceTree = "<group>";
@@ -79,6 +84,9 @@
 			dependencies = (
 			);
 			name = Spotiqueue;
+			packageProductDependencies = (
+				DABEC9112653799100CA3F67 /* KeychainSwift */,
+			);
 			productName = Spotiqueue;
 			productReference = DAE1F17E26534D660013704F /* Spotiqueue.app */;
 			productType = "com.apple.product-type.application";
@@ -107,6 +115,9 @@
 				Base,
 			);
 			mainGroup = DAE1F17526534D660013704F;
+			packageReferences = (
+				DABEC9102653799100CA3F67 /* XCRemoteSwiftPackageReference "keychain-swift" */,
+			);
 			productRefGroup = DAE1F17F26534D660013704F /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -134,6 +145,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DAE1F18226534D660013704F /* AppDelegate.swift in Sources */,
+				DABEC90F26536F5800CA3F67 /* Secrets.swift in Sources */,
 				DABEC90D2653534300CA3F67 /* SpotifySongTableRow.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -272,7 +284,7 @@
 				CODE_SIGN_ENTITLEMENTS = Spotiqueue/Spotiqueue.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 38;
+				CURRENT_PROJECT_VERSION = 44;
 				DEVELOPMENT_TEAM = SDW28FS7J5;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = Spotiqueue/Info.plist;
@@ -295,7 +307,7 @@
 				CODE_SIGN_ENTITLEMENTS = Spotiqueue/Spotiqueue.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 38;
+				CURRENT_PROJECT_VERSION = 44;
 				DEVELOPMENT_TEAM = SDW28FS7J5;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = Spotiqueue/Info.plist;
@@ -333,6 +345,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		DABEC9102653799100CA3F67 /* XCRemoteSwiftPackageReference "keychain-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/evgenyneu/keychain-swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 19.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		DABEC9112653799100CA3F67 /* KeychainSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DABEC9102653799100CA3F67 /* XCRemoteSwiftPackageReference "keychain-swift" */;
+			productName = KeychainSwift;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = DAE1F17626534D660013704F /* Project object */;
 }
