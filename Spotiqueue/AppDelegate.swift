@@ -28,6 +28,24 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // Insert code here to tear down your application
     }
 
+    // from https://stackoverflow.com/questions/1991072/how-to-handle-with-a-default-url-scheme
+    func applicationWillFinishLaunching(_ notification: Notification) {
+        NSAppleEventManager
+            .shared()
+            .setEventHandler(
+                self,
+                andSelector: #selector(handleURL(event:reply:)),
+                forEventClass: AEEventClass(kInternetEventClass),
+                andEventID: AEEventID(kAEGetURL)
+        )
+    }
+
+    @objc func handleURL(event: NSAppleEventDescriptor, reply: NSAppleEventDescriptor) {
+        if let path = event.paramDescriptor(forKeyword: keyDirectObject)?.stringValue?.removingPercentEncoding {
+            NSLog("Opened URL: \(path)")
+        }
+    }
+
     @IBAction func searched(_ sender: NSSearchField) {
         let searchString = self.searchField.stringValue
         if searchString.isEmpty {
