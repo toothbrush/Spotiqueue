@@ -7,12 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DABEC90D2653534300CA3F67 /* SpotifySongTableRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABEC90C2653534300CA3F67 /* SpotifySongTableRow.swift */; };
 		DAE1F18226534D660013704F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE1F18126534D660013704F /* AppDelegate.swift */; };
 		DAE1F18426534D670013704F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DAE1F18326534D670013704F /* Assets.xcassets */; };
 		DAE1F18726534D670013704F /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = DAE1F18526534D670013704F /* MainMenu.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		DABEC90C2653534300CA3F67 /* SpotifySongTableRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifySongTableRow.swift; sourceTree = "<group>"; };
 		DAE1F17E26534D660013704F /* Spotiqueue.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Spotiqueue.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAE1F18126534D660013704F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DAE1F18326534D670013704F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -56,6 +58,7 @@
 				DAE1F18526534D670013704F /* MainMenu.xib */,
 				DAE1F18826534D670013704F /* Info.plist */,
 				DAE1F18926534D670013704F /* Spotiqueue.entitlements */,
+				DABEC90C2653534300CA3F67 /* SpotifySongTableRow.swift */,
 			);
 			path = Spotiqueue;
 			sourceTree = "<group>";
@@ -131,6 +134,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DAE1F18226534D660013704F /* AppDelegate.swift in Sources */,
+				DABEC90D2653534300CA3F67 /* SpotifySongTableRow.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -268,7 +272,7 @@
 				CODE_SIGN_ENTITLEMENTS = Spotiqueue/Spotiqueue.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 20;
+				CURRENT_PROJECT_VERSION = 38;
 				DEVELOPMENT_TEAM = SDW28FS7J5;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = Spotiqueue/Info.plist;
@@ -291,7 +295,7 @@
 				CODE_SIGN_ENTITLEMENTS = Spotiqueue/Spotiqueue.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 20;
+				CURRENT_PROJECT_VERSION = 38;
 				DEVELOPMENT_TEAM = SDW28FS7J5;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = Spotiqueue/Info.plist;
