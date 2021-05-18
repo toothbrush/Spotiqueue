@@ -32,9 +32,9 @@
         "package": "SpotifyAPI",
         "repositoryURL": "https://github.com/Peter-Schorn/SpotifyAPI.git",
         "state": {
-          "branch": "swift-tools-5-1",
-          "revision": "9272cf3da069cb5e684767f0c60277d426dbc481",
-          "version": null
+          "branch": null,
+          "revision": "23f769e927b0552e3c3955836361b3dd245cb3d8",
+          "version": "1.6.1"
         }
       },
       {
