@@ -7,6 +7,8 @@
 //
 
 import Cocoa
+import SpotifyWebAPI
+import Combine
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
@@ -40,9 +42,36 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         )
     }
 
+    private var cancellables = Set<AnyCancellable>()
+
     @objc func handleURL(event: NSAppleEventDescriptor, reply: NSAppleEventDescriptor) {
         if let path = event.paramDescriptor(forKeyword: keyDirectObject)?.stringValue?.removingPercentEncoding {
-            NSLog("Opened URL: \(path)")
+            if path.hasPrefix("spotiqueue://callback/") {
+                spotify.authorizationManager.requestAccessAndRefreshTokens(
+                    redirectURIWithQuery: URL(string: path)!,
+                    // Must match the code verifier that was used to generate the
+                    // code challenge when creating the authorization URL.
+                    codeVerifier: codeVerifier,
+                    // Must match the value used when creating the authorization URL.
+                    state: state
+                )
+                .sink(receiveCompletion: { completion in
+                    switch completion {
+                        case .finished:
+                            print("successfully authorized")
+                        case .failure(let error):
+                            if let authError = error as? SpotifyAuthorizationError, authError.accessWasDenied {
+                                print("The user denied the authorization request")
+                            }
+                            else {
+                                print("couldn't authorize application: \(error)")
+                            }
+                    }
+                })
+                .store(in: &cancellables)
+            } else {
+                fatalError("Oops, I don't recognise that URL.")
+            }
         }
     }
 
@@ -56,10 +85,37 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     }
 
+    var spotify: SpotifyAPI<AuthorizationCodeFlowPKCEManager>!
+    var codeVerifier: String!
+    var codeChallenge: String!
+    var state: String!
+
     func initialiseSpotifyLibrary() {
         let client_id = Secrets.getSecret(s: .clientId)
         let client_secret = Secrets.getSecret(s: .clientSecret)
+        spotify = SpotifyAPI(
+            authorizationManager: AuthorizationCodeFlowPKCEManager(
+                clientId: client_id,
+                clientSecret: client_secret
+            )
+        )
+        codeVerifier = String.randomURLSafe(length: 128)
+        codeChallenge = codeVerifier.makeCodeChallenge()
 
+        // optional, but strongly recommended
+        state = String.randomURLSafe(length: 128)
+        let authorizationURL = spotify.authorizationManager.makeAuthorizationURL(
+            redirectURI: URL(string: "spotiqueue://callback")!,
+            codeChallenge: codeChallenge,
+            state: state,
+            scopes: [
+                .playlistModifyPrivate,
+                .userModifyPlaybackState,
+                .playlistReadCollaborative,
+                .userReadPlaybackPosition
+            ]
+            )!
+        NSLog("authorizationURL: %@", authorizationURL.description)
     }
 
 }
