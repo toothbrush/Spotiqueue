@@ -100,6 +100,7 @@
 		DAE1F17626534D660013704F /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				CLASSPREFIX = RB;
 				LastSwiftUpdateCheck = 1130;
 				LastUpgradeCheck = 1130;
 				ORGANIZATIONNAME = "Rustling Broccoli";
