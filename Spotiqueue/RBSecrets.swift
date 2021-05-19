@@ -9,7 +9,7 @@
 import Cocoa
 import KeychainSwift
 
-class Secrets: NSObject {
+class RBSecrets: NSObject {
     enum Secret: String {
         case clientId = "spotiqueue_client_id"
         case clientSecret = "spotiqueue_client_secret"
@@ -21,8 +21,7 @@ class Secrets: NSObject {
         if let key = keychain.get(s.rawValue) {
             return key
         } else {
-            print(String.init(format: "Unable to load <%@> from login Keychain", s.rawValue))
-            fatalError()
+            fatalError(String.init(format: "Unable to load <%@> from login Keychain", s.rawValue))
         }
     }
 }

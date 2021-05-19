@@ -20,7 +20,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     // I also had to follow advice here https://stackoverflow.com/questions/46756535/xcode-cannot-resolve-the-entered-path-when-binding-control-in-xib-file because apparently in newer Swift, @objc dynamic isn't implied.
     // Here is another extensive howto around table views and such https://www.raywenderlich.com/921-cocoa-bindings-on-macos
 
-    @objc dynamic var searchResults: Array<SpotifySongTableRow> = []
+    @objc dynamic var searchResults: Array<RBSpotifySongTableRow> = []
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         initialiseSpotifyLibrary()
@@ -81,7 +81,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             return
         }
 
-        searchResults.append(SpotifySongTableRow(songId: searchString))
+        searchResults.append(RBSpotifySongTableRow(songId: searchString))
 
     }
 
@@ -91,8 +91,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var state: String!
 
     func initialiseSpotifyLibrary() {
-        let client_id = Secrets.getSecret(s: .clientId)
-        let client_secret = Secrets.getSecret(s: .clientSecret)
+        let client_id = RBSecrets.getSecret(s: .clientId)
+        let client_secret = RBSecrets.getSecret(s: .clientSecret)
         spotify = SpotifyAPI(
             authorizationManager: AuthorizationCodeFlowPKCEManager(
                 clientId: client_id,

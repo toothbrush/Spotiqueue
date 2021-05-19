@@ -8,7 +8,7 @@
 
 import Cocoa
 
-class SpotifySongTableRow: NSObject {
+class RBSpotifySongTableRow: NSObject {
     @objc dynamic var spotifyId: String
 
     init(songId: String) {
