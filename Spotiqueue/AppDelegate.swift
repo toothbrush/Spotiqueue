@@ -16,7 +16,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet weak var searchField: NSSearchFieldCell!
     @IBOutlet weak var window: NSWindow!
 
-    // Hooking up the Array Controller it was helpful to read     https://swiftrien.blogspot.com/2015/11/swift-example-binding-nstableview-to.html
+    // Hooking up the Array Controller it was helpful to read https://swiftrien.blogspot.com/2015/11/swift-example-binding-nstableview-to.html
     // I also had to follow advice here https://stackoverflow.com/questions/46756535/xcode-cannot-resolve-the-entered-path-when-binding-control-in-xib-file because apparently in newer Swift, @objc dynamic isn't implied.
     // Here is another extensive howto around table views and such https://www.raywenderlich.com/921-cocoa-bindings-on-macos
 
@@ -116,6 +116,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             ]
             )!
         NSLog("authorizationURL: %@", authorizationURL.description)
+        // TODO: Use something like https://github.com/Peter-Schorn/SpotifyAPI/wiki/Saving-authorization-information-to-persistent-storage. to manage the SpotifyAPI object and auth flow.
+
+        // also TODO: "You are strongly encouraged to inject an instance of this class into the root of your view hierarchy as an environment object using the environmentObject(_:) view modifier."
+        // https://www.hackingwithswift.com/quick-start/swiftui/how-to-use-environmentobject-to-share-data-between-views
+        NSWorkspace.shared.open(authorizationURL)
     }
 
 }
