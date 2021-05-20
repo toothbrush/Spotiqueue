@@ -40,4 +40,18 @@ class RBSearchTableView: NSTableView {
         return result
     }
 
+    override func resignFirstResponder() -> Bool {
+        self.usesAlternatingRowBackgroundColors = true
+        self.backgroundColor = NSColor.white
+        return super.resignFirstResponder()
+    }
+
+    override func becomeFirstResponder() -> Bool {
+        self.usesAlternatingRowBackgroundColors = false
+        self.backgroundColor = NSColor(srgbRed: 187.0/255.0,
+                                       green: 202.0/255.0,
+                                       blue: 1.0,
+                                       alpha: 0.4)
+        return super.becomeFirstResponder()
+    }
 }
