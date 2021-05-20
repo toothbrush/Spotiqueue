@@ -28,7 +28,7 @@ class RBSecrets: NSObject {
     }
 
     static func setSecret(s: Secret, v: Data) {
-        if !keychain.set(v, forKey: s.rawValue) {
+        if !keychain.set(v, forKey: s.rawValue, withAccess: .accessibleAfterFirstUnlock) {
             logger.critical("Failure to save <\(s.rawValue)> to keychain")
         }
     }
