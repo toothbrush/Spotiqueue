@@ -146,5 +146,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             spotify.authorize()
         }
     }
+
+    // Helper to give me a pointer to this AppDelegate object.
+    static func appDelegate() -> AppDelegate {
+        return NSApplication.shared.delegate as! AppDelegate
+    }
 }
 
