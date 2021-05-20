@@ -19,6 +19,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet weak var searchField: NSSearchFieldCell!
     @IBOutlet weak var window: NSWindow!
 
+    var spotify: RBSpotify = RBSpotify()
+
+    private var cancellables: Set<AnyCancellable> = []
+
     // Hooking up the Array Controller it was helpful to read https://swiftrien.blogspot.com/2015/11/swift-example-binding-nstableview-to.html
     // I also had to follow advice here https://stackoverflow.com/questions/46756535/xcode-cannot-resolve-the-entered-path-when-binding-control-in-xib-file because apparently in newer Swift, @objc dynamic isn't implied.
     // Here is another extensive howto around table views and such https://www.raywenderlich.com/921-cocoa-bindings-on-macos
@@ -45,35 +49,60 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         )
     }
 
-    private var cancellables = Set<AnyCancellable>()
-
     @objc func handleURL(event: NSAppleEventDescriptor, reply: NSAppleEventDescriptor) {
-        if let path = event.paramDescriptor(forKeyword: keyDirectObject)?.stringValue?.removingPercentEncoding {
-            if path.hasPrefix("spotiqueue://callback/") {
-                spotify.authorizationManager.requestAccessAndRefreshTokens(
-                    redirectURIWithQuery: URL(string: path)!,
-                    // Must match the code verifier that was used to generate the
-                    // code challenge when creating the authorization URL.
-                    codeVerifier: codeVerifier,
-                    // Must match the value used when creating the authorization URL.
-                    state: state
+        if let url = event.paramDescriptor(forKeyword: keyDirectObject)?.stringValue?.removingPercentEncoding {
+            if url.hasPrefix(RBSpotify.loginCallbackURL.description) {
+                logger.info("received redirect from Spotify: '\(url)'")
+                // This property is used to display an activity indicator in
+                // `LoginView` indicating that the access and refresh tokens
+                // are being retrieved.
+                spotify.isRetrievingTokens = true
+
+                // Complete the authorization process by requesting the
+                // access and refresh tokens.
+                spotify.api.authorizationManager.requestAccessAndRefreshTokens(
+                    redirectURIWithQuery: URL(string: url)!,
+                    // This value must be the same as the one used to create the
+                    // authorization URL. Otherwise, an error will be thrown.
+                    state: spotify.authorizationState
                 )
+                .receive(on: RunLoop.main)
                 .sink(receiveCompletion: { completion in
-                    switch completion {
-                        case .finished:
-                            logger.debug("successfully authorized")
-                        case .failure(let error):
-                            if let authError = error as? SpotifyAuthorizationError, authError.accessWasDenied {
-                                logger.warning("The user denied the authorization request")
-                            }
-                            else {
-                                logger.error("couldn't authorize application: \(error)")
-                            }
+                    // Whether the request succeeded or not, we need to remove
+                    // the activity indicator.
+                    self.spotify.isRetrievingTokens = false
+
+                    /*
+                     After the access and refresh tokens are retrieved,
+                     `SpotifyAPI.authorizationManagerDidChange` will emit a
+                     signal, causing `Spotify.handleChangesToAuthorizationManager()`
+                     to be called, which will dismiss the loginView if the app was
+                     successfully authorized by setting the
+                     @Published `Spotify.isAuthorized` property to `true`.
+
+                     The only thing we need to do here is handle the error and
+                     show it to the user if one was received.
+                     */
+                    if case .failure(let error) = completion {
+                        logger.error("couldn't retrieve access and refresh tokens:\n\(error)")
+                        if let authError = error as? SpotifyAuthorizationError,
+                           authError.accessWasDenied {
+                            logger.error("Authorisation request denied!")
+                        }
+                        else {
+                            logger.error("Couldn't Authorization With Your Account")
+                        }
                     }
                 })
                 .store(in: &cancellables)
+
+                // MARK: IMPORTANT: generate a new value for the state parameter
+                // MARK: after each authorization request. This ensures an incoming
+                // MARK: redirect from Spotify was the result of a request made by
+                // MARK: this app, and not an attacker.
+                self.spotify.authorizationState = String.randomURLSafe(length: 128)
             } else {
-                fatalError("Oops, I don't recognise that URL.")
+                logger.error("not handling URL: unexpected scheme: '\(url)'")
             }
         }
     }
@@ -88,43 +117,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     }
 
-    var spotify: SpotifyAPI<AuthorizationCodeFlowPKCEManager>!
-    var codeVerifier: String!
-    var codeChallenge: String!
-    var state: String!
-
     func initialiseSpotifyLibrary() {
-        let client_id = RBSecrets.getSecret(s: .clientId)
-        let client_secret = RBSecrets.getSecret(s: .clientSecret)
-        spotify = SpotifyAPI(
-            authorizationManager: AuthorizationCodeFlowPKCEManager(
-                clientId: client_id,
-                clientSecret: client_secret
-            )
-        )
-        codeVerifier = String.randomURLSafe(length: 128)
-        codeChallenge = codeVerifier.makeCodeChallenge()
-
-        // optional, but strongly recommended
-        state = String.randomURLSafe(length: 128)
-        let authorizationURL = spotify.authorizationManager.makeAuthorizationURL(
-            redirectURI: URL(string: "spotiqueue://callback")!,
-            codeChallenge: codeChallenge,
-            state: state,
-            scopes: [
-                .playlistModifyPrivate,
-                .userModifyPlaybackState,
-                .playlistReadCollaborative,
-                .userReadPlaybackPosition
-            ]
-            )!
-        logger.debug("authorizationURL: \(authorizationURL.description)")
-        // TODO: Use something like https://github.com/Peter-Schorn/SpotifyAPI/wiki/Saving-authorization-information-to-persistent-storage. to manage the SpotifyAPI object and auth flow.
-
-        // also TODO: "You are strongly encouraged to inject an instance of this class into the root of your view hierarchy as an environment object using the environmentObject(_:) view modifier."
-        // https://www.hackingwithswift.com/quick-start/swiftui/how-to-use-environmentobject-to-share-data-between-views
-        NSWorkspace.shared.open(authorizationURL)
+        if !spotify.isAuthorized {
+            spotify.authorize()
+        }
     }
-
 }
 
