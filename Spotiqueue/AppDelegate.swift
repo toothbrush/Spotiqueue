@@ -107,14 +107,38 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
-    @IBAction func searched(_ sender: NSSearchField) {
+    @IBAction func search(_ sender: NSSearchField) {
         let searchString = self.searchField.stringValue
         if searchString.isEmpty {
             return
         }
+        logger.info("Searching for \"\(searchString)\"...")
 
-        searchResults.append(RBSpotifySongTableRow(songId: searchString))
-
+        searchResults = []
+        // self.isSearching = true
+        spotify.api.search(
+            query: searchString,
+            categories: [.track],
+            limit: 50
+        )
+        .receive(on: RunLoop.main)
+        .sink(
+            receiveCompletion: { completion in
+                //self.isSearching = false
+                logger.info("receiveCompletion")
+                if case .failure(let error) = completion {
+                    logger.error("Couldn't perform search:")
+                    logger.error(error.localizedDescription)
+                }
+            },
+            receiveValue: { [self] searchResultsReturn in
+                logger.info("receiveValue")
+                for result in searchResultsReturn.tracks?.items ?? [] {
+                    searchResults.append(RBSpotifySongTableRow(t: result))
+                }
+                logger.info("Received \(self.searchResults.count) tracks")
+            }
+        ).store(in: &cancellables)
     }
 
     func initialiseSpotifyLibrary() {

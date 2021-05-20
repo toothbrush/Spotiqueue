@@ -7,12 +7,18 @@
 //
 
 import Cocoa
+import SpotifyWebAPI
 
 class RBSpotifySongTableRow: NSObject {
-    @objc dynamic var spotifyId: String
 
-    init(songId: String) {
-        spotifyId = songId
+    // TODO make this a getter.
+    @objc dynamic var title: String
+
+    var track: Track
+
+    init(t: Track) {
+        track = t
+        title = t.name
 
         // maybe go off and fetch song metadata in another thread.
     }
