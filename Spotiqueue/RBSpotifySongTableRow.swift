@@ -18,11 +18,12 @@ class RBSpotifySongTableRow: NSObject {
 
     var track: Track
 
-    init(t: Track) {
-        track = t
-        title = t.name
-        artist = t.consolidated_name()
-        album = t.album?.name ?? "<no album>"
-        track_number = t.trackNumber ?? 0
+    init(track: Track) {
+        self.track = track
+        self.title = track.name
+        self.artist = track.consolidated_name()
+        self.album = track.album?.name ?? "<no album>"
+        self.track_number = track.trackNumber ?? 0
+        super.init()
     }
 }

@@ -134,7 +134,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             receiveValue: { [self] searchResultsReturn in
                 logger.info("receiveValue")
                 for result in searchResultsReturn.tracks?.items ?? [] {
-                    searchResults.append(RBSpotifySongTableRow(t: result))
+                    searchResults.append(RBSpotifySongTableRow(track: result))
                 }
                 logger.info("Received \(self.searchResults.count) tracks")
             }
