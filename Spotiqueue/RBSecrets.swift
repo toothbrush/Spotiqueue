@@ -21,7 +21,8 @@ class RBSecrets: NSObject {
         if let key = keychain.get(s.rawValue) {
             return key
         } else {
-            fatalError(String.init(format: "Unable to load <%@> from login Keychain", s.rawValue))
+            logger.critical(String.init(format: "Unable to load <%@> from login Keychain", s.rawValue))
+            fatalError()
         }
     }
 }

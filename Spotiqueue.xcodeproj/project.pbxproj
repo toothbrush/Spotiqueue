@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DA5AFB0C2656591300C6C468 /* Stenographer in Frameworks */ = {isa = PBXBuildFile; productRef = DA5AFB0B2656591300C6C468 /* Stenographer */; };
 		DAAE2F012653EA1F00FF0344 /* SpotifyAPI in Frameworks */ = {isa = PBXBuildFile; productRef = DAAE2F002653EA1F00FF0344 /* SpotifyAPI */; };
 		DABEC90D2653534300CA3F67 /* RBSpotifySongTableRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABEC90C2653534300CA3F67 /* RBSpotifySongTableRow.swift */; };
 		DABEC90F26536F5800CA3F67 /* RBSecrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABEC90E26536F5800CA3F67 /* RBSecrets.swift */; };
@@ -34,6 +35,7 @@
 			files = (
 				DAAE2F012653EA1F00FF0344 /* SpotifyAPI in Frameworks */,
 				DABEC9122653799100CA3F67 /* KeychainSwift in Frameworks */,
+				DA5AFB0C2656591300C6C468 /* Stenographer in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -89,6 +91,7 @@
 			packageProductDependencies = (
 				DABEC9112653799100CA3F67 /* KeychainSwift */,
 				DAAE2F002653EA1F00FF0344 /* SpotifyAPI */,
+				DA5AFB0B2656591300C6C468 /* Stenographer */,
 			);
 			productName = Spotiqueue;
 			productReference = DAE1F17E26534D660013704F /* Spotiqueue.app */;
@@ -122,6 +125,7 @@
 			packageReferences = (
 				DABEC9102653799100CA3F67 /* XCRemoteSwiftPackageReference "keychain-swift" */,
 				DAAE2EFF2653EA1F00FF0344 /* XCRemoteSwiftPackageReference "SpotifyAPI" */,
+				DA5AFB0A2656591300C6C468 /* XCRemoteSwiftPackageReference "stenographer" */,
 			);
 			productRefGroup = DAE1F17F26534D660013704F /* Products */;
 			projectDirPath = "";
@@ -290,7 +294,7 @@
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 57;
+				CURRENT_PROJECT_VERSION = 59;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = Spotiqueue/Info.plist;
@@ -314,7 +318,7 @@
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 57;
+				CURRENT_PROJECT_VERSION = 59;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = Spotiqueue/Info.plist;
@@ -354,6 +358,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		DA5AFB0A2656591300C6C468 /* XCRemoteSwiftPackageReference "stenographer" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/t9mike/stenographer.git";
+			requirement = {
+				kind = revision;
+				revision = 839b227132ae606a0fcd46ceac9b5236b4318774;
+			};
+		};
 		DAAE2EFF2653EA1F00FF0344 /* XCRemoteSwiftPackageReference "SpotifyAPI" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Peter-Schorn/SpotifyAPI.git";
@@ -373,6 +385,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		DA5AFB0B2656591300C6C468 /* Stenographer */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DA5AFB0A2656591300C6C468 /* XCRemoteSwiftPackageReference "stenographer" */;
+			productName = Stenographer;
+		};
 		DAAE2F002653EA1F00FF0344 /* SpotifyAPI */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = DAAE2EFF2653EA1F00FF0344 /* XCRemoteSwiftPackageReference "SpotifyAPI" */;

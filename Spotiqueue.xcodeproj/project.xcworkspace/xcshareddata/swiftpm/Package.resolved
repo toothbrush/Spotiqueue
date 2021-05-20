@@ -38,6 +38,15 @@
         }
       },
       {
+        "package": "Stenographer",
+        "repositoryURL": "https://github.com/t9mike/stenographer.git",
+        "state": {
+          "branch": null,
+          "revision": "839b227132ae606a0fcd46ceac9b5236b4318774",
+          "version": null
+        }
+      },
+      {
         "package": "swift-crypto",
         "repositoryURL": "https://github.com/apple/swift-crypto.git",
         "state": {

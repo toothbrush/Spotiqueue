@@ -9,6 +9,9 @@
 import Cocoa
 import SpotifyWebAPI
 import Combine
+import Stenographer
+
+let logger = SXLogger()
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
@@ -58,13 +61,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 .sink(receiveCompletion: { completion in
                     switch completion {
                         case .finished:
-                            print("successfully authorized")
+                            logger.debug("successfully authorized")
                         case .failure(let error):
                             if let authError = error as? SpotifyAuthorizationError, authError.accessWasDenied {
-                                print("The user denied the authorization request")
+                                logger.warning("The user denied the authorization request")
                             }
                             else {
-                                print("couldn't authorize application: \(error)")
+                                logger.error("couldn't authorize application: \(error)")
                             }
                     }
                 })
@@ -115,7 +118,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 .userReadPlaybackPosition
             ]
             )!
-        NSLog("authorizationURL: %@", authorizationURL.description)
+        logger.debug("authorizationURL: \(authorizationURL.description)")
         // TODO: Use something like https://github.com/Peter-Schorn/SpotifyAPI/wiki/Saving-authorization-information-to-persistent-storage. to manage the SpotifyAPI object and auth flow.
 
         // also TODO: "You are strongly encouraged to inject an instance of this class into the root of your view hierarchy as an environment object using the environmentObject(_:) view modifier."
