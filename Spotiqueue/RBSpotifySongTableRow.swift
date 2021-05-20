@@ -11,15 +11,18 @@ import SpotifyWebAPI
 
 class RBSpotifySongTableRow: NSObject {
 
-    // TODO make this a getter.
     @objc dynamic var title: String
+    @objc dynamic var artist: String
+    @objc dynamic var album: String
+    @objc dynamic var track_number: Int
 
     var track: Track
 
     init(t: Track) {
         track = t
         title = t.name
-
-        // maybe go off and fetch song metadata in another thread.
+        artist = t.consolidated_name()
+        album = t.album?.name ?? "<no album>"
+        track_number = t.trackNumber ?? 0
     }
 }
