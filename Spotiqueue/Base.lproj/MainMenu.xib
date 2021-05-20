@@ -706,7 +706,7 @@
                             <rect key="frame" x="1" y="1" width="489" height="696"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnSelection="YES" autosaveColumns="NO" rowSizeStyle="automatic" headerView="t8H-AC-zSi" viewBased="YES" id="nXe-2G-u1l">
+                                <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnSelection="YES" autosaveColumns="NO" rowSizeStyle="automatic" headerView="t8H-AC-zSi" viewBased="YES" id="nXe-2G-u1l" customClass="RBSearchTableView" customModule="Spotiqueue" customModuleProvider="target">
                                     <rect key="frame" x="0.0" y="0.0" width="805" height="671"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <size key="intercellSpacing" width="3" height="2"/>
@@ -861,7 +861,7 @@
                                 </tableView>
                             </subviews>
                         </clipView>
-                        <scroller key="horizontalScroller" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="0.79113924050632911" horizontal="YES" id="fIp-fc-DAN">
+                        <scroller key="horizontalScroller" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="0.0031645569620253164" horizontal="YES" id="fIp-fc-DAN">
                             <rect key="frame" x="1" y="681" width="489" height="16"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
