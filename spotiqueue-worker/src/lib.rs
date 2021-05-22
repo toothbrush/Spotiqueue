@@ -12,23 +12,13 @@ use librespot::playback::player::Player;
 
 use lazy_static::lazy_static;
 use std::sync::Mutex;
-use std::sync::RwLock;
 
-use async_std::task;
 use tokio::runtime::Runtime;
 
 lazy_static! {
     static ref RUNTIME: Runtime = Runtime::new().unwrap();
-    static ref SESSION: RwLock<Option<Session>> = RwLock::new(None);
+    static ref SESSION: Mutex<Option<Session>> = Mutex::new(None);
     static ref PLAYER: Mutex<Option<Player>> = Mutex::new(None);
-}
-
-#[cfg(test)]
-mod tests {
-    #[test]
-    fn it_works() {
-        assert_eq!(2 + 2, 4);
-    }
 }
 
 fn c_str_to_rust_string(s_raw: *const c_char) -> &'static str {
@@ -65,8 +55,6 @@ pub extern "C" fn spotiqueue_initialize_worker(
 
     let credentials = Credentials::with_password(username, password);
 
-    // let track_id = SpotifyId::from_base62(&args[3]).unwrap();
-
     let backend = audio_backend::find(None).unwrap();
 
     println!("credentials: {:?} and {:?}", username, password);
@@ -78,22 +66,63 @@ pub extern "C" fn spotiqueue_initialize_worker(
             .unwrap()
     });
     {
-        let mut sess = SESSION.write().unwrap();
+        let mut sess = SESSION.lock().unwrap();
         *sess = Some(session);
     }
 
     println!("Authorized.");
 
-    let (player, _) = Player::new(
-        player_config,
-        SESSION.read().unwrap().as_ref().unwrap().clone(),
-        None,
-        move || backend(None, audio_format),
-    );
-    {
-        let mut play = PLAYER.lock().unwrap();
-        *play = Some(player);
+    return true;
+}
+
+#[allow(dead_code)]
+#[no_mangle]
+pub extern "C" fn spotiqueue_play_track(spotify_uri_raw: *const c_char) -> bool {
+    let spotify_uri = c_str_to_rust_string(spotify_uri_raw);
+    println!("Will play {}...", spotify_uri);
+
+    match track_id_from_spotify_uri(spotify_uri) {
+        Some(track) => {
+            let player_config = PlayerConfig::default();
+            let audio_format = AudioFormat::default();
+            let backend = audio_backend::find(None).unwrap();
+            let session: Session = SESSION.lock().unwrap().as_ref().unwrap().clone();
+            let (mut player, _) = Player::new(player_config, session, None, move || {
+                backend(None, audio_format)
+            });
+
+            player.load(track, true, 0);
+
+            // let sth = PLAYER.lock().unwrap();
+            // let mut player = sth.as_ref().unwrap();
+            // player.load(track, true, 0);
+            // &mut PLAYER
+            //     .lock()
+            //     .expect("lock was poisoned")
+            //     .as_ref()
+            //     .unwrap()
+            //     .load(track, true, 0);
+        }
+        None => {
+            println!("Looks like that isn't a Spotify track URI!");
+            return false;
+        }
     }
+    println!("Playing.");
 
     return true;
+}
+
+fn track_id_from_spotify_uri(uri: &str) -> Option<SpotifyId> {
+    // e.g., spotify:track:7lmeHLHBe4nmXzuXc0HDjk
+    let components: Vec<&str> = uri.split(":").collect();
+
+    if components.len() == 3 {
+        if components[1] == "track" {
+            let track_id = SpotifyId::from_base62(components[2]).unwrap();
+            return Some(track_id);
+        }
+    }
+
+    return None;
 }

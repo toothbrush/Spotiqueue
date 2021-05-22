@@ -10,4 +10,6 @@
 
 bool spotiqueue_initialize_worker(const char *username_raw, const char *password_raw);
 
+bool spotiqueue_play_track(const char *spotify_uri_raw);
+
 #endif /* spotiqueue_worker_h */

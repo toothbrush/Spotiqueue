@@ -20,6 +20,7 @@ class RBSearchTableView: NSTableView {
         if selectedTracks().count == 1 {
             logger.info("Attempt to play track: \(selectedTracks().first!)")
             logger.info(" -> that's track \(selectedTracks().first!.track.uri!)")
+            spotiqueue_play_track(selectedTracks().first!.track.uri!)
         }
     }
 
