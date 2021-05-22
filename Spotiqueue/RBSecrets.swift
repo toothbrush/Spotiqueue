@@ -19,6 +19,24 @@ class RBSecrets: NSObject {
 
     // let's use this to collect some secrets
     static func getSecret(s: Secret) -> String? {
+        #if DEBUG
+        let appSupportDir = FileManager.default.urls(for: .applicationSupportDirectory,
+                                                     in: .userDomainMask).first!
+        let fileURL = appSupportDir.appendingPathComponent("\(s.rawValue).txt")
+        logger.info("DEBUG mode - does \(fileURL) exist?")
+        if FileManager.default.fileExists(atPath: fileURL.path) {
+            logger.info("Attempting to read \(fileURL) because DEBUG is set.")
+            do {
+                let contentFromFile = try String(contentsOfFile: fileURL.path,
+                                                 encoding: .utf8)
+                return contentFromFile
+            }
+            catch let error {
+                logger.error("Error reading file: \(error)")
+            }
+        }
+        #endif
+
         logger.info("Retrieving <\(s.rawValue)> from keychain.")
         if let key = keychain.get(s.rawValue) {
             return key
@@ -28,6 +46,21 @@ class RBSecrets: NSObject {
     }
 
     static func setSecret(s: Secret, v: Data) {
+        #if DEBUG
+        let appSupportDir = FileManager.default.urls(for: .applicationSupportDirectory,
+                                                     in: .userDomainMask).first!
+        let fileURL = appSupportDir.appendingPathComponent("\(s.rawValue).txt")
+        logger.info("DEBUG mode - writing to \(fileURL).")
+        do {
+            try String(decoding: v, as: UTF8.self).write(toFile: fileURL.path,
+                                                         atomically: true,
+                                                         encoding: .utf8)
+        }
+        catch let error {
+            logger.error("Error writing file: \(error)")
+        }
+        #endif
+
         if !keychain.set(v, forKey: s.rawValue, withAccess: .accessibleAfterFirstUnlock) {
             logger.critical("Failure to save <\(s.rawValue)> to keychain")
         }
