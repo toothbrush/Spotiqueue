@@ -12,6 +12,9 @@
 		DA5AFB1026567AB300C6C468 /* TrackExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5AFB0F26567AB300C6C468 /* TrackExtensions.swift */; };
 		DA5AFB13265682D300C6C468 /* RBSearchTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5AFB12265682D300C6C468 /* RBSearchTableView.swift */; };
 		DA5AFB172658A6C500C6C468 /* libspotiqueue_worker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5AFB162658A6C500C6C468 /* libspotiqueue_worker.a */; };
+		DA5AFB1D2658B7BE00C6C468 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5AFB1C2658B7BE00C6C468 /* AudioToolbox.framework */; };
+		DA5AFB1F2658B7C800C6C468 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5AFB1E2658B7C700C6C468 /* CoreFoundation.framework */; };
+		DA5AFB212658B7D100C6C468 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5AFB202658B7D100C6C468 /* CoreAudio.framework */; };
 		DAAE2F012653EA1F00FF0344 /* SpotifyAPI in Frameworks */ = {isa = PBXBuildFile; productRef = DAAE2F002653EA1F00FF0344 /* SpotifyAPI */; };
 		DABEC90D2653534300CA3F67 /* RBSpotifySongTableRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABEC90C2653534300CA3F67 /* RBSpotifySongTableRow.swift */; };
 		DABEC90F26536F5800CA3F67 /* RBSecrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABEC90E26536F5800CA3F67 /* RBSecrets.swift */; };
@@ -27,6 +30,9 @@
 		DA5AFB12265682D300C6C468 /* RBSearchTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RBSearchTableView.swift; sourceTree = "<group>"; };
 		DA5AFB162658A6C500C6C468 /* libspotiqueue_worker.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libspotiqueue_worker.a; path = "spotiqueue-worker/target/debug/libspotiqueue_worker.a"; sourceTree = "<group>"; };
 		DA5AFB182658A6F400C6C468 /* Spotiqueue-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Spotiqueue-Bridging-Header.h"; sourceTree = "<group>"; };
+		DA5AFB1C2658B7BE00C6C468 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		DA5AFB1E2658B7C700C6C468 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
+		DA5AFB202658B7D100C6C468 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 		DABEC90C2653534300CA3F67 /* RBSpotifySongTableRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RBSpotifySongTableRow.swift; sourceTree = "<group>"; };
 		DABEC90E26536F5800CA3F67 /* RBSecrets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RBSecrets.swift; sourceTree = "<group>"; };
 		DAE1F17E26534D660013704F /* Spotiqueue.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Spotiqueue.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -42,6 +48,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DA5AFB212658B7D100C6C468 /* CoreAudio.framework in Frameworks */,
+				DA5AFB1F2658B7C800C6C468 /* CoreFoundation.framework in Frameworks */,
+				DA5AFB1D2658B7BE00C6C468 /* AudioToolbox.framework in Frameworks */,
 				DAAE2F012653EA1F00FF0344 /* SpotifyAPI in Frameworks */,
 				DABEC9122653799100CA3F67 /* KeychainSwift in Frameworks */,
 				DA5AFB0C2656591300C6C468 /* Stenographer in Frameworks */,
@@ -74,6 +83,9 @@
 		DA5AFB152658A6C500C6C468 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				DA5AFB202658B7D100C6C468 /* CoreAudio.framework */,
+				DA5AFB1E2658B7C700C6C468 /* CoreFoundation.framework */,
+				DA5AFB1C2658B7BE00C6C468 /* AudioToolbox.framework */,
 				DA5AFB162658A6C500C6C468 /* libspotiqueue_worker.a */,
 			);
 			name = Frameworks;
@@ -342,7 +354,7 @@
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 111;
+				CURRENT_PROJECT_VERSION = 114;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = Spotiqueue/Info.plist;
@@ -373,7 +385,7 @@
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 111;
+				CURRENT_PROJECT_VERSION = 114;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = Spotiqueue/Info.plist;
