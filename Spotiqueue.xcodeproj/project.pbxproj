@@ -56,6 +56,17 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
+		DA5AFB142658A15E00C6C468 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				DABEC90C2653534300CA3F67 /* RBSpotifySongTableRow.swift */,
+				DABEC90E26536F5800CA3F67 /* RBSecrets.swift */,
+				DA5AFB0D26565CD300C6C468 /* RBSpotify.swift */,
+				DA5AFB12265682D300C6C468 /* RBSearchTableView.swift */,
+			);
+			path = Classes;
+			sourceTree = "<group>";
+		};
 		DAE1F17526534D660013704F = {
 			isa = PBXGroup;
 			children = (
@@ -75,16 +86,13 @@
 		DAE1F18026534D660013704F /* Spotiqueue */ = {
 			isa = PBXGroup;
 			children = (
+				DA5AFB142658A15E00C6C468 /* Classes */,
 				DA5AFB1126567B2400C6C468 /* Extensions */,
 				DAE1F18126534D660013704F /* AppDelegate.swift */,
 				DAE1F18326534D670013704F /* Assets.xcassets */,
 				DAE1F18526534D670013704F /* MainMenu.xib */,
 				DAE1F18826534D670013704F /* Info.plist */,
 				DAE1F18926534D670013704F /* Spotiqueue.entitlements */,
-				DABEC90C2653534300CA3F67 /* RBSpotifySongTableRow.swift */,
-				DABEC90E26536F5800CA3F67 /* RBSecrets.swift */,
-				DA5AFB0D26565CD300C6C468 /* RBSpotify.swift */,
-				DA5AFB12265682D300C6C468 /* RBSearchTableView.swift */,
 			);
 			path = Spotiqueue;
 			sourceTree = "<group>";
