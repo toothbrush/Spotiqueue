@@ -11,11 +11,16 @@ use librespot::playback::config::{AudioFormat, PlayerConfig};
 use librespot::playback::player::Player;
 
 use lazy_static::lazy_static;
+use std::sync::Mutex;
+use std::sync::RwLock;
+
+use async_std::task;
 use tokio::runtime::Runtime;
 
 lazy_static! {
     static ref RUNTIME: Runtime = Runtime::new().unwrap();
-    static ref SESSION_CONFIG: SessionConfig = SessionConfig::default();
+    static ref SESSION: RwLock<Option<Session>> = RwLock::new(None);
+    static ref PLAYER: Mutex<Option<Player>> = Mutex::new(None);
 }
 
 #[cfg(test)]
@@ -66,14 +71,29 @@ pub extern "C" fn spotiqueue_initialize_worker(
 
     println!("credentials: {:?} and {:?}", username, password);
     println!("Authorizing...");
-    // let session = Session::connect(session_config, credentials, None)
-    //     .await
-    //     .unwrap();
+
+    let session: Session = RUNTIME.block_on(async {
+        Session::connect(session_config, credentials, None)
+            .await
+            .unwrap()
+    });
+    {
+        let mut sess = SESSION.write().unwrap();
+        *sess = Some(session);
+    }
+
     println!("Authorized.");
 
-    // let (mut player, _) = Player::new(player_config, session.clone(), None, move || {
-    //     backend(None, audio_format)
-    // });
+    let (player, _) = Player::new(
+        player_config,
+        SESSION.read().unwrap().as_ref().unwrap().clone(),
+        None,
+        move || backend(None, audio_format),
+    );
+    {
+        let mut play = PLAYER.lock().unwrap();
+        *play = Some(player);
+    }
 
     return true;
 }
