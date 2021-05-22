@@ -31,6 +31,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         initialiseSpotifyLibrary()
+        spotiqueue_initialize_worker("aasdf", "dfdfdfdf")
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {
