@@ -20,19 +20,8 @@ import SpotifyWebAPI
  */
 final class RBSpotify: ObservableObject {
 
-    private static let clientId: String = {
-        if let clientId = RBSecrets.getSecret(s: .clientId) {
-            return clientId
-        }
-        fatalError()
-    }()
-
-    private static let clientSecret: String = {
-        if let clientSecret = RBSecrets.getSecret(s: .clientSecret) {
-            return clientSecret
-        }
-        fatalError()
-    }()
+    private static let clientId: String = RBSecrets.getSecret(s: .clientId)!
+    private static let clientSecret: String = RBSecrets.getSecret(s: .clientSecret)!
 
     /// The URL that Spotify will redirect to after the user either
     /// authorizes or denies authorization for your application.
