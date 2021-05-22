@@ -31,7 +31,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         initialiseSpotifyLibrary()
-        spotiqueue_initialize_worker("aasdf", "dfdfdfdf")
+        spotiqueue_initialize_worker(RBSecrets.getSecret(s: .username),
+                                     RBSecrets.getSecret(s: .password))
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {
