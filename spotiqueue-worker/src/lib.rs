@@ -1,7 +1,6 @@
 use std::ffi::CStr;
 use std::os::raw::c_char;
-use std::sync::mpsc::sync_channel;
-use std::sync::mpsc::SyncSender;
+use std::sync::mpsc::{sync_channel, SyncSender};
 use std::thread;
 
 use librespot::core::authentication::Credentials;
@@ -21,6 +20,7 @@ extern crate log;
 use env_logger::Builder;
 use log::LevelFilter;
 
+#[allow(dead_code)]
 static RUNTIME: OnceCell<Runtime> = OnceCell::new();
 static STATE: OnceCell<State> = OnceCell::new();
 
@@ -81,7 +81,6 @@ fn c_str_to_rust_string(s_raw: *const c_char) -> String {
     return str_buf;
 }
 
-#[allow(dead_code)]
 #[no_mangle]
 pub extern "C" fn spotiqueue_initialize_worker(
     username_raw: *const c_char,
@@ -125,15 +124,13 @@ pub extern "C" fn spotiqueue_initialize_worker(
     return true;
 }
 
-#[allow(dead_code)]
 #[no_mangle]
 pub extern "C" fn spotiqueue_pause_playback() -> bool {
-    let state = STATE.get().unwrap().clone();
+    let state = STATE.get().unwrap();
     state.send_command(Command::Pause);
     return true;
 }
 
-#[allow(dead_code)]
 #[no_mangle]
 pub extern "C" fn spotiqueue_play_track(spotify_uri_raw: *const c_char) -> bool {
     let spotify_uri = c_str_to_rust_string(spotify_uri_raw);
@@ -141,7 +138,7 @@ pub extern "C" fn spotiqueue_play_track(spotify_uri_raw: *const c_char) -> bool 
 
     match track_id_from_spotify_uri(&spotify_uri) {
         Some(track) => {
-            let state = STATE.get().unwrap().clone();
+            let state = STATE.get().unwrap();
             state.send_command(Command::Play { track: track });
         }
         None => {
