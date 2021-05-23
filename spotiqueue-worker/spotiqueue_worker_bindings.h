@@ -8,6 +8,8 @@
 #include <stdint.h>
 #include <stdlib.h>
 
+void set_callback(void (*callback)(int32_t i));
+
 bool spotiqueue_initialize_worker(const char *username_raw, const char *password_raw);
 
 bool spotiqueue_pause_playback(void);

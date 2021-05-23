@@ -9,7 +9,7 @@ use librespot::core::session::Session;
 use librespot::core::spotify_id::SpotifyId;
 use librespot::playback::audio_backend;
 use librespot::playback::config::{AudioFormat, PlayerConfig};
-use librespot::playback::player::Player;
+use librespot::playback::player::{Player, PlayerEvent};
 
 use once_cell::sync::OnceCell;
 
@@ -23,6 +23,7 @@ use log::LevelFilter;
 #[allow(dead_code)]
 static RUNTIME: OnceCell<Runtime> = OnceCell::new();
 static STATE: OnceCell<State> = OnceCell::new();
+static CALLBACK: OnceCell<WorkerCallback> = OnceCell::new();
 
 trait New {
     fn new(player: Player, session: Session) -> Self;
@@ -47,6 +48,7 @@ impl New for State {
     fn new(mut player: Player, _session: Session) -> State {
         let (tx, rx) = sync_channel(0);
         let state = State { send_channel: tx };
+        let mut player_event_channel = player.get_player_event_channel();
         thread::spawn(move || loop {
             let cmd = rx.recv().unwrap();
             debug!("Command: {:?}", cmd);
@@ -55,6 +57,22 @@ impl New for State {
                 Command::Play { track } => {
                     player.stop();
                     player.load(track, true, 0);
+                }
+            }
+        });
+        info!("Spawning the player-event listening thread");
+        thread::spawn(move || loop {
+            let event: PlayerEvent = RUNTIME
+                .get()
+                .unwrap()
+                .block_on(async { player_event_channel.recv().await.unwrap() });
+            info!("PlayerEvent ==> {:?}", event);
+            match event {
+                PlayerEvent::EndOfTrack { .. } => {
+                    debug!("end of track.");
+                }
+                _ => {
+                    use_stored_callback(123);
                 }
             }
         });
@@ -79,6 +97,25 @@ fn c_str_to_rust_string(s_raw: *const c_char) -> String {
     let str_slice: &str = std::str::from_utf8(buf).unwrap();
     let str_buf: String = str_slice.to_owned();
     return str_buf;
+}
+
+#[repr(C)]
+#[derive(Debug)]
+pub struct WorkerCallback {
+    pub callback: extern "C" fn(i: i32),
+}
+
+// https://stackoverflow.com/questions/50188710/rust-function-that-allocates-memory-and-calls-a-c-callback-crashes
+#[no_mangle]
+pub extern "C" fn set_callback(callback: extern "C" fn(i: i32)) {
+    let tmp = Box::new(WorkerCallback { callback });
+    println!("tmp as ptr: {:p}", tmp);
+    CALLBACK.set(WorkerCallback { callback }).unwrap();
+}
+
+fn use_stored_callback(i: i32) {
+    let cb = CALLBACK.get().unwrap();
+    (cb.callback)(i);
 }
 
 #[no_mangle]

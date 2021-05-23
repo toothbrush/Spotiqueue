@@ -13,6 +13,12 @@ import Stenographer
 
 let logger = SXLogger()
 
+@_cdecl("say_hello")
+public func say_hello(i: Int32){
+    print("Hello, World!")
+    print("I received ", i)
+}
+
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
 
@@ -31,6 +37,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         initialiseSpotifyLibrary()
+        set_callback(say_hello(i:))
         spotiqueue_initialize_worker(RBSecrets.getSecret(s: .username),
                                      RBSecrets.getSecret(s: .password))
     }
