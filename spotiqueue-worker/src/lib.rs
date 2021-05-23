@@ -1,5 +1,9 @@
 use std::ffi::CStr;
+use std::fmt;
 use std::os::raw::c_char;
+use std::sync::mpsc::sync_channel;
+use std::sync::mpsc::SyncSender;
+use std::thread;
 
 use librespot::core::authentication::Credentials;
 use librespot::core::config::SessionConfig;
@@ -10,15 +14,52 @@ use librespot::playback::audio_backend;
 use librespot::playback::config::{AudioFormat, PlayerConfig};
 use librespot::playback::player::Player;
 
-use lazy_static::lazy_static;
-use std::sync::Mutex;
+use once_cell::sync::OnceCell;
 
 use tokio::runtime::Runtime;
 
-lazy_static! {
-    static ref RUNTIME: Runtime = Runtime::new().unwrap();
-    static ref SESSION: Mutex<Option<Session>> = Mutex::new(None);
-    static ref PLAYER: Mutex<Option<Player>> = Mutex::new(None);
+static RUNTIME: OnceCell<Runtime> = OnceCell::new();
+static STATE: OnceCell<State> = OnceCell::new();
+
+trait New {
+    fn new(player: Player, session: Session) -> Self;
+}
+
+trait SendCommand {
+    fn send_command(&self, command: String);
+}
+
+struct State {
+    send_channel: SyncSender<String>,
+}
+
+impl New for State {
+    fn new(mut player: Player, session: Session) -> State {
+        let (tx, rx) = sync_channel(0);
+        let state = State { send_channel: tx };
+        thread::spawn(move || {
+            loop {
+                let cmd = rx.recv().unwrap();
+                println!("Command: {}", cmd); //process commands here
+                player.stop();
+                let track = track_id_from_spotify_uri(&cmd);
+                player.load(track.unwrap(), true, 0);
+            }
+        });
+        return state;
+    }
+}
+
+impl SendCommand for State {
+    fn send_command(&self, command: String) {
+        self.send_channel.send(command).unwrap();
+    }
+}
+
+impl fmt::Debug for State {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "Hi: ")
+    }
 }
 
 fn c_str_to_rust_string(s_raw: *const c_char) -> &'static str {
@@ -41,14 +82,16 @@ pub extern "C" fn spotiqueue_initialize_worker(
     username_raw: *const c_char,
     password_raw: *const c_char,
 ) -> bool {
-    let session_config = SessionConfig::default();
-    let player_config = PlayerConfig::default();
-    let audio_format = AudioFormat::default();
+    RUNTIME.set(Runtime::new().unwrap()).unwrap();
 
     if username_raw.is_null() || password_raw.is_null() {
         println!("Username or password not provided correctly.");
         return false;
     }
+
+    let session_config = SessionConfig::default();
+    let player_config = PlayerConfig::default();
+    let audio_format = AudioFormat::default();
 
     let username = c_str_to_rust_string(username_raw);
     let password = c_str_to_rust_string(password_raw);
@@ -60,15 +103,16 @@ pub extern "C" fn spotiqueue_initialize_worker(
     println!("credentials: {:?} and {:?}", username, password);
     println!("Authorizing...");
 
-    let session: Session = RUNTIME.block_on(async {
+    let session: Session = RUNTIME.get().unwrap().block_on(async {
         Session::connect(session_config, credentials, None)
             .await
             .unwrap()
     });
-    {
-        let mut sess = SESSION.lock().unwrap();
-        *sess = Some(session);
-    }
+
+    let (mut player, _) = Player::new(player_config, session.clone(), None, move || {
+        backend(None, audio_format)
+    });
+    STATE.set(State::new(player, session)).unwrap();
 
     println!("Authorized.");
 
@@ -79,37 +123,18 @@ pub extern "C" fn spotiqueue_initialize_worker(
 #[no_mangle]
 pub extern "C" fn spotiqueue_play_track(spotify_uri_raw: *const c_char) -> bool {
     let spotify_uri = c_str_to_rust_string(spotify_uri_raw);
-    println!("Will play {}...", spotify_uri);
+    println!("Trying to play {}...", spotify_uri);
 
     match track_id_from_spotify_uri(spotify_uri) {
         Some(track) => {
-            let player_config = PlayerConfig::default();
-            let audio_format = AudioFormat::default();
-            let backend = audio_backend::find(None).unwrap();
-            let session: Session = SESSION.lock().unwrap().as_ref().unwrap().clone();
-            let (mut player, _) = Player::new(player_config, session, None, move || {
-                backend(None, audio_format)
-            });
-
-            player.load(track, true, 0);
-
-            // let sth = PLAYER.lock().unwrap();
-            // let mut player = sth.as_ref().unwrap();
-            // player.load(track, true, 0);
-            // &mut PLAYER
-            //     .lock()
-            //     .expect("lock was poisoned")
-            //     .as_ref()
-            //     .unwrap()
-            //     .load(track, true, 0);
+            let state = STATE.get().unwrap().clone();
+            state.send_command(spotify_uri.to_string());
         }
         None => {
             println!("Looks like that isn't a Spotify track URI!");
             return false;
         }
     }
-    println!("Playing.");
-
     return true;
 }
 

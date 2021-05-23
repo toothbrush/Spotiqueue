@@ -1731,6 +1731,7 @@ dependencies = [
  "cbindgen",
  "lazy_static",
  "librespot",
+ "once_cell",
  "tokio",
 ]
 
