@@ -24,9 +24,38 @@ class RBSearchTableView: NSTableView {
         }
     }
 
+    func selectRow(row: Int) {
+        if !(0..<self.numberOfRows).contains(row) {
+            return
+        }
+        self.scrollRowToVisible(row)
+        self.selectRowIndexes(IndexSet(integer: row),
+                              byExtendingSelection: false)
+    }
+
+    func selectNext() {
+        guard selectedRowIndexes.count == 1 else {
+            return
+        }
+        selectRow(row: self.selectedRow + 1)
+    }
+
+    func selectPrev() {
+        guard selectedRowIndexes.count == 1 else {
+            return
+        }
+        selectRow(row: self.selectedRow - 1)
+    }
+
     override func keyDown(with event: NSEvent) {
         if event.keyCode == 36 { // Enter/Return key
             enter()
+        } else if event.characters == "j"
+                    && event.modifierFlags.intersection(.deviceIndependentFlagsMask).isEmpty {
+            selectNext()
+        } else if event.characters == "k"
+                    && event.modifierFlags.intersection(.deviceIndependentFlagsMask).isEmpty {
+            selectPrev()
         } else {
             super.keyDown(with: event)
         }
