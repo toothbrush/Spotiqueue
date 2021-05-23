@@ -18,10 +18,21 @@ class RBQueueTableView: RBTableView {
         AppDelegate.appDelegate().playNextQueuedTrack()
     }
 
+    func delete() {
+        guard self.selectedRowIndexes.count > 0 else {
+            return
+        }
+        let firstDeletionIdx = self.selectedRowIndexes.first!
+        AppDelegate.appDelegate().queue.remove(atOffsets: self.selectedRowIndexes)
+        self.selectRow(row: firstDeletionIdx - 1)
+    }
+
     override func keyDown(with event: NSEvent) {
         //let flags = event.modifierFlags.intersection(.deviceIndependentFlagsMask)
         if event.keyCode == 36 { // Enter/Return key
             enter()
+        } else if event.keyCode == 51 { // Backspace
+            delete()
         } else {
             logger.info("Unrecognised key: \(event.keyCode)")
             super.keyDown(with: event)
