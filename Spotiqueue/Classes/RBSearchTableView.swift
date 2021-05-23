@@ -48,13 +48,14 @@ class RBSearchTableView: NSTableView {
     }
 
     override func keyDown(with event: NSEvent) {
+        let flags = event.modifierFlags.intersection(.deviceIndependentFlagsMask)
         if event.keyCode == 36 { // Enter/Return key
             enter()
         } else if event.characters == "j"
-                    && event.modifierFlags.intersection(.deviceIndependentFlagsMask).isEmpty {
+                    && flags.isEmpty {
             selectNext()
         } else if event.characters == "k"
-                    && event.modifierFlags.intersection(.deviceIndependentFlagsMask).isEmpty {
+                    && flags.isEmpty {
             selectPrev()
         } else {
             super.keyDown(with: event)
