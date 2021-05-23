@@ -13,10 +13,9 @@ import Stenographer
 
 let logger = SXLogger()
 
-@_cdecl("say_hello")
-public func say_hello(i: Int32){
-    print("Hello, World!")
-    print("I received ", i)
+@_cdecl("player_update_hook")
+public func player_update_hook(hook: StatusUpdate) {
+    logger.info("Hook ==> \(hook.rawValue)")
 }
 
 @NSApplicationMain
@@ -37,7 +36,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         initialiseSpotifyLibrary()
-        set_callback(say_hello(i:))
+        set_callback(player_update_hook(hook:))
         spotiqueue_initialize_worker(RBSecrets.getSecret(s: .username),
                                      RBSecrets.getSecret(s: .password))
     }

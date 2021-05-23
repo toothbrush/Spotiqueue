@@ -69,11 +69,26 @@ impl New for State {
             info!("PlayerEvent ==> {:?}", event);
             match event {
                 PlayerEvent::EndOfTrack { .. } => {
-                    debug!("end of track.");
+                    use_stored_callback(StatusUpdate::EndOfTrack);
                 }
-                _ => {
-                    use_stored_callback(123);
+                PlayerEvent::Paused { .. } => {
+                    use_stored_callback(StatusUpdate::Paused);
                 }
+                PlayerEvent::Playing { .. } => {
+                    use_stored_callback(StatusUpdate::Playing);
+                }
+                PlayerEvent::Stopped { .. } => {
+                    use_stored_callback(StatusUpdate::Stopped);
+                }
+                PlayerEvent::TimeToPreloadNextTrack { .. } => {
+                    use_stored_callback(StatusUpdate::TimeToPreloadNextTrack);
+                }
+                PlayerEvent::Changed { .. } => {}
+                PlayerEvent::Loading { .. } => {}
+                PlayerEvent::Preloading { .. } => {}
+                PlayerEvent::Started { .. } => {}
+                PlayerEvent::Unavailable { .. } => {}
+                PlayerEvent::VolumeSet { .. } => {}
             }
         });
         return state;
@@ -100,22 +115,28 @@ fn c_str_to_rust_string(s_raw: *const c_char) -> String {
 }
 
 #[repr(C)]
+pub enum StatusUpdate {
+    EndOfTrack,
+    Paused,
+    Playing,
+    Stopped,
+    TimeToPreloadNextTrack,
+}
+
 #[derive(Debug)]
 pub struct WorkerCallback {
-    pub callback: extern "C" fn(i: i32),
+    pub callback: extern "C" fn(status: StatusUpdate),
 }
 
 // https://stackoverflow.com/questions/50188710/rust-function-that-allocates-memory-and-calls-a-c-callback-crashes
 #[no_mangle]
-pub extern "C" fn set_callback(callback: extern "C" fn(i: i32)) {
-    let tmp = Box::new(WorkerCallback { callback });
-    println!("tmp as ptr: {:p}", tmp);
+pub extern "C" fn set_callback(callback: extern "C" fn(status: StatusUpdate)) {
     CALLBACK.set(WorkerCallback { callback }).unwrap();
 }
 
-fn use_stored_callback(i: i32) {
+fn use_stored_callback(status: StatusUpdate) {
     let cb = CALLBACK.get().unwrap();
-    (cb.callback)(i);
+    (cb.callback)(status);
 }
 
 #[no_mangle]

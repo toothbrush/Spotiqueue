@@ -8,7 +8,15 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-void set_callback(void (*callback)(int32_t i));
+typedef enum StatusUpdate {
+  EndOfTrack,
+  Paused,
+  Playing,
+  Stopped,
+  TimeToPreloadNextTrack,
+} StatusUpdate;
+
+void set_callback(void (*callback)(enum StatusUpdate status));
 
 bool spotiqueue_initialize_worker(const char *username_raw, const char *password_raw);
 
