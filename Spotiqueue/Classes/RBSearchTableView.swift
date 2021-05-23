@@ -47,6 +47,13 @@ class RBSearchTableView: NSTableView {
         selectRow(row: self.selectedRow - 1)
     }
 
+    func enqueueSelection() {
+        guard !selectedRowIndexes.isEmpty else {
+            return
+        }
+        AppDelegate.appDelegate().queue.append(contentsOf: self.selectedTracks())
+    }
+
     override func keyDown(with event: NSEvent) {
         let flags = event.modifierFlags.intersection(.deviceIndependentFlagsMask)
         if event.keyCode == 36 { // Enter/Return key
@@ -57,7 +64,11 @@ class RBSearchTableView: NSTableView {
         } else if event.characters == "k"
                     && flags.isEmpty {
             selectPrev()
+        } else if event.keyCode == 123 // left arrow
+                    && flags.contains(.command) {
+            enqueueSelection()
         } else {
+            logger.info("Unrecognised key: \(event.keyCode)")
             super.keyDown(with: event)
         }
     }

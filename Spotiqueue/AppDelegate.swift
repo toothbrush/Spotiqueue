@@ -27,6 +27,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet weak var window: NSWindow!
 
     @objc dynamic var searchResults: Array<RBSpotifySongTableRow> = []
+    @objc dynamic var queue: Array<RBSpotifySongTableRow> = []
 
     var spotify: RBSpotify = RBSpotify()
 
