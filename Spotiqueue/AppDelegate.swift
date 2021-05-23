@@ -21,7 +21,9 @@ public func player_update_hook(hook: StatusUpdate) {
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
 
-    @IBOutlet weak var searchField: NSSearchFieldCell!
+    @IBOutlet weak var searchTableView: RBSearchTableView!
+    @IBOutlet weak var searchField: NSSearchField!
+    @IBOutlet weak var searchFieldCell: NSSearchFieldCell!
     @IBOutlet weak var window: NSWindow!
 
     var spotify: RBSpotify = RBSpotify()
@@ -39,6 +41,25 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         set_callback(player_update_hook(hook:))
         spotiqueue_initialize_worker(RBSecrets.getSecret(s: .username),
                                      RBSecrets.getSecret(s: .password))
+        NSEvent.addLocalMonitorForEvents(matching: .keyDown) { ev in
+            self.eventSeen(event: ev)
+        }
+    }
+
+    func eventSeen(event:NSEvent) -> NSEvent? {
+        logger.info("I saw an event! \(event.description)")
+        logger.info("characters: >\(String(describing: event.characters))<")
+        logger.info("flagmask:   >\(event.modifierFlags.intersection(.deviceIndependentFlagsMask))<")
+        if event.modifierFlags.intersection(.deviceIndependentFlagsMask) == .command
+            && event.characters == "f" {
+            NSApplication.shared.windows.first?.makeFirstResponder(searchField)
+        } else if event.modifierFlags.intersection(.deviceIndependentFlagsMask) == .command
+                    && event.characters == "l" {
+            NSApplication.shared.windows.first?.makeFirstResponder(searchField)
+        } else {
+            return event
+        }
+        return nil
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {
@@ -116,7 +137,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     @IBAction func search(_ sender: NSSearchField) {
-        let searchString = self.searchField.stringValue
+        let searchString = self.searchFieldCell.stringValue
         if searchString.isEmpty {
             return
         }
@@ -147,6 +168,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 logger.info("Received \(self.searchResults.count) tracks")
             }
         ).store(in: &cancellables)
+        NSApplication.shared.windows.first?.makeFirstResponder(searchTableView)
     }
 
     func initialiseSpotifyLibrary() {
