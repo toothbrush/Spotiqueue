@@ -683,9 +683,9 @@
                     <box horizontalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="5TE-We-BfU">
                         <rect key="frame" x="510" y="0.0" width="5" height="768"/>
                     </box>
-                    <scrollView autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rTt-x6-oyB">
+                    <scrollView focusRingType="exterior" autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rTt-x6-oyB">
                         <rect key="frame" x="513" y="20" width="491" height="698"/>
-                        <clipView key="contentView" id="NVK-ot-Jnv">
+                        <clipView key="contentView" focusRingType="exterior" id="NVK-ot-Jnv">
                             <rect key="frame" x="1" y="1" width="489" height="696"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
