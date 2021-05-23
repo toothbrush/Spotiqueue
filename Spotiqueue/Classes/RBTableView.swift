@@ -40,6 +40,14 @@ class RBTableView: NSTableView {
         } else if event.characters == "k"
                     && flags.isEmpty {
             selectPrev()
+        } else if flags.isDisjoint(with: .command.union(.shift))
+                    && event.keyCode == 123 { // left
+            let queueTableView = AppDelegate.appDelegate().queueTableView
+            NSApplication.shared.windows.first?.makeFirstResponder(queueTableView)
+        } else if flags.isDisjoint(with: .command.union(.shift))
+                    && event.keyCode == 124 { // right
+            let searchTableView = AppDelegate.appDelegate().searchTableView
+            NSApplication.shared.windows.first?.makeFirstResponder(searchTableView)
         } else {
             logger.info("Unrecognised key: \(event.keyCode)")
             super.keyDown(with: event)

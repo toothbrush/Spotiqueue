@@ -15,6 +15,7 @@
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="Spotiqueue" customModuleProvider="target">
             <connections>
+                <outlet property="queueTableView" destination="6Nm-8I-o1Q" id="wXs-vo-FYF"/>
                 <outlet property="searchField" destination="T2h-BB-MEE" id="Olc-dc-Cro"/>
                 <outlet property="searchFieldCell" destination="EnN-fl-XWg" id="vRs-fB-Pan"/>
                 <outlet property="searchTableView" destination="nXe-2G-u1l" id="2g7-LC-9zd"/>

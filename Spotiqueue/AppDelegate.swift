@@ -29,6 +29,7 @@ public func player_update_hook(hook: StatusUpdate) {
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
 
+    @IBOutlet weak var queueTableView: RBQueueTableView!
     @IBOutlet weak var searchTableView: RBSearchTableView!
     @IBOutlet weak var searchField: NSSearchField!
     @IBOutlet weak var searchFieldCell: NSSearchFieldCell!
@@ -58,11 +59,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func eventSeen(event:NSEvent) -> NSEvent? {
         logger.info("I saw an event! \(event.description)")
         logger.info("characters: >\(String(describing: event.characters))<")
-        logger.info("flagmask:   >\(event.modifierFlags.intersection(.deviceIndependentFlagsMask))<")
-        if event.modifierFlags.intersection(.deviceIndependentFlagsMask) == .command
+        let flags = event.modifierFlags.intersection(.deviceIndependentFlagsMask)
+        if flags.contains(.command)
             && event.characters == "f" {
             NSApplication.shared.windows.first?.makeFirstResponder(searchField)
-        } else if event.modifierFlags.intersection(.deviceIndependentFlagsMask) == .command
+        } else if flags.contains(.command)
                     && event.characters == "l" {
             NSApplication.shared.windows.first?.makeFirstResponder(searchField)
         } else {
