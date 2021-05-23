@@ -16,6 +16,11 @@ use once_cell::sync::OnceCell;
 
 use tokio::runtime::Runtime;
 
+#[macro_use]
+extern crate log;
+use env_logger::Builder;
+use log::LevelFilter;
+
 static RUNTIME: OnceCell<Runtime> = OnceCell::new();
 static STATE: OnceCell<State> = OnceCell::new();
 
@@ -44,7 +49,7 @@ impl New for State {
         let state = State { send_channel: tx };
         thread::spawn(move || loop {
             let cmd = rx.recv().unwrap();
-            println!("Command: {:?}", cmd);
+            debug!("Command: {:?}", cmd);
             match cmd {
                 Command::Pause => player.pause(),
                 Command::Play { track } => {
@@ -65,7 +70,7 @@ impl SendCommand for State {
 
 fn c_str_to_rust_string(s_raw: *const c_char) -> String {
     if s_raw.is_null() {
-        println!("Null string!");
+        error!("Null string!");
         return "".to_owned();
     }
     // take string from the input C string
@@ -82,10 +87,12 @@ pub extern "C" fn spotiqueue_initialize_worker(
     username_raw: *const c_char,
     password_raw: *const c_char,
 ) -> bool {
+    Builder::new().filter_level(LevelFilter::Debug).init();
+
     RUNTIME.set(Runtime::new().unwrap()).unwrap();
 
     if username_raw.is_null() || password_raw.is_null() {
-        println!("Username or password not provided correctly.");
+        error!("Username or password not provided correctly.");
         return false;
     }
 
@@ -100,7 +107,7 @@ pub extern "C" fn spotiqueue_initialize_worker(
 
     let backend = audio_backend::find(None).unwrap();
 
-    println!("Authorizing...");
+    info!("Authorizing...");
 
     let session: Session = RUNTIME.get().unwrap().block_on(async {
         Session::connect(session_config, credentials, None)
@@ -113,7 +120,7 @@ pub extern "C" fn spotiqueue_initialize_worker(
     });
     STATE.set(State::new(player, session)).unwrap();
 
-    println!("Authorized.");
+    info!("Authorized.");
 
     return true;
 }
@@ -130,7 +137,7 @@ pub extern "C" fn spotiqueue_pause_playback() -> bool {
 #[no_mangle]
 pub extern "C" fn spotiqueue_play_track(spotify_uri_raw: *const c_char) -> bool {
     let spotify_uri = c_str_to_rust_string(spotify_uri_raw);
-    println!("Trying to play {}...", spotify_uri);
+    info!("Trying to play {}...", spotify_uri);
 
     match track_id_from_spotify_uri(&spotify_uri) {
         Some(track) => {
@@ -138,7 +145,7 @@ pub extern "C" fn spotiqueue_play_track(spotify_uri_raw: *const c_char) -> bool 
             state.send_command(Command::Play { track: track });
         }
         None => {
-            println!("Looks like that isn't a Spotify track URI!");
+            error!("Looks like that isn't a Spotify track URI!");
             return false;
         }
     }
