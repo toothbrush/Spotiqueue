@@ -1,5 +1,4 @@
 use std::ffi::CStr;
-use std::fmt;
 use std::os::raw::c_char;
 use std::sync::mpsc::sync_channel;
 use std::sync::mpsc::SyncSender;
@@ -9,7 +8,6 @@ use librespot::core::authentication::Credentials;
 use librespot::core::config::SessionConfig;
 use librespot::core::session::Session;
 use librespot::core::spotify_id::SpotifyId;
-use librespot::metadata::{Metadata, Track};
 use librespot::playback::audio_backend;
 use librespot::playback::config::{AudioFormat, PlayerConfig};
 use librespot::playback::player::Player;
@@ -26,24 +24,33 @@ trait New {
 }
 
 trait SendCommand {
-    fn send_command(&self, command: String);
+    fn send_command(&self, command: Command);
 }
 
+#[derive(Debug)]
 struct State {
-    send_channel: SyncSender<String>,
+    send_channel: SyncSender<Command>,
+}
+
+#[derive(Debug)]
+enum Command {
+    Pause,
+    Play { track: SpotifyId },
 }
 
 impl New for State {
-    fn new(mut player: Player, session: Session) -> State {
+    fn new(mut player: Player, _session: Session) -> State {
         let (tx, rx) = sync_channel(0);
         let state = State { send_channel: tx };
-        thread::spawn(move || {
-            loop {
-                let cmd = rx.recv().unwrap();
-                println!("Command: {}", cmd); //process commands here
-                player.stop();
-                let track = track_id_from_spotify_uri(&cmd);
-                player.load(track.unwrap(), true, 0);
+        thread::spawn(move || loop {
+            let cmd = rx.recv().unwrap();
+            println!("Command: {:?}", cmd);
+            match cmd {
+                Command::Pause => player.pause(),
+                Command::Play { track } => {
+                    player.stop();
+                    player.load(track, true, 0);
+                }
             }
         });
         return state;
@@ -51,29 +58,22 @@ impl New for State {
 }
 
 impl SendCommand for State {
-    fn send_command(&self, command: String) {
+    fn send_command(&self, command: Command) {
         self.send_channel.send(command).unwrap();
     }
 }
 
-impl fmt::Debug for State {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "Hi: ")
-    }
-}
-
-fn c_str_to_rust_string(s_raw: *const c_char) -> &'static str {
+fn c_str_to_rust_string(s_raw: *const c_char) -> String {
     if s_raw.is_null() {
         println!("Null string!");
-        return "";
+        return "".to_owned();
     }
     // take string from the input C string
     let c_str: &CStr = unsafe { CStr::from_ptr(s_raw) };
     let buf: &[u8] = c_str.to_bytes();
     let str_slice: &str = std::str::from_utf8(buf).unwrap();
-    // let str_buf: String = str_slice.to_owned();
-    // return str_buf;
-    return str_slice;
+    let str_buf: String = str_slice.to_owned();
+    return str_buf;
 }
 
 #[allow(dead_code)]
@@ -96,11 +96,10 @@ pub extern "C" fn spotiqueue_initialize_worker(
     let username = c_str_to_rust_string(username_raw);
     let password = c_str_to_rust_string(password_raw);
 
-    let credentials = Credentials::with_password(username, password);
+    let credentials = Credentials::with_password(username.clone(), password.clone());
 
     let backend = audio_backend::find(None).unwrap();
 
-    println!("credentials: {:?} and {:?}", username, password);
     println!("Authorizing...");
 
     let session: Session = RUNTIME.get().unwrap().block_on(async {
@@ -109,7 +108,7 @@ pub extern "C" fn spotiqueue_initialize_worker(
             .unwrap()
     });
 
-    let (mut player, _) = Player::new(player_config, session.clone(), None, move || {
+    let (player, _) = Player::new(player_config, session.clone(), None, move || {
         backend(None, audio_format)
     });
     STATE.set(State::new(player, session)).unwrap();
@@ -121,14 +120,22 @@ pub extern "C" fn spotiqueue_initialize_worker(
 
 #[allow(dead_code)]
 #[no_mangle]
+pub extern "C" fn spotiqueue_pause_playback() -> bool {
+    let state = STATE.get().unwrap().clone();
+    state.send_command(Command::Pause);
+    return true;
+}
+
+#[allow(dead_code)]
+#[no_mangle]
 pub extern "C" fn spotiqueue_play_track(spotify_uri_raw: *const c_char) -> bool {
     let spotify_uri = c_str_to_rust_string(spotify_uri_raw);
     println!("Trying to play {}...", spotify_uri);
 
-    match track_id_from_spotify_uri(spotify_uri) {
+    match track_id_from_spotify_uri(&spotify_uri) {
         Some(track) => {
             let state = STATE.get().unwrap().clone();
-            state.send_command(spotify_uri.to_string());
+            state.send_command(Command::Play { track: track });
         }
         None => {
             println!("Looks like that isn't a Spotify track URI!");
