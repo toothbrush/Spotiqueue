@@ -16,6 +16,14 @@ let logger = SXLogger()
 @_cdecl("player_update_hook")
 public func player_update_hook(hook: StatusUpdate) {
     logger.info("Hook ==> \(hook.rawValue)")
+    switch hook {
+        case EndOfTrack:
+            DispatchQueue.main.async{
+                AppDelegate.appDelegate().playNextQueuedTrack()
+            }
+        default:
+            logger.info("foo")
+    }
 }
 
 @NSApplicationMain
