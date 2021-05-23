@@ -1729,7 +1729,6 @@ name = "spotiqueue-worker"
 version = "0.1.0"
 dependencies = [
  "cbindgen",
- "lazy_static",
  "librespot",
  "once_cell",
  "tokio",
