@@ -695,7 +695,7 @@
                             <rect key="frame" x="1" y="1" width="489" height="696"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <tableView focusRingType="exterior" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnSelection="YES" autosaveColumns="NO" rowSizeStyle="automatic" headerView="t8H-AC-zSi" viewBased="YES" id="nXe-2G-u1l" customClass="RBSearchTableView" customModule="Spotiqueue" customModuleProvider="target">
+                                <tableView focusRingType="exterior" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" autosaveColumns="NO" rowSizeStyle="automatic" headerView="t8H-AC-zSi" viewBased="YES" id="nXe-2G-u1l" customClass="RBSearchTableView" customModule="Spotiqueue" customModuleProvider="target">
                                     <rect key="frame" x="0.0" y="0.0" width="805" height="671"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <size key="intercellSpacing" width="3" height="2"/>
@@ -883,7 +883,7 @@
                             <rect key="frame" x="1" y="1" width="490" height="696"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <tableView focusRingType="exterior" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnSelection="YES" autosaveColumns="NO" rowSizeStyle="automatic" headerView="N1i-1X-IjP" viewBased="YES" id="6Nm-8I-o1Q" customClass="RBSearchTableView" customModule="Spotiqueue" customModuleProvider="target">
+                                <tableView focusRingType="exterior" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" autosaveColumns="NO" rowSizeStyle="automatic" headerView="N1i-1X-IjP" viewBased="YES" id="6Nm-8I-o1Q" customClass="RBQueueTableView" customModule="Spotiqueue" customModuleProvider="target">
                                     <rect key="frame" x="0.0" y="0.0" width="805" height="668"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <size key="intercellSpacing" width="3" height="2"/>
@@ -1038,7 +1038,7 @@
                                 </tableView>
                             </subviews>
                         </clipView>
-                        <scroller key="horizontalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="LOV-cU-CSh">
+                        <scroller key="horizontalScroller" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="0.034920634920634921" horizontal="YES" id="LOV-cU-CSh">
                             <rect key="frame" x="1" y="681" width="490" height="16"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>

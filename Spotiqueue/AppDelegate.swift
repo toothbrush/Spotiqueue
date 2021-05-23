@@ -178,6 +178,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
+    func playNextQueuedTrack() {
+        guard let nextTrack = queue.first else {
+            return
+        }
+        spotiqueue_play_track(nextTrack.track.uri!)
+        queue.remove(at: 0)
+    }
+
     // Helper to give me a pointer to this AppDelegate object.
     static func appDelegate() -> AppDelegate {
         return NSApplication.shared.delegate as! AppDelegate
