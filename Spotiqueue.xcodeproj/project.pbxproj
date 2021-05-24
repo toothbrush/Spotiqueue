@@ -17,6 +17,7 @@
 		DA5AFB212658B7D100C6C468 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA5AFB202658B7D100C6C468 /* CoreAudio.framework */; };
 		DA5AFB2D265A86FD00C6C468 /* RBTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5AFB2C265A86FD00C6C468 /* RBTableView.swift */; };
 		DA5AFB2F265A89BD00C6C468 /* RBQueueTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5AFB2E265A89BD00C6C468 /* RBQueueTableView.swift */; };
+		DA5AFB31265BB59900C6C468 /* CalendarExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5AFB30265BB59900C6C468 /* CalendarExtension.swift */; };
 		DAAE2F012653EA1F00FF0344 /* SpotifyAPI in Frameworks */ = {isa = PBXBuildFile; productRef = DAAE2F002653EA1F00FF0344 /* SpotifyAPI */; };
 		DABEC90D2653534300CA3F67 /* RBSpotifySongTableRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABEC90C2653534300CA3F67 /* RBSpotifySongTableRow.swift */; };
 		DABEC90F26536F5800CA3F67 /* RBSecrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABEC90E26536F5800CA3F67 /* RBSecrets.swift */; };
@@ -38,6 +39,7 @@
 		DA5AFB25265A1B8D00C6C468 /* spotiqueue_worker_bindings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = spotiqueue_worker_bindings.h; path = "spotiqueue-worker/spotiqueue_worker_bindings.h"; sourceTree = SOURCE_ROOT; };
 		DA5AFB2C265A86FD00C6C468 /* RBTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RBTableView.swift; sourceTree = "<group>"; };
 		DA5AFB2E265A89BD00C6C468 /* RBQueueTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RBQueueTableView.swift; sourceTree = "<group>"; };
+		DA5AFB30265BB59900C6C468 /* CalendarExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarExtension.swift; sourceTree = "<group>"; };
 		DABEC90C2653534300CA3F67 /* RBSpotifySongTableRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RBSpotifySongTableRow.swift; sourceTree = "<group>"; };
 		DABEC90E26536F5800CA3F67 /* RBSecrets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RBSecrets.swift; sourceTree = "<group>"; };
 		DAE1F17E26534D660013704F /* Spotiqueue.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Spotiqueue.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -70,6 +72,7 @@
 			isa = PBXGroup;
 			children = (
 				DA5AFB0F26567AB300C6C468 /* TrackExtensions.swift */,
+				DA5AFB30265BB59900C6C468 /* CalendarExtension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -215,6 +218,7 @@
 			files = (
 				DA5AFB0E26565CD300C6C468 /* RBSpotify.swift in Sources */,
 				DAE1F18226534D660013704F /* AppDelegate.swift in Sources */,
+				DA5AFB31265BB59900C6C468 /* CalendarExtension.swift in Sources */,
 				DABEC90F26536F5800CA3F67 /* RBSecrets.swift in Sources */,
 				DA5AFB2D265A86FD00C6C468 /* RBTableView.swift in Sources */,
 				DA5AFB13265682D300C6C468 /* RBSearchTableView.swift in Sources */,
