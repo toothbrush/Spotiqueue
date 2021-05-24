@@ -54,6 +54,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         NSEvent.addLocalMonitorForEvents(matching: .keyDown) { ev in
             self.eventSeen(event: ev)
         }
+        
+        self.window.makeFirstResponder(self.searchField)
+        // setup "focus loop"
+        self.searchField.nextKeyView = self.searchTableView;
+        self.searchTableView.nextKeyView = self.queueTableView;
+        self.queueTableView.nextKeyView = self.searchField;
     }
 
     func eventSeen(event:NSEvent) -> NSEvent? {
@@ -62,10 +68,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let flags = event.modifierFlags.intersection(.deviceIndependentFlagsMask)
         if flags.contains(.command)
             && event.characters == "f" {
-            NSApplication.shared.windows.first?.makeFirstResponder(searchField)
+            self.window.makeFirstResponder(searchField)
         } else if flags.contains(.command)
                     && event.characters == "l" {
-            NSApplication.shared.windows.first?.makeFirstResponder(searchField)
+            self.window.makeFirstResponder(searchField)
         } else {
             return event
         }
@@ -178,7 +184,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 logger.info("Received \(self.searchResults.count) tracks")
             }
         ).store(in: &cancellables)
-        NSApplication.shared.windows.first?.makeFirstResponder(searchTableView)
+        self.window.makeFirstResponder(searchTableView)
     }
 
     func initialiseSpotifyLibrary() {
