@@ -9,15 +9,21 @@
 import Cocoa
 
 class RBSearchTableView: RBTableView {
-    func enter() {
-        guard selectedSearchTracks().count == 1 else {
-            logger.info("hmm, enter pressed on non-single track selection..")
-            return
-        }
-        spotiqueue_play_track(selectedSearchTracks().first!.track.uri!)
+    enum EnqueuePosition {
+        case Top
+        case Bottom
     }
 
-    func enqueueSelection() {
+    func enter() {
+        guard !selectedSearchTracks().isEmpty else {
+            logger.info("hmm, enter pressed on empty search selection..")
+            return
+        }
+        AppDelegate.appDelegate().queue = self.selectedSearchTracks() + AppDelegate.appDelegate().queue
+        AppDelegate.appDelegate().playNextQueuedTrack()
+    }
+
+    func enqueueSelection(position: EnqueuePosition = .Bottom) {
         guard !selectedRowIndexes.isEmpty else {
             return
         }
