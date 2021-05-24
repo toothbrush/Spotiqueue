@@ -10,7 +10,7 @@ import Cocoa
 
 class RBSearchTableView: RBTableView {
     func enter() {
-        guard selectedSearchTracks().count != 1 else {
+        guard selectedSearchTracks().count == 1 else {
             logger.info("hmm, enter pressed on non-single track selection..")
             return
         }
