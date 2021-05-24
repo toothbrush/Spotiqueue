@@ -15,6 +15,8 @@ class RBSpotifySongTableRow: NSObject {
     @objc dynamic var artist: String
     @objc dynamic var album: String
     @objc dynamic var track_number: Int
+    @objc dynamic var disc_number: Int
+    @objc dynamic var year: Int
 
     var track: Track
 
@@ -24,6 +26,11 @@ class RBSpotifySongTableRow: NSObject {
         self.artist = track.consolidated_name()
         self.album = track.album?.name ?? "<no album>"
         self.track_number = track.trackNumber ?? 0
+        self.disc_number = track.discNumber ?? 0
+        self.year = -1
+        if let release = track.album?.releaseDate {
+            self.year = Calendar.iso8601.component(.year, from: release)
+        }
         super.init()
     }
 }
