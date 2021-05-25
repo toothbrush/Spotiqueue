@@ -15,11 +15,16 @@
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="Spotiqueue" customModuleProvider="target">
             <connections>
+                <outlet property="albumImage" destination="BMX-yB-dah" id="8xA-A6-Bob"/>
+                <outlet property="albumTitleLabel" destination="Mxf-Pa-N9U" id="26z-pe-k3T"/>
+                <outlet property="durationLabel" destination="ijX-rD-el8" id="rYJ-ck-xJg"/>
                 <outlet property="queueTableView" destination="6Nm-8I-o1Q" id="wXs-vo-FYF"/>
+                <outlet property="saveSongButton" destination="YTG-en-bjx" id="OxA-gG-wAH"/>
                 <outlet property="searchField" destination="T2h-BB-MEE" id="Olc-dc-Cro"/>
                 <outlet property="searchFieldCell" destination="EnN-fl-XWg" id="vRs-fB-Pan"/>
                 <outlet property="searchResultsArrayController" destination="cJI-F4-neh" id="Ncy-gz-ctc"/>
                 <outlet property="searchTableView" destination="nXe-2G-u1l" id="2g7-LC-9zd"/>
+                <outlet property="songTitleLabel" destination="iV4-Go-1uE" id="e3W-ym-mUP"/>
                 <outlet property="window" destination="QvC-M9-y7g" id="gIp-Ho-8D9"/>
             </connections>
         </customObject>
@@ -1096,6 +1101,9 @@
                             <string key="keyEquivalent">n</string>
                             <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                         </buttonCell>
+                        <connections>
+                            <action selector="nextSongButtonPressed:" target="Voe-Tx-rLC" id="r2S-Yh-inr"/>
+                        </connections>
                     </button>
                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jBE-uh-Tyh">
                         <rect key="frame" x="126" y="61" width="51" height="17"/>
@@ -1106,15 +1114,18 @@
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YTG-en-bjx">
+                    <button hidden="YES" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YTG-en-bjx">
                         <rect key="frame" x="1105" y="60" width="114" height="19"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="recessed" title="★ (⌘S)" bezelStyle="recessed" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="t1h-b7-7TB">
+                        <buttonCell key="cell" type="recessed" title="★ (⌘S)" bezelStyle="recessed" alignment="center" enabled="NO" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="t1h-b7-7TB">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
                             <font key="font" size="12" name="HiraKakuProN-W6"/>
                             <string key="keyEquivalent">s</string>
                             <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                         </buttonCell>
+                        <connections>
+                            <action selector="saveSongButtonPressed:" target="Voe-Tx-rLC" id="oIg-u1-et9"/>
+                        </connections>
                     </button>
                     <box autoresizesSubviews="NO" focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="DHR-Fg-IYC">
                         <rect key="frame" x="9" y="126" width="1210" height="5"/>

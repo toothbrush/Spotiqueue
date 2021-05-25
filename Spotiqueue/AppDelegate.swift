@@ -34,12 +34,32 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet weak var searchField: NSSearchField!
     @IBOutlet weak var searchFieldCell: NSSearchFieldCell!
     @IBOutlet weak var window: NSWindow!
-
     @IBOutlet weak var searchResultsArrayController: NSArrayController!
+
     @objc dynamic var searchResults: Array<RBSpotifySongTableRow> = []
     @objc dynamic var queue: Array<RBSpotifySongTableRow> = []
 
+    // MARK: View element bindings
+    @IBOutlet weak var albumImage: NSImageView!
+    @IBOutlet weak var albumTitleLabel: NSTextField!
+    @IBOutlet weak var songTitleLabel: NSTextField!
+    @IBOutlet weak var durationLabel: NSTextField!
+    @IBOutlet weak var saveSongButton: NSButton!
+
+    // MARK: Button action bindings
+    @IBAction func saveSongButtonPressed(_ sender: Any) {
+        guard let song = currentSong else {
+            return
+        }
+        // do complicated and potentially slow stuff here.
+        // spotify.api.currentUserSavedTracks()
+    }
+    @IBAction func nextSongButtonPressed(_ sender: Any) {
+        self.playNextQueuedTrack()
+    }
+
     var spotify: RBSpotify = RBSpotify()
+    var currentSong: RBSpotifySongTableRow?
 
     private var cancellables: Set<AnyCancellable> = []
 
@@ -185,6 +205,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 logger.info("Received \(self.searchResults.count) tracks")
                 searchResultsArrayController.sortDescriptors = RBSpotifySongTableRow.trackSortDescriptors()
                 searchResultsArrayController.rearrangeObjects()
+                searchTableView.selectRow(row: 0)
             }
         ).store(in: &cancellables)
         self.window.makeFirstResponder(searchTableView)
@@ -201,6 +222,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             return
         }
         spotiqueue_play_track(nextTrack.track.uri!)
+        self.albumTitleLabel.cell?.title = nextTrack.album
+        self.songTitleLabel.cell?.title = String(format: "%@ – %@", nextTrack.artist, nextTrack.title)
+
+        // ehm awkward, attempting to get second largest image.
+        if let image = nextTrack.track.album?.images?.suffix(2).first {
+            self.albumImage.imageFromServerURL(image.url, placeHolder: nil)
+        }
         queue.remove(at: 0)
     }
 
