@@ -223,7 +223,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         spotiqueue_play_track(nextTrack.track.uri!)
         self.albumTitleLabel.cell?.title = nextTrack.album
-        self.songTitleLabel.cell?.title = String(format: "%@ – %@", nextTrack.artist, nextTrack.title)
+        self.songTitleLabel.cell?.title = String(format: "%@ — %@", nextTrack.artist, nextTrack.title)
 
         // ehm awkward, attempting to get second largest image.
         if let image = nextTrack.track.album?.images?.suffix(2).first {
