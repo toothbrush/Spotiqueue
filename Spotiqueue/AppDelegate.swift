@@ -35,6 +35,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet weak var searchFieldCell: NSSearchFieldCell!
     @IBOutlet weak var window: NSWindow!
     @IBOutlet weak var searchResultsArrayController: NSArrayController!
+    @IBOutlet weak var queueArrayController: NSArrayController!
 
     @objc dynamic var searchResults: Array<RBSpotifySongTableRow> = []
     @objc dynamic var queue: Array<RBSpotifySongTableRow> = []
