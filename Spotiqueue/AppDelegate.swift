@@ -35,6 +35,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet weak var searchFieldCell: NSSearchFieldCell!
     @IBOutlet weak var window: NSWindow!
 
+    @IBOutlet weak var searchResultsArrayController: NSArrayController!
     @objc dynamic var searchResults: Array<RBSpotifySongTableRow> = []
     @objc dynamic var queue: Array<RBSpotifySongTableRow> = []
 
@@ -182,6 +183,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                     searchResults.append(RBSpotifySongTableRow(track: result))
                 }
                 logger.info("Received \(self.searchResults.count) tracks")
+                searchResultsArrayController.sortDescriptors = RBSpotifySongTableRow.trackSortDescriptors()
+                searchResultsArrayController.rearrangeObjects()
             }
         ).store(in: &cancellables)
         self.window.makeFirstResponder(searchTableView)

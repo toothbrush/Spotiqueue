@@ -18,6 +18,7 @@
                 <outlet property="queueTableView" destination="6Nm-8I-o1Q" id="wXs-vo-FYF"/>
                 <outlet property="searchField" destination="T2h-BB-MEE" id="Olc-dc-Cro"/>
                 <outlet property="searchFieldCell" destination="EnN-fl-XWg" id="vRs-fB-Pan"/>
+                <outlet property="searchResultsArrayController" destination="cJI-F4-neh" id="Ncy-gz-ctc"/>
                 <outlet property="searchTableView" destination="nXe-2G-u1l" id="2g7-LC-9zd"/>
                 <outlet property="window" destination="QvC-M9-y7g" id="gIp-Ho-8D9"/>
             </connections>

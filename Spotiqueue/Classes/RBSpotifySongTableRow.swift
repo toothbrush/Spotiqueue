@@ -14,6 +14,7 @@ class RBSpotifySongTableRow: NSObject {
     @objc dynamic var title: String
     @objc dynamic var artist: String
     @objc dynamic var album: String
+    @objc dynamic var album_uri: String
     @objc dynamic var track_number: Int
     @objc dynamic var disc_number: Int
     @objc dynamic var year: Int
@@ -25,6 +26,7 @@ class RBSpotifySongTableRow: NSObject {
         self.title = track.name
         self.artist = track.consolidated_name()
         self.album = track.album?.name ?? "<no album>"
+        self.album_uri = track.album?.uri ?? "<no album_uri>"
         self.track_number = track.trackNumber ?? 0
         self.disc_number = track.discNumber ?? 0
         self.year = -1
@@ -32,5 +34,14 @@ class RBSpotifySongTableRow: NSObject {
             self.year = Calendar.iso8601.component(.year, from: release)
         }
         super.init()
+    }
+
+    static func trackSortDescriptors() -> [NSSortDescriptor] {
+        return [
+            NSSortDescriptor(key: "year", ascending: true),
+            NSSortDescriptor(key: "disc_number", ascending: true),
+            NSSortDescriptor(key: "album_uri", ascending: true),
+            NSSortDescriptor(key: "track_number", ascending: true),
+        ]
     }
 }
