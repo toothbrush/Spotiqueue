@@ -45,6 +45,24 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet weak var songTitleLabel: NSTextField!
     @IBOutlet weak var durationLabel: NSTextField!
     @IBOutlet weak var saveSongButton: NSButton!
+    @IBOutlet weak var searchSpinner: NSProgressIndicator!
+
+    private var _isSearching: Bool = false
+    var isSearching: Bool {
+        get {
+            return _isSearching
+        }
+        set {
+            _isSearching = newValue
+            if _isSearching {
+                self.searchSpinner.isHidden = false
+                self.searchSpinner.startAnimation(self)
+            } else {
+                self.searchSpinner.isHidden = true
+                self.searchSpinner.stopAnimation(self)
+            }
+        }
+    }
 
     // MARK: Button action bindings
     @IBAction func saveSongButtonPressed(_ sender: Any) {
@@ -181,7 +199,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         logger.info("Searching for \"\(searchString)\"...")
 
         searchResults = []
-        // self.isSearching = true
+        self.isSearching = true
         spotify.api.search(
             query: searchString,
             categories: [.track],
@@ -189,8 +207,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         )
         .receive(on: RunLoop.main)
         .sink(
-            receiveCompletion: { completion in
-                //self.isSearching = false
+            receiveCompletion: { [self] completion in
+                self.isSearching = false
                 logger.info("receiveCompletion")
                 if case .failure(let error) = completion {
                     logger.error("Couldn't perform search:")
@@ -206,6 +224,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 searchResultsArrayController.sortDescriptors = RBSpotifySongTableRow.trackSortDescriptors()
                 searchResultsArrayController.rearrangeObjects()
                 searchTableView.selectRow(row: 0)
+                self.isSearching = false
             }
         ).store(in: &cancellables)
         self.window.makeFirstResponder(searchTableView)
