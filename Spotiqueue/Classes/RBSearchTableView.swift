@@ -24,7 +24,7 @@ class RBSearchTableView: RBTableView {
     }
 
     func enqueueSelection(position: EnqueuePosition = .Bottom) {
-        guard !selectedRowIndexes.isEmpty else {
+        guard !selectedSearchTracks().isEmpty else {
             return
         }
         AppDelegate.appDelegate().queue.append(contentsOf: self.selectedSearchTracks())
@@ -44,11 +44,9 @@ class RBSearchTableView: RBTableView {
     }
 
     func selectedSearchTracks() -> [RBSpotifySongTableRow] {
-        var result: [RBSpotifySongTableRow] = []
-        for r in selectedRowIndexes {
-            let track = AppDelegate.appDelegate().searchResults[r]
-            result.append(track)
-        }
-        return result
+        return AppDelegate
+            .appDelegate()
+            .searchResultsArrayController
+            .selectedObjects as? [RBSpotifySongTableRow] ?? []
     }
 }
