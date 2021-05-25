@@ -14,6 +14,10 @@ class RBSearchTableView: RBTableView {
         case Bottom
     }
 
+    override func associatedArrayController() -> NSArrayController {
+        AppDelegate.appDelegate().searchResultsArrayController
+    }
+
     func enter() {
         guard !selectedSearchTracks().isEmpty else {
             logger.info("hmm, enter pressed on empty search selection..")

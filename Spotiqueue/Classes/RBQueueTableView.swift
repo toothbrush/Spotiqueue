@@ -9,6 +9,10 @@
 import Cocoa
 
 class RBQueueTableView: RBTableView {
+    override func associatedArrayController() -> NSArrayController {
+        AppDelegate.appDelegate().queueArrayController
+    }
+
     func enter() {
         guard self.selectedRowIndexes.count == 1 else {
             logger.info("hmm, enter pressed on non-single track selection..")

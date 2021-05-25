@@ -9,6 +9,10 @@
 import Cocoa
 
 class RBTableView: NSTableView {
+    func associatedArrayController() -> NSArrayController {
+        preconditionFailure("This method must be overridden")
+    }
+
     func selectRow(row: Int) {
         if !(0..<self.numberOfRows).contains(row) {
             return
