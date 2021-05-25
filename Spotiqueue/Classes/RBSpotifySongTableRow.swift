@@ -18,6 +18,16 @@ class RBSpotifySongTableRow: NSObject {
     @objc dynamic var track_number: Int
     @objc dynamic var disc_number: Int
     @objc dynamic var year: Int
+    @objc dynamic var length: String {
+        get {
+            let formatter = DateComponentsFormatter()
+            formatter.allowedUnits = [.day, .hour, .minute, .second]
+            formatter.unitsStyle = .positional
+            formatter.maximumUnitCount = 0
+            let seconds = Double(self.track.durationMS ?? 0) / 1000
+            return formatter.string(from: seconds)!
+        }
+    }
 
     var track: Track
 
