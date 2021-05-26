@@ -47,6 +47,16 @@ class RBTableView: NSTableView {
         }
     }
 
+    func focusQueue() {
+        let queueTableView = AppDelegate.appDelegate().queueTableView
+        NSApplication.shared.windows.first?.makeFirstResponder(queueTableView)
+    }
+
+    func focusSearchResults() {
+        let searchTableView = AppDelegate.appDelegate().searchTableView
+        NSApplication.shared.windows.first?.makeFirstResponder(searchTableView)
+    }
+
     override func keyDown(with event: NSEvent) {
         let flags = event.modifierFlags.intersection(.deviceIndependentFlagsMask)
         if event.characters == "j"
@@ -56,13 +66,15 @@ class RBTableView: NSTableView {
                     && flags.isEmpty {
             selectPrev()
         } else if flags.isDisjoint(with: NSEvent.ModifierFlags.command.union(.shift))
-                    && event.keyCode == 123 { // left
-            let queueTableView = AppDelegate.appDelegate().queueTableView
-            NSApplication.shared.windows.first?.makeFirstResponder(queueTableView)
+                    && event.keyCode == 123 { // left arrow
+            focusQueue()
         } else if flags.isDisjoint(with: NSEvent.ModifierFlags.command.union(.shift))
-                    && event.keyCode == 124 { // right
-            let searchTableView = AppDelegate.appDelegate().searchTableView
-            NSApplication.shared.windows.first?.makeFirstResponder(searchTableView)
+                    && event.keyCode == 124 { // right arrow
+            focusSearchResults()
+        } else if event.keyCode == 4 { // "h" key, left
+            focusQueue()
+        } else if event.keyCode == 37 { // "l" key, right
+            focusSearchResults()
         } else if flags.isSuperset(of: .command)
                     && event.keyCode == 124 { // cmd-right, search for album
             searchForAlbum()
