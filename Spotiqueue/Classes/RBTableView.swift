@@ -65,6 +65,12 @@ class RBTableView: NSTableView {
         } else if event.characters == "k"
                     && flags.isEmpty {
             selectPrev()
+        } else if event.characters == "g"
+                    && flags.isEmpty {
+            selectRow(row: 0)
+        } else if event.characters == "G"
+                    && flags.union(.shift) == .shift {
+            selectRow(row: self.numberOfRows - 1)
         } else if flags.isDisjoint(with: NSEvent.ModifierFlags.command.union(.shift))
                     && event.keyCode == 123 { // left arrow
             focusQueue()
