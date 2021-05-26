@@ -41,6 +41,9 @@ class RBSearchTableView: RBTableView {
         } else if event.keyCode == 123 // left arrow
                     && flags.contains(.command) {
             enqueueSelection()
+        } else if event.characters == "h" // cmd-"h" key
+                    && flags.contains(.command) {
+            enqueueSelection()
         } else {
             logger.info("Unrecognised key: \(event.keyCode)")
             super.keyDown(with: event)
