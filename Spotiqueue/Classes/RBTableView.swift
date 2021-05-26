@@ -57,6 +57,11 @@ class RBTableView: NSTableView {
         NSApplication.shared.windows.first?.makeFirstResponder(searchTableView)
     }
 
+    func focusSearchField() {
+        let searchField = AppDelegate.appDelegate().searchField
+        NSApplication.shared.windows.first?.makeFirstResponder(searchField)
+    }
+
     override func keyDown(with event: NSEvent) {
         let flags = event.modifierFlags.intersection(.deviceIndependentFlagsMask)
         if event.characters == "j"
@@ -84,6 +89,9 @@ class RBTableView: NSTableView {
         } else if flags.isSuperset(of: .command)
                     && event.keyCode == 124 { // cmd-right, search for album
             searchForAlbum()
+        } else if event.characters == "/"
+                    && flags.isEmpty {
+            focusSearchField()
         } else {
             logger.info("Unrecognised key: \(event.keyCode)")
             super.keyDown(with: event)
