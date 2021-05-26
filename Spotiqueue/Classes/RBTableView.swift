@@ -36,6 +36,17 @@ class RBTableView: NSTableView {
         selectRow(row: self.selectedRow - 1)
     }
 
+    func searchForAlbum() {
+        guard selectedRowIndexes.count == 1 else {
+            return
+        }
+        if let songRow: RBSpotifySongTableRow = self.associatedArrayController().selectedObjects.first as? RBSpotifySongTableRow {
+            if let uri = songRow.track.album?.uri {
+                AppDelegate.appDelegate().loadTracksFromAlbum(album_uri: uri)
+            }
+        }
+    }
+
     override func keyDown(with event: NSEvent) {
         let flags = event.modifierFlags.intersection(.deviceIndependentFlagsMask)
         if event.characters == "j"
@@ -52,6 +63,9 @@ class RBTableView: NSTableView {
                     && event.keyCode == 124 { // right
             let searchTableView = AppDelegate.appDelegate().searchTableView
             NSApplication.shared.windows.first?.makeFirstResponder(searchTableView)
+        } else if flags.isSuperset(of: .command)
+                    && event.keyCode == 124 { // cmd-right, search for album
+            searchForAlbum()
         } else {
             logger.info("Unrecognised key: \(event.keyCode)")
             super.keyDown(with: event)

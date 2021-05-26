@@ -131,7 +131,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 andSelector: #selector(handleURL(event:reply:)),
                 forEventClass: AEEventClass(kInternetEventClass),
                 andEventID: AEEventID(kAEGetURL)
-        )
+            )
     }
 
     @objc func handleURL(event: NSAppleEventDescriptor, reply: NSAppleEventDescriptor) {
@@ -192,6 +192,86 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
+    func loadTracksFromAlbum(album_uri: String) {
+        searchResults = []
+        self.isSearching = true
+
+        // retrieve full "album object"
+        var fullAlbum: Album?
+        let dispatchGroup = DispatchGroup()
+        dispatchGroup.enter()
+        spotify.api.album(album_uri)
+            .sink(
+                receiveCompletion: { completion in
+                    switch completion {
+                        case .finished:
+                            logger.info("finished loading album object")
+                        case .failure(let error):
+                            logger.error("Couldn't load album: \(error.localizedDescription)")
+                    }
+                    dispatchGroup.leave()
+                },
+                receiveValue: { album in
+                    fullAlbum = album
+                    logger.info("Full album = \(String(describing: fullAlbum))")
+                }
+            )
+            .store(in: &cancellables)
+
+        dispatchGroup.wait()
+
+        // hydrate all tracks – the album doesn't contain full tracks, only simplified.
+        var allTracks: [Track] = []
+        if let tracks = fullAlbum?.tracks {
+            dispatchGroup.enter()
+
+            self.spotify.api.extendPages(tracks)
+                .map(\.items)
+                //.receive(on: RunLoop.main)
+                .sink(
+                    receiveCompletion: { completion in
+                        switch completion {
+                            case .finished:
+                                logger.info("finished loading album tracks")
+                            case .failure(let error):
+                                logger.error("Couldn't load tracks for album: \(error.localizedDescription)")
+                        }
+                        dispatchGroup.leave()
+
+                    },
+                    receiveValue: { tracks in
+                        logger.info("retrieved \(tracks.count) tracks")
+                        allTracks.append(contentsOf: tracks)
+                    }
+                )
+                .store(in: &cancellables)
+        }
+        dispatchGroup.wait()
+
+        // hydrate all tracks
+        _ = allTracks.publisher.map { t in
+            spotify.api.track(t.uri!)
+                .receive(on: RunLoop.main)
+                .sink(
+                    receiveCompletion: { completion in
+                        self.isSearching = false
+                        switch completion {
+                            case .finished:
+                                logger.info("finished loading all tracks")
+                            case .failure(let error):
+                                logger.error("Couldn't load all tracks: \(error.localizedDescription)")
+                        }
+                    },
+                    receiveValue: {[self] track in
+                        let t = RBSpotifySongTableRow(track: track)
+                        self.searchResults.append(t)
+                        logger.info("finally hydrated: \(t.title)")
+                    }
+                )
+                .store(in: &cancellables)
+        }
+    }
+
     @IBAction func search(_ sender: NSSearchField) {
         let searchString = self.searchFieldCell.stringValue
         if searchString.isEmpty {
@@ -210,14 +290,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         .sink(
             receiveCompletion: { [self] completion in
                 self.isSearching = false
-                logger.info("receiveCompletion")
                 if case .failure(let error) = completion {
                     logger.error("Couldn't perform search:")
                     logger.error(error.localizedDescription)
                 }
             },
             receiveValue: { [self] searchResultsReturn in
-                logger.info("receiveValue")
                 for result in searchResultsReturn.tracks?.items ?? [] {
                     searchResults.append(RBSpotifySongTableRow(track: result))
                 }
