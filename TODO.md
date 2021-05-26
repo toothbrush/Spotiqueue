@@ -1,7 +1,7 @@
 # TODO list
 
 * Automatically switch audio output sink when using Sound.prefpane
-* Album browse
+* [x] Album browse
 * Artist browse
 * Duration song countdown
 
