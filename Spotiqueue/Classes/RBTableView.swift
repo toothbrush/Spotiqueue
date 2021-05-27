@@ -89,6 +89,9 @@ class RBTableView: NSTableView {
         } else if flags.isSuperset(of: .command)
                     && event.keyCode == 124 { // cmd-right, search for album
             searchForAlbum()
+        } else if flags.isSuperset(of: .command)
+                    && event.keyCode == 37 { // cmd-"right", "l", search for album
+            searchForAlbum()
         } else if event.characters == "/"
                     && flags.isEmpty {
             focusSearchField()

@@ -109,9 +109,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         if flags.contains(.command)
             && event.characters == "f" {
             self.window.makeFirstResponder(searchField)
-        } else if flags.contains(.command)
-                    && event.characters == "l" {
-            self.window.makeFirstResponder(searchField)
         } else {
             return event
         }
