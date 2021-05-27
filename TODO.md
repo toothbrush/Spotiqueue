@@ -12,6 +12,7 @@
 * Dragging items position in queue
 * Dragging items into queue from search
 
+* Media keys, globally
 
 # Ideas
 
