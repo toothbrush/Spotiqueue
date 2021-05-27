@@ -1,5 +1,7 @@
 # TODO list
 
+* preloading
+
 * Automatically switch audio output sink when using Sound.prefpane
 * [x] Album browse
 * Artist browse
