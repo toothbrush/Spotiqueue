@@ -1,3 +1,13 @@
+# Feature parity with the old thing
+
+
+Remaining:
+-   Use arrows to navigate around lists (maybe using shift to select stuff).
+-   Holding the command-key and using the navigation keys moves the selected tracks in the queue.
+-   Space bar pauses and unpauses (unless search field has focus).
+-   ⌘← enqueues, ⌘⇧← adds tracks to top of queue.
+
+
 # TODO list
 
 * under high CPU load spotiqueue-worker seems to falter.
