@@ -1,11 +1,15 @@
 # TODO list
 
+* under high CPU load spotiqueue-worker seems to falter.
+
 * preloading
 
 * Automatically switch audio output sink when using Sound.prefpane
 * [x] Album browse
 * Artist browse
-* Duration song countdown
+* Duration song countdown.. how? can/should we poll the worker every
+  so often? maybe have to worker, when playing, ping the GUI every few
+  seconds? just in case jitter happened or whatnot...
 
 * Keep track of current playback status: playing/paused/stopped
 * Play/pause with spacebar
