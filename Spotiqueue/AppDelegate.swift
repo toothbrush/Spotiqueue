@@ -20,27 +20,27 @@ public func player_update_hook(hook: StatusUpdate, position_ms: UInt32, duration
         case EndOfTrack:
             DispatchQueue.main.async{
                 AppDelegate.appDelegate().playerState = .Stopped
-                AppDelegate.appDelegate().position_ms = 0
-                AppDelegate.appDelegate().duration_ms = 0
+                AppDelegate.appDelegate().position = 0
+                AppDelegate.appDelegate().duration = 0
                 AppDelegate.appDelegate().playNextQueuedTrack()
             }
         case Paused:
             DispatchQueue.main.async{
                 AppDelegate.appDelegate().playerState = .Paused
-                AppDelegate.appDelegate().position_ms = Int(position_ms)
-                AppDelegate.appDelegate().duration_ms = Int(duration_ms)
+                AppDelegate.appDelegate().position = Double(position_ms/1000)
+                AppDelegate.appDelegate().duration = Double(duration_ms/1000)
             }
         case Playing:
             DispatchQueue.main.async{
                 AppDelegate.appDelegate().playerState = .Playing
-                AppDelegate.appDelegate().position_ms = Int(position_ms)
-                AppDelegate.appDelegate().duration_ms = Int(duration_ms)
+                AppDelegate.appDelegate().position = Double(position_ms/1000)
+                AppDelegate.appDelegate().duration = Double(duration_ms/1000)
             }
         case Stopped:
             DispatchQueue.main.async{
                 AppDelegate.appDelegate().playerState = .Stopped
-                AppDelegate.appDelegate().position_ms = 0
-                AppDelegate.appDelegate().duration_ms = 0
+                AppDelegate.appDelegate().position = 0
+                AppDelegate.appDelegate().duration = 0
             }
         case TimeToPreloadNextTrack:
             DispatchQueue.main.async{
@@ -98,11 +98,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
-    var position_ms: Int = 0
-    var duration_ms: Int = 0
+    var position: TimeInterval = 0
+    var duration: TimeInterval = 0
 
     func updateDurationDisplay() {
-        durationLabel.cell?.title = String(format: "dur %d / %d", position_ms, duration_ms)
+        let remaining = round(position) - round(duration)
+        durationLabel.cell?.title = String(format: "%@ / %@ / %@",
+                                           round(position).positionalTime,
+                                           round(remaining).positionalTime,
+                                           round(duration).positionalTime)
     }
 
     // MARK: Button action bindings
@@ -141,10 +145,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         self.searchTableView.nextKeyView = self.queueTableView
         self.queueTableView.nextKeyView = self.searchField
 
-        Timer.scheduledTimer(withTimeInterval: 0.25, repeats: true) { [weak self] timer in
+        let timerInterval : TimeInterval = 0.25
+        Timer.scheduledTimer(withTimeInterval: timerInterval, repeats: true) { [weak self] timer in
             if let s = self {
                 if s.playerState == .Playing {
-                    s.position_ms += 250
+                    s.position += timerInterval
                 }
                 s.updateDurationDisplay()
             }

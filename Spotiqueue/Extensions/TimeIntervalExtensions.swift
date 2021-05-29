@@ -10,6 +10,10 @@ import Foundation
 
 extension TimeInterval {
     var positionalTime: String {
+        if self == 0 {
+            return "-:--"
+        }
+
         // always show at least minutes and seconds.
         Formatter.positional.allowedUnits = self >= 3600 ?
             [.hour, .minute, .second] :
