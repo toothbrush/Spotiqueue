@@ -21,11 +21,21 @@ final class RBSpotifySongTableRow: NSObject {
     @objc dynamic var length: String {
         get {
             let formatter = DateComponentsFormatter()
-            formatter.allowedUnits = [.day, .hour, .minute, .second]
+
+            // always show at least minutes and seconds.
+            if self.durationSeconds >= 3600 {
+                formatter.allowedUnits = [.hour, .minute, .second]
+            } else {
+                formatter.allowedUnits = [.minute, .second]
+            }
             formatter.unitsStyle = .positional
             formatter.maximumUnitCount = 0
+            formatter.zeroFormattingBehavior = .pad
             let seconds = Double(self.durationSeconds)
-            return formatter.string(from: seconds)!
+            let string = formatter.string(from: seconds)!
+            return string.hasPrefix("0") ?
+                .init(string.dropFirst()) :
+                string
         }
     }
 
