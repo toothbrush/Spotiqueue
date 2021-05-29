@@ -223,7 +223,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 }
             )
             .store(in: &cancellables)
-
+        self.window.makeFirstResponder(searchTableView)
     }
 
     @IBAction func search(_ sender: NSSearchField) {
