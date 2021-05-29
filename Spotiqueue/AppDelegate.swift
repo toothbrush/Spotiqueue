@@ -137,9 +137,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         self.window.makeFirstResponder(self.searchField)
         // setup "focus loop"
-        self.searchField.nextKeyView = self.searchTableView;
-        self.searchTableView.nextKeyView = self.queueTableView;
-        self.queueTableView.nextKeyView = self.searchField;
+        self.searchField.nextKeyView = self.searchTableView
+        self.searchTableView.nextKeyView = self.queueTableView
+        self.queueTableView.nextKeyView = self.searchField
 
         Timer.scheduledTimer(withTimeInterval: 0.25, repeats: true) { [weak self] timer in
             if let s = self {
