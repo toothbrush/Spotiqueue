@@ -26,8 +26,7 @@ extension SpotifyAPI {
      [3]: https://developer.spotify.com/documentation/general/guides/track-relinking-guide/
      */
     func artistFullAlbums(
-        _ artist: SpotifyURIConvertible,
-        market: String? = nil
+        _ artist: SpotifyURIConvertible
     ) -> AnyPublisher<[Album], Error> {
 
         self.artistAlbums(

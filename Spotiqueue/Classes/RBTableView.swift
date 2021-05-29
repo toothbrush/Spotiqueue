@@ -41,7 +41,7 @@ class RBTableView: NSTableView {
             return
         }
         if let songRow: RBSpotifySongTableRow = self.associatedArrayController().selectedObjects.first as? RBSpotifySongTableRow {
-            AppDelegate.appDelegate().loadTracksFromAlbum(for: songRow.spotify_album)
+            AppDelegate.appDelegate().diveDeeperOnRow(for: songRow)
         }
     }
 

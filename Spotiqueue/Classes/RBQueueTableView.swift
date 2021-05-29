@@ -31,6 +31,12 @@ class RBQueueTableView: RBTableView {
         self.selectRow(row: firstDeletionIdx)
     }
 
+    override func searchForAlbum() {
+        // rather a hack, but from the queue table we probably want to always to album browse, not artist browse if we've "toevallig" previously already done one on potentially an entire other track or artist.
+        AppDelegate.appDelegate().lastSearch = .Freetext
+        super.searchForAlbum()
+    }
+
     override func keyDown(with event: NSEvent) {
         //let flags = event.modifierFlags.intersection(.deviceIndependentFlagsMask)
         if event.keyCode == 36 { // Enter/Return key

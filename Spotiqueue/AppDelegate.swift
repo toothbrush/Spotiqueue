@@ -57,6 +57,12 @@ enum PlayerState {
     case Paused
 }
 
+enum LastSearch {
+    case Freetext
+    case Album
+    case Artist
+}
+
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
 
@@ -81,6 +87,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet weak var progressBar: NSProgressIndicator!
 
     var playerState: PlayerState = .Stopped
+    var lastSearch: LastSearch = .Freetext
 
     private var _isSearching: Bool = false
     var isSearching: Bool {
@@ -249,10 +256,26 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
-    func loadTracksFromAlbum(for album: Album) {
+    func diveDeeperOnRow(for row: RBSpotifySongTableRow) {
+        guard !self.isSearching else {
+            return
+        }
         searchResults = []
         self.isSearching = true
 
+        switch lastSearch {
+            case .Freetext:
+                albumTracks(for: row.spotify_album)
+            case .Album:
+                artistTracks(for: row.spotify_artist)
+            case .Artist:
+                albumTracks(for: row.spotify_album)
+        }
+        self.window.makeFirstResponder(searchTableView)
+    }
+
+    private func albumTracks(for album: Album) {
+        lastSearch = .Album
         // retrieve album tracks
         spotify.api.albumTracks(
             album.uri!,
@@ -273,17 +296,73 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                     let simplifiedTracks = tracksPage.items
                     // create a new array of table rows from the page of simplified tracks
                     let newTableRows = simplifiedTracks.map{ t in
-                        RBSpotifySongTableRow.init(track: t, album: album)
+                        RBSpotifySongTableRow.init(track: t, album: album, artist: t.artists!.first!)
                     }
                     // append the new table rows to the full array
                     self.searchResults.append(contentsOf: newTableRows)
                 }
             )
             .store(in: &cancellables)
-        self.window.makeFirstResponder(searchTableView)
+    }
+
+    private func artistTracks(for artist: Artist) {
+        lastSearch = .Artist
+        let dispatchGroup = DispatchGroup()
+
+        var albumsReceived: [Album] = []
+        dispatchGroup.enter()
+        spotify.api.artistFullAlbums(artist.uri!)
+            .sink(
+                receiveCompletion: { completion in
+                    dispatchGroup.leave()
+                    switch completion {
+                        case .finished:
+                            logger.info("finished loading artists' albums")
+                        case .failure(let error):
+                            logger.error("Couldn't load artist's albums: \(error.localizedDescription)")
+                    }
+                },
+                receiveValue: { albums in
+                    albumsReceived += albums
+                }
+            )
+            .store(in: &cancellables)
+        dispatchGroup.wait()
+
+        for album in albumsReceived {
+            dispatchGroup.enter()
+            spotify.api.albumTracks(album.uri!, limit: 50)
+                .extendPages(spotify.api)
+                .sink(receiveCompletion: { completion in
+                    dispatchGroup.leave()
+                    switch completion {
+                        case .finished:
+                            logger.info("finished loading tracks for album \(album.name)")
+                        case .failure(let error):
+                            logger.error("Couldn't load album's tracks: \(error.localizedDescription)")
+                    }
+                },
+                receiveValue: { tracksPage in
+                    let simplifiedTracks = tracksPage.items
+                    // create a new array of table rows from the page of simplified tracks
+                    let newTableRows = simplifiedTracks.map{ t in
+                        RBSpotifySongTableRow.init(track: t, album: album, artist: artist)
+                    }
+                    // append the new table rows to the full array
+                    self.searchResults.append(contentsOf: newTableRows)
+                }
+                )
+                .store(in: &cancellables)
+            dispatchGroup.wait()
+        }
+        self.isSearching = false
     }
 
     @IBAction func search(_ sender: NSSearchField) {
+        guard !self.isSearching else {
+            return
+        }
+
         let searchString = self.searchFieldCell.stringValue
         if searchString.isEmpty {
             return
@@ -292,6 +371,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         searchResults = []
         self.isSearching = true
+        lastSearch = .Freetext
         spotify.api.search(
             query: searchString,
             categories: [.track],

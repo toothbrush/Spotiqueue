@@ -26,6 +26,7 @@ final class RBSpotifySongTableRow: NSObject {
 
     var track_uri: String
     var spotify_album: Album
+    var spotify_artist: Artist
     var durationSeconds: TimeInterval
     var album_image: SpotifyImage?
 
@@ -33,11 +34,15 @@ final class RBSpotifySongTableRow: NSObject {
         guard let album = track.album else {
             fatalError("Trying to construct RBSpotifySongTableRow with simplified Track.")
         }
-        self.init(track: track, album: album)
+        guard let artist = track.artists?.first else {
+            fatalError("Trying to construct RBSpotifySongTableRow with simplified Track.")
+        }
+        self.init(track: track, album: album, artist: artist)
     }
 
-    init(track: Track, album: Album) {
+    init(track: Track, album: Album, artist: Artist) {
         self.spotify_album = album
+        self.spotify_artist = artist
 
         self.title = track.name
         self.track_uri = track.uri!
