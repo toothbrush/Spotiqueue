@@ -305,6 +305,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             .store(in: &cancellables)
     }
 
+    var runningTasks: Int = 0 {
+        didSet {
+            if runningTasks == 0 {
+                self.isSearching = false
+            }
+        }
+    }
+
     private func artistTracks(for artist: Artist) {
         lastSearch = .Artist
         let dispatchGroup = DispatchGroup()
@@ -329,11 +337,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             .store(in: &cancellables)
         dispatchGroup.wait()
 
+        runningTasks = albumsReceived.count
         for album in albumsReceived {
             spotify.api.albumTracks(album.uri!, limit: 50)
                 .extendPagesConcurrently(spotify.api)
                 .receive(on: RunLoop.main)
-                .sink(receiveCompletion: { completion in
+                .sink(receiveCompletion: { [self] completion in
+                    runningTasks -= 1
                     switch completion {
                         case .finished:
                             logger.info("finished loading tracks for album \(album.name)")
@@ -349,11 +359,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                     }
                     // append the new table rows to the full array
                     self.searchResults.append(contentsOf: newTableRows)
+                    // after finishing we want the cursor at the top. however, the "streaming" results means some newer albums might have showed up later, pushing your selection down.
+                    self.searchTableView.selectRow(row: 0)
                 }
                 )
                 .store(in: &cancellables)
         }
-        self.isSearching = false
     }
 
     @IBAction func search(_ sender: NSSearchField) {
