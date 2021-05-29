@@ -36,7 +36,8 @@ class RBQueueTableView: RBTableView {
         if event.keyCode == 36 { // Enter/Return key
             enter()
         } else if event.keyCode == 51         // Backspace
-                    || event.keyCode == 117 { // Delete
+                    || event.keyCode == 117   // Delete
+                    || event.characters == "d" {
             delete()
         } else {
             logger.info("Unrecognised key: \(event.keyCode)")
