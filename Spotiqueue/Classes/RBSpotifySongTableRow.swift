@@ -40,23 +40,29 @@ final class RBSpotifySongTableRow: NSObject {
     }
 
     var track_uri: String
+    var spotify_album: Album
     var durationSeconds: Int
     var album_image: SpotifyImage?
 
     convenience init(track: Track) {
-        self.init(track: track, album: track.album!)
+        guard let album = track.album else {
+            fatalError("Trying to construct RBSpotifySongTableRow with simplified Track.")
+        }
+        self.init(track: track, album: album)
     }
 
     init(track: Track, album: Album) {
+        self.spotify_album = album
+
         self.title = track.name
         self.track_uri = track.uri!
         self.artist = track.consolidated_name()
 
-        self.album = album.name
-        self.album_uri = album.uri!
-        self.album_image = album.images?.suffix(2).first
+        self.album = self.spotify_album.name
+        self.album_uri = self.spotify_album.uri!
+        self.album_image = self.spotify_album.images?.suffix(2).first
 
-        if let releaseDate = album.releaseDate {
+        if let releaseDate = self.spotify_album.releaseDate {
             self.year = Calendar.iso8601.component(.year, from: releaseDate)
         } else {
             self.year = 0

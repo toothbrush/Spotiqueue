@@ -94,7 +94,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         NSEvent.addLocalMonitorForEvents(matching: .keyDown) { ev in
             self.eventSeen(event: ev)
         }
-        
+
         self.window.makeFirstResponder(self.searchField)
         // setup "focus loop"
         self.searchField.nextKeyView = self.searchTableView;
@@ -192,84 +192,38 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
-    func loadTracksFromAlbum(album_uri: String) {
+    func loadTracksFromAlbum(for album: Album) {
         searchResults = []
         self.isSearching = true
 
-        // retrieve full "album object"
-        var fullAlbum: Album?
-        let dispatchGroup = DispatchGroup()
-        dispatchGroup.enter()
-        spotify.api.album(album_uri)
+        // retrieve album tracks
+        spotify.api.albumTracks(
+            album.uri!,
+            limit: 50)
+            .extendPages(spotify.api)
+            .receive(on: RunLoop.main)
             .sink(
                 receiveCompletion: { completion in
+                    self.isSearching = false
                     switch completion {
                         case .finished:
                             logger.info("finished loading album object")
                         case .failure(let error):
                             logger.error("Couldn't load album: \(error.localizedDescription)")
                     }
-                    dispatchGroup.leave()
                 },
-                receiveValue: { album in
-                    fullAlbum = album
-                    logger.info("Full album = \(String(describing: fullAlbum))")
+                receiveValue: { tracksPage in
+                    let simplifiedTracks = tracksPage.items
+                    // create a new array of table rows from the page of simplified tracks
+                    let newTableRows = simplifiedTracks.map{ t in
+                        RBSpotifySongTableRow.init(track: t, album: album)
+                    }
+                    // append the new table rows to the full array
+                    self.searchResults.append(contentsOf: newTableRows)
                 }
             )
             .store(in: &cancellables)
 
-        dispatchGroup.wait()
-
-        // hydrate all tracks – the album doesn't contain full tracks, only simplified.
-        var allTracks: [Track] = []
-        if let tracks = fullAlbum?.tracks {
-            dispatchGroup.enter()
-
-            self.spotify.api.extendPages(tracks)
-                .map(\.items)
-                //.receive(on: RunLoop.main)
-                .sink(
-                    receiveCompletion: { completion in
-                        switch completion {
-                            case .finished:
-                                logger.info("finished loading album tracks")
-                            case .failure(let error):
-                                logger.error("Couldn't load tracks for album: \(error.localizedDescription)")
-                        }
-                        dispatchGroup.leave()
-
-                    },
-                    receiveValue: { tracks in
-                        logger.info("retrieved \(tracks.count) tracks")
-                        allTracks.append(contentsOf: tracks)
-                    }
-                )
-                .store(in: &cancellables)
-        }
-        dispatchGroup.wait()
-
-        // hydrate all tracks
-        _ = allTracks.publisher.map { t in
-            spotify.api.track(t.uri!)
-                .receive(on: RunLoop.main)
-                .sink(
-                    receiveCompletion: { completion in
-                        self.isSearching = false
-                        switch completion {
-                            case .finished:
-                                logger.info("finished loading all tracks")
-                            case .failure(let error):
-                                logger.error("Couldn't load all tracks: \(error.localizedDescription)")
-                        }
-                    },
-                    receiveValue: {[self] track in
-                        let t = RBSpotifySongTableRow(track: track)
-                        self.searchResults.append(t)
-                        logger.info("finally hydrated: \(t.title)")
-                    }
-                )
-                .store(in: &cancellables)
-        }
     }
 
     @IBAction func search(_ sender: NSSearchField) {
@@ -320,7 +274,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             return
         }
         spotiqueue_play_track(nextTrack.track_uri)
-        self.albumTitleLabel.cell?.title = nextTrack.album!
+        self.albumTitleLabel.cell?.title = nextTrack.album
         self.songTitleLabel.cell?.title = String(format: "%@ — %@", nextTrack.artist, nextTrack.title)
 
         self.currentSong = nextTrack
@@ -336,4 +290,3 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         return NSApplication.shared.delegate as! AppDelegate
     }
 }
-
