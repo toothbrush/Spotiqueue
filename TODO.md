@@ -44,6 +44,7 @@ Remaining:
 
 * "d" deletes row from queue.
 
+* Some sort of local "filter results" function.  Press "/" or something?
 
 
 # Lower priority
