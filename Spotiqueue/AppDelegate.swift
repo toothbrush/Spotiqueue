@@ -300,7 +300,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                     searchResults.append(RBSpotifySongTableRow(track: result))
                 }
                 logger.info("Received \(self.searchResults.count) tracks")
-                searchResultsArrayController.sortDescriptors = RBSpotifySongTableRow.trackSortDescriptors()
+                searchResultsArrayController.sortDescriptors = RBSpotifySongTableRow.trackSortDescriptors
                 searchResultsArrayController.rearrangeObjects()
                 searchTableView.selectRow(row: 0)
                 self.isSearching = false

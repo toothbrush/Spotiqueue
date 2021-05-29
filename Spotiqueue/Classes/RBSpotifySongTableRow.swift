@@ -9,7 +9,7 @@
 import Cocoa
 import SpotifyWebAPI
 
-class RBSpotifySongTableRow: NSObject {
+final class RBSpotifySongTableRow: NSObject {
 
     @objc dynamic var title: String
     @objc dynamic var artist: String
@@ -46,12 +46,10 @@ class RBSpotifySongTableRow: NSObject {
         super.init()
     }
 
-    static func trackSortDescriptors() -> [NSSortDescriptor] {
-        return [
+    static let trackSortDescriptors: [NSSortDescriptor] = [
             NSSortDescriptor(key: "year", ascending: true),
             NSSortDescriptor(key: "disc_number", ascending: true),
             NSSortDescriptor(key: "album_uri", ascending: true),
             NSSortDescriptor(key: "track_number", ascending: true),
         ]
-    }
 }
