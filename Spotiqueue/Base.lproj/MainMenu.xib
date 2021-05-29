@@ -18,6 +18,7 @@
                 <outlet property="albumImage" destination="BMX-yB-dah" id="8xA-A6-Bob"/>
                 <outlet property="albumTitleLabel" destination="Mxf-Pa-N9U" id="26z-pe-k3T"/>
                 <outlet property="durationLabel" destination="ijX-rD-el8" id="rYJ-ck-xJg"/>
+                <outlet property="progressBar" destination="q94-z4-FfB" id="Dx4-YB-2cA"/>
                 <outlet property="queueArrayController" destination="ueN-np-pxA" id="mqC-lc-mVO"/>
                 <outlet property="queueTableView" destination="6Nm-8I-o1Q" id="wXs-vo-FYF"/>
                 <outlet property="saveSongButton" destination="YTG-en-bjx" id="OxA-gG-wAH"/>
@@ -1125,7 +1126,7 @@
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ijX-rD-el8">
-                        <rect key="frame" x="181" y="20" width="179" height="17"/>
+                        <rect key="frame" x="181" y="31" width="179" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="-:--" id="0tK-S9-F2G">
                             <font key="font" size="12" name="Menlo-Regular"/>
@@ -1135,6 +1136,10 @@
                     </textField>
                     <progressIndicator hidden="YES" fixedFrame="YES" maxValue="100" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="NxD-rt-1LN">
                         <rect key="frame" x="935" y="790" width="16" height="16"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    </progressIndicator>
+                    <progressIndicator hidden="YES" fixedFrame="YES" maxValue="1" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="q94-z4-FfB">
+                        <rect key="frame" x="0.0" y="-7" width="1229" height="20"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     </progressIndicator>
                 </subviews>

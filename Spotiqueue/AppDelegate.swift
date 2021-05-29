@@ -78,6 +78,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet weak var durationLabel: NSTextField!
     @IBOutlet weak var saveSongButton: NSButton!
     @IBOutlet weak var searchSpinner: NSProgressIndicator!
+    @IBOutlet weak var progressBar: NSProgressIndicator!
 
     var playerState: PlayerState = .Stopped
 
@@ -107,6 +108,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                                            round(position).positionalTime,
                                            round(remaining).positionalTime,
                                            round(duration).positionalTime)
+        progressBar.isHidden = duration == 0
+        progressBar.doubleValue = position/duration
     }
 
     // MARK: Button action bindings
