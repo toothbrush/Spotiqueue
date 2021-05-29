@@ -10,18 +10,17 @@ Remaining:
 * page up / down should bring focussed row along for the ride.
 
 * under high CPU load spotiqueue-worker seems to falter.
+  supposedly a release build will help...
 
-* preloading
+* [x] preloading
 
 * Automatically switch audio output sink when using Sound.prefpane
 * [x] Album browse
 * Artist browse
-* Duration song countdown.. how? can/should we poll the worker every
-  so often? maybe have to worker, when playing, ping the GUI every few
-  seconds? just in case jitter happened or whatnot...
+* [x] Duration song countdown
 
-* Keep track of current playback status: playing/paused/stopped
-* Play/pause with spacebar
+* [x] Keep track of current playback status: playing/paused/stopped
+* [x] Play/pause with spacebar
 
 * Copying and pasting of spotify URIs
 * Dragging items position in queue
@@ -39,7 +38,7 @@ Remaining:
 * shift-V switches "visual" mode, allow selecting rows in queue with
   motion keys?
 
-* "d" deletes row from queue.
+* [x] "d" deletes row from queue.
 
 * Some sort of local "filter results" function.  Press "/" or something?
 
