@@ -19,11 +19,30 @@ public func player_update_hook(hook: StatusUpdate) {
     switch hook {
         case EndOfTrack:
             DispatchQueue.main.async{
+                AppDelegate.appDelegate().playerState = .Stopped
                 AppDelegate.appDelegate().playNextQueuedTrack()
+            }
+        case Paused:
+            DispatchQueue.main.async{
+                AppDelegate.appDelegate().playerState = .Paused
+            }
+        case Playing:
+            DispatchQueue.main.async{
+                AppDelegate.appDelegate().playerState = .Playing
+            }
+        case Stopped:
+            DispatchQueue.main.async{
+                AppDelegate.appDelegate().playerState = .Stopped
             }
         default:
             logger.info("foo")
     }
+}
+
+enum PlayerState {
+    case Stopped
+    case Playing
+    case Paused
 }
 
 @NSApplicationMain
@@ -48,6 +67,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet weak var saveSongButton: NSButton!
     @IBOutlet weak var searchSpinner: NSProgressIndicator!
 
+    var playerState: PlayerState = .Stopped
+
     private var _isSearching: Bool = false
     var isSearching: Bool {
         get {
@@ -67,7 +88,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     // MARK: Button action bindings
     @IBAction func saveSongButtonPressed(_ sender: Any) {
-        guard let song = currentSong else {
+        guard let _ = currentSong else {
             return
         }
         // do complicated and potentially slow stuff here.
@@ -266,6 +287,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func initialiseSpotifyLibrary() {
         if !spotify.isAuthorized {
             spotify.authorize()
+        }
+    }
+
+    func playOrPause() {
+        switch self.playerState {
+            case .Stopped:
+                return
+            case .Playing:
+                spotiqueue_pause_playback()
+            case .Paused:
+                spotiqueue_unpause_playback()
         }
     }
 

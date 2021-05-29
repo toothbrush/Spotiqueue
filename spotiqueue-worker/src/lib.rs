@@ -42,6 +42,8 @@ struct State {
 enum Command {
     Pause,
     Play { track: SpotifyId },
+    Preload { track: SpotifyId },
+    Unpause,
 }
 
 impl New for State {
@@ -57,6 +59,10 @@ impl New for State {
                 Command::Play { track } => {
                     player.stop();
                     player.load(track, true, 0);
+                }
+                Command::Preload { track } => player.preload(track),
+                Command::Unpause => {
+                    player.play();
                 }
             }
         });
@@ -186,6 +192,28 @@ pub extern "C" fn spotiqueue_initialize_worker(
 pub extern "C" fn spotiqueue_pause_playback() -> bool {
     let state = STATE.get().unwrap();
     state.send_command(Command::Pause);
+    return true;
+}
+
+#[no_mangle]
+pub extern "C" fn spotiqueue_unpause_playback() {
+    let state = STATE.get().unwrap();
+    state.send_command(Command::Unpause);
+}
+
+#[no_mangle]
+pub extern "C" fn spotiqueue_preload_track(spotify_uri_raw: *const c_char) -> bool {
+    let spotify_uri = c_str_to_rust_string(spotify_uri_raw);
+    match track_id_from_spotify_uri(&spotify_uri) {
+        Some(track) => {
+            let state = STATE.get().unwrap();
+            state.send_command(Command::Preload { track: track });
+        }
+        None => {
+            error!("Looks like that isn't a Spotify track URI!");
+            return false;
+        }
+    }
     return true;
 }
 

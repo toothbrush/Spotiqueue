@@ -3,7 +3,6 @@
 
 Remaining:
 -   Holding the command-key and using the navigation keys moves the selected tracks in the queue.
--   Space bar pauses and unpauses (unless search field has focus).
 
 
 # TODO list

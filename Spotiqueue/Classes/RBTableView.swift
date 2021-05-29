@@ -93,8 +93,11 @@ class RBTableView: NSTableView {
         } else if event.characters == "/"
                     && flags.isEmpty {
             focusSearchField()
+        } else if event.characters == " "
+                    && flags.isEmpty {
+            AppDelegate.appDelegate().playOrPause()
         } else {
-            logger.info("Unrecognised key: \(event.keyCode)")
+            logger.info("Unrecognised key: \(event.keyCode), flags: \(flags)")
             super.keyDown(with: event)
         }
     }
