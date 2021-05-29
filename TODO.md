@@ -28,7 +28,6 @@ Remaining:
 
 # Ideas
 
-* Keep track of last-searched: free-text, album, or artist, and if you've cmd-right'ed to get an album, doing it again gets the artist's tracks/albums?
 * If doing album-browse, put "album:..." into the search bar?
 
 * Search: if searching for "album:...URI..." plus a term, maybe filter results (locally) on those terms?
