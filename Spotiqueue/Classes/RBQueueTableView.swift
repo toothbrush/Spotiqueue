@@ -46,7 +46,6 @@ class RBQueueTableView: RBTableView {
                     || event.characters == "d" {
             delete()
         } else {
-            logger.info("Unrecognised key: \(event.keyCode)")
             super.keyDown(with: event)
         }
     }

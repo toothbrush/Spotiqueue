@@ -97,7 +97,6 @@ class RBTableView: NSTableView {
                     && flags.isEmpty {
             AppDelegate.appDelegate().playOrPause()
         } else {
-            logger.info("Unrecognised key: \(event.keyCode), flags: \(flags)")
             super.keyDown(with: event)
         }
     }

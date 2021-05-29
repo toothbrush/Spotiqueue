@@ -14,7 +14,7 @@ Remaining:
 
 * Automatically switch audio output sink when using Sound.prefpane
 * [x] Album browse
-* Artist browse
+* [x] Artist browse
 * [x] Duration song countdown
 
 * [x] Keep track of current playback status: playing/paused/stopped

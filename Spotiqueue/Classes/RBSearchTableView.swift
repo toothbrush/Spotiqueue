@@ -56,7 +56,6 @@ class RBSearchTableView: RBTableView {
                     && flags.contains(.command) {
             enqueueSelection()
         } else {
-            logger.info("Unrecognised key: \(event.keyCode)")
             super.keyDown(with: event)
         }
     }
