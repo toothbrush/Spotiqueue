@@ -403,9 +403,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 searchResultsArrayController.sortDescriptors = RBSpotifySongTableRow.trackSortDescriptors
                 searchResultsArrayController.rearrangeObjects()
                 searchTableView.selectRow(row: 0)
-                self.isSearching = false
             }
-        ).store(in: &cancellables)
+        )
+        .store(in: &cancellables)
         self.window.makeFirstResponder(searchTableView)
     }
 
