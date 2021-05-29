@@ -381,31 +381,37 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         searchResults = []
         self.isSearching = true
         lastSearch = .Freetext
-        spotify.api.search(
-            query: searchString,
-            categories: [.track],
-            limit: 50
-        )
-        .receive(on: RunLoop.main)
-        .sink(
-            receiveCompletion: { [self] completion in
-                self.isSearching = false
-                if case .failure(let error) = completion {
-                    logger.error("Couldn't perform search:")
-                    logger.error(error.localizedDescription)
+
+        // cheap and dirty way of saying "this many pages expected"
+        runningTasks = 4
+        for i in 0..<runningTasks {
+            spotify.api.search(
+                query: searchString,
+                categories: [.track],
+                limit: 50,
+                offset: i * 50
+            )
+            .receive(on: RunLoop.main)
+            .sink(
+                receiveCompletion: { [self] completion in
+                    runningTasks -= 1
+                    if case .failure(let error) = completion {
+                        logger.error("Couldn't perform search:")
+                        logger.error(error.localizedDescription)
+                    }
+                },
+                receiveValue: { [self] searchResultsReturn in
+                    for result in searchResultsReturn.tracks?.items ?? [] {
+                        searchResults.append(RBSpotifySongTableRow(track: result))
+                    }
+                    logger.info("Received \(self.searchResults.count) tracks")
+                    searchResultsArrayController.sortDescriptors = RBSpotifySongTableRow.trackSortDescriptors
+                    searchResultsArrayController.rearrangeObjects()
+                    searchTableView.selectRow(row: 0)
                 }
-            },
-            receiveValue: { [self] searchResultsReturn in
-                for result in searchResultsReturn.tracks?.items ?? [] {
-                    searchResults.append(RBSpotifySongTableRow(track: result))
-                }
-                logger.info("Received \(self.searchResults.count) tracks")
-                searchResultsArrayController.sortDescriptors = RBSpotifySongTableRow.trackSortDescriptors
-                searchResultsArrayController.rearrangeObjects()
-                searchTableView.selectRow(row: 0)
-            }
-        )
-        .store(in: &cancellables)
+            )
+            .store(in: &cancellables)
+        }
         self.window.makeFirstResponder(searchTableView)
     }
 
