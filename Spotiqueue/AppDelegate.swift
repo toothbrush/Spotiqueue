@@ -42,8 +42,12 @@ public func player_update_hook(hook: StatusUpdate, position_ms: UInt32, duration
                 AppDelegate.appDelegate().position_ms = 0
                 AppDelegate.appDelegate().duration_ms = 0
             }
+        case TimeToPreloadNextTrack:
+            DispatchQueue.main.async{
+                AppDelegate.appDelegate().preloadNextQueuedTrack()
+            }
         default:
-            logger.info("foo")
+            fatalError("Received absurd hook.")
     }
 }
 
@@ -339,6 +343,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             self.albumImage.imageFromServerURL(image.url, placeHolder: nil)
         }
         queue.remove(at: 0)
+    }
+
+    func preloadNextQueuedTrack() {
+        guard let nextTrack = queue.first else {
+            return
+        }
+        spotiqueue_preload_track(nextTrack.track_uri)
     }
 
     // Helper to give me a pointer to this AppDelegate object.
