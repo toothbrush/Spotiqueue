@@ -323,6 +323,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         self.albumTitleLabel.cell?.title = nextTrack.album!
         self.songTitleLabel.cell?.title = String(format: "%@ — %@", nextTrack.artist, nextTrack.title)
 
+        self.currentSong = nextTrack
         // ehm awkward, attempting to get second largest image.
         if let image = nextTrack.album_image {
             self.albumImage.imageFromServerURL(image.url, placeHolder: nil)
