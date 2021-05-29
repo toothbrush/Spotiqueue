@@ -330,11 +330,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         dispatchGroup.wait()
 
         for album in albumsReceived {
-            dispatchGroup.enter()
             spotify.api.albumTracks(album.uri!, limit: 50)
-                .extendPages(spotify.api)
+                .extendPagesConcurrently(spotify.api)
+                .receive(on: RunLoop.main)
                 .sink(receiveCompletion: { completion in
-                    dispatchGroup.leave()
                     switch completion {
                         case .finished:
                             logger.info("finished loading tracks for album \(album.name)")
@@ -353,7 +352,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 }
                 )
                 .store(in: &cancellables)
-            dispatchGroup.wait()
         }
         self.isSearching = false
     }

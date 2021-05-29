@@ -32,7 +32,7 @@ extension SpotifyAPI {
         self.artistAlbums(
             artist,
             limit: 20)
-            .extendPages(self)
+            .extendPagesConcurrently(self)
             // extract the URIs of the albums from each page
             .map { albumsPage in
                 albumsPage.items.compactMap(\.uri)
