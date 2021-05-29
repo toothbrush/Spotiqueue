@@ -20,28 +20,13 @@ final class RBSpotifySongTableRow: NSObject {
     @objc dynamic var year: Int
     @objc dynamic var length: String {
         get {
-            let formatter = DateComponentsFormatter()
-
-            // always show at least minutes and seconds.
-            if self.durationSeconds >= 3600 {
-                formatter.allowedUnits = [.hour, .minute, .second]
-            } else {
-                formatter.allowedUnits = [.minute, .second]
-            }
-            formatter.unitsStyle = .positional
-            formatter.maximumUnitCount = 0
-            formatter.zeroFormattingBehavior = .pad
-            let seconds = Double(self.durationSeconds)
-            let string = formatter.string(from: seconds)!
-            return string.hasPrefix("0") ?
-                .init(string.dropFirst()) :
-                string
+            self.durationSeconds.positionalTime
         }
     }
 
     var track_uri: String
     var spotify_album: Album
-    var durationSeconds: Int
+    var durationSeconds: TimeInterval
     var album_image: SpotifyImage?
 
     convenience init(track: Track) {
@@ -71,7 +56,7 @@ final class RBSpotifySongTableRow: NSObject {
         self.track_number = track.trackNumber!
         self.disc_number = track.discNumber!
 
-        self.durationSeconds = track.durationMS! / 1000
+        self.durationSeconds = Double(track.durationMS! / 1000)
         super.init()
     }
 
