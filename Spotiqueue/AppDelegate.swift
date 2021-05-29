@@ -319,12 +319,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         guard let nextTrack = queue.first else {
             return
         }
-        spotiqueue_play_track(nextTrack.track.uri!)
-        self.albumTitleLabel.cell?.title = nextTrack.album
+        spotiqueue_play_track(nextTrack.track_uri)
+        self.albumTitleLabel.cell?.title = nextTrack.album!
         self.songTitleLabel.cell?.title = String(format: "%@ — %@", nextTrack.artist, nextTrack.title)
 
         // ehm awkward, attempting to get second largest image.
-        if let image = nextTrack.track.album?.images?.suffix(2).first {
+        if let image = nextTrack.album_image {
             self.albumImage.imageFromServerURL(image.url, placeHolder: nil)
         }
         queue.remove(at: 0)

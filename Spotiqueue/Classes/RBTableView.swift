@@ -41,7 +41,7 @@ class RBTableView: NSTableView {
             return
         }
         if let songRow: RBSpotifySongTableRow = self.associatedArrayController().selectedObjects.first as? RBSpotifySongTableRow {
-            if let uri = songRow.track.album?.uri {
+            if let uri = songRow.album_uri {
                 AppDelegate.appDelegate().loadTracksFromAlbum(album_uri: uri)
             }
         }

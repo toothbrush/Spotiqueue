@@ -13,8 +13,8 @@ final class RBSpotifySongTableRow: NSObject {
 
     @objc dynamic var title: String
     @objc dynamic var artist: String
-    @objc dynamic var album: String
-    @objc dynamic var album_uri: String
+    @objc dynamic var album: String!
+    @objc dynamic var album_uri: String!
     @objc dynamic var track_number: Int
     @objc dynamic var disc_number: Int
     @objc dynamic var year: Int
@@ -24,25 +24,38 @@ final class RBSpotifySongTableRow: NSObject {
             formatter.allowedUnits = [.day, .hour, .minute, .second]
             formatter.unitsStyle = .positional
             formatter.maximumUnitCount = 0
-            let seconds = Double(self.track.durationMS ?? 0) / 1000
+            let seconds = Double(self.durationSeconds)
             return formatter.string(from: seconds)!
         }
     }
 
-    var track: Track
+    var track_uri: String
+    var durationSeconds: Int
+    var album_image: SpotifyImage?
 
-    init(track: Track) {
-        self.track = track
+    convenience init(track: Track) {
+        self.init(track: track, album: track.album!)
+    }
+
+    init(track: Track, album: Album) {
         self.title = track.name
+        self.track_uri = track.uri!
         self.artist = track.consolidated_name()
-        self.album = track.album?.name ?? "<no album>"
-        self.album_uri = track.album?.uri ?? "<no album_uri>"
-        self.track_number = track.trackNumber ?? 0
-        self.disc_number = track.discNumber ?? 0
-        self.year = -1
-        if let release = track.album?.releaseDate {
-            self.year = Calendar.iso8601.component(.year, from: release)
+
+        self.album = album.name
+        self.album_uri = album.uri!
+        self.album_image = album.images?.suffix(2).first
+
+        if let releaseDate = album.releaseDate {
+            self.year = Calendar.iso8601.component(.year, from: releaseDate)
+        } else {
+            self.year = 0
         }
+
+        self.track_number = track.trackNumber!
+        self.disc_number = track.discNumber!
+
+        self.durationSeconds = track.durationMS! / 1000
         super.init()
     }
 
