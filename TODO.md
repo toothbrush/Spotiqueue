@@ -10,6 +10,8 @@ Remaining:
 
 # TODO list
 
+* page up / down should bring focussed row along for the ride.
+
 * under high CPU load spotiqueue-worker seems to falter.
 
 * preloading
