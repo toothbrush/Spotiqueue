@@ -16,7 +16,7 @@ typedef enum StatusUpdate {
   TimeToPreloadNextTrack,
 } StatusUpdate;
 
-void set_callback(void (*callback)(enum StatusUpdate status));
+void set_callback(void (*callback)(enum StatusUpdate status, uint32_t position_ms, uint32_t duration_ms));
 
 bool spotiqueue_initialize_worker(const char *username_raw, const char *password_raw);
 

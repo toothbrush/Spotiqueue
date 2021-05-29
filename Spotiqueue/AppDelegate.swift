@@ -14,25 +14,33 @@ import Stenographer
 let logger = SXLogger()
 
 @_cdecl("player_update_hook")
-public func player_update_hook(hook: StatusUpdate) {
+public func player_update_hook(hook: StatusUpdate, position_ms: UInt32, duration_ms: UInt32) {
     logger.info("Hook ==> \(hook.rawValue)")
     switch hook {
         case EndOfTrack:
             DispatchQueue.main.async{
                 AppDelegate.appDelegate().playerState = .Stopped
+                AppDelegate.appDelegate().position_ms = 0
+                AppDelegate.appDelegate().duration_ms = 0
                 AppDelegate.appDelegate().playNextQueuedTrack()
             }
         case Paused:
             DispatchQueue.main.async{
                 AppDelegate.appDelegate().playerState = .Paused
+                AppDelegate.appDelegate().position_ms = Int(position_ms)
+                AppDelegate.appDelegate().duration_ms = Int(duration_ms)
             }
         case Playing:
             DispatchQueue.main.async{
                 AppDelegate.appDelegate().playerState = .Playing
+                AppDelegate.appDelegate().position_ms = Int(position_ms)
+                AppDelegate.appDelegate().duration_ms = Int(duration_ms)
             }
         case Stopped:
             DispatchQueue.main.async{
                 AppDelegate.appDelegate().playerState = .Stopped
+                AppDelegate.appDelegate().position_ms = 0
+                AppDelegate.appDelegate().duration_ms = 0
             }
         default:
             logger.info("foo")
@@ -86,6 +94,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
+    var position_ms: Int = 0
+    var duration_ms: Int = 0
+
+    func updateDurationDisplay() {
+        durationLabel.cell?.title = String(format: "dur %d / %d", position_ms, duration_ms)
+    }
+
     // MARK: Button action bindings
     @IBAction func saveSongButtonPressed(_ sender: Any) {
         guard let _ = currentSong else {
@@ -109,7 +124,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         initialiseSpotifyLibrary()
-        set_callback(player_update_hook(hook:))
+        set_callback(player_update_hook(hook: position_ms: duration_ms:))
         spotiqueue_initialize_worker(RBSecrets.getSecret(s: .username),
                                      RBSecrets.getSecret(s: .password))
         NSEvent.addLocalMonitorForEvents(matching: .keyDown) { ev in
@@ -121,6 +136,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         self.searchField.nextKeyView = self.searchTableView;
         self.searchTableView.nextKeyView = self.queueTableView;
         self.queueTableView.nextKeyView = self.searchField;
+
+        Timer.scheduledTimer(withTimeInterval: 0.25, repeats: true) { [weak self] timer in
+            if let s = self {
+                if s.playerState == .Playing {
+                    s.position_ms += 250
+                }
+                s.updateDurationDisplay()
+            }
+        }
     }
 
     func eventSeen(event:NSEvent) -> NSEvent? {

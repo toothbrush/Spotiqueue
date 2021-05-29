@@ -75,19 +75,27 @@ impl New for State {
             info!("PlayerEvent ==> {:?}", event);
             match event {
                 PlayerEvent::EndOfTrack { .. } => {
-                    use_stored_callback(StatusUpdate::EndOfTrack);
+                    use_stored_callback(StatusUpdate::EndOfTrack, 0, 0);
                 }
-                PlayerEvent::Paused { .. } => {
-                    use_stored_callback(StatusUpdate::Paused);
+                PlayerEvent::Paused {
+                    position_ms,
+                    duration_ms,
+                    ..
+                } => {
+                    use_stored_callback(StatusUpdate::Paused, position_ms, duration_ms);
                 }
-                PlayerEvent::Playing { .. } => {
-                    use_stored_callback(StatusUpdate::Playing);
+                PlayerEvent::Playing {
+                    position_ms,
+                    duration_ms,
+                    ..
+                } => {
+                    use_stored_callback(StatusUpdate::Playing, position_ms, duration_ms);
                 }
                 PlayerEvent::Stopped { .. } => {
-                    use_stored_callback(StatusUpdate::Stopped);
+                    use_stored_callback(StatusUpdate::Stopped, 0, 0);
                 }
                 PlayerEvent::TimeToPreloadNextTrack { .. } => {
-                    use_stored_callback(StatusUpdate::TimeToPreloadNextTrack);
+                    use_stored_callback(StatusUpdate::TimeToPreloadNextTrack, 0, 0);
                 }
                 PlayerEvent::Changed { .. } => {}
                 PlayerEvent::Loading { .. } => {}
@@ -131,18 +139,20 @@ pub enum StatusUpdate {
 
 #[derive(Debug)]
 pub struct WorkerCallback {
-    pub callback: extern "C" fn(status: StatusUpdate),
+    pub callback: extern "C" fn(status: StatusUpdate, position_ms: u32, duration_ms: u32),
 }
 
 // https://stackoverflow.com/questions/50188710/rust-function-that-allocates-memory-and-calls-a-c-callback-crashes
 #[no_mangle]
-pub extern "C" fn set_callback(callback: extern "C" fn(status: StatusUpdate)) {
+pub extern "C" fn set_callback(
+    callback: extern "C" fn(status: StatusUpdate, position_ms: u32, duration_ms: u32),
+) {
     CALLBACK.set(WorkerCallback { callback }).unwrap();
 }
 
-fn use_stored_callback(status: StatusUpdate) {
+fn use_stored_callback(status: StatusUpdate, position_ms: u32, duration_ms: u32) {
     let cb = CALLBACK.get().unwrap();
-    (cb.callback)(status);
+    (cb.callback)(status, position_ms, duration_ms);
 }
 
 #[no_mangle]
