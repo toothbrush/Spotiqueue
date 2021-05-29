@@ -1125,7 +1125,7 @@
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ijX-rD-el8">
-                        <rect key="frame" x="181" y="20" width="55" height="17"/>
+                        <rect key="frame" x="181" y="20" width="179" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="-:--" id="0tK-S9-F2G">
                             <font key="font" metaFont="system"/>
