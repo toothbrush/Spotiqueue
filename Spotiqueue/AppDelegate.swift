@@ -116,7 +116,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                                            round(remaining).positionalTime,
                                            round(duration).positionalTime)
         progressBar.isHidden = duration == 0
-        progressBar.doubleValue = position/duration
+        progressBar.doubleValue = 100 * position/duration
     }
 
     // MARK: Button action bindings
