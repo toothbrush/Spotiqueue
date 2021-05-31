@@ -239,7 +239,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                             logger.error("Authorisation request denied!")
                         }
                         else {
-                            logger.error("Couldn't Authorization With Your Account")
+                            logger.error("Couldn't authorise: \(error.localizedDescription)")
                         }
                     }
                 })
