@@ -145,10 +145,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         set_callback(player_update_hook(hook: position_ms: duration_ms:))
         spotiqueue_initialize_worker(RBSecrets.getSecret(s: .username),
                                      RBSecrets.getSecret(s: .password))
-        NSEvent.addLocalMonitorForEvents(matching: .keyDown) { ev in
-            self.eventSeen(event: ev)
-        }
 
+        NSEvent.addLocalMonitorForEvents(matching: [.keyDown, .systemDefined], handler: localKeyShortcuts(event:))
         self.window.makeFirstResponder(self.searchField)
         // setup "focus loop"
         self.searchField.nextKeyView = self.searchTableView
@@ -166,9 +164,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
-    func eventSeen(event:NSEvent) -> NSEvent? {
+    func localKeyShortcuts(event: NSEvent) -> NSEvent? {
         logger.info("I saw an event! \(event.description)")
-        logger.info("characters: >\(String(describing: event.characters))<")
+        logger.info("keycode = \(event.keyCode)")
+        if event.type == .keyDown {
+            logger.info("characters: >\(String(describing: event.characters))<")
+        }
         let flags = event.modifierFlags.intersection(.deviceIndependentFlagsMask).subtracting([.function, .numericPad])
         if flags == .command
             && event.characters == "f" {
