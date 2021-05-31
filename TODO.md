@@ -5,20 +5,15 @@ Remaining:
 
 # TODO list
 
+* countdown duration removes minus sign when abs(remaining) < 1min.
+
 * page up / down should bring focussed row along for the ride.
 
 * under high CPU load spotiqueue-worker seems to falter.
   supposedly a release build will help...
 
-* [x] preloading
-
 * Automatically switch audio output sink when using Sound.prefpane
-* [x] Album browse
-* [x] Artist browse
 * [x] Duration song countdown
-
-* [x] Keep track of current playback status: playing/paused/stopped
-* [x] Play/pause with spacebar
 
 * Copying and pasting of spotify URIs
 * Dragging items position in queue
@@ -34,8 +29,6 @@ Remaining:
 
 * shift-V switches "visual" mode, allow selecting rows in queue with
   motion keys?
-
-* [x] "d" deletes row from queue.
 
 * Some sort of local "filter results" function.  Press "/" or something?
 
