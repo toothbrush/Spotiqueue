@@ -38,12 +38,14 @@ class RBQueueTableView: RBTableView {
     }
 
     override func keyDown(with event: NSEvent) {
-        //let flags = event.modifierFlags.intersection(.deviceIndependentFlagsMask)
-        if event.keyCode == 36 { // Enter/Return key
+        let flags = event.modifierFlags.intersection(.deviceIndependentFlagsMask).subtracting([.function, .numericPad])
+        if event.keyCode == 36
+            && flags.isEmpty { // Enter/Return key
             enter()
-        } else if event.keyCode == 51         // Backspace
+        } else if (event.keyCode == 51         // Backspace
                     || event.keyCode == 117   // Delete
-                    || event.characters == "d" {
+                    || event.characters == "d")
+                    && flags.isEmpty {
             delete()
         } else {
             super.keyDown(with: event)

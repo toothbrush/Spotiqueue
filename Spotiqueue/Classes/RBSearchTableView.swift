@@ -40,20 +40,23 @@ class RBSearchTableView: RBTableView {
     }
 
     override func keyDown(with event: NSEvent) {
-        let flags = event.modifierFlags.intersection(.deviceIndependentFlagsMask)
-        if event.keyCode == 36 { // Enter/Return key
+        // OMGWOW it took me a long time to figure out that arrow keys are special.  They count as both "function" and "numeric" keys. facepalm!
+        let flags = event.modifierFlags.intersection(.deviceIndependentFlagsMask).subtracting([.function, .numericPad])
+                
+        if event.keyCode == 36
+            && flags.isEmpty { // Enter/Return key
             enter()
-        } else if event.keyCode == 123 // left arrow
-                    && flags.intersection(.shift.union(.command)) == .shift.union(.command) {
+        } else if event.keyCode == 123 // cmd-shift-left arrow
+                    && flags == [.command, .shift] {
             enqueueSelection(position: .Top)
-        } else if event.characters == "h" // cmd-"h" key
-                    && flags.intersection(.shift.union(.command)) == .shift.union(.command) {
+        } else if event.characters == "h" // cmd-shift-"h" key
+                    && flags == [.command, .shift] {
             enqueueSelection(position: .Top)
-        } else if event.keyCode == 123 // left arrow
-                    && flags.contains(.command) {
+        } else if event.keyCode == 123 // cmd-left arrow
+                    && flags == .command {
             enqueueSelection()
         } else if event.characters == "h" // cmd-"h" key
-                    && flags.contains(.command) {
+                    && flags == .command {
             enqueueSelection()
         } else {
             super.keyDown(with: event)

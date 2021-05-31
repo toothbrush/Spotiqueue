@@ -169,11 +169,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func eventSeen(event:NSEvent) -> NSEvent? {
         logger.info("I saw an event! \(event.description)")
         logger.info("characters: >\(String(describing: event.characters))<")
-        let flags = event.modifierFlags.intersection(.deviceIndependentFlagsMask)
-        if flags.contains(.command)
+        let flags = event.modifierFlags.intersection(.deviceIndependentFlagsMask).subtracting([.function, .numericPad])
+        if flags == .command
             && event.characters == "f" {
             self.window.makeFirstResponder(searchField)
-        } else if flags.contains(.command)
+        } else if flags == .command
                     && event.characters == "l" {
             self.window.makeFirstResponder(searchField)
         } else {

@@ -61,7 +61,7 @@ class RBTableView: NSTableView {
     }
 
     override func keyDown(with event: NSEvent) {
-        let flags = event.modifierFlags.intersection(.deviceIndependentFlagsMask)
+        let flags = event.modifierFlags.intersection(.deviceIndependentFlagsMask).subtracting([.function, .numericPad])
         if event.characters == "j"
                     && flags.isEmpty {
             selectNext()
@@ -72,22 +72,24 @@ class RBTableView: NSTableView {
                     && flags.isEmpty {
             selectRow(row: 0)
         } else if event.characters == "G"
-                    && flags.union(.shift) == .shift {
+                    && flags == .shift {
             selectRow(row: self.numberOfRows - 1)
-        } else if flags.isDisjoint(with: NSEvent.ModifierFlags.command.union(.shift))
+        } else if flags.isEmpty
                     && event.keyCode == 123 { // left arrow
             focusQueue()
-        } else if flags.isDisjoint(with: NSEvent.ModifierFlags.command.union(.shift))
+        } else if flags.isEmpty
                     && event.keyCode == 124 { // right arrow
             focusSearchResults()
-        } else if event.keyCode == 4 { // "h" key, left
+        } else if event.keyCode == 4
+                    && flags.isEmpty { // "h" key, left
             focusQueue()
-        } else if event.keyCode == 37 { // "l" key, right
+        } else if event.keyCode == 37
+                    && flags.isEmpty { // "l" key, right
             focusSearchResults()
-        } else if flags.isSuperset(of: .command)
+        } else if flags == .command
                     && event.keyCode == 124 { // cmd-right, search for album
             searchForAlbum()
-        } else if flags.isSuperset(of: .command)
+        } else if flags == .command
                     && event.characters == ";" { // cmd-;, search for album, because cmd-L is taken?
             searchForAlbum()
         } else if event.characters == "/"
