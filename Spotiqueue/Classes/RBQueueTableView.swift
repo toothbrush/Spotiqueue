@@ -16,6 +16,7 @@ class RBQueueTableView: RBTableView {
     func enter() {
         guard self.selectedRowIndexes.count == 1 else {
             logger.info("hmm, enter pressed on non-single track selection..")
+            NSSound.beep()
             return
         }
         AppDelegate.appDelegate().queue.removeFirst(self.selectedRow)
@@ -24,6 +25,7 @@ class RBQueueTableView: RBTableView {
 
     func delete() {
         guard self.selectedRowIndexes.count > 0 else {
+            NSSound.beep()
             return
         }
         let firstDeletionIdx = self.selectedRowIndexes.first!

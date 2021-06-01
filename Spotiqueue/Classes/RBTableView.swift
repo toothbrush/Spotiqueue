@@ -38,6 +38,7 @@ class RBTableView: NSTableView {
 
     func searchForAlbum() {
         guard selectedRowIndexes.count == 1 else {
+            NSSound.beep()
             return
         }
         if let songRow: RBSpotifySongTableRow = self.associatedArrayController().selectedObjects.first as? RBSpotifySongTableRow {

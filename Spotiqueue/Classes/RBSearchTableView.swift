@@ -20,7 +20,7 @@ class RBSearchTableView: RBTableView {
 
     func enter() {
         guard !selectedSearchTracks().isEmpty else {
-            logger.info("hmm, enter pressed on empty search selection..")
+            NSSound.beep()
             return
         }
         enqueueSelection(position: .Top)
@@ -29,6 +29,7 @@ class RBSearchTableView: RBTableView {
 
     func enqueueSelection(position: EnqueuePosition = .Bottom) {
         guard !selectedSearchTracks().isEmpty else {
+            NSSound.beep()
             return
         }
         switch position {
