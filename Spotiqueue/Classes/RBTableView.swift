@@ -20,22 +20,6 @@ class RBTableView: NSTableView {
                               byExtendingSelection: false)
     }
 
-    func selectNext() {
-        if let row = self.selectedRowIndexes.last {
-            selectRow(row: row + 1)
-        } else {
-            selectRow(row: self.numberOfRows)
-        }
-    }
-
-    func selectPrev() {
-        if let row = self.selectedRowIndexes.first {
-            selectRow(row: row - 1)
-        } else {
-            selectRow(row: 0)
-        }
-    }
-
     func searchForAlbum() {
         guard selectedRowIndexes.count == 1 else {
             NSSound.beep()
@@ -63,12 +47,28 @@ class RBTableView: NSTableView {
 
     override func keyDown(with event: NSEvent) {
         let flags = event.modifierFlags.intersection(.deviceIndependentFlagsMask).subtracting([.function, .numericPad])
-        if event.characters == "j"
-                    && flags.isEmpty {
-            selectNext()
-        } else if event.characters == "k"
-                    && flags.isEmpty {
-            selectPrev()
+        if event.charactersIgnoringModifiers?.lowercased() == "j" {
+            let synthetic = NSEvent.keyEvent(with: .keyDown,
+                                             location: .zero,
+                                             modifierFlags: event.modifierFlags.union([.function, .numericPad]),
+                                             timestamp: 0, windowNumber: 0,
+                                             context: nil,
+                                             characters: "",
+                                             charactersIgnoringModifiers: "",
+                                             isARepeat: event.isARepeat,
+                                             keyCode: 125)!
+            super.keyDown(with: synthetic)
+        } else if event.characters?.lowercased() == "k" {
+            let synthetic = NSEvent.keyEvent(with: .keyDown,
+                                             location: .zero,
+                                             modifierFlags: event.modifierFlags.union([.function, .numericPad]),
+                                             timestamp: 0, windowNumber: 0,
+                                             context: nil,
+                                             characters: "",
+                                             charactersIgnoringModifiers: "",
+                                             isARepeat: event.isARepeat,
+                                             keyCode: 126)!
+            super.keyDown(with: synthetic)
         } else if event.characters == "g"
                     && flags.isEmpty {
             selectRow(row: 0)
