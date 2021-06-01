@@ -1,8 +1,3 @@
-# Feature parity with the old thing
-
-Remaining:
--   Holding the command-key and using the navigation keys moves the selected tracks in the queue.
-
 # TODO list
 
 * countdown duration removes minus sign when abs(remaining) < 1min.

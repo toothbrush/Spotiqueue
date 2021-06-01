@@ -39,6 +39,28 @@ class RBQueueTableView: RBTableView {
         super.searchForAlbum()
     }
 
+    func moveSelectionUp() {
+        guard !self.selectedRowIndexes.isEmpty else {
+            NSSound.beep()
+            return
+        }
+        if let first = self.selectedRowIndexes.first, first > 0 {
+            AppDelegate.appDelegate().queue.move(fromOffsets: self.selectedRowIndexes, toOffset: first - 1)
+            self.scrollRowToVisible((first - 2).clamped(fromInclusive: 0, toInclusive: self.numberOfRows - 1))
+        }
+    }
+
+    func moveSelectionDown() {
+        guard !self.selectedRowIndexes.isEmpty else {
+            NSSound.beep()
+            return
+        }
+        if let last = self.selectedRowIndexes.last, last + 1 < self.numberOfRows  {
+            AppDelegate.appDelegate().queue.move(fromOffsets: self.selectedRowIndexes, toOffset: last + 2)
+            self.scrollRowToVisible((last + 2).clamped(fromInclusive: 0, toInclusive: self.numberOfRows - 1))
+        }
+    }
+
     override func keyDown(with event: NSEvent) {
         let flags = event.modifierFlags.intersection(.deviceIndependentFlagsMask).subtracting([.function, .numericPad])
         if event.keyCode == 36
@@ -49,6 +71,12 @@ class RBQueueTableView: RBTableView {
                     || event.characters == "d")
                     && flags.isEmpty {
             delete()
+        } else if event.keyCode == 125       // down arrow
+                    && flags == [.command] {
+            moveSelectionDown()
+        } else if event.keyCode == 126       // up arrow
+                    && flags == [.command] {
+            moveSelectionUp()
         } else {
             super.keyDown(with: event)
         }
