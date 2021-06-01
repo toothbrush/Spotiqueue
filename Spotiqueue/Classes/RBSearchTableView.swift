@@ -35,8 +35,10 @@ class RBSearchTableView: RBTableView {
         switch position {
             case .Bottom:
                 AppDelegate.appDelegate().queue.append(contentsOf: self.selectedSearchTracks())
+                AppDelegate.appDelegate().queueTableView.selectRow(row: AppDelegate.appDelegate().queue.count - self.selectedSearchTracks().count)
             case .Top:
                 AppDelegate.appDelegate().queue = self.selectedSearchTracks() + AppDelegate.appDelegate().queue
+                AppDelegate.appDelegate().queueTableView.selectRow(row: 0)
         }
     }
 
