@@ -209,8 +209,6 @@ final class RBSpotify: ObservableObject {
 
             // Save the data to the keychain.
             RBSecrets.setSecret(s: .authorizationManager, v: authManagerData)
-            logger.info("did save authorization manager to keychain")
-
         } catch {
             logger.critical(
                 "couldn't encode authorizationManager for storage " +

@@ -30,8 +30,6 @@
 * Nicer login and auth flow.  Maybe use OAUTH for spotiqueue-worker, too.
 * Save queue to .. NSUserDefaults? Text file?
 
-* clean debug logs to be a bit more readable 😬
-
 * Loved tracks retrieval
 * Add/remove star
 

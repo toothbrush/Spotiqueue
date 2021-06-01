@@ -15,7 +15,7 @@ let logger = SXLogger()
 
 @_cdecl("player_update_hook")
 public func player_update_hook(hook: StatusUpdate, position_ms: UInt32, duration_ms: UInt32) {
-    logger.info("Hook ==> \(hook.rawValue)")
+    logger.info("Hook spotiqueue-worker hook ==> \(hook.rawValue)")
     switch hook {
         case EndOfTrack:
             DispatchQueue.main.async{
@@ -167,8 +167,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func localKeyShortcuts(event: NSEvent) -> NSEvent? {
         logger.info("I saw an event! \(event.description)")
         if event.type == .keyDown {
-            logger.info("keycode = \(event.keyCode)")
-            logger.info("characters: >\(String(describing: event.characters))<")
+            logger.info("keycode = \(event.keyCode), characters: >\(String(describing: event.characters))<")
         }
         let flags = event.modifierFlags.intersection(.deviceIndependentFlagsMask).subtracting([.function, .numericPad])
         if flags == .command
@@ -405,7 +404,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                     for result in searchResultsReturn.tracks?.items ?? [] {
                         searchResults.append(RBSpotifySongTableRow(track: result))
                     }
-                    logger.info("Received \(self.searchResults.count) tracks")
+                    logger.info("[query \(i)] Received \(self.searchResults.count) tracks")
                     searchResultsArrayController.sortDescriptors = RBSpotifySongTableRow.trackSortDescriptors
                     searchResultsArrayController.rearrangeObjects()
                     searchTableView.selectRow(row: 0)

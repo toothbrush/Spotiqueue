@@ -25,9 +25,8 @@ class RBSecrets: NSObject {
         let appSupportDir = FileManager.default.urls(for: .applicationSupportDirectory,
                                                      in: .userDomainMask).first!
         let fileURL = appSupportDir.appendingPathComponent("\(s.rawValue).txt")
-        logger.info("DEBUG mode - does \(fileURL) exist?")
+        logger.info("Read <\(s.rawValue)> from \(fileURL)")
         if FileManager.default.fileExists(atPath: fileURL.path) {
-            logger.info("Attempting to read \(fileURL) because DEBUG is set.")
             do {
                 let contentFromFile = try String(contentsOfFile: fileURL.path,
                                                  encoding: .utf8)
@@ -39,7 +38,6 @@ class RBSecrets: NSObject {
         }
         #endif
 
-        logger.info("Retrieving <\(s.rawValue)> from keychain.")
         if let key = keychain.get(s.rawValue) {
             return key
         }
@@ -52,7 +50,7 @@ class RBSecrets: NSObject {
         let appSupportDir = FileManager.default.urls(for: .applicationSupportDirectory,
                                                      in: .userDomainMask).first!
         let fileURL = appSupportDir.appendingPathComponent("\(s.rawValue).txt")
-        logger.info("DEBUG mode - writing to \(fileURL).")
+        logger.info("Writing key to \(fileURL)")
         do {
             try String(decoding: v, as: UTF8.self).write(toFile: fileURL.path,
                                                          atomically: true,

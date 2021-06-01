@@ -39,7 +39,6 @@ extension NSImageView {
 
         if let url = URL(string: imageServerUrl) {
             URLSession.shared.dataTask(with: url, completionHandler: { (data, response, error) in
-                // logger.info("Response downloading image: \(String(describing: response))")
                 if error != nil {
                     logger.error("Error loading image from URL: \(String(describing: error?.localizedDescription))")
                     DispatchQueue.main.async {
