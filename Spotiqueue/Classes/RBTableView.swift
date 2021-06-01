@@ -57,7 +57,7 @@ class RBTableView: NSTableView {
                                              charactersIgnoringModifiers: "",
                                              isARepeat: event.isARepeat,
                                              keyCode: 125)!
-            super.keyDown(with: synthetic)
+            self.keyDown(with: synthetic)
         } else if event.characters?.lowercased() == "k" {
             let synthetic = NSEvent.keyEvent(with: .keyDown,
                                              location: .zero,
@@ -68,7 +68,7 @@ class RBTableView: NSTableView {
                                              charactersIgnoringModifiers: "",
                                              isARepeat: event.isARepeat,
                                              keyCode: 126)!
-            super.keyDown(with: synthetic)
+            self.keyDown(with: synthetic)
         } else if event.characters == "g"
                     && flags.isEmpty {
             selectRow(row: 0)
