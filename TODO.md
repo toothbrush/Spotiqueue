@@ -27,9 +27,6 @@ Remaining:
 
 * Search: if searching for "album:...URI..." plus a term, maybe filter results (locally) on those terms?
 
-* shift-V switches "visual" mode, allow selecting rows in queue with
-  motion keys?
-
 * Some sort of local "filter results" function.  Press "/" or something?
 
 
