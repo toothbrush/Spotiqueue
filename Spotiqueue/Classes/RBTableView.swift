@@ -14,26 +14,26 @@ class RBTableView: NSTableView {
     }
 
     func selectRow(row: Int) {
-        if !(0..<self.numberOfRows).contains(row) {
-            return
-        }
-        self.scrollRowToVisible(row)
-        self.selectRowIndexes(IndexSet(integer: row),
+        let row_ = row.clamped(to: (0..<self.numberOfRows))
+        self.scrollRowToVisible(row_)
+        self.selectRowIndexes(IndexSet(integer: row_),
                               byExtendingSelection: false)
     }
 
     func selectNext() {
-        guard selectedRowIndexes.count == 1 else {
-            return
+        if let row = self.selectedRowIndexes.last {
+            selectRow(row: row + 1)
+        } else {
+            selectRow(row: self.numberOfRows)
         }
-        selectRow(row: self.selectedRow + 1)
     }
 
     func selectPrev() {
-        guard selectedRowIndexes.count == 1 else {
-            return
+        if let row = self.selectedRowIndexes.first {
+            selectRow(row: row - 1)
+        } else {
+            selectRow(row: 0)
         }
-        selectRow(row: self.selectedRow - 1)
     }
 
     func searchForAlbum() {
