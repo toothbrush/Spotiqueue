@@ -1,14 +1,11 @@
 # TODO list
 
-* countdown duration removes minus sign when abs(remaining) < 1min.
-
 * page up / down should bring focussed row along for the ride.
 
 * under high CPU load spotiqueue-worker seems to falter.
   supposedly a release build will help...
 
 * Automatically switch audio output sink when using Sound.prefpane
-* [x] Duration song countdown
 
 * Copying and pasting of spotify URIs
 * Dragging items position in queue

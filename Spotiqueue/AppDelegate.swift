@@ -110,8 +110,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var duration: TimeInterval = 0
 
     func updateDurationDisplay() {
-        let remaining = round(position) - round(duration)
-        durationLabel.cell?.title = String(format: "%@ / %@ / %@",
+        let remaining = round(duration) - round(position)
+        durationLabel.cell?.title = String(format: "%@ / -%@ / %@",
                                            round(position).positionalTime,
                                            round(remaining).positionalTime,
                                            round(duration).positionalTime)
