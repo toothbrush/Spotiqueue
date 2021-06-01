@@ -14,7 +14,7 @@ class RBTableView: NSTableView {
     }
 
     func selectRow(row: Int) {
-        let row_ = row.clamped(to: (0..<self.numberOfRows))
+        let row_ = row.clamped(fromInclusive: 0, toInclusive: self.numberOfRows - 1)
         self.scrollRowToVisible(row_)
         self.selectRowIndexes(IndexSet(integer: row_),
                               byExtendingSelection: false)
