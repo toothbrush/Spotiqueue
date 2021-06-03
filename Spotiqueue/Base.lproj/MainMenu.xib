@@ -1140,7 +1140,7 @@
                     </progressIndicator>
                     <progressIndicator hidden="YES" fixedFrame="YES" maxValue="100" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="q94-z4-FfB">
                         <rect key="frame" x="0.0" y="-7" width="1229" height="20"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                     </progressIndicator>
                 </subviews>
             </view>
