@@ -40,7 +40,7 @@
 		DA5AFB0D26565CD300C6C468 /* RBSpotify.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RBSpotify.swift; sourceTree = "<group>"; };
 		DA5AFB0F26567AB300C6C468 /* TrackExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackExtensions.swift; sourceTree = "<group>"; };
 		DA5AFB12265682D300C6C468 /* RBSearchTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RBSearchTableView.swift; sourceTree = "<group>"; };
-		DA5AFB162658A6C500C6C468 /* libspotiqueue_worker.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libspotiqueue_worker.a; path = "spotiqueue-worker/target/debug/libspotiqueue_worker.a"; sourceTree = "<group>"; };
+		DA5AFB162658A6C500C6C468 /* libspotiqueue_worker.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libspotiqueue_worker.a; path = "spotiqueue-worker/target/release/libspotiqueue_worker.a"; sourceTree = "<group>"; };
 		DA5AFB182658A6F400C6C468 /* Spotiqueue-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Spotiqueue-Bridging-Header.h"; sourceTree = "<group>"; };
 		DA5AFB1C2658B7BE00C6C468 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		DA5AFB1E2658B7C700C6C468 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
