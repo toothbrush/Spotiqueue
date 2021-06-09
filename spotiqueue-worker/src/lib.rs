@@ -116,8 +116,7 @@ impl SendCommand for State {
 
 fn c_str_to_rust_string(s_raw: *const c_char) -> String {
     if s_raw.is_null() {
-        error!("Null string!");
-        return "".to_owned();
+        panic!("Null string!");
     }
     // take string from the input C string
     let c_str: &CStr = unsafe { CStr::from_ptr(s_raw) };
