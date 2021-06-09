@@ -143,8 +143,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         initialiseSpotifyLibrary()
         set_callback(player_update_hook(hook: position_ms: duration_ms:))
-        spotiqueue_initialize_worker(RBSecrets.getSecret(s: .username),
-                                     RBSecrets.getSecret(s: .password))
+        let worker_initialized = spotiqueue_initialize_worker(
+            RBSecrets.getSecret(s: .username),
+            RBSecrets.getSecret(s: .password))
+        if !worker_initialized {
+            fatalError("Unable to launch spotiqueue-worker!")
+        }
 
         NSEvent.addLocalMonitorForEvents(matching: [.keyDown, .systemDefined], handler: localKeyShortcuts(event:))
         self.window.makeFirstResponder(self.searchField)
