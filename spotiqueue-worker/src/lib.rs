@@ -158,23 +158,27 @@ pub extern "C" fn spotiqueue_initialize_worker(
     username_raw: *const c_char,
     password_raw: *const c_char,
 ) -> bool {
-    Builder::new().filter_level(LevelFilter::Debug).init();
-
-    RUNTIME.set(Runtime::new().unwrap()).unwrap();
-
     if username_raw.is_null() || password_raw.is_null() {
         error!("Username or password not provided correctly.");
         return false;
     }
 
+    let username = c_str_to_rust_string(username_raw);
+    let password = c_str_to_rust_string(password_raw);
+
+    internal_initialize_worker(username, password)
+}
+
+fn internal_initialize_worker(username: String, password: String) -> bool {
+    Builder::new().filter_level(LevelFilter::Debug).init();
+
+    RUNTIME.set(Runtime::new().unwrap()).unwrap();
+
     let session_config = SessionConfig::default();
     let player_config = PlayerConfig::default();
     let audio_format = AudioFormat::default();
 
-    let username = c_str_to_rust_string(username_raw);
-    let password = c_str_to_rust_string(password_raw);
-
-    let credentials = Credentials::with_password(username.clone(), password.clone());
+    let credentials = Credentials::with_password(username, password);
 
     let backend = audio_backend::find(None).unwrap();
 
