@@ -15,10 +15,9 @@ use once_cell::sync::OnceCell;
 
 use tokio::runtime::Runtime;
 
-#[macro_use]
-extern crate log;
 use env_logger::Builder;
 use log::LevelFilter;
+use log::{debug, error, info};
 
 #[allow(dead_code)]
 static RUNTIME: OnceCell<Runtime> = OnceCell::new();
