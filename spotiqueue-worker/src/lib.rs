@@ -127,6 +127,7 @@ fn c_str_to_rust_string(s_raw: *const c_char) -> String {
 }
 
 #[repr(C)]
+#[derive(Debug)]
 pub enum StatusUpdate {
     EndOfTrack,
     Paused,
