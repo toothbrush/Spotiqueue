@@ -171,6 +171,10 @@ pub extern "C" fn spotiqueue_initialize_worker(
 
 fn internal_initialize_worker(username: String, password: String) -> bool {
     Builder::new().filter_level(LevelFilter::Debug).init();
+    #[cfg(debug_assertions)]
+    {
+        info!("I am running in debug mode.");
+    }
 
     RUNTIME.set(Runtime::new().unwrap()).unwrap();
 
