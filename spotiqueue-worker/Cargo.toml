@@ -1,5 +1,5 @@
 [lib]
-crate-type = ["staticlib"]
+crate-type = ["staticlib", "rlib"]
 
 [package]
 name = "spotiqueue-worker"
