@@ -1,6 +1,9 @@
 [lib]
 crate-type = ["staticlib", "rlib"]
 
+[profile.release]
+debug = 1
+
 [package]
 name = "spotiqueue-worker"
 version = "0.1.0"
