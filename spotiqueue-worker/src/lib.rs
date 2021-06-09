@@ -216,6 +216,10 @@ pub extern "C" fn spotiqueue_unpause_playback() {
 #[no_mangle]
 pub extern "C" fn spotiqueue_preload_track(spotify_uri_raw: *const c_char) -> bool {
     let spotify_uri = c_str_to_rust_string(spotify_uri_raw);
+    internal_preload_track(spotify_uri)
+}
+
+fn internal_preload_track(spotify_uri: String) -> bool {
     match track_id_from_spotify_uri(&spotify_uri) {
         Some(track) => {
             let state = STATE.get().unwrap();
@@ -232,6 +236,10 @@ pub extern "C" fn spotiqueue_preload_track(spotify_uri_raw: *const c_char) -> bo
 #[no_mangle]
 pub extern "C" fn spotiqueue_play_track(spotify_uri_raw: *const c_char) -> bool {
     let spotify_uri = c_str_to_rust_string(spotify_uri_raw);
+    internal_play_track(spotify_uri)
+}
+
+fn internal_play_track(spotify_uri: String) -> bool {
     info!("Trying to play {}...", spotify_uri);
 
     match track_id_from_spotify_uri(&spotify_uri) {
