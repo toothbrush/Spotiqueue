@@ -11,7 +11,15 @@ import SpotifyWebAPI
 import Combine
 import Stenographer
 
-let logger = SXLogger()
+#if DEBUG
+let minimumLogPriorityLevel: SXPriorityLevel = .all
+#else
+let minimumLogPriorityLevel: SXPriorityLevel = .warning
+#endif
+
+let logger = SXLogger(endpoints: [
+    SXConsoleEndpoint(minimumPriorityLevel: minimumLogPriorityLevel)
+])
 
 @_cdecl("player_update_hook")
 public func player_update_hook(hook: StatusUpdate, position_ms: UInt32, duration_ms: UInt32) {
