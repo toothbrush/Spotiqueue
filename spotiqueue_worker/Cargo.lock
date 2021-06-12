@@ -1737,7 +1737,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "spotiqueue-worker"
+name = "spotiqueue_worker"
 version = "0.1.0"
 dependencies = [
  "cbindgen",
