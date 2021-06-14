@@ -149,15 +149,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     // Here is another extensive howto around table views and such https://www.raywenderlich.com/921-cocoa-bindings-on-macos
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
-        initialiseSpotifyLibrary()
+        let modal = RBLoginWindow(windowNibName: "RBLoginWindow")
+        self.window?.beginSheet(modal.window!, completionHandler: { [weak self] response in
+            self!.initialiseSpotifyWebAPI()
+        })
+        modal.startLoginRoutine()
         set_callback(player_update_hook(hook: position_ms: duration_ms:))
-        let worker_initialized = spotiqueue_initialize_worker(
-            RBSecrets.getSecret(s: .username),
-            RBSecrets.getSecret(s: .password))
-        if !worker_initialized {
-            fatalError("Unable to launch spotiqueue-worker!")
-        }
-
         NSEvent.addLocalMonitorForEvents(matching: [.keyDown, .systemDefined], handler: localKeyShortcuts(event:))
         self.window.makeFirstResponder(self.searchField)
         // setup "focus loop"
@@ -188,6 +185,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         } else if flags == .command
                     && event.characters == "l" {
             self.window.makeFirstResponder(searchField)
+        } else if flags == .command
+                    && event.characters == "q" {
+            for window in NSApp.windows {
+                window.close()
+            }
+            NSApp.terminate(self)
         } else {
             return event
         }
@@ -428,7 +431,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         self.window.makeFirstResponder(searchTableView)
     }
 
-    func initialiseSpotifyLibrary() {
+    func initialiseSpotifyWebAPI() {
         if !spotify.isAuthorized {
             spotify.authorize()
         }
@@ -456,7 +459,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         self.currentSong = nextTrack
         // ehm awkward, attempting to get second largest image.
         if let image = nextTrack.album_image {
-            self.albumImage.imageFromServerURL(image.url, placeHolder: nil)
+            self.albumImage.imageFromServerURL(image.url.absoluteString, placeHolder: nil)
         }
         queue.remove(at: 0)
     }
