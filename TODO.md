@@ -41,7 +41,6 @@
 
 # Lower priority
 
-* Nicer login and auth flow.  Maybe use OAUTH for spotiqueue-worker, too.
 * Save queue to .. NSUserDefaults? Text file?
 
 * Loved tracks retrieval
@@ -55,3 +54,5 @@
 * Sparkle framework or other auto update
 
 * Play/pause button
+
+* Deal with incorrect username/password.

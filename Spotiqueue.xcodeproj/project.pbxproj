@@ -31,6 +31,8 @@
 		DAFAB407265D1BE90096810C /* NSImageViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAFAB406265D1BE90096810C /* NSImageViewExtensions.swift */; };
 		EC34C8A32664D92300786C78 /* OptionSetExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC34C8A22664D92300786C78 /* OptionSetExtensions.swift */; };
 		EC34C8B82665C17C00786C78 /* ComparableExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC34C8B72665C17C00786C78 /* ComparableExtensions.swift */; };
+		EC9B31A82677048000E5C44B /* RBLoginWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC9B31A62677048000E5C44B /* RBLoginWindow.swift */; };
+		EC9B31A92677048000E5C44B /* RBLoginWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = EC9B31A72677048000E5C44B /* RBLoginWindow.xib */; };
 		ECB750492676E4D80011DFF6 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = ECB750482676E4D80011DFF6 /* MainMenu.xib */; };
 /* End PBXBuildFile section */
 
@@ -71,6 +73,8 @@
 		DAFAB406265D1BE90096810C /* NSImageViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSImageViewExtensions.swift; sourceTree = "<group>"; };
 		EC34C8A22664D92300786C78 /* OptionSetExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionSetExtensions.swift; sourceTree = "<group>"; };
 		EC34C8B72665C17C00786C78 /* ComparableExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComparableExtensions.swift; sourceTree = "<group>"; };
+		EC9B31A62677048000E5C44B /* RBLoginWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RBLoginWindow.swift; sourceTree = "<group>"; };
+		EC9B31A72677048000E5C44B /* RBLoginWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RBLoginWindow.xib; sourceTree = "<group>"; };
 		ECB750482676E4D80011DFF6 /* MainMenu.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainMenu.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -170,6 +174,8 @@
 				DAE1F18326534D670013704F /* Assets.xcassets */,
 				DAE1F18826534D670013704F /* Info.plist */,
 				DAE1F18926534D670013704F /* Spotiqueue.entitlements */,
+				EC9B31A62677048000E5C44B /* RBLoginWindow.swift */,
+				EC9B31A72677048000E5C44B /* RBLoginWindow.xib */,
 			);
 			path = Spotiqueue;
 			sourceTree = "<group>";
@@ -260,6 +266,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EC9B31A92677048000E5C44B /* RBLoginWindow.xib in Resources */,
 				DAE1F18426534D670013704F /* Assets.xcassets in Resources */,
 				ECB750492676E4D80011DFF6 /* MainMenu.xib in Resources */,
 			);
@@ -275,6 +282,7 @@
 				DA5AFB0E26565CD300C6C468 /* RBSpotify.swift in Sources */,
 				DA343EE326622367000980E2 /* SpotifyAPIExtensions.swift in Sources */,
 				DAE1F18226534D660013704F /* AppDelegate.swift in Sources */,
+				EC9B31A82677048000E5C44B /* RBLoginWindow.swift in Sources */,
 				DA5AFB31265BB59900C6C468 /* CalendarExtension.swift in Sources */,
 				DABEC90F26536F5800CA3F67 /* RBSecrets.swift in Sources */,
 				DA5AFB2D265A86FD00C6C468 /* RBTableView.swift in Sources */,
