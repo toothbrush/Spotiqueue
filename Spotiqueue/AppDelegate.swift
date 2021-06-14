@@ -223,6 +223,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 // access and refresh tokens.
                 spotify.api.authorizationManager.requestAccessAndRefreshTokens(
                     redirectURIWithQuery: URL(string: url)!,
+                    codeVerifier: RBSpotify.codeVerifier,
                     // This value must be the same as the one used to create the
                     // authorization URL. Otherwise, an error will be thrown.
                     state: spotify.authorizationState

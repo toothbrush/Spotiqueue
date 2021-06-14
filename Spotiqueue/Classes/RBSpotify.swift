@@ -20,8 +20,7 @@ import SpotifyWebAPI
  */
 final class RBSpotify: ObservableObject {
 
-    private static let clientId: String = RBSecrets.getSecret(s: .clientId)!
-    private static let clientSecret: String = RBSecrets.getSecret(s: .clientSecret)!
+    private static let clientId: String = "f925f1b4e9164425be3d9ec9bf4be1c5"
 
     /// The URL that Spotify will redirect to after the user either
     /// authorizes or denies authorization for your application.
@@ -34,7 +33,8 @@ final class RBSpotify: ObservableObject {
     /// made by this app, and not an attacker. **This value is regenerated**
     /// **after each authorization process completes.**
     var authorizationState = String.randomURLSafe(length: 128)
-
+    static let codeVerifier = String.randomURLSafe(length: 128)
+    static let codeChallenge = String.makeCodeChallenge(codeVerifier: codeVerifier)
     /**
      Whether or not the application has been authorized. If `true`,
      then you can begin making requests to the Spotify web API
@@ -65,8 +65,8 @@ final class RBSpotify: ObservableObject {
     /// An instance of `SpotifyAPI` that you use to make requests to
     /// the Spotify web API.
     let api = SpotifyAPI(
-        authorizationManager: AuthorizationCodeFlowManager(
-            clientId: RBSpotify.clientId, clientSecret: RBSpotify.clientSecret
+        authorizationManager: AuthorizationCodeFlowPKCEManager(
+            clientId: RBSpotify.clientId
         )
     )
 
@@ -102,7 +102,7 @@ final class RBSpotify: ObservableObject {
             do {
                 // Try to decode the data.
                 let authorizationManager = try JSONDecoder().decode(
-                    AuthorizationCodeFlowManager.self,
+                    AuthorizationCodeFlowPKCEManager.self,
                     from: authManagerData.data(using: .utf8)!
                 )
                 logger.debug("found authorization information in keychain")
@@ -148,7 +148,7 @@ final class RBSpotify: ObservableObject {
 
         let url = api.authorizationManager.makeAuthorizationURL(
             redirectURI: Self.loginCallbackURL,
-            showDialog: false,
+            codeChallenge: RBSpotify.codeChallenge,
             // This same value **MUST** be provided for the state parameter of
             // `authorizationManager.requestAccessAndRefreshTokens(redirectURIWithQuery:state:)`.
             // Otherwise, an error will be thrown.

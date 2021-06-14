@@ -11,8 +11,6 @@ import KeychainSwift
 
 class RBSecrets: NSObject {
     enum Secret: String {
-        case clientId = "spotiqueue_client_id"
-        case clientSecret = "spotiqueue_client_secret"
         case username = "spotiqueue_username"
         case password = "spotiqueue_password"
         case authorizationManager = "spotiqueue_authorization_manager"
