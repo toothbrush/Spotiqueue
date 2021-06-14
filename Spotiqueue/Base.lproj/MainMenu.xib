@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="18122" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="18122"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17701"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -32,13 +32,11 @@
             </connections>
         </customObject>
         <arrayController objectClassName="Spotiqueue.SpotifySongTableRow" id="cJI-F4-neh" userLabel="searchResults">
-            <classReference key="objectClass" className="SpotifySongTableRow" moduleName="Spotiqueue"/>
             <connections>
                 <binding destination="Voe-Tx-rLC" name="contentArray" keyPath="self.searchResults" id="ol7-5Z-Tgg"/>
             </connections>
         </arrayController>
         <arrayController objectClassName="Spotiqueue.SpotifySongTableRow" id="ueN-np-pxA" userLabel="queue">
-            <classReference key="objectClass" className="SpotifySongTableRow" moduleName="Spotiqueue"/>
             <connections>
                 <binding destination="Voe-Tx-rLC" name="contentArray" keyPath="self.queue" id="bM9-ch-RTT"/>
             </connections>
@@ -667,7 +665,7 @@
                     </menu>
                 </menuItem>
             </items>
-            <point key="canvasLocation" x="139" y="154"/>
+            <point key="canvasLocation" x="301" y="514"/>
         </menu>
         <window title="Spotiqueue" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" animationBehavior="default" id="QvC-M9-y7g">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
@@ -682,11 +680,11 @@
                         <rect key="frame" x="618" y="142" width="591" height="637"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" heightSizable="YES"/>
                         <clipView key="contentView" focusRingType="exterior" id="NVK-ot-Jnv">
-                            <rect key="frame" x="1" y="1" width="589" height="620"/>
+                            <rect key="frame" x="1" y="1" width="589" height="635"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <tableView focusRingType="exterior" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" autosaveColumns="NO" rowSizeStyle="automatic" headerView="t8H-AC-zSi" viewBased="YES" id="nXe-2G-u1l" customClass="RBSearchTableView" customModule="Spotiqueue" customModuleProvider="target">
-                                    <rect key="frame" x="0.0" y="0.0" width="811" height="595"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="811" height="610"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <size key="intercellSpacing" width="3" height="2"/>
                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -846,7 +844,7 @@
                             </subviews>
                         </clipView>
                         <scroller key="horizontalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="fIp-fc-DAN">
-                            <rect key="frame" x="1" y="621" width="589" height="15"/>
+                            <rect key="frame" x="1" y="620" width="589" height="16"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                         <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="XBY-rE-fFs">
@@ -861,7 +859,7 @@
                     <searchField wantsLayer="YES" focusRingType="exterior" verticalHuggingPriority="750" fixedFrame="YES" preferredMaxLayoutWidth="250" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="T2h-BB-MEE">
                         <rect key="frame" x="959" y="787" width="250" height="22"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                        <searchFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" borderStyle="bezel" focusRingType="exterior" usesSingleLineMode="YES" bezelStyle="round" sendsWholeSearchString="YES" id="EnN-fl-XWg">
+                        <searchFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" borderStyle="bezel" focusRingType="exterior" placeholderString="Search (⌘F)" usesSingleLineMode="YES" bezelStyle="round" sendsWholeSearchString="YES" id="EnN-fl-XWg">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
