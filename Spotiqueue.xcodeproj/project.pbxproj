@@ -206,6 +206,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = DAE1F18C26534D670013704F /* Build configuration list for PBXNativeTarget "Spotiqueue" */;
 			buildPhases = (
+				DAD7D74A2677726000A5510E /* Codesign Sparkle.framework */,
 				DAE1F17A26534D660013704F /* Sources */,
 				DAE1F17B26534D660013704F /* Frameworks */,
 				DAE1F17C26534D660013704F /* Resources */,
@@ -293,6 +294,29 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		DAD7D74A2677726000A5510E /* Codesign Sparkle.framework */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Sparkle.framework/Resources/Autoupdate.app/Contents/MacOS/Autoupdate",
+				"$(SRCROOT)/Sparkle.framework/Resources/Autoupdate.app/Contents/MacOS/fileop",
+			);
+			name = "Codesign Sparkle.framework";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -exu\n\nif [ \"$CONFIGURATION\" != Release ]; then\n    echo \"Not release configuration, skipping Sparkle codesigning\"\n    exit 0\nfi\n\ncodesign --verbose --force --sign \"$CODE_SIGN_IDENTITY\" --timestamp --deep --options runtime \"${SRCROOT}/Sparkle.framework/Resources/Autoupdate.app\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		DAE1F17A26534D660013704F /* Sources */ = {
@@ -450,7 +474,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 389;
+				CURRENT_PROJECT_VERSION = 391;
 				DEVELOPMENT_TEAM = QG72S9L5L3;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -481,7 +505,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 389;
+				CURRENT_PROJECT_VERSION = 391;
 				DEVELOPMENT_TEAM = QG72S9L5L3;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
