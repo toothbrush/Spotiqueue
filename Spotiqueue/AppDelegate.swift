@@ -97,6 +97,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var playerState: PlayerState = .Stopped
     var lastSearch: LastSearch = .Freetext
 
+    var loginWindow: RBLoginWindow?
+
     private var _isSearching: Bool = false
     var isSearching: Bool {
         get {
@@ -150,8 +152,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         let modal = RBLoginWindow(windowNibName: "RBLoginWindow")
+        loginWindow = modal
         self.window?.beginSheet(modal.window!, completionHandler: { [weak self] response in
             self!.initialiseSpotifyWebAPI()
+            self?.loginWindow = nil
         })
         modal.startLoginRoutine()
         set_callback(player_update_hook(hook: position_ms: duration_ms:))
