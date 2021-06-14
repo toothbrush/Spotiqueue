@@ -9,23 +9,6 @@
 
 * page up / down should bring focussed row along for the ride.
 
-* under high CPU load spotiqueue-worker seems to falter.  supposedly a
-  release build will help... OK so. A release build drops CPU to about
-  10-12% when Spotiqueue is idling.  Still no good.  It looks as if it
-  starts as soon as `spotiqueue_initialize_worker` is called, and it
-  seems (see Profiler of XCode) to be a thread suggestively called
-  com.apple.audio.iothread.client taking that CPU time.  Weirdly
-  though, when i wrote a Rust client app with a main.rs that simply
-  boots the library with that call, it doesn't _appear_ to use much
-  CPU (merely .5% or so).  In `flamegraph` output it does however seem
-  that CoreAudio HALB_IOThread is doing most of the time.
-
-  Is it something about going via the static library / C FFI boundary?
-  That's something the Rust client app avoids - it's using rlib
-  style.  Next test would be to use spotiqueue-worker as a static
-  library too.  Then there's also a question of how Swift's threading
-  runtime interacts with Rust/Tokio?  No idea.
-
 * Automatically switch audio output sink when using Sound.prefpane
 
 * Copying and pasting of spotify URIs
