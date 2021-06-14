@@ -56,3 +56,5 @@
 * Search: Does "album:asdf" make sense? Search for "asdf" in album titles?  why not _just_ search for "asdf"?  Maybe park that idea until it turns out i'm often failing to find what i'm after in one go.
 
 * Sparkle framework or other auto update
+
+* Play/pause button
