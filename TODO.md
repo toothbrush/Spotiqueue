@@ -41,8 +41,6 @@
 
 # Lower priority
 
-* Better column widths in TableView 🙁
-
 * Nicer login and auth flow.  Maybe use OAUTH for spotiqueue-worker, too.
 * Save queue to .. NSUserDefaults? Text file?
 
