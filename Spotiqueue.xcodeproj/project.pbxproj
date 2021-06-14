@@ -25,9 +25,9 @@
 		DABEC90D2653534300CA3F67 /* RBSpotifySongTableRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABEC90C2653534300CA3F67 /* RBSpotifySongTableRow.swift */; };
 		DABEC90F26536F5800CA3F67 /* RBSecrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABEC90E26536F5800CA3F67 /* RBSecrets.swift */; };
 		DABEC9122653799100CA3F67 /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = DABEC9112653799100CA3F67 /* KeychainSwift */; };
-		DAD7D74026775AFB00A5510E /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAD7D73E26775AE900A5510E /* Sparkle.framework */; };
-		DAD7D74126775AFB00A5510E /* Sparkle.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DAD7D73E26775AE900A5510E /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		DAD7D74F267775A800A5510E /* libspotiqueue_worker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAD7D74E267775A800A5510E /* libspotiqueue_worker.a */; };
+		DAD7D75626777F4700A5510E /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAD7D75426777F4500A5510E /* Sparkle.framework */; };
+		DAD7D75726777F4700A5510E /* Sparkle.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DAD7D75426777F4500A5510E /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		DAE1F18226534D660013704F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE1F18126534D660013704F /* AppDelegate.swift */; };
 		DAE1F18426534D670013704F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DAE1F18326534D670013704F /* Assets.xcassets */; };
 		DAFAB407265D1BE90096810C /* NSImageViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAFAB406265D1BE90096810C /* NSImageViewExtensions.swift */; };
@@ -45,7 +45,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				DAD7D74126775AFB00A5510E /* Sparkle.framework in Embed Frameworks */,
+				DAD7D75726777F4700A5510E /* Sparkle.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -70,8 +70,8 @@
 		DA9564442674816D001BEDCA /* spotiqueue_worker_bindings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = spotiqueue_worker_bindings.h; path = spotiqueue_worker/spotiqueue_worker_bindings.h; sourceTree = "<group>"; };
 		DABEC90C2653534300CA3F67 /* RBSpotifySongTableRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RBSpotifySongTableRow.swift; sourceTree = "<group>"; };
 		DABEC90E26536F5800CA3F67 /* RBSecrets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RBSecrets.swift; sourceTree = "<group>"; };
-		DAD7D73E26775AE900A5510E /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sparkle.framework; path = Spotiqueue/Sparkle.framework; sourceTree = "<group>"; };
 		DAD7D74E267775A800A5510E /* libspotiqueue_worker.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libspotiqueue_worker.a; path = spotiqueue_worker/target/release/libspotiqueue_worker.a; sourceTree = "<group>"; };
+		DAD7D75426777F4500A5510E /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sparkle.framework; path = Spotiqueue/Sparkle.framework; sourceTree = "<group>"; };
 		DAE1F17E26534D660013704F /* Spotiqueue.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Spotiqueue.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAE1F18126534D660013704F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DAE1F18326534D670013704F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -94,7 +94,7 @@
 				DA5AFB212658B7D100C6C468 /* CoreAudio.framework in Frameworks */,
 				DA5AFB1F2658B7C800C6C468 /* CoreFoundation.framework in Frameworks */,
 				DA5AFB1D2658B7BE00C6C468 /* AudioToolbox.framework in Frameworks */,
-				DAD7D74026775AFB00A5510E /* Sparkle.framework in Frameworks */,
+				DAD7D75626777F4700A5510E /* Sparkle.framework in Frameworks */,
 				DAAE2F012653EA1F00FF0344 /* SpotifyAPI in Frameworks */,
 				DABEC9122653799100CA3F67 /* KeychainSwift in Frameworks */,
 				DAD7D74F267775A800A5510E /* libspotiqueue_worker.a in Frameworks */,
@@ -137,8 +137,8 @@
 			isa = PBXGroup;
 			children = (
 				DAD7D74E267775A800A5510E /* libspotiqueue_worker.a */,
-				DAD7D73E26775AE900A5510E /* Sparkle.framework */,
 				DA95643226746A9F001BEDCA /* libresolv.tbd */,
+				DAD7D75426777F4500A5510E /* Sparkle.framework */,
 				DA5AFB202658B7D100C6C468 /* CoreAudio.framework */,
 				DA5AFB1E2658B7C700C6C468 /* CoreFoundation.framework */,
 				DA5AFB1C2658B7BE00C6C468 /* AudioToolbox.framework */,
