@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="18122" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17701"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="18122"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -20,21 +20,25 @@
                 <outlet property="durationLabel" destination="ijX-rD-el8" id="rYJ-ck-xJg"/>
                 <outlet property="progressBar" destination="q94-z4-FfB" id="Dx4-YB-2cA"/>
                 <outlet property="queueArrayController" destination="ueN-np-pxA" id="mqC-lc-mVO"/>
+                <outlet property="queueTableView" destination="rTj-ma-zaY" id="iLq-mj-ogd"/>
                 <outlet property="saveSongButton" destination="YTG-en-bjx" id="OxA-gG-wAH"/>
                 <outlet property="searchField" destination="T2h-BB-MEE" id="Olc-dc-Cro"/>
                 <outlet property="searchFieldCell" destination="EnN-fl-XWg" id="vRs-fB-Pan"/>
                 <outlet property="searchResultsArrayController" destination="cJI-F4-neh" id="Ncy-gz-ctc"/>
                 <outlet property="searchSpinner" destination="NxD-rt-1LN" id="9z1-Ke-Wki"/>
+                <outlet property="searchTableView" destination="kdh-74-V14" id="Zwh-2d-qyB"/>
                 <outlet property="songTitleLabel" destination="iV4-Go-1uE" id="e3W-ym-mUP"/>
                 <outlet property="window" destination="QvC-M9-y7g" id="gIp-Ho-8D9"/>
             </connections>
         </customObject>
         <arrayController objectClassName="Spotiqueue.SpotifySongTableRow" id="cJI-F4-neh" userLabel="searchResults">
+            <classReference key="objectClass" className="SpotifySongTableRow" moduleName="Spotiqueue"/>
             <connections>
                 <binding destination="Voe-Tx-rLC" name="contentArray" keyPath="self.searchResults" id="ol7-5Z-Tgg"/>
             </connections>
         </arrayController>
         <arrayController objectClassName="Spotiqueue.SpotifySongTableRow" id="ueN-np-pxA" userLabel="queue">
+            <classReference key="objectClass" className="SpotifySongTableRow" moduleName="Spotiqueue"/>
             <connections>
                 <binding destination="Voe-Tx-rLC" name="contentArray" keyPath="self.queue" id="bM9-ch-RTT"/>
             </connections>
@@ -674,13 +678,13 @@
                 <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <scrollView autohidesScrollers="YES" horizontalLineScroll="24" horizontalPageScroll="10" verticalLineScroll="24" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iUA-JW-urq">
+                    <scrollView autohidesScrollers="YES" horizontalLineScroll="24" horizontalPageScroll="10" verticalLineScroll="24" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iUA-JW-urq" userLabel="queue table">
                         <rect key="frame" x="20" y="137" width="488" height="581"/>
                         <clipView key="contentView" id="Q3G-Cd-ica">
                             <rect key="frame" x="1" y="1" width="486" height="579"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="24" rowSizeStyle="automatic" headerView="bdB-YS-DxR" viewBased="YES" id="rTj-ma-zaY">
+                                <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="24" rowSizeStyle="automatic" headerView="bdB-YS-DxR" viewBased="YES" id="rTj-ma-zaY" customClass="RBQueueTableView" customModule="Spotiqueue" customModuleProvider="target">
                                     <rect key="frame" x="0.0" y="0.0" width="486" height="551"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <size key="intercellSpacing" width="17" height="0.0"/>
@@ -898,13 +902,13 @@
                             <constraint firstAttribute="height" constant="16" id="eKi-h3-hbX"/>
                         </constraints>
                     </progressIndicator>
-                    <scrollView autohidesScrollers="YES" horizontalLineScroll="24" horizontalPageScroll="10" verticalLineScroll="24" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XO6-ft-PxZ">
+                    <scrollView autohidesScrollers="YES" horizontalLineScroll="24" horizontalPageScroll="10" verticalLineScroll="24" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XO6-ft-PxZ" userLabel="search result table">
                         <rect key="frame" x="516" y="137" width="488" height="581"/>
                         <clipView key="contentView" id="aXf-af-pkH">
                             <rect key="frame" x="1" y="1" width="486" height="579"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="24" rowSizeStyle="automatic" headerView="Etz-Zh-YRF" viewBased="YES" id="kdh-74-V14">
+                                <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" autosaveColumns="NO" rowHeight="24" rowSizeStyle="automatic" headerView="Etz-Zh-YRF" viewBased="YES" id="kdh-74-V14" customClass="RBSearchTableView" customModule="Spotiqueue" customModuleProvider="target">
                                     <rect key="frame" x="0.0" y="0.0" width="486" height="551"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <size key="intercellSpacing" width="17" height="0.0"/>
@@ -912,7 +916,7 @@
                                     <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                     <tableColumns>
                                         <tableColumn width="116" minWidth="40" maxWidth="1000" id="UsT-MH-M5V">
-                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border">
+                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Title">
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                             </tableHeaderCell>
@@ -935,6 +939,9 @@
                                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                             </textFieldCell>
+                                                            <connections>
+                                                                <binding destination="aaw-Nt-4B0" name="value" keyPath="objectValue.title" id="o6y-fW-6DE"/>
+                                                            </connections>
                                                         </textField>
                                                     </subviews>
                                                     <connections>
@@ -944,7 +951,7 @@
                                             </prototypeCellViews>
                                         </tableColumn>
                                         <tableColumn width="341" minWidth="40" maxWidth="1000" id="chp-b3-hxj">
-                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border">
+                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="#">
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                             </tableHeaderCell>
@@ -967,6 +974,9 @@
                                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                             </textFieldCell>
+                                                            <connections>
+                                                                <binding destination="Fm0-Ny-Gc0" name="value" keyPath="objectValue.track_number" id="OVh-bJ-LcD"/>
+                                                            </connections>
                                                         </textField>
                                                     </subviews>
                                                     <connections>
@@ -976,6 +986,11 @@
                                             </prototypeCellViews>
                                         </tableColumn>
                                     </tableColumns>
+                                    <connections>
+                                        <binding destination="cJI-F4-neh" name="content" keyPath="arrangedObjects" id="mHN-Rv-lmt"/>
+                                        <binding destination="cJI-F4-neh" name="selectionIndexes" keyPath="selectionIndexes" previousBinding="mHN-Rv-lmt" id="PDZ-aw-AFd"/>
+                                        <binding destination="cJI-F4-neh" name="sortDescriptors" keyPath="sortDescriptors" previousBinding="PDZ-aw-AFd" id="kgg-co-LdR"/>
+                                    </connections>
                                 </tableView>
                             </subviews>
                         </clipView>
