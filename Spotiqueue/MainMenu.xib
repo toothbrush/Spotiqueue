@@ -936,19 +936,35 @@
                                                     <rect key="frame" x="198" y="0.0" width="50" height="24"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
-                                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HuC-hC-W5L">
-                                                            <rect key="frame" x="0.0" y="4" width="50" height="16"/>
-                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                                            <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="44:12" id="te8-pZ-mRX">
-                                                                <font key="font" size="13" name="Menlo-Regular"/>
-                                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                            </textFieldCell>
-                                                            <connections>
-                                                                <binding destination="Dbv-mP-Yhk" name="value" keyPath="objectValue.length" id="Gw2-vh-yoL"/>
-                                                            </connections>
-                                                        </textField>
+                                                        <customView translatesAutoresizingMaskIntoConstraints="NO" id="CYG-do-XPF">
+                                                            <rect key="frame" x="0.0" y="0.0" width="50" height="24"/>
+                                                            <subviews>
+                                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="HuC-hC-W5L">
+                                                                    <rect key="frame" x="3" y="5" width="44" height="15"/>
+                                                                    <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="44:12" id="te8-pZ-mRX">
+                                                                        <font key="font" size="13" name="Menlo-Regular"/>
+                                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                    </textFieldCell>
+                                                                    <connections>
+                                                                        <binding destination="Dbv-mP-Yhk" name="value" keyPath="objectValue.length" id="Gw2-vh-yoL"/>
+                                                                    </connections>
+                                                                </textField>
+                                                            </subviews>
+                                                            <constraints>
+                                                                <constraint firstItem="HuC-hC-W5L" firstAttribute="centerY" secondItem="CYG-do-XPF" secondAttribute="centerY" id="LAk-IR-18s"/>
+                                                                <constraint firstItem="HuC-hC-W5L" firstAttribute="centerX" secondItem="CYG-do-XPF" secondAttribute="centerX" id="WPR-vo-M76"/>
+                                                            </constraints>
+                                                        </customView>
                                                     </subviews>
+                                                    <constraints>
+                                                        <constraint firstItem="CYG-do-XPF" firstAttribute="centerY" secondItem="Dbv-mP-Yhk" secondAttribute="centerY" id="8wW-Zp-ftW"/>
+                                                        <constraint firstItem="CYG-do-XPF" firstAttribute="leading" secondItem="Dbv-mP-Yhk" secondAttribute="leading" id="UFv-yL-Kyh"/>
+                                                        <constraint firstAttribute="trailing" secondItem="CYG-do-XPF" secondAttribute="trailing" id="W3i-Cw-9cn"/>
+                                                        <constraint firstItem="CYG-do-XPF" firstAttribute="top" secondItem="Dbv-mP-Yhk" secondAttribute="top" id="dB9-ot-fsI"/>
+                                                        <constraint firstAttribute="bottom" secondItem="CYG-do-XPF" secondAttribute="bottom" id="tCn-VE-GFI"/>
+                                                        <constraint firstItem="CYG-do-XPF" firstAttribute="centerX" secondItem="Dbv-mP-Yhk" secondAttribute="centerX" id="zUF-Hg-voQ"/>
+                                                    </constraints>
                                                     <connections>
                                                         <outlet property="textField" destination="HuC-hC-W5L" id="PgG-IG-VT3"/>
                                                     </connections>
