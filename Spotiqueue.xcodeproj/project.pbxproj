@@ -21,13 +21,13 @@
 		DA5AFB2F265A89BD00C6C468 /* RBQueueTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5AFB2E265A89BD00C6C468 /* RBQueueTableView.swift */; };
 		DA5AFB31265BB59900C6C468 /* CalendarExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5AFB30265BB59900C6C468 /* CalendarExtension.swift */; };
 		DA95643326746A9F001BEDCA /* libresolv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = DA95643226746A9F001BEDCA /* libresolv.tbd */; };
-		DA95644226747B4B001BEDCA /* libspotiqueue_worker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA95644126747B2B001BEDCA /* libspotiqueue_worker.a */; };
 		DAAE2F012653EA1F00FF0344 /* SpotifyAPI in Frameworks */ = {isa = PBXBuildFile; productRef = DAAE2F002653EA1F00FF0344 /* SpotifyAPI */; };
 		DABEC90D2653534300CA3F67 /* RBSpotifySongTableRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABEC90C2653534300CA3F67 /* RBSpotifySongTableRow.swift */; };
 		DABEC90F26536F5800CA3F67 /* RBSecrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABEC90E26536F5800CA3F67 /* RBSecrets.swift */; };
 		DABEC9122653799100CA3F67 /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = DABEC9112653799100CA3F67 /* KeychainSwift */; };
 		DAD7D74026775AFB00A5510E /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAD7D73E26775AE900A5510E /* Sparkle.framework */; };
 		DAD7D74126775AFB00A5510E /* Sparkle.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DAD7D73E26775AE900A5510E /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		DAD7D74F267775A800A5510E /* libspotiqueue_worker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAD7D74E267775A800A5510E /* libspotiqueue_worker.a */; };
 		DAE1F18226534D660013704F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE1F18126534D660013704F /* AppDelegate.swift */; };
 		DAE1F18426534D670013704F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DAE1F18326534D670013704F /* Assets.xcassets */; };
 		DAFAB407265D1BE90096810C /* NSImageViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAFAB406265D1BE90096810C /* NSImageViewExtensions.swift */; };
@@ -37,16 +37,6 @@
 		EC9B31A92677048000E5C44B /* RBLoginWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = EC9B31A72677048000E5C44B /* RBLoginWindow.xib */; };
 		ECB750492676E4D80011DFF6 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = ECB750482676E4D80011DFF6 /* MainMenu.xib */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		DA95644026747B2B001BEDCA /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = DA95643B26747B2B001BEDCA /* spotiqueue_worker.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = CA606788D0A6F2996E6A3E81;
-			remoteInfo = "spotiqueue_worker-staticlib";
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		DAD7D73826775A6A00A5510E /* Embed Frameworks */ = {
@@ -77,11 +67,11 @@
 		DA5AFB2E265A89BD00C6C468 /* RBQueueTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RBQueueTableView.swift; sourceTree = "<group>"; };
 		DA5AFB30265BB59900C6C468 /* CalendarExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarExtension.swift; sourceTree = "<group>"; };
 		DA95643226746A9F001BEDCA /* libresolv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libresolv.tbd; path = usr/lib/libresolv.tbd; sourceTree = SDKROOT; };
-		DA95643B26747B2B001BEDCA /* spotiqueue_worker.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = spotiqueue_worker.xcodeproj; path = spotiqueue_worker/spotiqueue_worker.xcodeproj; sourceTree = "<group>"; };
 		DA9564442674816D001BEDCA /* spotiqueue_worker_bindings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = spotiqueue_worker_bindings.h; path = spotiqueue_worker/spotiqueue_worker_bindings.h; sourceTree = "<group>"; };
 		DABEC90C2653534300CA3F67 /* RBSpotifySongTableRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RBSpotifySongTableRow.swift; sourceTree = "<group>"; };
 		DABEC90E26536F5800CA3F67 /* RBSecrets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RBSecrets.swift; sourceTree = "<group>"; };
 		DAD7D73E26775AE900A5510E /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sparkle.framework; path = Spotiqueue/Sparkle.framework; sourceTree = "<group>"; };
+		DAD7D74E267775A800A5510E /* libspotiqueue_worker.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libspotiqueue_worker.a; path = spotiqueue_worker/target/release/libspotiqueue_worker.a; sourceTree = "<group>"; };
 		DAE1F17E26534D660013704F /* Spotiqueue.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Spotiqueue.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAE1F18126534D660013704F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DAE1F18326534D670013704F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -107,8 +97,8 @@
 				DAD7D74026775AFB00A5510E /* Sparkle.framework in Frameworks */,
 				DAAE2F012653EA1F00FF0344 /* SpotifyAPI in Frameworks */,
 				DABEC9122653799100CA3F67 /* KeychainSwift in Frameworks */,
+				DAD7D74F267775A800A5510E /* libspotiqueue_worker.a in Frameworks */,
 				DA5AFB0C2656591300C6C468 /* Stenographer in Frameworks */,
-				DA95644226747B4B001BEDCA /* libspotiqueue_worker.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -146,6 +136,7 @@
 		DA5AFB152658A6C500C6C468 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				DAD7D74E267775A800A5510E /* libspotiqueue_worker.a */,
 				DAD7D73E26775AE900A5510E /* Sparkle.framework */,
 				DA95643226746A9F001BEDCA /* libresolv.tbd */,
 				DA5AFB202658B7D100C6C468 /* CoreAudio.framework */,
@@ -155,18 +146,9 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		DA95643C26747B2B001BEDCA /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				DA95644126747B2B001BEDCA /* libspotiqueue_worker.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		DAE1F17526534D660013704F = {
 			isa = PBXGroup;
 			children = (
-				DA95643B26747B2B001BEDCA /* spotiqueue_worker.xcodeproj */,
 				DAE1F18026534D660013704F /* Spotiqueue */,
 				DAE1F17F26534D660013704F /* Products */,
 				DA5AFB152658A6C500C6C468 /* Frameworks */,
@@ -259,28 +241,12 @@
 			);
 			productRefGroup = DAE1F17F26534D660013704F /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = DA95643C26747B2B001BEDCA /* Products */;
-					ProjectRef = DA95643B26747B2B001BEDCA /* spotiqueue_worker.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				DAE1F17D26534D660013704F /* Spotiqueue */,
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		DA95644126747B2B001BEDCA /* libspotiqueue_worker.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libspotiqueue_worker.a;
-			remoteRef = DA95644026747B2B001BEDCA /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		DAE1F17C26534D660013704F /* Resources */ = {
@@ -486,6 +452,10 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/spotiqueue_worker/target/release",
+				);
 				MARKETING_VERSION = 2.0.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rustlingbroccoli.Spotiqueue;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -516,6 +486,10 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/spotiqueue_worker/target/release",
 				);
 				MARKETING_VERSION = 2.0.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rustlingbroccoli.Spotiqueue;
