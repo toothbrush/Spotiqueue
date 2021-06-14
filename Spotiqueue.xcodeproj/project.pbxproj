@@ -26,8 +26,6 @@
 		DABEC90F26536F5800CA3F67 /* RBSecrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABEC90E26536F5800CA3F67 /* RBSecrets.swift */; };
 		DABEC9122653799100CA3F67 /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = DABEC9112653799100CA3F67 /* KeychainSwift */; };
 		DAD7D74F267775A800A5510E /* libspotiqueue_worker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAD7D74E267775A800A5510E /* libspotiqueue_worker.a */; };
-		DAD7D75626777F4700A5510E /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAD7D75426777F4500A5510E /* Sparkle.framework */; };
-		DAD7D75726777F4700A5510E /* Sparkle.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DAD7D75426777F4500A5510E /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		DAE1F18226534D660013704F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE1F18126534D660013704F /* AppDelegate.swift */; };
 		DAE1F18426534D670013704F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DAE1F18326534D670013704F /* Assets.xcassets */; };
 		DAFAB407265D1BE90096810C /* NSImageViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAFAB406265D1BE90096810C /* NSImageViewExtensions.swift */; };
@@ -45,7 +43,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				DAD7D75726777F4700A5510E /* Sparkle.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -71,7 +68,6 @@
 		DABEC90C2653534300CA3F67 /* RBSpotifySongTableRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RBSpotifySongTableRow.swift; sourceTree = "<group>"; };
 		DABEC90E26536F5800CA3F67 /* RBSecrets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RBSecrets.swift; sourceTree = "<group>"; };
 		DAD7D74E267775A800A5510E /* libspotiqueue_worker.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libspotiqueue_worker.a; path = spotiqueue_worker/target/release/libspotiqueue_worker.a; sourceTree = "<group>"; };
-		DAD7D75426777F4500A5510E /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sparkle.framework; path = Spotiqueue/Sparkle.framework; sourceTree = "<group>"; };
 		DAE1F17E26534D660013704F /* Spotiqueue.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Spotiqueue.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAE1F18126534D660013704F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DAE1F18326534D670013704F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -94,7 +90,6 @@
 				DA5AFB212658B7D100C6C468 /* CoreAudio.framework in Frameworks */,
 				DA5AFB1F2658B7C800C6C468 /* CoreFoundation.framework in Frameworks */,
 				DA5AFB1D2658B7BE00C6C468 /* AudioToolbox.framework in Frameworks */,
-				DAD7D75626777F4700A5510E /* Sparkle.framework in Frameworks */,
 				DAAE2F012653EA1F00FF0344 /* SpotifyAPI in Frameworks */,
 				DABEC9122653799100CA3F67 /* KeychainSwift in Frameworks */,
 				DAD7D74F267775A800A5510E /* libspotiqueue_worker.a in Frameworks */,
@@ -138,7 +133,6 @@
 			children = (
 				DAD7D74E267775A800A5510E /* libspotiqueue_worker.a */,
 				DA95643226746A9F001BEDCA /* libresolv.tbd */,
-				DAD7D75426777F4500A5510E /* Sparkle.framework */,
 				DA5AFB202658B7D100C6C468 /* CoreAudio.framework */,
 				DA5AFB1E2658B7C700C6C468 /* CoreFoundation.framework */,
 				DA5AFB1C2658B7BE00C6C468 /* AudioToolbox.framework */,
@@ -188,7 +182,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = DAE1F18C26534D670013704F /* Build configuration list for PBXNativeTarget "Spotiqueue" */;
 			buildPhases = (
-				DAD7D74A2677726000A5510E /* Codesign Sparkle.framework */,
 				DAE1F17A26534D660013704F /* Sources */,
 				DAE1F17B26534D660013704F /* Frameworks */,
 				DAE1F17C26534D660013704F /* Resources */,
@@ -260,29 +253,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		DAD7D74A2677726000A5510E /* Codesign Sparkle.framework */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"$(SRCROOT)/Sparkle.framework/Resources/Autoupdate.app/Contents/MacOS/Autoupdate",
-				"$(SRCROOT)/Sparkle.framework/Resources/Autoupdate.app/Contents/MacOS/fileop",
-			);
-			name = "Codesign Sparkle.framework";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "set -exu\n\nif [ \"$CONFIGURATION\" != Release ]; then\n    echo \"Not release configuration, skipping Sparkle codesigning\"\n    exit 0\nfi\n\ncodesign --verbose --force --sign \"$CODE_SIGN_IDENTITY\" --timestamp --deep --options runtime \"${SRCROOT}/Sparkle.framework/Resources/Autoupdate.app\"\n";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		DAE1F17A26534D660013704F /* Sources */ = {
@@ -440,7 +410,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 391;
+				CURRENT_PROJECT_VERSION = 394;
 				DEVELOPMENT_TEAM = QG72S9L5L3;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -475,7 +445,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 391;
+				CURRENT_PROJECT_VERSION = 394;
 				DEVELOPMENT_TEAM = QG72S9L5L3;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (

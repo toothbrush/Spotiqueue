@@ -32,7 +32,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>391</string>
+	<string>394</string>
 	<key>LSApplicationCategoryType</key>
 	<string>public.app-category.music</string>
 	<key>LSMinimumSystemVersion</key>
@@ -47,9 +47,5 @@
 	<true/>
 	<key>NSSupportsSuddenTermination</key>
 	<true/>
-	<key>SUFeedURL</key>
-	<string>https://raw.githubusercontent.com/toothbrush/Spotiqueue/master/appcast.xml</string>
-	<key>SUPublicEDKey</key>
-	<string>TH0ovIHSPHF1VdqgdE3+fsHLV+m5IXkXoP383G/HGiQ=</string>
 </dict>
 </plist>
