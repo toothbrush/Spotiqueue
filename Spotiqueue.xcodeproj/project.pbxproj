@@ -28,10 +28,10 @@
 		DABEC9122653799100CA3F67 /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = DABEC9112653799100CA3F67 /* KeychainSwift */; };
 		DAE1F18226534D660013704F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE1F18126534D660013704F /* AppDelegate.swift */; };
 		DAE1F18426534D670013704F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DAE1F18326534D670013704F /* Assets.xcassets */; };
-		DAE1F18726534D670013704F /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = DAE1F18526534D670013704F /* MainMenu.xib */; };
 		DAFAB407265D1BE90096810C /* NSImageViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAFAB406265D1BE90096810C /* NSImageViewExtensions.swift */; };
 		EC34C8A32664D92300786C78 /* OptionSetExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC34C8A22664D92300786C78 /* OptionSetExtensions.swift */; };
 		EC34C8B82665C17C00786C78 /* ComparableExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC34C8B72665C17C00786C78 /* ComparableExtensions.swift */; };
+		ECB750492676E4D80011DFF6 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = ECB750482676E4D80011DFF6 /* MainMenu.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -66,12 +66,12 @@
 		DAE1F17E26534D660013704F /* Spotiqueue.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Spotiqueue.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAE1F18126534D660013704F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DAE1F18326534D670013704F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		DAE1F18626534D670013704F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		DAE1F18826534D670013704F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DAE1F18926534D670013704F /* Spotiqueue.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Spotiqueue.entitlements; sourceTree = "<group>"; };
 		DAFAB406265D1BE90096810C /* NSImageViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSImageViewExtensions.swift; sourceTree = "<group>"; };
 		EC34C8A22664D92300786C78 /* OptionSetExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionSetExtensions.swift; sourceTree = "<group>"; };
 		EC34C8B72665C17C00786C78 /* ComparableExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComparableExtensions.swift; sourceTree = "<group>"; };
+		ECB750482676E4D80011DFF6 /* MainMenu.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainMenu.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -166,8 +166,8 @@
 				DA5AFB142658A15E00C6C468 /* Classes */,
 				DA5AFB1126567B2400C6C468 /* Extensions */,
 				DAE1F18126534D660013704F /* AppDelegate.swift */,
+				ECB750482676E4D80011DFF6 /* MainMenu.xib */,
 				DAE1F18326534D670013704F /* Assets.xcassets */,
-				DAE1F18526534D670013704F /* MainMenu.xib */,
 				DAE1F18826534D670013704F /* Info.plist */,
 				DAE1F18926534D670013704F /* Spotiqueue.entitlements */,
 			);
@@ -261,7 +261,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DAE1F18426534D670013704F /* Assets.xcassets in Resources */,
-				DAE1F18726534D670013704F /* MainMenu.xib in Resources */,
+				ECB750492676E4D80011DFF6 /* MainMenu.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -291,17 +291,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXVariantGroup section */
-		DAE1F18526534D670013704F /* MainMenu.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				DAE1F18626534D670013704F /* Base */,
-			);
-			name = MainMenu.xib;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		DAE1F18A26534D670013704F /* Debug */ = {
@@ -433,7 +422,7 @@
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 325;
+				CURRENT_PROJECT_VERSION = 326;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = Spotiqueue/Info.plist;
@@ -460,7 +449,7 @@
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 325;
+				CURRENT_PROJECT_VERSION = 326;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = Spotiqueue/Info.plist;
