@@ -10,6 +10,7 @@ import Cocoa
 import SpotifyWebAPI
 import Combine
 import Stenographer
+import Sparkle
 
 #if DEBUG
 let minimumLogPriorityLevel: SXPriorityLevel = .all
@@ -96,6 +97,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     var playerState: PlayerState = .Stopped
     var lastSearch: LastSearch = .Freetext
+
+    let sparkle: SUUpdater = SUUpdater(for: Bundle.main)
 
     private var _isSearching: Bool = false
     var isSearching: Bool {

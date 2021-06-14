@@ -2,6 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>SUPublicEDKey</key>
+	<string>TH0ovIHSPHF1VdqgdE3+fsHLV+m5IXkXoP383G/HGiQ=</string>
+	<key>SUFeedURL</key>
+	<string>https://raw.githubusercontent.com/toothbrush/Spotiqueue/master/appcast.xml</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>
@@ -32,7 +36,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>385</string>
+	<string>387</string>
 	<key>LSApplicationCategoryType</key>
 	<string>public.app-category.music</string>
 	<key>LSMinimumSystemVersion</key>
