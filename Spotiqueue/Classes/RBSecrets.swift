@@ -39,7 +39,7 @@ class RBSecrets: NSObject {
         if let key = keychain.get(s.rawValue) {
             return key
         }
-        logger.critical("Failure to read <\(s.rawValue)> from keychain")
+        logger.critical("Failure to read <\(s.rawValue)> from Keychain!")
         return nil
     }
 

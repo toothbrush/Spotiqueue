@@ -152,13 +152,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     // Here is another extensive howto around table views and such https://www.raywenderlich.com/921-cocoa-bindings-on-macos
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
-        let modal = RBLoginWindow(windowNibName: "RBLoginWindow")
-        loginWindow = modal
-        self.window?.beginSheet(modal.window!, completionHandler: { [weak self] response in
-            self!.initialiseSpotifyWebAPI()
-            self?.loginWindow = nil
-        })
-        modal.startLoginRoutine()
+        loginWindow = RBLoginWindow(windowNibName: "RBLoginWindow")
+        if let window = loginWindow?.window {
+            self.window?.beginSheet(window, completionHandler: { [self] response in
+                self.initialiseSpotifyWebAPI()
+                self.loginWindow = nil
+            })
+            loginWindow?.startLoginRoutine()
+        } else {
+            // Mind you, this will be nil if AppMover moves the executable away before we have had a chance to load the NIB.  Which is still a file...
+            logger.critical("Something very weird - modal.window is nil!")
+        }
         set_callback(player_update_hook(hook: position_ms: duration_ms:))
         NSEvent.addLocalMonitorForEvents(matching: [.keyDown, .systemDefined], handler: localKeyShortcuts(event:))
         self.window.makeFirstResponder(self.searchField)
