@@ -40,6 +40,7 @@ class RBSecrets: NSObject {
             return key
         }
         logger.critical("Failure to read <\(s.rawValue)> from Keychain!")
+        logger.debug("Keychain.lastResultCode = \(keychain.lastResultCode)")
         return nil
     }
 
@@ -61,12 +62,14 @@ class RBSecrets: NSObject {
 
         if !keychain.set(v, forKey: s.rawValue, withAccess: .accessibleAfterFirstUnlock) {
             logger.critical("Failure to save <\(s.rawValue)> to keychain")
+            logger.debug("Keychain.lastResultCode = \(keychain.lastResultCode)")
         }
     }
 
     static func deleteSecret(s: Secret) {
         if !keychain.delete(s.rawValue) {
             logger.critical("Failure to remove <\(s.rawValue)> from keychain")
+            logger.debug("Keychain.lastResultCode = \(keychain.lastResultCode)")
         }
     }
 }
