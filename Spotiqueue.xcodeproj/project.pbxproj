@@ -31,6 +31,7 @@
 		DAFAB407265D1BE90096810C /* NSImageViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAFAB406265D1BE90096810C /* NSImageViewExtensions.swift */; };
 		EC34C8A32664D92300786C78 /* OptionSetExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC34C8A22664D92300786C78 /* OptionSetExtensions.swift */; };
 		EC34C8B82665C17C00786C78 /* ComparableExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC34C8B72665C17C00786C78 /* ComparableExtensions.swift */; };
+		EC97CFB02679E29000A0361C /* AppMover in Frameworks */ = {isa = PBXBuildFile; productRef = EC97CFAF2679E29000A0361C /* AppMover */; };
 		EC9B31A82677048000E5C44B /* RBLoginWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC9B31A62677048000E5C44B /* RBLoginWindow.swift */; };
 		EC9B31A92677048000E5C44B /* RBLoginWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = EC9B31A72677048000E5C44B /* RBLoginWindow.xib */; };
 		ECB750492676E4D80011DFF6 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = ECB750482676E4D80011DFF6 /* MainMenu.xib */; };
@@ -89,6 +90,7 @@
 				DA95643326746A9F001BEDCA /* libresolv.tbd in Frameworks */,
 				DA5AFB212658B7D100C6C468 /* CoreAudio.framework in Frameworks */,
 				DA5AFB1F2658B7C800C6C468 /* CoreFoundation.framework in Frameworks */,
+				EC97CFB02679E29000A0361C /* AppMover in Frameworks */,
 				DA5AFB1D2658B7BE00C6C468 /* AudioToolbox.framework in Frameworks */,
 				DAAE2F012653EA1F00FF0344 /* SpotifyAPI in Frameworks */,
 				DABEC9122653799100CA3F67 /* KeychainSwift in Frameworks */,
@@ -196,6 +198,7 @@
 				DABEC9112653799100CA3F67 /* KeychainSwift */,
 				DAAE2F002653EA1F00FF0344 /* SpotifyAPI */,
 				DA5AFB0B2656591300C6C468 /* Stenographer */,
+				EC97CFAF2679E29000A0361C /* AppMover */,
 			);
 			productName = Spotiqueue;
 			productReference = DAE1F17E26534D660013704F /* Spotiqueue.app */;
@@ -231,6 +234,7 @@
 				DABEC9102653799100CA3F67 /* XCRemoteSwiftPackageReference "keychain-swift" */,
 				DAAE2EFF2653EA1F00FF0344 /* XCRemoteSwiftPackageReference "SpotifyAPI" */,
 				DA5AFB0A2656591300C6C468 /* XCRemoteSwiftPackageReference "stenographer" */,
+				EC97CFAE2679E29000A0361C /* XCRemoteSwiftPackageReference "AppMover" */,
 			);
 			productRefGroup = DAE1F17F26534D660013704F /* Products */;
 			projectDirPath = "";
@@ -410,7 +414,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 401;
+				CURRENT_PROJECT_VERSION = 411;
 				DEVELOPMENT_TEAM = QG72S9L5L3;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -445,7 +449,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 401;
+				CURRENT_PROJECT_VERSION = 411;
 				DEVELOPMENT_TEAM = QG72S9L5L3;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -518,6 +522,14 @@
 				minimumVersion = 19.0.0;
 			};
 		};
+		EC97CFAE2679E29000A0361C /* XCRemoteSwiftPackageReference "AppMover" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/toothbrush/AppMover.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -535,6 +547,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = DABEC9102653799100CA3F67 /* XCRemoteSwiftPackageReference "keychain-swift" */;
 			productName = KeychainSwift;
+		};
+		EC97CFAF2679E29000A0361C /* AppMover */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EC97CFAE2679E29000A0361C /* XCRemoteSwiftPackageReference "AppMover" */;
+			productName = AppMover;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
