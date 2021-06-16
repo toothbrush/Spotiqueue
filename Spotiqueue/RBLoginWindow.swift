@@ -34,6 +34,8 @@ class RBLoginWindow: NSWindowController {
             }
             
             self.window?.sheetParent?.endSheet(self.window!, returnCode: .OK)
+        } else {
+            logger.info("Eek, couldn't retrieve username or password from Keychain! Let's ask the user.")
         }
         endSpinning()
     }
