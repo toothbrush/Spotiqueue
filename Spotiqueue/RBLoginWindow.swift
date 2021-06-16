@@ -68,6 +68,7 @@ class RBLoginWindow: NSWindowController {
         passwordField.isEnabled = true
         quitButton.isEnabled = true
         loginButton.isEnabled = true
+        self.window?.makeFirstResponder(self.usernameField)
     }
     
 }
