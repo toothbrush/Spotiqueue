@@ -2,6 +2,15 @@
   "object": {
     "pins": [
       {
+        "package": "AppMover",
+        "repositoryURL": "https://github.com/toothbrush/AppMover.git",
+        "state": {
+          "branch": "master",
+          "revision": "25b7ddd962dcab70e15a2daceb2bfee5b62ecb76",
+          "version": null
+        }
+      },
+      {
         "package": "KeychainSwift",
         "repositoryURL": "https://github.com/evgenyneu/keychain-swift.git",
         "state": {
