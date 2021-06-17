@@ -1,15 +1,11 @@
 # TODO list
 
-## Before it's ready for showing people
-
-* Sparkle framework or other auto update
-
 
 ## Other
 
 * page up / down should bring focussed row along for the ride.
 
-* Automatically switch audio output sink when using Sound.prefpane
+* Automatically switch audio output sink when using Sound.prefpane - https://github.com/RustAudio/rodio/issues/327
 
 * Copying and pasting of spotify URIs
 * Dragging items position in queue
