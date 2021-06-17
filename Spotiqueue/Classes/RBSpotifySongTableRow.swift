@@ -25,8 +25,8 @@ final class RBSpotifySongTableRow: NSObject {
     }
 
     var track_uri: String
-    var spotify_album: Album
-    var spotify_artist: Artist
+    var spotify_album: Album?
+    var spotify_artist: Artist?
     var durationSeconds: TimeInterval
     var album_image: SpotifyImage?
 
@@ -48,11 +48,11 @@ final class RBSpotifySongTableRow: NSObject {
         self.track_uri = track.uri!
         self.artist = track.consolidated_name()
 
-        self.album = self.spotify_album.name
-        self.album_uri = self.spotify_album.uri!
-        self.album_image = self.spotify_album.images?.suffix(2).first
+        self.album = album.name
+        self.album_uri = album.uri!
+        self.album_image = album.images?.suffix(2).first
 
-        if let releaseDate = self.spotify_album.releaseDate {
+        if let releaseDate = album.releaseDate {
             self.year = Calendar.iso8601.component(.year, from: releaseDate)
         } else {
             self.year = 0

@@ -328,7 +328,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         self.window.makeFirstResponder(searchTableView)
     }
 
-    private func albumTracks(for album: Album) {
+    private func albumTracks(for album: Album?) {
+        guard let album = album else {
+            logger.warning("Called with nil album!  Doing nothing.")
+            return
+        }
+        
         lastSearch = .Album
         // retrieve album tracks
         spotify.api.albumTracks(
@@ -367,7 +372,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
-    private func artistTracks(for artist: Artist) {
+    private func artistTracks(for artist: Artist?) {
+        guard let artist = artist else {
+            logger.warning("Called with nil artist!  Doing nothing.")
+            return
+        }
+
         lastSearch = .Artist
         let dispatchGroup = DispatchGroup()
 
