@@ -44,7 +44,19 @@ class RBTableView: NSTableView {
         let searchField = AppDelegate.appDelegate().searchField
         NSApplication.shared.windows.first?.makeFirstResponder(searchField)
     }
+    
+    @objc func copy(_ sender: AnyObject?) {
+        // https://bluelemonbits.com/2016/08/02/copy-one-or-multiple-nstableview-rows-swift/
 
+        var copiedItems: String = ""
+        for obj in self.associatedArrayController().selectedObjects as? [RBSpotifySongTableRow] ?? [] {
+            copiedItems = copiedItems + obj.copyText() + "\n"
+        }
+        let pasteBoard = NSPasteboard.general
+        pasteBoard.clearContents()
+        pasteBoard.setString(copiedItems, forType: NSPasteboard.PasteboardType.string)
+    }
+    
     // Curious about keyCode values? See https://stackoverflow.com/questions/2080312/where-can-i-find-a-list-of-key-codes-for-use-with-cocoas-nsevent-class
     //
     override func keyDown(with event: NSEvent) {

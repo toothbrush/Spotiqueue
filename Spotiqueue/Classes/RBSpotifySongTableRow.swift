@@ -64,6 +64,11 @@ final class RBSpotifySongTableRow: NSObject {
         self.durationSeconds = Double(track.durationMS! / 1000)
         super.init()
     }
+    
+    // This is what we want it to look like if copied to pasteboard.
+    func copyText() -> String {
+        return String(format: "%@ (%@ – %@)", self.track_uri, self.artist, self.title)
+    }
 
     static let trackSortDescriptors: [NSSortDescriptor] = [
             NSSortDescriptor(key: "year", ascending: true),
