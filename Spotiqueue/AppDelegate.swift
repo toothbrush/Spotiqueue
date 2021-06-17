@@ -492,7 +492,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         spotiqueue_play_track(nextTrack.track_uri)
         self.albumTitleLabel.cell?.title = nextTrack.album
-        self.songTitleLabel.cell?.title = String(format: "%@ — %@", nextTrack.artist, nextTrack.title)
+        self.songTitleLabel.cell?.title = nextTrack.prettyTitle()
 
         self.currentSong = nextTrack
         // ehm awkward, attempting to get second largest image.

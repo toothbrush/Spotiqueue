@@ -69,6 +69,14 @@ final class RBSpotifySongTableRow: NSObject {
     func copyText() -> String {
         return String(format: "%@ (%@ – %@)", self.track_uri, self.artist, self.title)
     }
+    
+    func prettyTitle() -> String {
+        if artist.isEmpty {
+            return self.title
+        } else {
+            return String(format: "%@ — %@", self.artist, self.title)
+        }
+    }
 
     static let trackSortDescriptors: [NSSortDescriptor] = [
             NSSortDescriptor(key: "year", ascending: true),
