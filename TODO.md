@@ -66,3 +66,5 @@
   with each entry one-by-one... 🤔
 
 * Little Credits or Help screen
+
+* Why are the table column headers sometimes differently-coloured???
