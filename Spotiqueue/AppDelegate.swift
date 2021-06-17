@@ -268,15 +268,33 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                      The only thing we need to do here is handle the error and
                      show it to the user if one was received.
                      */
-                    if case .failure(let error) = completion {
+                    switch completion {
+                    case .failure(let error):
                         logger.error("couldn't retrieve access and refresh tokens:\n\(error)")
                         if let authError = error as? SpotifyAuthorizationError,
                            authError.accessWasDenied {
                             logger.error("Authorisation request denied!")
+                            let alert = NSAlert.init()
+                            alert.messageText = "Authorisation denied!"
+                            alert.informativeText = "Authorisation request denied."
+                            alert.addButton(withTitle: "OK")
+                            alert.runModal()
                         }
                         else {
                             logger.error("Couldn't authorise: \(error.localizedDescription)")
+                            let alert = NSAlert.init()
+                            alert.messageText = "Authorisation failed!"
+                            alert.informativeText = "Authorisation request failed: \(error.localizedDescription)"
+                            alert.addButton(withTitle: "OK")
+                            alert.runModal()
                         }
+                    case .finished:
+                        logger.info("Successfully received tokens from Spotify.")
+                        let alert = NSAlert.init()
+                        alert.messageText = "Authorised"
+                        alert.informativeText = "Successfully authorised with Spotify.  You can safely close the web browser window."
+                        alert.addButton(withTitle: "OK")
+                        alert.runModal()
                     }
                 })
                 .store(in: &cancellables)
