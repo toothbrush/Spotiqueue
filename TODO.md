@@ -53,4 +53,16 @@
 
 * Create README with instructions for building, codesign, sparkle
   update, and especially the `ditto....` incantation and how `zip -r`
-  breaks notarisation...
+  breaks notarisation... https://developer.apple.com/forums/thread/677186
+
+* Dark mode: disable completely or fix.  Probably disable.
+
+* When moving tracks in queue consider scrolling such that there's a
+  3-4 track "buffer" of not-selected tracks between the selected block
+  and the edge of the view.
+
+
+* Pasting would be much easier if we didn't bother batching and dealt
+  with each entry one-by-one... 🤔
+
+* Little Credits or Help screen
