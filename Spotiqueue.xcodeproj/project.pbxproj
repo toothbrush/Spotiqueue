@@ -110,14 +110,14 @@
 		DA5AFB1126567B2400C6C468 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				DA5AFB0F26567AB300C6C468 /* TrackExtensions.swift */,
 				DA5AFB30265BB59900C6C468 /* CalendarExtension.swift */,
-				DAFAB406265D1BE90096810C /* NSImageViewExtensions.swift */,
-				DA343EDE26621394000980E2 /* FormatterExtensions.swift */,
-				DA343EE0266213B6000980E2 /* TimeIntervalExtensions.swift */,
-				DA343EE226622367000980E2 /* SpotifyAPIExtensions.swift */,
-				EC34C8A22664D92300786C78 /* OptionSetExtensions.swift */,
 				EC34C8B72665C17C00786C78 /* ComparableExtensions.swift */,
+				DA343EDE26621394000980E2 /* FormatterExtensions.swift */,
+				DAFAB406265D1BE90096810C /* NSImageViewExtensions.swift */,
+				EC34C8A22664D92300786C78 /* OptionSetExtensions.swift */,
+				DA343EE226622367000980E2 /* SpotifyAPIExtensions.swift */,
+				DA343EE0266213B6000980E2 /* TimeIntervalExtensions.swift */,
+				DA5AFB0F26567AB300C6C468 /* TrackExtensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -125,12 +125,11 @@
 		DA5AFB142658A15E00C6C468 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				DABEC90C2653534300CA3F67 /* RBSpotifySongTableRow.swift */,
+				DA5AFB1126567B2400C6C468 /* Extensions */,
+				EC90ED33267B446F003C3C0D /* Tables */,
 				DABEC90E26536F5800CA3F67 /* RBSecrets.swift */,
 				DA5AFB0D26565CD300C6C468 /* RBSpotify.swift */,
-				DA5AFB2C265A86FD00C6C468 /* RBTableView.swift */,
-				DA5AFB2E265A89BD00C6C468 /* RBQueueTableView.swift */,
-				DA5AFB12265682D300C6C468 /* RBSearchTableView.swift */,
+				DABEC90C2653534300CA3F67 /* RBSpotifySongTableRow.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -171,16 +170,33 @@
 			isa = PBXGroup;
 			children = (
 				DA5AFB142658A15E00C6C468 /* Classes */,
-				DA5AFB1126567B2400C6C468 /* Extensions */,
+				EC90ED34267B44C0003C3C0D /* UI */,
 				DAE1F18126534D660013704F /* AppDelegate.swift */,
 				ECB750482676E4D80011DFF6 /* MainMenu.xib */,
 				DAE1F18326534D670013704F /* Assets.xcassets */,
 				DAE1F18826534D670013704F /* Info.plist */,
 				DAE1F18926534D670013704F /* Spotiqueue.entitlements */,
+			);
+			path = Spotiqueue;
+			sourceTree = "<group>";
+		};
+		EC90ED33267B446F003C3C0D /* Tables */ = {
+			isa = PBXGroup;
+			children = (
+				DA5AFB2E265A89BD00C6C468 /* RBQueueTableView.swift */,
+				DA5AFB12265682D300C6C468 /* RBSearchTableView.swift */,
+				DA5AFB2C265A86FD00C6C468 /* RBTableView.swift */,
+			);
+			name = Tables;
+			sourceTree = "<group>";
+		};
+		EC90ED34267B44C0003C3C0D /* UI */ = {
+			isa = PBXGroup;
+			children = (
 				EC9B31A62677048000E5C44B /* RBLoginWindow.swift */,
 				EC9B31A72677048000E5C44B /* RBLoginWindow.xib */,
 			);
-			path = Spotiqueue;
+			name = UI;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -420,7 +436,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 475;
+				CURRENT_PROJECT_VERSION = 476;
 				DEVELOPMENT_TEAM = QG72S9L5L3;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -455,7 +471,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 475;
+				CURRENT_PROJECT_VERSION = 476;
 				DEVELOPMENT_TEAM = QG72S9L5L3;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
