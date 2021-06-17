@@ -9,6 +9,7 @@
 import AppMover
 import Cocoa
 import Combine
+import Sparkle
 import SpotifyWebAPI
 import Stenographer
 
@@ -99,6 +100,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var lastSearch: LastSearch = .Freetext
 
     var loginWindow: RBLoginWindow?
+
+    let sparkle: SUUpdater = SUUpdater(for: Bundle.main)
 
     private var _isSearching: Bool = false
     var isSearching: Bool {
