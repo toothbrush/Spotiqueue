@@ -8,8 +8,8 @@
 
 import AppMover
 import Cocoa
-import SpotifyWebAPI
 import Combine
+import SpotifyWebAPI
 import Stenographer
 
 #if DEBUG
