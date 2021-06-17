@@ -32,3 +32,7 @@
 * Deal with incorrect username/password gracefully.
 
 * better logging framework, show messages in Console.app.
+
+* FIX: blocking on get-all-albums for artist with many albums. Should
+  be background job. Eg. search for beethoven, cmd-right twice in a
+  row. Boom.
