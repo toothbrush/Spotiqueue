@@ -171,7 +171,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             logger.critical("Something very weird - modal.window is nil!")
         }
         set_callback(player_update_hook(hook: position_ms: duration_ms:))
-        NSEvent.addLocalMonitorForEvents(matching: [.keyDown, .systemDefined], handler: localKeyShortcuts(event:))
+        NSEvent.addLocalMonitorForEvents(matching: [.keyDown /*, .systemDefined */], handler: localKeyShortcuts(event:))
         self.window.makeFirstResponder(self.searchField)
         // setup "focus loop"
         self.searchField.nextKeyView = self.searchTableView
