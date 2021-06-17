@@ -101,9 +101,23 @@ class RBTableView: NSTableView {
         } else if event.characters == " "
                     && flags.isEmpty {
             AppDelegate.appDelegate().playOrPause()
+        } else if event.keyCode == kVK_PageUp && flags.isEmpty {
+            self.selectRow(row: selectedRow - nbVisibleRows() + 1)
+        } else if event.keyCode == kVK_PageDown && flags.isEmpty {
+            self.selectRow(row: selectedRow + nbVisibleRows() - 1)
+        } else if event.keyCode == kVK_Home && flags.isEmpty {
+            self.selectRow(row: 0)
+        } else if event.keyCode == kVK_End && flags.isEmpty {
+            self.selectRow(row: numberOfRows)
         } else {
             super.keyDown(with: event)
         }
+    }
+    
+    // return the number of visible rows
+    func nbVisibleRows() -> Int {
+        // minus 1, because of header row
+        return Int(superview!.frame.size.height / rowHeight) - 1
     }
 
     override func resignFirstResponder() -> Bool {
