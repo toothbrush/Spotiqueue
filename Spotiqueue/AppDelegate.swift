@@ -76,6 +76,10 @@ enum LastSearch {
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
 
+    @IBAction func checkForUpdates(_ sender: Any) {
+        sparkle.checkForUpdates(sender)
+    }
+
     @IBOutlet weak var queueTableView: RBQueueTableView!
     @IBOutlet weak var searchTableView: RBSearchTableView!
     @IBOutlet weak var searchField: NSSearchField!
