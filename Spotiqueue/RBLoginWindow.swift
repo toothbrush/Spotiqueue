@@ -22,6 +22,7 @@ class RBLoginWindow: NSWindowController {
     }
     
     func startLoginRoutine(){
+        startSpinning()
         // try to grab user/pass from keychain:
         if let username = RBSecrets.getSecret(s: .username),
            let password = RBSecrets.getSecret(s: .password) {
@@ -41,7 +42,6 @@ class RBLoginWindow: NSWindowController {
     }
     
     @IBAction func loginPressed(_ sender: Any) {
-        startSpinning()
         RBSecrets.setSecret(s: .username, v: usernameField.stringValue.data(using: .utf8)!)
         RBSecrets.setSecret(s: .password, v: passwordField.stringValue.data(using: .utf8)!)
         self.startLoginRoutine()
@@ -72,5 +72,4 @@ class RBLoginWindow: NSWindowController {
         loginButton.isEnabled = true
         self.window?.makeFirstResponder(self.usernameField)
     }
-    
 }
