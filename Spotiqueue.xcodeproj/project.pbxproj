@@ -32,6 +32,8 @@
 		EC34C8A32664D92300786C78 /* OptionSetExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC34C8A22664D92300786C78 /* OptionSetExtensions.swift */; };
 		EC34C8B82665C17C00786C78 /* ComparableExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC34C8B72665C17C00786C78 /* ComparableExtensions.swift */; };
 		EC97CFB02679E29000A0361C /* AppMover in Frameworks */ = {isa = PBXBuildFile; productRef = EC97CFAF2679E29000A0361C /* AppMover */; };
+		EC97CFB5267AFFA400A0361C /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EC97CFB3267AFF7700A0361C /* Sparkle.framework */; };
+		EC97CFB6267AFFA400A0361C /* Sparkle.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = EC97CFB3267AFF7700A0361C /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		EC9B31A82677048000E5C44B /* RBLoginWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC9B31A62677048000E5C44B /* RBLoginWindow.swift */; };
 		EC9B31A92677048000E5C44B /* RBLoginWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = EC9B31A72677048000E5C44B /* RBLoginWindow.xib */; };
 		ECB750492676E4D80011DFF6 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = ECB750482676E4D80011DFF6 /* MainMenu.xib */; };
@@ -44,6 +46,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				EC97CFB6267AFFA400A0361C /* Sparkle.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -77,6 +80,7 @@
 		DAFAB406265D1BE90096810C /* NSImageViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSImageViewExtensions.swift; sourceTree = "<group>"; };
 		EC34C8A22664D92300786C78 /* OptionSetExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionSetExtensions.swift; sourceTree = "<group>"; };
 		EC34C8B72665C17C00786C78 /* ComparableExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComparableExtensions.swift; sourceTree = "<group>"; };
+		EC97CFB3267AFF7700A0361C /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sparkle.framework; path = Spotiqueue/Sparkle.framework; sourceTree = "<group>"; };
 		EC9B31A62677048000E5C44B /* RBLoginWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RBLoginWindow.swift; sourceTree = "<group>"; };
 		EC9B31A72677048000E5C44B /* RBLoginWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RBLoginWindow.xib; sourceTree = "<group>"; };
 		ECB750482676E4D80011DFF6 /* MainMenu.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainMenu.xib; sourceTree = "<group>"; };
@@ -94,6 +98,7 @@
 				DA5AFB1D2658B7BE00C6C468 /* AudioToolbox.framework in Frameworks */,
 				DAAE2F012653EA1F00FF0344 /* SpotifyAPI in Frameworks */,
 				DABEC9122653799100CA3F67 /* KeychainSwift in Frameworks */,
+				EC97CFB5267AFFA400A0361C /* Sparkle.framework in Frameworks */,
 				DAD7D74F267775A800A5510E /* libspotiqueue_worker.a in Frameworks */,
 				DA5AFB0C2656591300C6C468 /* Stenographer in Frameworks */,
 			);
@@ -134,6 +139,7 @@
 			isa = PBXGroup;
 			children = (
 				DAD7D74E267775A800A5510E /* libspotiqueue_worker.a */,
+				EC97CFB3267AFF7700A0361C /* Sparkle.framework */,
 				DA95643226746A9F001BEDCA /* libresolv.tbd */,
 				DA5AFB202658B7D100C6C468 /* CoreAudio.framework */,
 				DA5AFB1E2658B7C700C6C468 /* CoreFoundation.framework */,
