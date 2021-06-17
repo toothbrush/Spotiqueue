@@ -7,12 +7,55 @@
 //
 
 import Cocoa
+import Combine
 
 class RBQueueTableView: RBTableView {
+    var cancellables: Set<AnyCancellable> = []
+
     override func associatedArrayController() -> NSArrayController {
         AppDelegate.appDelegate().queueArrayController
     }
 
+    @objc func paste(_ sender: AnyObject?) {
+        guard let contents = NSPasteboard.general.pasteboardItems?.first?.string(forType: .string) else { return }
+        let songs = contents.split(whereSeparator: \.isNewline).map { $0.trimmingCharacters(in: .whitespaces) }
+        var stub_songs: [RBSpotifySongTableRow] = []
+        for s in songs {
+            if s.hasPrefix("spotify:"),
+               let uri = s.split(whereSeparator: \.isWhitespace).first {
+                logger.info("Hydrating song \(uri)")
+                stub_songs.append(
+                    RBSpotifySongTableRow(track_uri: String(uri))
+                )
+            } else {
+                logger.warning("Ignoring pasted invalid Spotify URI: \(s)")
+            }
+        }
+        AppDelegate.appDelegate().queueArrayController.add(contentsOf: stub_songs)
+        
+        for chunk in stub_songs.chunked(size: 50) {
+            AppDelegate.appDelegate().spotify.api.tracks(chunk.map({ $0.track_uri }))
+                .receive(on: RunLoop.main)
+                .sink(
+                    receiveCompletion: { completion in
+                        logger.info("completion: \(completion)")
+                    },
+                    receiveValue: { tracks in
+                        for (index, track) in tracks.enumerated() {
+                            logger.info("result[\(index)]: \(track?.name ?? "")")
+                            if let track = track {
+                                chunk[index].hydrate(with: track)
+                            } else {
+                                // we got a nil from the API, remove from queue.
+                            }
+                        }
+                    }
+                )
+                .store(in: &cancellables)
+        }
+        self.reloadData()
+    }
+    
     func enter() {
         guard self.selectedRowIndexes.count == 1 else {
             logger.info("hmm, enter pressed on non-single track selection..")
