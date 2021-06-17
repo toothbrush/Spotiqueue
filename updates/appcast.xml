@@ -3,10 +3,10 @@
     <channel>
         <title>Spotiqueue</title>
         <item>
-            <title>2.1.1</title>
-            <pubDate>Thu, 17 Jun 2021 14:27:54 +1000</pubDate>
+            <title>2.1.2</title>
+            <pubDate>Thu, 17 Jun 2021 17:59:49 +1000</pubDate>
             <sparkle:minimumSystemVersion>10.15</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/toothbrush/Spotiqueue/releases/download/v2.1.1/Spotiqueue-v2.1.1.zip" sparkle:version="431" sparkle:shortVersionString="2.1.1" length="11476477" type="application/octet-stream" sparkle:edSignature="nBxCw54Jj5Nhnh5d6AUql61DRsLxFTaULCs/tBqu2C3qjqqyawkNPehIEneNv3qxcNsufddYtadhs3w+/PjRBg=="/>
+            <enclosure url="https://github.com/toothbrush/Spotiqueue/releases/download/v2.1.2/Spotiqueue-v2.1.2.zip" sparkle:version="474" sparkle:shortVersionString="2.1.2" length="9439116" type="application/octet-stream" sparkle:edSignature="/eNLRXeMYx+boomfnbceK/GpmUNOn9L51Jq0DNsI2Ed+vdukBjZqWlQg6222jqkHWOoSkNutNNQXGFbH5tATDA=="/>
         </item>
     </channel>
 </rss>
