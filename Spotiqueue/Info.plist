@@ -47,9 +47,9 @@
 	<true/>
 	<key>NSSupportsSuddenTermination</key>
 	<true/>
-    <key>SUPublicEDKey</key>
-    <string>xKdxNvbRi43WA8hJwdAcOaMj4guYIpmKFg+zT91g6S8=</string>
-    <key>SUFeedURL</key>
-    <string>https://raw.githubusercontent.com/toothbrush/Spotiqueue/main/updates/appcast.xml</string>
+	<key>SUFeedURL</key>
+	<string>https://raw.githubusercontent.com/toothbrush/Spotiqueue/main/updates/appcast.xml</string>
+	<key>SUPublicEDKey</key>
+	<string>xKdxNvbRi43WA8hJwdAcOaMj4guYIpmKFg+zT91g6S8=</string>
 </dict>
 </plist>
