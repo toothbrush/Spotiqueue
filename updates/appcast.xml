@@ -1,0 +1,12 @@
+<?xml version="1.0" standalone="yes"?>
+<rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
+    <channel>
+        <title>Spotiqueue</title>
+        <item>
+            <title>2.1.1</title>
+            <pubDate>Thu, 17 Jun 2021 14:27:54 +1000</pubDate>
+            <sparkle:minimumSystemVersion>10.15</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/toothbrush/Spotiqueue/releases/download/v2.1.1/Spotiqueue-v2.1.1.zip" sparkle:version="431" sparkle:shortVersionString="2.1.1" length="11476477" type="application/octet-stream" sparkle:edSignature="nBxCw54Jj5Nhnh5d6AUql61DRsLxFTaULCs/tBqu2C3qjqqyawkNPehIEneNv3qxcNsufddYtadhs3w+/PjRBg=="/>
+        </item>
+    </channel>
+</rss>
