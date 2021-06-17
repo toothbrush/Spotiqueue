@@ -18,16 +18,16 @@ final class RBSpotifySongTableRow: NSObject {
     @objc dynamic var track_number: Int
     @objc dynamic var disc_number: Int
     @objc dynamic var year: Int
-    @objc dynamic var length: String {
-        get {
-            self.durationSeconds.positionalTime
-        }
-    }
+    @objc dynamic var length: String = ""
 
     var track_uri: String
     var spotify_album: Album?
     var spotify_artist: Artist?
-    var durationSeconds: TimeInterval
+    var durationSeconds: TimeInterval {
+        didSet {
+            length = durationSeconds.positionalTime
+        }
+    }
     var album_image: SpotifyImage?
 
     convenience init(track: Track) {
