@@ -177,6 +177,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         self.searchField.nextKeyView = self.searchTableView
         self.searchTableView.nextKeyView = self.queueTableView
         self.queueTableView.nextKeyView = self.searchField
+        
+        queueArrayController.selectsInsertedObjects = false
+        searchResultsArrayController.selectsInsertedObjects = false
 
         let timerInterval : TimeInterval = 0.25
         Timer.scheduledTimer(withTimeInterval: timerInterval, repeats: true) { [weak self] timer in
