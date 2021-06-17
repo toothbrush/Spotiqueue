@@ -40,13 +40,48 @@ final class RBSpotifySongTableRow: NSObject {
         self.init(track: track, album: album, artist: artist)
     }
 
-    init(track: Track, album: Album, artist: Artist) {
+    convenience init(track: Track, album: Album, artist: Artist) {
+        // first, create stub with URI only:
+        self.init(track_uri: track.uri!)
+        // now, hydrate it.
+        self.hydrate(with: track, album: album, artist: artist)
+    }
+    
+    init(track_uri: String) {
+        // This is to create a placeholder/stub track object, to be hydrated later
+        self.track_uri = track_uri
+        self.spotify_album = nil
+        self.spotify_artist = nil
+
+        self.title = track_uri
+        self.artist = ""
+
+        self.album = ""
+        self.album_uri = ""
+        self.album_image = nil
+        self.year = 0
+        self.track_number = 0
+        self.disc_number = 0
+        self.durationSeconds = 0
+    }
+    
+    func hydrate(with fullTrack: Track) {
+        guard let album = fullTrack.album else {
+            fatalError("Trying to hydrate RBSpotifySongTableRow with simplified Track.")
+        }
+        guard let artist = fullTrack.artists?.first else {
+            fatalError("Trying to hydrate RBSpotifySongTableRow with simplified Track.")
+        }
+        hydrate(with: fullTrack, album: album, artist: artist)
+    }
+    
+    private func hydrate(with partialTrack: Track, album: Album, artist: Artist) {
         self.spotify_album = album
         self.spotify_artist = artist
 
-        self.title = track.name
-        self.track_uri = track.uri!
-        self.artist = track.consolidated_name()
+        self.title = partialTrack.name
+        self.track_uri = partialTrack.uri!
+        self.artist = partialTrack.consolidated_name()
 
         self.album = album.name
         self.album_uri = album.uri!
@@ -58,11 +93,10 @@ final class RBSpotifySongTableRow: NSObject {
             self.year = 0
         }
 
-        self.track_number = track.trackNumber!
-        self.disc_number = track.discNumber!
+        self.track_number = partialTrack.trackNumber!
+        self.disc_number = partialTrack.discNumber!
 
-        self.durationSeconds = Double(track.durationMS! / 1000)
-        super.init()
+        self.durationSeconds = Double(partialTrack.durationMS! / 1000)
     }
     
     // This is what we want it to look like if copied to pasteboard.
