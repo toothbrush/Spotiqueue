@@ -48,3 +48,5 @@
 * Show popup or something when successfully received callback from
   spotify for authorisation.  Something to the effect of "you may
   close the browser window"
+
+* better logging framework, show messages in Console.app.
