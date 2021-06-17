@@ -50,3 +50,7 @@
 
 * Everywhere you can paste spotify URIs, consider allowing
   `https://open.spotify.com...` URLs, too.
+
+* Create README with instructions for building, codesign, sparkle
+  update, and especially the `ditto....` incantation and how `zip -r`
+  breaks notarisation...
