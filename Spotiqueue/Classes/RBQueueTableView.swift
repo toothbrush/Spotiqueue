@@ -63,18 +63,18 @@ class RBQueueTableView: RBTableView {
 
     override func keyDown(with event: NSEvent) {
         let flags = event.modifierFlags.intersection(.deviceIndependentFlagsMask).subtracting([.function, .numericPad])
-        if event.keyCode == 36
+        if event.keyCode == kVK_Return
             && flags.isEmpty { // Enter/Return key
             enter()
-        } else if (event.keyCode == 51         // Backspace
-                    || event.keyCode == 117   // Delete
+        } else if (event.keyCode == kVK_Delete         // Backspace
+                    || event.keyCode == kVK_ForwardDelete   // Delete
                     || event.characters == "d")
                     && flags.isEmpty {
             delete()
-        } else if event.keyCode == 125       // down arrow
+        } else if event.keyCode == kVK_DownArrow       // down arrow
                     && flags == [.command] {
             moveSelectionDown()
-        } else if event.keyCode == 126       // up arrow
+        } else if event.keyCode == kVK_UpArrow       // up arrow
                     && flags == [.command] {
             moveSelectionUp()
         } else {

@@ -45,6 +45,8 @@ class RBTableView: NSTableView {
         NSApplication.shared.windows.first?.makeFirstResponder(searchField)
     }
 
+    // Curious about keyCode values? See https://stackoverflow.com/questions/2080312/where-can-i-find-a-list-of-key-codes-for-use-with-cocoas-nsevent-class
+    //
     override func keyDown(with event: NSEvent) {
         let flags = event.modifierFlags.intersection(.deviceIndependentFlagsMask).subtracting([.function, .numericPad])
         if event.charactersIgnoringModifiers?.lowercased() == "j" {
@@ -56,7 +58,7 @@ class RBTableView: NSTableView {
                                              characters: "",
                                              charactersIgnoringModifiers: "",
                                              isARepeat: event.isARepeat,
-                                             keyCode: 125)!
+                                             keyCode: UInt16(kVK_DownArrow))!
             self.keyDown(with: synthetic)
         } else if event.characters?.lowercased() == "k" {
             let synthetic = NSEvent.keyEvent(with: .keyDown,
@@ -67,7 +69,7 @@ class RBTableView: NSTableView {
                                              characters: "",
                                              charactersIgnoringModifiers: "",
                                              isARepeat: event.isARepeat,
-                                             keyCode: 126)!
+                                             keyCode: UInt16(kVK_UpArrow))!
             self.keyDown(with: synthetic)
         } else if event.characters == "g"
                     && flags.isEmpty {
@@ -76,19 +78,19 @@ class RBTableView: NSTableView {
                     && flags == .shift {
             selectRow(row: self.numberOfRows - 1)
         } else if flags.isEmpty
-                    && event.keyCode == 123 { // left arrow
+                    && event.keyCode == kVK_LeftArrow { // left arrow
             focusQueue()
         } else if flags.isEmpty
-                    && event.keyCode == 124 { // right arrow
+                    && event.keyCode == kVK_RightArrow { // right arrow
             focusSearchResults()
-        } else if event.keyCode == 4
+        } else if event.characters == "h"
                     && flags.isEmpty { // "h" key, left
             focusQueue()
-        } else if event.keyCode == 37
+        } else if event.characters == "l"
                     && flags.isEmpty { // "l" key, right
             focusSearchResults()
         } else if flags == .command
-                    && event.keyCode == 124 { // cmd-right, search for album
+                    && event.keyCode == kVK_RightArrow { // cmd-right, search for album
             searchForAlbum()
         } else if flags == .command
                     && event.characters == ";" { // cmd-;, search for album, because cmd-L is taken?

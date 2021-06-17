@@ -46,16 +46,16 @@ class RBSearchTableView: RBTableView {
         // OMGWOW it took me a long time to figure out that arrow keys are special.  They count as both "function" and "numeric" keys. facepalm!
         let flags = event.modifierFlags.intersection(.deviceIndependentFlagsMask).subtracting([.function, .numericPad])
                 
-        if event.keyCode == 36
+        if event.keyCode == kVK_Return
             && flags.isEmpty { // Enter/Return key
             enter()
-        } else if event.keyCode == 123 // cmd-shift-left arrow
+        } else if event.keyCode == kVK_LeftArrow // cmd-shift-left arrow
                     && flags == [.command, .shift] {
             enqueueSelection(position: .Top)
         } else if event.characters == "h" // cmd-shift-"h" key
                     && flags == [.command, .shift] {
             enqueueSelection(position: .Top)
-        } else if event.keyCode == 123 // cmd-left arrow
+        } else if event.keyCode == kVK_LeftArrow // cmd-left arrow
                     && flags == .command {
             enqueueSelection()
         } else if event.characters == "h" // cmd-"h" key
