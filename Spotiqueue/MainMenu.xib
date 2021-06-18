@@ -244,19 +244,18 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <rect key="contentRect" x="165" y="7" width="1200" height="800"/>
             <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1415"/>
-            <value key="minSize" type="size" width="800" height="700"/>
             <view key="contentView" id="EiT-Mj-1SZ">
-                <rect key="frame" x="0.0" y="0.0" width="1200" height="800"/>
+                <rect key="frame" x="0.0" y="0.0" width="1200" height="587"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <scrollView focusRingType="exterior" autohidesScrollers="YES" horizontalLineScroll="24" horizontalPageScroll="10" verticalLineScroll="24" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XO6-ft-PxZ" userLabel="search result table">
-                        <rect key="frame" x="604" y="137" width="576" height="613"/>
+                        <rect key="frame" x="604" y="137" width="576" height="400"/>
                         <clipView key="contentView" id="aXf-af-pkH">
-                            <rect key="frame" x="1" y="1" width="574" height="611"/>
+                            <rect key="frame" x="1" y="1" width="574" height="398"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" autosaveColumns="NO" rowHeight="24" rowSizeStyle="automatic" headerView="Etz-Zh-YRF" viewBased="YES" id="kdh-74-V14" customClass="RBSearchTableView" customModule="Spotiqueue" customModuleProvider="target">
-                                    <rect key="frame" x="0.0" y="0.0" width="618" height="583"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="618" height="370"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <size key="intercellSpacing" width="17" height="0.0"/>
                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -417,10 +416,10 @@
                         </clipView>
                         <constraints>
                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="350" id="6cz-Kd-Tp0"/>
-                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="400" id="ZCD-3B-3Eh"/>
+                            <constraint firstAttribute="height" relation="greaterThanOrEqual" priority="999" constant="400" id="ZCD-3B-3Eh"/>
                         </constraints>
                         <scroller key="horizontalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="Ke9-47-fK2">
-                            <rect key="frame" x="1" y="596" width="574" height="16"/>
+                            <rect key="frame" x="1" y="383" width="574" height="16"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                         <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="fDt-9x-vYf">
@@ -433,7 +432,7 @@
                         </tableHeaderView>
                     </scrollView>
                     <searchField wantsLayer="YES" focusRingType="exterior" verticalHuggingPriority="750" preferredMaxLayoutWidth="250" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="T2h-BB-MEE">
-                        <rect key="frame" x="830" y="758" width="350" height="22"/>
+                        <rect key="frame" x="830" y="545" width="350" height="22"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="350" id="Uko-wk-qr6"/>
                             <constraint firstAttribute="height" constant="22" id="khZ-zq-ktw"/>
@@ -448,13 +447,13 @@
                         </connections>
                     </searchField>
                     <scrollView focusRingType="exterior" autohidesScrollers="YES" horizontalLineScroll="24" horizontalPageScroll="10" verticalLineScroll="24" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iUA-JW-urq" userLabel="queue table">
-                        <rect key="frame" x="20" y="137" width="576" height="613"/>
-                        <clipView key="contentView" ambiguous="YES" id="Q3G-Cd-ica">
-                            <rect key="frame" x="1" y="1" width="574" height="611"/>
+                        <rect key="frame" x="20" y="137" width="576" height="400"/>
+                        <clipView key="contentView" id="Q3G-Cd-ica">
+                            <rect key="frame" x="1" y="1" width="574" height="398"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <tableView verticalHuggingPriority="750" ambiguous="YES" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" autosaveColumns="NO" rowHeight="24" rowSizeStyle="automatic" headerView="bdB-YS-DxR" viewBased="YES" id="rTj-ma-zaY" customClass="RBQueueTableView" customModule="Spotiqueue" customModuleProvider="target">
-                                    <rect key="frame" x="0.0" y="0.0" width="574" height="583"/>
+                                <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" autosaveColumns="NO" rowHeight="24" rowSizeStyle="automatic" headerView="bdB-YS-DxR" viewBased="YES" id="rTj-ma-zaY" customClass="RBQueueTableView" customModule="Spotiqueue" customModuleProvider="target">
+                                    <rect key="frame" x="0.0" y="0.0" width="574" height="370"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <size key="intercellSpacing" width="17" height="0.0"/>
                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -625,11 +624,11 @@
                             </subviews>
                         </clipView>
                         <constraints>
-                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="400" id="quz-vm-lBw"/>
+                            <constraint firstAttribute="height" relation="greaterThanOrEqual" priority="999" constant="400" id="quz-vm-lBw"/>
                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="350" id="ueA-sc-fxx"/>
                         </constraints>
                         <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="xWo-IC-g7R">
-                            <rect key="frame" x="1" y="446" width="574" height="16"/>
+                            <rect key="frame" x="1" y="383" width="354" height="16"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                         <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="OVK-QR-vuF">
@@ -642,7 +641,7 @@
                         </tableHeaderView>
                     </scrollView>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ers-rB-7hD">
-                        <rect key="frame" x="28" y="758" width="54" height="16"/>
+                        <rect key="frame" x="28" y="545" width="54" height="16"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="16" id="shg-Bk-Nlh"/>
                             <constraint firstAttribute="width" constant="50" id="viP-iI-w9S"/>
@@ -750,7 +749,7 @@
                         </constraints>
                     </progressIndicator>
                     <progressIndicator hidden="YES" maxValue="100" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="NxD-rt-1LN">
-                        <rect key="frame" x="806" y="761" width="16" height="16"/>
+                        <rect key="frame" x="806" y="548" width="16" height="16"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="16" id="18x-wn-TcE"/>
                             <constraint firstAttribute="height" constant="16" id="eKi-h3-hbX"/>
