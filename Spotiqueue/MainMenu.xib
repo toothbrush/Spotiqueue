@@ -242,7 +242,7 @@
         </menu>
         <window title="Spotiqueue" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" animationBehavior="default" id="QvC-M9-y7g">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
-            <rect key="contentRect" x="165" y="7" width="1200" height="800"/>
+            <rect key="contentRect" x="165" y="7" width="1259" height="683"/>
             <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1415"/>
             <view key="contentView" id="EiT-Mj-1SZ">
                 <rect key="frame" x="0.0" y="0.0" width="1200" height="587"/>
@@ -800,7 +800,7 @@
                     <constraint firstItem="XO6-ft-PxZ" firstAttribute="top" secondItem="T2h-BB-MEE" secondAttribute="bottom" constant="8" symbolic="YES" id="zsW-sl-cre"/>
                 </constraints>
             </view>
-            <point key="canvasLocation" x="266.5" y="-63.5"/>
+            <point key="canvasLocation" x="295.5" y="-15.5"/>
         </window>
     </objects>
 </document>
