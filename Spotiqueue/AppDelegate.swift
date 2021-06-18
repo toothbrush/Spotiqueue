@@ -92,6 +92,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @objc dynamic var queue: Array<RBSpotifySongTableRow> = []
 
     // MARK: View element bindings
+    @IBOutlet weak var queueHeaderLabel: NSTextField!
     @IBOutlet weak var albumImage: NSImageView!
     @IBOutlet weak var albumTitleLabel: NSTextField!
     @IBOutlet weak var songTitleLabel: NSTextField!
@@ -188,6 +189,24 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                     s.position += timerInterval
                 }
                 s.updateDurationDisplay()
+            }
+        }
+        
+        self.addObserver(self, forKeyPath: "queueArrayController.arrangedObjects", options: .new, context: nil)
+    }
+    
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        guard let keyPath = keyPath else { return }
+        
+        if keyPath == "queueArrayController.arrangedObjects" {
+            // sum up the durations and put the info into the queue heading label
+            if let queueTracks = queueArrayController.arrangedObjects as? [RBSpotifySongTableRow] {
+                let totalLengthSeconds = queueTracks.map(\.durationSeconds).reduce(0, +)
+                if totalLengthSeconds > 0 {
+                    queueHeaderLabel.stringValue = String(format: "Queue (total: %@)", totalLengthSeconds.positionalTime)
+                } else {
+                    queueHeaderLabel.stringValue = "Queue"
+                }
             }
         }
     }

@@ -20,6 +20,7 @@
                 <outlet property="durationLabel" destination="ijX-rD-el8" id="rYJ-ck-xJg"/>
                 <outlet property="progressBar" destination="q94-z4-FfB" id="Dx4-YB-2cA"/>
                 <outlet property="queueArrayController" destination="ueN-np-pxA" id="mqC-lc-mVO"/>
+                <outlet property="queueHeaderLabel" destination="ers-rB-7hD" id="Iuw-M6-9Tr"/>
                 <outlet property="queueTableView" destination="rTj-ma-zaY" id="iLq-mj-ogd"/>
                 <outlet property="saveSongButton" destination="YTG-en-bjx" id="OxA-gG-wAH"/>
                 <outlet property="searchField" destination="T2h-BB-MEE" id="Olc-dc-Cro"/>
@@ -641,10 +642,10 @@
                         </tableHeaderView>
                     </scrollView>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ers-rB-7hD">
-                        <rect key="frame" x="28" y="545" width="54" height="16"/>
+                        <rect key="frame" x="28" y="545" width="154" height="16"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="16" id="shg-Bk-Nlh"/>
-                            <constraint firstAttribute="width" constant="50" id="viP-iI-w9S"/>
+                            <constraint firstAttribute="width" constant="150" id="viP-iI-w9S"/>
                         </constraints>
                         <textFieldCell key="cell" lineBreakMode="clipping" title="Queue" id="57c-gX-gmj">
                             <font key="font" metaFont="system"/>

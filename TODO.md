@@ -15,8 +15,6 @@
 
 * Media keys, globally
 
-* total remaining queue time
-
 # Ideas
 
 * Some sort of local "filter results" function (in search view).  Press "/" or something?
@@ -36,8 +34,6 @@
 * Create playlist.. maybe? By default suggest name "Artist - Album"
   based on first selected item?  Or based on current queue?
 
-* Play/pause button
-
 * Deal with incorrect username/password gracefully.
 
 * better logging framework, show messages in Console.app.
@@ -54,8 +50,6 @@
 * Create README with instructions for building, codesign, sparkle
   update, and especially the `ditto....` incantation and how `zip -r`
   breaks notarisation... https://developer.apple.com/forums/thread/677186
-
-* Dark mode: disable completely or fix.  Probably disable.
 
 * When moving tracks in queue consider scrolling such that there's a
   3-4 track "buffer" of not-selected tracks between the selected block
