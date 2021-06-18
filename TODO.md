@@ -68,3 +68,5 @@
 * Little Credits or Help screen
 
 * Why are the table column headers sometimes differently-coloured???
+
+* when copying: _intersperse_ with `\n`, don't append to every line.
