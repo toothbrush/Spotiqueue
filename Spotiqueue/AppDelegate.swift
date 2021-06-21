@@ -71,6 +71,7 @@ enum LastSearch {
     case Freetext
     case Album
     case Artist
+    case AllPlaylists
 }
 
 @NSApplicationMain
@@ -341,6 +342,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         searchResults = []
         self.isSearching = true
+        lastSearch = .AllPlaylists
         
         spotify.api.currentUserPlaylists()
             .extendPagesConcurrently(spotify.api)
@@ -377,8 +379,39 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             artistTracks(for: row.spotify_artist)
         case .Artist:
             albumTracks(for: row.spotify_album)
+        case .AllPlaylists:
+            playlistTracks(for: row.spotify_uri)
         }
         self.window.makeFirstResponder(searchTableView)
+    }
+    
+    private func playlistTracks(for playlist_uri: String?) {
+        guard let playlist_uri = playlist_uri else {
+            logger.warning("Called with nil playlist URI!  Doing nothing.")
+            return
+        }
+
+        spotify.api.playlistItems(playlist_uri)
+            .extendPagesConcurrently(spotify.api)
+            .collectAndSortByOffset()
+            .receive(on: RunLoop.main)
+            .sink(receiveCompletion: {completion in
+                self.isSearching = false
+                switch completion {
+                    case .finished:
+                        logger.info("finished loading playlist")
+                    case .failure(let error):
+                        logger.error("Couldn't load playlist: \(error.localizedDescription)")
+                }
+            },
+            receiveValue: { items in
+                for playlistItemContainer in items {
+                    if case .track(let track) = playlistItemContainer.item {
+                        self.searchResults.append(RBSpotifySongTableRow.init(track: track))
+                    }
+                }
+            })
+            .store(in: &cancellables)
     }
 
     private func albumTracks(for album: Album?) {
