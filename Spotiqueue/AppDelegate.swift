@@ -229,6 +229,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 window.close()
             }
             NSApp.terminate(self)
+        } else if flags == .command
+                    && event.characters == "o" {
+            retrieveAllPlaylists()
         } else {
             return event
         }
