@@ -340,12 +340,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         self.isSearching = true
 
         switch lastSearch {
-            case .Freetext:
-                albumTracks(for: row.spotify_album)
-            case .Album:
-                artistTracks(for: row.spotify_artist)
-            case .Artist:
-                albumTracks(for: row.spotify_album)
+        case .Freetext:
+            albumTracks(for: row.spotify_album)
+        case .Album:
+            artistTracks(for: row.spotify_artist)
+        case .Artist:
+            albumTracks(for: row.spotify_album)
         }
         self.window.makeFirstResponder(searchTableView)
     }
