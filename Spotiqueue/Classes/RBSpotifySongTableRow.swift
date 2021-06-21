@@ -20,7 +20,7 @@ final class RBSpotifySongTableRow: NSObject {
     @objc dynamic var year: Int
     @objc dynamic var length: String = ""
 
-    var track_uri: String
+    var spotify_uri: String
     var spotify_album: Album?
     var spotify_artist: Artist?
     var durationSeconds: TimeInterval {
@@ -42,18 +42,18 @@ final class RBSpotifySongTableRow: NSObject {
 
     convenience init(track: Track, album: Album, artist: Artist) {
         // first, create stub with URI only:
-        self.init(track_uri: track.uri!)
+        self.init(spotify_uri: track.uri!)
         // now, hydrate it.
         self.hydrate(with: track, album: album, artist: artist)
     }
     
-    init(track_uri: String) {
+    init(spotify_uri: String) {
         // This is to create a placeholder/stub track object, to be hydrated later
-        self.track_uri = track_uri
+        self.spotify_uri = spotify_uri
         self.spotify_album = nil
         self.spotify_artist = nil
 
-        self.title = track_uri
+        self.title = spotify_uri
         self.artist = ""
 
         self.album = ""
@@ -80,7 +80,7 @@ final class RBSpotifySongTableRow: NSObject {
         self.spotify_artist = artist
 
         self.title = partialTrack.name
-        self.track_uri = partialTrack.uri!
+        self.spotify_uri = partialTrack.uri!
         self.artist = partialTrack.consolidated_name()
 
         self.album = album.name
@@ -101,7 +101,7 @@ final class RBSpotifySongTableRow: NSObject {
     
     // This is what we want it to look like if copied to pasteboard.
     func copyText() -> String {
-        return String(format: "%@ (%@ – %@)", self.track_uri, self.artist, self.title)
+        return String(format: "%@ (%@ – %@)", self.spotify_uri, self.artist, self.title)
     }
     
     func prettyTitle() -> String {

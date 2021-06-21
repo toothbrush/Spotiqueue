@@ -25,7 +25,7 @@ class RBQueueTableView: RBTableView {
                let uri = s.split(whereSeparator: \.isWhitespace).first {
                 logger.info("Hydrating song \(uri)")
                 stub_songs.append(
-                    RBSpotifySongTableRow(track_uri: String(uri))
+                    RBSpotifySongTableRow(spotify_uri: String(uri))
                 )
             } else {
                 logger.warning("Ignoring pasted invalid Spotify URI: \(s)")
@@ -34,7 +34,7 @@ class RBQueueTableView: RBTableView {
         AppDelegate.appDelegate().queueArrayController.add(contentsOf: stub_songs)
         
         for chunk in stub_songs.chunked(size: 50) {
-            AppDelegate.appDelegate().spotify.api.tracks(chunk.map({ $0.track_uri }))
+            AppDelegate.appDelegate().spotify.api.tracks(chunk.map({ $0.spotify_uri }))
                 .receive(on: RunLoop.main)
                 .sink(
                     receiveCompletion: { completion in

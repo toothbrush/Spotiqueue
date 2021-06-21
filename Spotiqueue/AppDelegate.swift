@@ -522,7 +522,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         guard let nextTrack = queue.first else {
             return
         }
-        spotiqueue_play_track(nextTrack.track_uri)
+        spotiqueue_play_track(nextTrack.spotify_uri)
         self.albumTitleLabel.cell?.title = nextTrack.album
         self.songTitleLabel.cell?.title = nextTrack.prettyTitle()
 
@@ -538,7 +538,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         guard let nextTrack = queue.first else {
             return
         }
-        spotiqueue_preload_track(nextTrack.track_uri)
+        spotiqueue_preload_track(nextTrack.spotify_uri)
     }
 
     // Helper to give me a pointer to this AppDelegate object.
