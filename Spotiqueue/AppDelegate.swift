@@ -341,6 +341,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             return
         }
         searchResults = []
+        searchResultsArrayController.sortDescriptors = []
         self.isSearching = true
         lastSearch = .AllPlaylists
         
@@ -393,6 +394,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         // okay, so listing a playlist's tracks isn't strictly a free-text search, but mainly we use that to tell Spotiqueue that a followup "detail-browse" should get the album for a track, and the one after that should get the artist's entire library.
         lastSearch = .Freetext
+        searchResultsArrayController.sortDescriptors = []
 
         spotify.api.playlistItems(playlist_uri)
             .extendPagesConcurrently(spotify.api)
