@@ -332,6 +332,34 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
+    func retrieveAllPlaylists() {
+        guard !self.isSearching else {
+            return
+        }
+        searchResults = []
+        self.isSearching = true
+        
+        spotify.api.currentUserPlaylists()
+            .extendPagesConcurrently(spotify.api)
+            .collectAndSortByOffset()
+            .receive(on: RunLoop.main)
+            .sink(receiveCompletion: { completion in
+                self.isSearching = false
+                if case .failure(let error) = completion {
+                    logger.error("couldn't retrieve playlists: \(error.localizedDescription)")
+                }
+            }
+            , receiveValue: { playlists in
+                for pl in playlists {
+                    self.searchResults.append(RBSpotifySongTableRow(playlist: pl))
+                }
+                self.searchTableView.selectRow(row: 0)
+            })
+            .store(in: &cancellables)
+        
+        self.window.makeFirstResponder(searchTableView)
+    }
+    
     func diveDeeperOnRow(for row: RBSpotifySongTableRow) {
         guard !self.isSearching else {
             return
