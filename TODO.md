@@ -8,6 +8,10 @@
   - [ ] playlists
   - won't support artist URI - just use search & browse!
 
+* Cmd-O to put list of all playlists into search results
+* Cmd-right gets all tracks if a playlist is selected, enter enqueues
+  entire playlist
+
 
 ## Other
 

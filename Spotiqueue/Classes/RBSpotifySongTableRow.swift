@@ -11,6 +11,11 @@ import SpotifyWebAPI
 
 final class RBSpotifySongTableRow: NSObject {
 
+    enum PlayableItem {
+        case Playlist
+        case Track
+    }
+    
     @objc dynamic var title: String
     @objc dynamic var artist: String
     @objc dynamic var album: String!
@@ -20,6 +25,8 @@ final class RBSpotifySongTableRow: NSObject {
     @objc dynamic var year: Int
     @objc dynamic var length: String = ""
 
+    var myKind: PlayableItem = .Track
+    
     var spotify_uri: String
     var spotify_album: Album?
     var spotify_artist: Artist?
@@ -45,6 +52,14 @@ final class RBSpotifySongTableRow: NSObject {
         self.init(spotify_uri: track.uri!)
         // now, hydrate it.
         self.hydrate(with: track, album: album, artist: artist)
+    }
+    
+    convenience init(playlist: Playlist<PlaylistItemsReference>) {
+        self.init(spotify_uri: playlist.uri)
+        self.title = playlist.name
+        self.artist = playlist.owner?.displayName ?? ""
+        self.track_number = playlist.items.total
+        self.myKind = .Playlist
     }
     
     init(spotify_uri: String) {
