@@ -390,6 +390,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             logger.warning("Called with nil playlist URI!  Doing nothing.")
             return
         }
+        
+        // okay, so listing a playlist's tracks isn't strictly a free-text search, but mainly we use that to tell Spotiqueue that a followup "detail-browse" should get the album for a track, and the one after that should get the artist's entire library.
+        lastSearch = .Freetext
 
         spotify.api.playlistItems(playlist_uri)
             .extendPagesConcurrently(spotify.api)
