@@ -158,6 +158,8 @@ final class RBSpotify: ObservableObject {
                 .userModifyPlaybackState,
                 .playlistModifyPrivate,
                 .playlistModifyPublic,
+                .playlistReadPrivate,
+                .playlistReadCollaborative,
                 .userLibraryRead,
                 .userLibraryModify,
                 .userReadEmail,
