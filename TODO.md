@@ -1,6 +1,9 @@
 # TODO list
 
-* Make sure that if user pastes URIs into queue, they're all the same kind.
+* When a user pastes URIs into queue,
+  1. If they're all tracks, use fast batching retrieval (as currently
+     implemented)
+  2. If it's anything else or a mix, deal with them one-by-one.
 
 * Allow pasting lists of:
   - [x] tracks
