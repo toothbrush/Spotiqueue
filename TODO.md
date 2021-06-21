@@ -8,10 +8,8 @@
   - [ ] playlists
   - won't support artist URI - just use search & browse!
 
-* Cmd-O to put list of all playlists into search results
-* Cmd-right gets all tracks if a playlist is selected, enter enqueues
-  entire playlist
-
+* cmd(-shift)-left enqueues entire playlist (top or bottom)
+* enter top-enqueues entire playlist and starts playing it
 
 ## Other
 
@@ -34,7 +32,6 @@
 * Loved tracks retrieval
 * Add/remove star
 
-* All playlists retrieval
 * Create playlist.. maybe? By default suggest name "Artist - Album"
   based on first selected item?  Or based on current queue?
 
