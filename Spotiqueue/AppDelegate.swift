@@ -174,12 +174,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         set_callback(player_update_hook(hook: position_ms: duration_ms:))
         NSEvent.addLocalMonitorForEvents(matching: [.keyDown /*, .systemDefined */], handler: localKeyShortcuts(event:))
-        self.window.makeFirstResponder(self.searchField)
-        // setup "focus loop"
-        self.searchField.nextKeyView = self.searchTableView
-        self.searchTableView.nextKeyView = self.queueTableView
-        self.queueTableView.nextKeyView = self.searchField
-        
+
         queueArrayController.selectsInsertedObjects = false
         searchResultsArrayController.selectsInsertedObjects = false
 
@@ -194,6 +189,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         
         self.addObserver(self, forKeyPath: "queueArrayController.arrangedObjects", options: .new, context: nil)
+
+        // setup "focus loop" / tab order
+        self.window.initialFirstResponder = self.searchField
+        self.searchField.nextKeyView = self.searchTableView
+        self.searchTableView.nextKeyView = self.queueTableView
+        self.queueTableView.nextKeyView = self.searchField
     }
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
@@ -208,6 +209,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 } else {
                     queueHeaderLabel.stringValue = "Queue"
                 }
+            } else {
+                logger.info("\(keyPath): \(String(describing: change))")
             }
         }
     }
