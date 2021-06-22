@@ -195,6 +195,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         self.searchField.nextKeyView = self.searchTableView
         self.searchTableView.nextKeyView = self.queueTableView
         self.queueTableView.nextKeyView = self.searchField
+        self.window.makeFirstResponder(self.searchField)
     }
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
