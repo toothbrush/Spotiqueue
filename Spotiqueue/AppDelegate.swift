@@ -410,7 +410,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func loadPlaylistTracksInto(for playlist_uri: String?,
                                 in target: SongList,
                                 at_the_top: Bool = false,
-                                and_then_advance: Bool = false) {
+                                and_then: (()->Void)? = nil) {
         guard let playlist_uri = playlist_uri else {
             logger.warning("Called with nil playlist URI!  Doing nothing.")
             return
@@ -424,9 +424,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 self.isSearching = false
                 switch completion {
                     case .finished:
-                        if and_then_advance {
-                            self.playNextQueuedTrack()
-                        }
                         logger.info("finished loading playlist")
                     case .failure(let error):
                         logger.error("Couldn't load playlist: \(error.localizedDescription)")
@@ -439,23 +436,32 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                         newRows.append(RBSpotifySongTableRow.init(track: track))
                     }
                 }
-                if at_the_top {
-                    switch target {
-                    case .Queue:
-                        self.queue = newRows + self.queue
-                    case .Search:
-                        self.searchResults = newRows + self.searchResults
-                    }
-                } else {
-                    switch target {
-                    case .Queue:
-                        self.queue.append(contentsOf: newRows)
-                    case .Search:
-                        self.searchResults.append(contentsOf: newRows)
-                    }
-                }
+                self.insertTracks(newRows: newRows,
+                                  in: target,
+                                  at_the_top: at_the_top,
+                                  and_then: and_then)
             })
             .store(in: &cancellables)
+    }
+    
+    func insertTracks(newRows: Array<RBSpotifySongTableRow>,
+                      in target: SongList,
+                      at_the_top: Bool = false,
+                      and_then: (() -> Void)?) {
+        switch target {
+        case .Queue:
+            let position = at_the_top ? 0 : self.queue.count
+            self.queue.insert(contentsOf: newRows, at: position)
+            self.queueTableView.selectRow(row: position)
+        case .Search:
+            let position = at_the_top ? 0 : self.searchResults.count
+            self.searchResults.insert(contentsOf: newRows, at: position)
+            self.searchTableView.selectRow(row: position)
+        }
+
+        if let and_then = and_then {
+            and_then()
+        }
     }
 
     private func albumTracks(for album: Album?) {

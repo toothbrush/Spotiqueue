@@ -31,7 +31,13 @@ class RBSearchTableView: RBTableView {
             NSSound.beep()
             return
         }
-        
+        var extra_commands: (()->Void)? = nil
+        if and_then_advance {
+            extra_commands = {
+                AppDelegate.appDelegate().playNextQueuedTrack()
+            }
+        }
+
         if selectedSearchTracks().allSatisfy({ $0.myKind == .Playlist }) {
             // let's say we can only enqueue one playlist at a time. it's a mess otherwise (among other issues, the fact that top-enqueueing batches of tracks is weird, and that this is an async call so the shortest playlist is added first).
             guard selectedSearchTracks().count == 1 else {
@@ -41,19 +47,12 @@ class RBSearchTableView: RBTableView {
             AppDelegate.appDelegate().loadPlaylistTracksInto(for: selectedSearchTracks().first!.spotify_uri,
                                                              in: .Queue,
                                                              at_the_top: position == .Top,
-                                                             and_then_advance: and_then_advance)
+                                                             and_then: extra_commands)
         } else if selectedSearchTracks().allSatisfy({ $0.myKind == .Track }) {
-            switch position {
-                case .Bottom:
-                    AppDelegate.appDelegate().queue.append(contentsOf: self.selectedSearchTracks())
-                    AppDelegate.appDelegate().queueTableView.selectRow(row: AppDelegate.appDelegate().queue.count - self.selectedSearchTracks().count)
-                case .Top:
-                    AppDelegate.appDelegate().queue = self.selectedSearchTracks() + AppDelegate.appDelegate().queue
-                    AppDelegate.appDelegate().queueTableView.selectRow(row: 0)
-            }
-            if and_then_advance {
-                AppDelegate.appDelegate().playNextQueuedTrack()
-            }
+            AppDelegate.appDelegate().insertTracks(newRows: self.selectedSearchTracks(),
+                                                   in: .Queue,
+                                                   at_the_top: position == .Top,
+                                                   and_then: extra_commands)
         }
     }
 
