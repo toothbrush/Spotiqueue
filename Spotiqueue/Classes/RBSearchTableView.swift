@@ -23,22 +23,37 @@ class RBSearchTableView: RBTableView {
             NSSound.beep()
             return
         }
-        enqueueSelection(position: .Top)
-        AppDelegate.appDelegate().playNextQueuedTrack()
+        enqueueSelection(position: .Top, and_then_advance: true)
     }
 
-    func enqueueSelection(position: EnqueuePosition = .Bottom) {
+    func enqueueSelection(position: EnqueuePosition = .Bottom, and_then_advance: Bool = false) {
         guard !selectedSearchTracks().isEmpty else {
             NSSound.beep()
             return
         }
-        switch position {
-            case .Bottom:
-                AppDelegate.appDelegate().queue.append(contentsOf: self.selectedSearchTracks())
-                AppDelegate.appDelegate().queueTableView.selectRow(row: AppDelegate.appDelegate().queue.count - self.selectedSearchTracks().count)
-            case .Top:
-                AppDelegate.appDelegate().queue = self.selectedSearchTracks() + AppDelegate.appDelegate().queue
-                AppDelegate.appDelegate().queueTableView.selectRow(row: 0)
+        
+        if selectedSearchTracks().allSatisfy({ $0.myKind == .Playlist }) {
+            // let's say we can only enqueue one playlist at a time. it's a mess otherwise (among other issues, the fact that top-enqueueing batches of tracks is weird, and that this is an async call so the shortest playlist is added first).
+            guard selectedSearchTracks().count == 1 else {
+                NSSound.beep()
+                return
+            }
+            AppDelegate.appDelegate().loadPlaylistTracksInto(for: selectedSearchTracks().first!.spotify_uri,
+                                                             in: .Queue,
+                                                             at_the_top: position == .Top,
+                                                             and_then_advance: and_then_advance)
+        } else if selectedSearchTracks().allSatisfy({ $0.myKind == .Track }) {
+            switch position {
+                case .Bottom:
+                    AppDelegate.appDelegate().queue.append(contentsOf: self.selectedSearchTracks())
+                    AppDelegate.appDelegate().queueTableView.selectRow(row: AppDelegate.appDelegate().queue.count - self.selectedSearchTracks().count)
+                case .Top:
+                    AppDelegate.appDelegate().queue = self.selectedSearchTracks() + AppDelegate.appDelegate().queue
+                    AppDelegate.appDelegate().queueTableView.selectRow(row: 0)
+            }
+            if and_then_advance {
+                AppDelegate.appDelegate().playNextQueuedTrack()
+            }
         }
     }
 

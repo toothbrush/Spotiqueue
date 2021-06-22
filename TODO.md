@@ -11,9 +11,6 @@
   - [ ] playlists
   - won't support artist URI - just use search & browse!
 
-* cmd(-shift)-left enqueues entire playlist (top or bottom)
-* enter top-enqueues entire playlist and starts playing it
-
 ## Other
 
 * Automatically switch audio output sink when using Sound.prefpane - https://github.com/RustAudio/rodio/issues/327

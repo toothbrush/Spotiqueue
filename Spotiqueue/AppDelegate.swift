@@ -384,12 +384,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         case .Artist:
             albumTracks(for: row.spotify_album)
         case .AllPlaylists:
-            playlistTracks(for: row.spotify_uri)
+            searchPlaylistTracks(for: row.spotify_uri)
         }
         self.window.makeFirstResponder(searchTableView)
     }
     
-    private func playlistTracks(for playlist_uri: String?) {
+    private func searchPlaylistTracks(for playlist_uri: String?) {
         guard let playlist_uri = playlist_uri else {
             logger.warning("Called with nil playlist URI!  Doing nothing.")
             return
@@ -399,6 +399,23 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         lastSearch = .Freetext
         searchResultsArrayController.sortDescriptors = []
 
+        loadPlaylistTracksInto(for: playlist_uri, in: .Search)
+    }
+    
+    enum SongList {
+        case Queue
+        case Search
+    }
+    
+    func loadPlaylistTracksInto(for playlist_uri: String?,
+                                in target: SongList,
+                                at_the_top: Bool = false,
+                                and_then_advance: Bool = false) {
+        guard let playlist_uri = playlist_uri else {
+            logger.warning("Called with nil playlist URI!  Doing nothing.")
+            return
+        }
+        
         spotify.api.playlistItems(playlist_uri)
             .extendPagesConcurrently(spotify.api)
             .collectAndSortByOffset()
@@ -407,15 +424,34 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 self.isSearching = false
                 switch completion {
                     case .finished:
+                        if and_then_advance {
+                            self.playNextQueuedTrack()
+                        }
                         logger.info("finished loading playlist")
                     case .failure(let error):
                         logger.error("Couldn't load playlist: \(error.localizedDescription)")
                 }
             },
             receiveValue: { items in
+                var newRows: Array<RBSpotifySongTableRow> = []
                 for playlistItemContainer in items {
                     if case .track(let track) = playlistItemContainer.item {
-                        self.searchResults.append(RBSpotifySongTableRow.init(track: track))
+                        newRows.append(RBSpotifySongTableRow.init(track: track))
+                    }
+                }
+                if at_the_top {
+                    switch target {
+                    case .Queue:
+                        self.queue = newRows + self.queue
+                    case .Search:
+                        self.searchResults = newRows + self.searchResults
+                    }
+                } else {
+                    switch target {
+                    case .Queue:
+                        self.queue.append(contentsOf: newRows)
+                    case .Search:
+                        self.searchResults.append(contentsOf: newRows)
                     }
                 }
             })
