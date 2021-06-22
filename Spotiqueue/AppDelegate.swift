@@ -410,7 +410,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func loadPlaylistTracksInto(for playlist_uri: String?,
                                 in target: SongList,
                                 at_the_top: Bool = false,
-                                and_then: (()->Void)? = nil) {
+                                and_then_advance: Bool = false) {
         guard let playlist_uri = playlist_uri else {
             logger.warning("Called with nil playlist URI!  Doing nothing.")
             return
@@ -439,7 +439,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 self.insertTracks(newRows: newRows,
                                   in: target,
                                   at_the_top: at_the_top,
-                                  and_then: and_then)
+                                  and_then_advance: and_then_advance)
             })
             .store(in: &cancellables)
     }
@@ -447,7 +447,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func insertTracks(newRows: Array<RBSpotifySongTableRow>,
                       in target: SongList,
                       at_the_top: Bool = false,
-                      and_then: (() -> Void)?) {
+                      and_then_advance: Bool = false) {
         switch target {
         case .Queue:
             let position = at_the_top ? 0 : self.queue.count
@@ -459,8 +459,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             self.searchTableView.selectRow(row: position)
         }
 
-        if let and_then = and_then {
-            and_then()
+        if and_then_advance {
+            self.playNextQueuedTrack()
         }
     }
 

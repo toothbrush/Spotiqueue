@@ -31,12 +31,6 @@ class RBSearchTableView: RBTableView {
             NSSound.beep()
             return
         }
-        var extra_commands: (()->Void)? = nil
-        if and_then_advance {
-            extra_commands = {
-                AppDelegate.appDelegate().playNextQueuedTrack()
-            }
-        }
 
         if selectedSearchTracks().allSatisfy({ $0.myKind == .Playlist }) {
             // let's say we can only enqueue one playlist at a time. it's a mess otherwise (among other issues, the fact that top-enqueueing batches of tracks is weird, and that this is an async call so the shortest playlist is added first).
@@ -47,12 +41,12 @@ class RBSearchTableView: RBTableView {
             AppDelegate.appDelegate().loadPlaylistTracksInto(for: selectedSearchTracks().first!.spotify_uri,
                                                              in: .Queue,
                                                              at_the_top: position == .Top,
-                                                             and_then: extra_commands)
+                                                             and_then_advance: and_then_advance)
         } else if selectedSearchTracks().allSatisfy({ $0.myKind == .Track }) {
             AppDelegate.appDelegate().insertTracks(newRows: self.selectedSearchTracks(),
                                                    in: .Queue,
                                                    at_the_top: position == .Top,
-                                                   and_then: extra_commands)
+                                                   and_then_advance: and_then_advance)
         }
     }
 
