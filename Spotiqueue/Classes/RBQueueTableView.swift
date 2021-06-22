@@ -18,48 +18,42 @@ class RBQueueTableView: RBTableView {
 
     @objc func paste(_ sender: AnyObject?) {
         guard let contents = NSPasteboard.general.pasteboardItems?.first?.string(forType: .string) else { return }
-        let incoming_uris = contents
-            .split(whereSeparator: \.isNewline)
-            .compactMap({ $0
-                    .trimmingCharacters(in: .whitespaces)
-                    .split(whereSeparator: \.isWhitespace)
-                    .first
-            })
-            .compactMap({ String($0) })
-        var stub_songs: [RBSpotifySongTableRow] = []
-        for s in incoming_uris {
-            if s.hasPrefix("spotify:") {
+        let incoming_uris = RBSpotify.sanitiseIncomingURIBlob(pasted_blob: contents)
+        
+        if incoming_uris.allSatisfy({ $0.hasPrefix("spotify:track:") }) {
+            // we can use the fancy batching-fetch-songs mechanism.
+            AppDelegate.appDelegate().isSearching = true
+            var stub_songs: [RBSpotifySongTableRow] = []
+            for s in incoming_uris {
                 logger.info("Hydrating song \(s)")
                 stub_songs.append(
                     RBSpotifySongTableRow(spotify_uri: s)
                 )
-            } else {
-                logger.warning("Ignoring pasted invalid Spotify URI: \(s)")
             }
-        }
-        AppDelegate.appDelegate().queueArrayController.add(contentsOf: stub_songs)
-        
-        for chunk in stub_songs.chunked(size: 50) {
-            AppDelegate.appDelegate().spotify.api.tracks(chunk.map({ $0.spotify_uri }))
-                .receive(on: RunLoop.main)
-                .sink(
-                    receiveCompletion: { completion in
-                        logger.info("completion: \(completion)")
-                    },
-                    receiveValue: { tracks in
-                        for (index, track) in tracks.enumerated() {
-                            logger.info("result[\(index)]: \(track?.name ?? "")")
-                            if let track = track {
-                                chunk[index].hydrate(with: track)
-                            } else {
-                                // we got a nil from the API, remove from queue.
+            AppDelegate.appDelegate().queueArrayController.add(contentsOf: stub_songs)
+            
+            for chunk in stub_songs.chunked(size: 50) {
+                AppDelegate.appDelegate().spotify.api.tracks(chunk.map({ $0.spotify_uri }))
+                    .receive(on: RunLoop.main)
+                    .sink(
+                        receiveCompletion: { completion in
+                            AppDelegate.appDelegate().isSearching = false
+                            logger.info("completion: \(completion)")
+                        },
+                        receiveValue: { tracks in
+                            for (index, track) in tracks.enumerated() {
+                                logger.info("result[\(index)]: \(track?.name ?? "")")
+                                if let track = track {
+                                    chunk[index].hydrate(with: track)
+                                } else {
+                                    // we got a nil from the API, remove from queue.
+                                }
                             }
                         }
-                    }
-                )
-                .store(in: &cancellables)
+                    )
+                    .store(in: &cancellables)
+            }
         }
-        self.reloadData()
     }
     
     func enter() {
