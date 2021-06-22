@@ -36,11 +36,14 @@ final class RBSpotify: ObservableObject {
             || value.hasPrefix("spotify:playlist:")
             || value.hasPrefix("spotify:album:") {
             return value
-        } else if value.hasPrefix("https://open.spotify.com/"),
-                  let url = URL(string: value) {
-            let my_uri = "spotify" + url.path.replacingOccurrences(of: "/", with: ":")
-            logger.info("Converted open.spotify.com URL to \(my_uri)")
-            return my_uri
+        } else if value.hasPrefix("https://open.spotify.com/track/")
+                    || value.hasPrefix("https://open.spotify.com/playlist/")
+                    || value.hasPrefix("https://open.spotify.com/album/") {
+            if let url = URL(string: value) {
+                let my_uri = "spotify" + url.path.replacingOccurrences(of: "/", with: ":")
+                logger.info("Converted open.spotify.com URL to \(my_uri)")
+                return my_uri
+            }
         }
         logger.warning("Ignoring invalid Spotify URI: \(value)")
         return nil
