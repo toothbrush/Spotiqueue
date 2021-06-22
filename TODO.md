@@ -67,8 +67,6 @@
 
 * Why are the table column headers sometimes differently-coloured???
 
-* when copying: _intersperse_ with `\n`, don't append to every line.
-
 * I want a key shortcut to search for the currently playing song or
   album. Consider adding a menu item.
 
