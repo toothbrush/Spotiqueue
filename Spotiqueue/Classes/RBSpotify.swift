@@ -32,9 +32,9 @@ final class RBSpotify: ObservableObject {
     }
     
     static func sanitiseIncomingURI(value: String) -> String? {
-        if value.hasPrefix("spotify:track:") ||
-            value.hasPrefix("spotify:playlist:") ||
-            value.hasPrefix("spotify:album:") {
+        if value.hasPrefix("spotify:track:")
+            || value.hasPrefix("spotify:playlist:")
+            || value.hasPrefix("spotify:album:") {
             return value
         } else if value.hasPrefix("https://open.spotify.com/"),
                   let url = URL(string: value) {
