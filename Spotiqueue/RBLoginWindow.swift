@@ -26,9 +26,13 @@ class RBLoginWindow: NSWindowController {
         // try to grab user/pass from keychain:
         if let username = RBSecrets.getSecret(s: .username),
            let password = RBSecrets.getSecret(s: .password) {
+            usernameField.isEnabled = true
+            passwordField.isEnabled = true
             usernameField.stringValue = username
             passwordField.stringValue = password
-            
+            usernameField.isEnabled = false
+            passwordField.isEnabled = false
+
             let worker_initialized = spotiqueue_initialize_worker(username, password)
             if !worker_initialized {
                 fatalError("Unable to launch spotiqueue-worker!")
