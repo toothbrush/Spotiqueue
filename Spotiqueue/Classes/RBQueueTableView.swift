@@ -18,14 +18,20 @@ class RBQueueTableView: RBTableView {
 
     @objc func paste(_ sender: AnyObject?) {
         guard let contents = NSPasteboard.general.pasteboardItems?.first?.string(forType: .string) else { return }
-        let songs = contents.split(whereSeparator: \.isNewline).map { $0.trimmingCharacters(in: .whitespaces) }
+        let incoming_uris = contents
+            .split(whereSeparator: \.isNewline)
+            .compactMap({ $0
+                    .trimmingCharacters(in: .whitespaces)
+                    .split(whereSeparator: \.isWhitespace)
+                    .first
+            })
+            .compactMap({ String($0) })
         var stub_songs: [RBSpotifySongTableRow] = []
-        for s in songs {
-            if s.hasPrefix("spotify:"),
-               let uri = s.split(whereSeparator: \.isWhitespace).first {
-                logger.info("Hydrating song \(uri)")
+        for s in incoming_uris {
+            if s.hasPrefix("spotify:") {
+                logger.info("Hydrating song \(s)")
                 stub_songs.append(
-                    RBSpotifySongTableRow(spotify_uri: String(uri))
+                    RBSpotifySongTableRow(spotify_uri: s)
                 )
             } else {
                 logger.warning("Ignoring pasted invalid Spotify URI: \(s)")
