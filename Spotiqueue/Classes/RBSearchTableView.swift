@@ -9,10 +9,6 @@
 import Cocoa
 
 class RBSearchTableView: RBTableView {
-    enum EnqueuePosition {
-        case Top
-        case Bottom
-    }
 
     override func associatedArrayController() -> NSArrayController {
         AppDelegate.appDelegate().searchResultsArrayController
@@ -23,10 +19,10 @@ class RBSearchTableView: RBTableView {
             NSSound.beep()
             return
         }
-        enqueueSelection(position: .Top, and_then_advance: true)
+        enqueueSelection(at_the_top: true, and_then_advance: true)
     }
 
-    func enqueueSelection(position: EnqueuePosition = .Bottom, and_then_advance: Bool = false) {
+    func enqueueSelection(at_the_top: Bool = false, and_then_advance: Bool = false) {
         guard !selectedSearchTracks().isEmpty else {
             NSSound.beep()
             return
@@ -40,12 +36,12 @@ class RBSearchTableView: RBTableView {
             }
             AppDelegate.appDelegate().loadPlaylistTracksInto(for: selectedSearchTracks().first!.spotify_uri,
                                                              in: .Queue,
-                                                             at_the_top: position == .Top,
+                                                             at_the_top: at_the_top,
                                                              and_then_advance: and_then_advance)
         } else if selectedSearchTracks().allSatisfy({ $0.myKind == .Track }) {
             AppDelegate.appDelegate().insertTracks(newRows: self.selectedSearchTracks(),
                                                    in: .Queue,
-                                                   at_the_top: position == .Top,
+                                                   at_the_top: at_the_top,
                                                    and_then_advance: and_then_advance)
         }
     }
@@ -59,10 +55,10 @@ class RBSearchTableView: RBTableView {
             enter()
         } else if event.keyCode == kVK_LeftArrow // cmd-shift-left arrow
                     && flags == [.command, .shift] {
-            enqueueSelection(position: .Top)
+            enqueueSelection(at_the_top: true)
         } else if event.characters == "h" // cmd-shift-"h" key
                     && flags == [.command, .shift] {
-            enqueueSelection(position: .Top)
+            enqueueSelection(at_the_top: true)
         } else if event.keyCode == kVK_LeftArrow // cmd-left arrow
                     && flags == .command {
             enqueueSelection()
