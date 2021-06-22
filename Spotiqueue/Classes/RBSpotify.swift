@@ -20,6 +20,32 @@ import SpotifyWebAPI
  */
 final class RBSpotify: ObservableObject {
 
+    static func sanitiseIncomingURIBlob(pasted_blob: String) -> [String] {
+        pasted_blob
+            .split(whereSeparator: \.isNewline)
+            .compactMap({ $0
+                .trimmingCharacters(in: .whitespaces)
+                .split(whereSeparator: \.isWhitespace)
+                .first
+            })
+            .compactMap({ sanitiseIncomingURI(value: String($0)) })
+    }
+    
+    static func sanitiseIncomingURI(value: String) -> String? {
+        if value.hasPrefix("spotify:track:") ||
+            value.hasPrefix("spotify:playlist:") ||
+            value.hasPrefix("spotify:album:") {
+            return value
+        } else if value.hasPrefix("https://open.spotify.com/"),
+                  let url = URL(string: value) {
+            let my_uri = "spotify" + url.path.replacingOccurrences(of: "/", with: ":")
+            logger.info("Converted open.spotify.com URL to \(my_uri)")
+            return my_uri
+        }
+        logger.warning("Ignoring invalid Spotify URI: \(value)")
+        return nil
+    }
+    
     private static let clientId: String = "f925f1b4e9164425be3d9ec9bf4be1c5"
 
     /// The URL that Spotify will redirect to after the user either
