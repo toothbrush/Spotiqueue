@@ -53,8 +53,10 @@ class RBTableView: NSTableView {
             copiedItems.append(obj.copyText())
         }
         let pasteBoard = NSPasteboard.general
-        pasteBoard.clearContents()
-        pasteBoard.setString(copiedItems.joined(separator: "\n"), forType: NSPasteboard.PasteboardType.string)
+        if !copiedItems.isEmpty {
+            pasteBoard.clearContents()
+            pasteBoard.setString(copiedItems.joined(separator: "\n"), forType: NSPasteboard.PasteboardType.string)
+        }
     }
     
     // Curious about keyCode values? See https://stackoverflow.com/questions/2080312/where-can-i-find-a-list-of-key-codes-for-use-with-cocoas-nsevent-class
