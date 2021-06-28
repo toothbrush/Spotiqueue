@@ -44,4 +44,52 @@ extension SpotifyAPI {
             .map { $0.compactMap { $0 } }
             .eraseToAnyPublisher()
     }
+    
+    func albumFullTracks(
+        _ album: SpotifyURIConvertible
+    ) -> AnyPublisher<[Track], Error> {
+        self.albumTracks(album)
+            .extendPagesConcurrently(self)
+            // extract the URIs of the tracks from each page
+            .map { tracksPage in
+                tracksPage.items.compactMap(\.uri)
+            }
+            .flatMap { trackURIs -> AnyPublisher<[Track?], Error> in
+                return self.tracks(trackURIs)
+            }
+            // remove the `nil` items from the array of albums
+            .map { $0.compactMap { $0 } }
+            .eraseToAnyPublisher()
+
+    }
+    
+    func dealWithUnknownSpotifyURI(
+        _ uri: SpotifyURIConvertible
+    ) -> AnyPublisher<[Track], Error> {
+        if uri.uri.hasPrefix("spotify:track:") {
+            logger.info("yep it's a track!")
+            return self.track(uri)
+                .collect()
+                .eraseToAnyPublisher()
+        } else if uri.uri.hasPrefix("spotify:album:") {
+            logger.info("yep it's an album!")
+            return self.albumFullTracks(uri)
+        } else if uri.uri.hasPrefix("spotify:playlist:") {
+            logger.info("yep it's a playlist!")
+//            return self.playlistTracks(uri)
+//                .collectAndSortByOffset()
+//                .eraseToAnyPublisher()
+//                .map({ playlistItemContainer in
+//                    if case .track(let track) = playlistItemContainer.item {
+//                        track
+//                    } else {
+//                        nil
+//                    }
+//                })
+        } else {
+            logger.error("eek, don't know what to do with <\(uri)>!")
+        }
+        return Empty(completeImmediately: true)
+            .eraseToAnyPublisher()
+    }
 }

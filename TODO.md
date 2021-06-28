@@ -7,7 +7,7 @@
 
 * Allow pasting lists of:
   - [x] tracks
-  - [ ] albums
+  - [x] albums
   - [ ] playlists
   - won't support artist URI - just use search & browse!
 
