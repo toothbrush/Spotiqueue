@@ -20,7 +20,7 @@ import SpotifyWebAPI
  */
 final class RBSpotify: ObservableObject {
 
-    static func sanitiseIncomingURIBlob(pasted_blob: String) -> [String] {
+    static func sanitiseIncomingURIBlob(pasted_blob: String) -> [SpotifyURIConvertible] {
         pasted_blob
             .split(whereSeparator: \.isNewline)
             .compactMap({ $0

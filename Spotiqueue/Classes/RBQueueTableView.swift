@@ -20,14 +20,14 @@ class RBQueueTableView: RBTableView {
         guard let contents = NSPasteboard.general.pasteboardItems?.first?.string(forType: .string) else { return }
         let incoming_uris = RBSpotify.sanitiseIncomingURIBlob(pasted_blob: contents)
         
-        if incoming_uris.allSatisfy({ $0.hasPrefix("spotify:track:") }) {
+        if incoming_uris.allSatisfy({ $0.uri.hasPrefix("spotify:track:") }) {
             // we can use the fancy batching-fetch-songs mechanism.
             AppDelegate.appDelegate().isSearching = true
             var stub_songs: [RBSpotifySongTableRow] = []
             for s in incoming_uris {
                 logger.info("Hydrating song \(s)")
                 stub_songs.append(
-                    RBSpotifySongTableRow(spotify_uri: s)
+                    RBSpotifySongTableRow(spotify_uri: s.uri)
                 )
             }
             AppDelegate.appDelegate().queueArrayController.add(contentsOf: stub_songs)
