@@ -67,15 +67,12 @@ extension SpotifyAPI {
         _ uri: SpotifyURIConvertible
     ) -> AnyPublisher<[Track], Error> {
         if uri.uri.hasPrefix("spotify:track:") {
-            logger.info("yep it's a track!")
             return self.track(uri)
                 .collect()
                 .eraseToAnyPublisher()
         } else if uri.uri.hasPrefix("spotify:album:") {
-            logger.info("yep it's an album!")
             return self.albumFullTracks(uri)
         } else if uri.uri.hasPrefix("spotify:playlist:") {
-            logger.info("yep it's a playlist!")
 //            return self.playlistTracks(uri)
 //                .collectAndSortByOffset()
 //                .eraseToAnyPublisher()
