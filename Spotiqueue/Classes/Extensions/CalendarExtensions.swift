@@ -1,5 +1,5 @@
 //
-//  CalendarExtension.swift
+//  CalendarExtensions.swift
 //  Spotiqueue
 //
 //  Created by Paul on 24/5/21.
