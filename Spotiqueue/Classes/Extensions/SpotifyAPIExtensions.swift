@@ -45,6 +45,25 @@ extension SpotifyAPI {
             .eraseToAnyPublisher()
     }
     
+    func playlistFullTracks(
+        _ playlist: SpotifyURIConvertible
+    ) -> AnyPublisher<[Track], Error> {
+
+        self.playlistItems(playlist)
+            .extendPagesConcurrently(self)
+            .collectAndSortByOffset()
+            .compactMap({ playlistItems in
+                var tracks: Array<Track> = []
+                for playlistItemContainer in playlistItems {
+                    if case .track(let track) = playlistItemContainer.item {
+                        tracks.append(track)
+                    }
+                }
+                return tracks
+            })
+            .eraseToAnyPublisher()
+    }
+    
     func albumFullTracks(
         _ album: SpotifyURIConvertible
     ) -> AnyPublisher<[Track], Error> {
@@ -73,18 +92,10 @@ extension SpotifyAPI {
         } else if uri.uri.hasPrefix("spotify:album:") {
             return self.albumFullTracks(uri)
         } else if uri.uri.hasPrefix("spotify:playlist:") {
-//            return self.playlistTracks(uri)
-//                .collectAndSortByOffset()
-//                .eraseToAnyPublisher()
-//                .map({ playlistItemContainer in
-//                    if case .track(let track) = playlistItemContainer.item {
-//                        track
-//                    } else {
-//                        nil
-//                    }
-//                })
+            return self.playlistFullTracks(uri)
         } else {
-            logger.error("eek, don't know what to do with <\(uri)>!")
+            // For some reason, logger doesn't successfully go to stdout here.  Weirdly using print() does.
+            logger.error("Don't know what to do with this URI! \(uri.uri)")
         }
         return Empty(completeImmediately: true)
             .eraseToAnyPublisher()

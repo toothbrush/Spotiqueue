@@ -64,7 +64,6 @@ class RBQueueTableView: RBTableView {
                     logger.info("completion: \(completion)")
                 },
                 receiveValue: { tracks in
-                    logger.info("received tracks = \(tracks)")
                     AppDelegate.appDelegate()
                         .insertTracks(newRows: tracks.joined().map({ RBSpotifySongTableRow(track: $0)}),
                                       in: .Queue,

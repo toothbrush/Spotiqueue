@@ -1,16 +1,5 @@
 # TODO list
 
-* When a user pastes URIs into queue,
-  1. If they're all tracks, use fast batching retrieval (as currently
-     implemented)
-  2. If it's anything else or a mix, deal with them one-by-one.
-
-* Allow pasting lists of:
-  - [x] tracks
-  - [x] albums
-  - [ ] playlists
-  - won't support artist URI - just use search & browse!
-
 ## Other
 
 * Automatically switch audio output sink when using Sound.prefpane - https://github.com/RustAudio/rodio/issues/327
@@ -39,14 +28,7 @@
 
 * better logging framework, show messages in Console.app.
 
-* FIX: blocking on get-all-albums for artist with many albums. Should
-  be background job. Eg. search for beethoven, cmd-right twice in a
-  row. Boom.
-
 * Deal with user pasting `spotify:......` URI into search bar.
-
-* Everywhere you can paste spotify URIs, consider allowing
-  `https://open.spotify.com...` URLs, too.
 
 * Create README with instructions for building, codesign, sparkle
   update, and especially the `ditto....` incantation and how `zip -r`
@@ -55,10 +37,6 @@
 * When moving tracks in queue consider scrolling such that there's a
   3-4 track "buffer" of not-selected tracks between the selected block
   and the edge of the view.
-
-
-* Pasting would be much easier if we didn't bother batching and dealt
-  with each entry one-by-one... 🤔
 
 * Little Credits or Help screen
 
