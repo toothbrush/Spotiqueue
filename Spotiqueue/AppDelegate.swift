@@ -67,11 +67,13 @@ enum PlayerState {
     case Paused
 }
 
-enum LastSearch {
-    case Freetext
-    case Album
-    case Artist
+enum SearchCommand {
+    case None
+    case Freetext(String)
+    case Album(Album)
+    case Artist(Artist)
     case AllPlaylists
+    case Playlist(String, SpotifyURIConvertible)
 }
 
 @NSApplicationMain
@@ -103,7 +105,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet weak var progressBar: NSProgressIndicator!
 
     var playerState: PlayerState = .Stopped
-    var lastSearch: LastSearch = .Freetext
+    var currentSearch: SearchCommand = .None
 
     var loginWindow: RBLoginWindow?
 
@@ -359,7 +361,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         searchResults = []
         searchResultsArrayController.sortDescriptors = []
-        lastSearch = .AllPlaylists
+        currentSearch = .AllPlaylists
         
         spotify.api.currentUserPlaylists()
             .extendPagesConcurrently(spotify.api)
@@ -390,26 +392,30 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         searchResults = []
         self.window.makeFirstResponder(searchTableView)
 
-        switch lastSearch {
-        case .Freetext:
-            albumTracks(for: row.spotify_album)
-        case .Album:
-            artistTracks(for: row.spotify_artist)
-        case .Artist:
-            albumTracks(for: row.spotify_album)
-        case .AllPlaylists:
-            searchPlaylistTracks(for: row.spotify_uri)
+        switch currentSearch {
+            case .None:
+                albumTracks(for: row.spotify_album)
+            case .Freetext:
+                albumTracks(for: row.spotify_album)
+            case .Album:
+                artistTracks(for: row.spotify_artist)
+            case .Artist:
+                albumTracks(for: row.spotify_album)
+            case .AllPlaylists:
+                searchPlaylistTracks(for: row.spotify_uri, withTitle: row.title)
+            case .Playlist:
+                albumTracks(for: row.spotify_album)
         }
     }
     
-    private func searchPlaylistTracks(for playlist_uri: String?) {
+    private func searchPlaylistTracks(for playlist_uri: String?, withTitle title: String) {
         guard let playlist_uri = playlist_uri else {
             logger.warning("Called with nil playlist URI!  Doing nothing.")
             return
         }
         
         // okay, so listing a playlist's tracks isn't strictly a free-text search, but mainly we use that to tell Spotiqueue that a followup "detail-browse" should get the album for a track, and the one after that should get the artist's entire library.
-        lastSearch = .Freetext
+        currentSearch = .Playlist(title, playlist_uri)
         searchResultsArrayController.sortDescriptors = []
 
         loadPlaylistTracksInto(for: playlist_uri, in: .Search)
@@ -483,7 +489,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             return
         }
         
-        lastSearch = .Album
+        currentSearch = .Album(album)
         // retrieve album tracks
         spotify.api.albumTracks(
             album.uri!,
@@ -527,7 +533,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             return
         }
 
-        lastSearch = .Artist
+        currentSearch = .Artist(artist)
         let dispatchGroup = DispatchGroup()
 
         var albumsReceived: [Album] = []
@@ -594,7 +600,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         logger.info("Searching for \"\(searchString)\"...")
 
         searchResults = []
-        lastSearch = .Freetext
+        currentSearch = .Freetext(searchString)
 
         // cheap and dirty way of saying "this many pages expected"
         runningTasks = 4
