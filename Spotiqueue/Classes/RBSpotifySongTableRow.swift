@@ -116,7 +116,11 @@ final class RBSpotifySongTableRow: NSObject {
     
     // This is what we want it to look like if copied to pasteboard.
     func copyText() -> String {
-        return String(format: "%@ (%@ – %@)", self.spotify_uri, self.artist, self.title)
+        if !self.artist.isEmpty && !self.title.isEmpty {
+            return String(format: "%@ (%@ – %@)", self.spotify_uri, self.artist, self.title)
+        } else {
+            return self.spotify_uri
+        }
     }
     
     func prettyTitle() -> String {
