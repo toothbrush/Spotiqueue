@@ -13,13 +13,13 @@ AC_USERNAME := $(shell pass spotiqueue-itc-signing | grep email | awk '{print $$
 export AC_PASSWORD := $(shell pass spotiqueue-itc-signing | grep app-specific-pass | awk '{print $$2}')
 
 .PHONY: build
-build: archive notarize sign make-zip open
+build: archive notarize sign make-zip
 
 # --- MAIN WORKFLOW FUNCTIONS --- #
 
 .PHONY: archive
 archive: clean
-	echo "Exporting application archive..."
+	@echo "Exporting application archive..."
 
 	xcodebuild \
 		-scheme $(APP) \
@@ -27,7 +27,7 @@ archive: clean
 		-configuration Release archive \
 		-archivePath $(BUILD_PATH)/$(APP).xcarchive
 
-	echo "Application built, starting the export archive..."
+	@echo "Application built, starting the export archive..."
 
 	xcodebuild -exportArchive \
 		-exportOptionsPlist "$(PWD)/ExportOptions.plist" \
@@ -36,11 +36,11 @@ archive: clean
 
 	ditto -c -k --keepParent $(APP_PATH) $(ZIP_PATH)
 
-	echo "Project archived successfully"
+	@echo "Project archived successfully"
 
 .PHONY: notarize
 notarize:
-	echo "Submitting app for notarization..."
+	@echo "Submitting app for notarization..."
 
 	xcrun altool --notarize-app \
 	  --primary-bundle-id $(BUNDLE_ID) \
@@ -49,15 +49,15 @@ notarize:
 	  -p @env:AC_PASSWORD \
 	  --file $(ZIP_PATH)
 
-	echo "Application sent to the notarization center"
+	@echo "Application sent to the notarization center"
 
 	sleep 30s
 
 .PHONY: sign
 sign:
-	echo "Checking if package is approved by Apple..."
+	@echo "Checking if package is approved by Apple..."
 
-	while true; do \
+	@while true; do \
 		if [[ "$$(xcrun altool --notarization-history 0 --team-id ${TEAM_ID} -u $(AC_USERNAME) -p @env:AC_PASSWORD | sed -n '6p')" == *"success"* ]]; then \
 			echo "OK" ;\
 			break ;\
@@ -66,12 +66,12 @@ sign:
 		sleep 10s ;\
 	done
 
-	echo "Going to staple an application..."
+	@echo "Going to staple an application..."
 
 	xcrun stapler staple $(APP_PATH)
 	spctl -a -t exec -vvv $(APP_PATH)
 
-	echo "Spotiqueue successfully stapled"
+	@echo "Spotiqueue successfully stapled"
 
 .PHONY: make-zip
 make-zip: VERSION = $(shell /usr/libexec/PlistBuddy -c "Print CFBundleShortVersionString" "$(APP_PATH)/Contents/Info.plist")
@@ -102,9 +102,9 @@ prepare-dmg:
 
 .PHONY: prepare-dSYM
 prepare-dSYM:
-	echo "Zipping dSYMs..."
+	@echo "Zipping dSYMs..."
 	cd $(BUILD_PATH)/Spotiqueue.xcarchive/dSYMs && zip -r $(PWD)/dSYMs.zip .
-	echo "Created zip with dSYMs"
+	@echo "Created zip with dSYMs"
 
 # --- HELPERS --- #
 
@@ -117,9 +117,9 @@ clean:
 .PHONY: next-version
 next-version:
 	versionNumber=$$(/usr/libexec/PlistBuddy -c "Print CFBundleVersion" "$(PWD)/Spotiqueue/Info.plist") ;\
-	echo "Actual version is: $$versionNumber" ;\
+	@echo "Actual version is: $$versionNumber" ;\
 	versionNumber=$$((versionNumber + 1)) ;\
-	echo "Next version is: $$versionNumber" ;\
+	@echo "Next version is: $$versionNumber" ;\
 	/usr/libexec/PlistBuddy -c "Set :CFBundleVersion $$versionNumber" "$(PWD)/Spotiqueue/Info.plist" ;\
 
 .PHONY: history
@@ -128,8 +128,3 @@ history:
 		--team-id ${TEAM_ID} \
 		-u $(AC_USERNAME) \
 		-p @env:AC_PASSWORD
-
-.PHONY: open
-open:
-	echo "Opening working folder..."
-	open $(PWD)
