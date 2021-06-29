@@ -28,10 +28,6 @@
 
 * better logging framework, show messages in Console.app.
 
-* Create README with instructions for building, codesign, sparkle
-  update, and especially the `ditto....` incantation and how `zip -r`
-  breaks notarisation... https://developer.apple.com/forums/thread/677186
-
 * When moving tracks in queue consider scrolling such that there's a
   3-4 track "buffer" of not-selected tracks between the selected block
   and the edge of the view.
