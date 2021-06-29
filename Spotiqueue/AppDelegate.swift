@@ -259,6 +259,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         } else if flags == .command
                     && event.characters == "o" {
             retrieveAllPlaylists()
+        } else if flags.isEmpty
+                    && event.keyCode == kVK_Escape {
+            cancellables.forEach { $0.cancel() }
+            self.isSearching = false
         } else {
             return event
         }
