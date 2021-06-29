@@ -109,19 +109,18 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     let sparkle: SUUpdater = SUUpdater(for: Bundle.main)
 
-    private var _isSearching: Bool = false
-    var isSearching: Bool {
-        get {
-            return _isSearching
-        }
-        set {
-            _isSearching = newValue
-            if _isSearching {
+    var isSearching: Bool = false {
+        didSet {
+            if isSearching {
+                logger.info("Commenced 'isSearching' spinner...")
                 self.searchSpinner.isHidden = false
                 self.searchSpinner.startAnimation(self)
+                self.searchField.isEnabled = false
             } else {
                 self.searchSpinner.isHidden = true
                 self.searchSpinner.stopAnimation(self)
+                self.searchField.isEnabled = true
+                logger.info("Finished 'isSearching' spinner...")
             }
         }
     }
@@ -344,9 +343,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         guard !self.isSearching else {
             return
         }
+        self.isSearching = true
+
         searchResults = []
         searchResultsArrayController.sortDescriptors = []
-        self.isSearching = true
         lastSearch = .AllPlaylists
         
         spotify.api.currentUserPlaylists()
@@ -374,8 +374,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         guard !self.isSearching else {
             return
         }
-        searchResults = []
         self.isSearching = true
+        searchResults = []
+        self.window.makeFirstResponder(searchTableView)
 
         switch lastSearch {
         case .Freetext:
@@ -387,7 +388,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         case .AllPlaylists:
             searchPlaylistTracks(for: row.spotify_uri)
         }
-        self.window.makeFirstResponder(searchTableView)
     }
     
     private func searchPlaylistTracks(for playlist_uri: String?) {
@@ -577,10 +577,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         if searchString.isEmpty {
             return
         }
+        self.isSearching = true
         logger.info("Searching for \"\(searchString)\"...")
 
         searchResults = []
-        self.isSearching = true
         lastSearch = .Freetext
 
         // cheap and dirty way of saying "this many pages expected"

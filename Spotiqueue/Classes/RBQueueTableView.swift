@@ -22,11 +22,11 @@ class RBQueueTableView: RBTableView {
     }
 
     func addTracksToQueue(from contents: String) {
-        let incoming_uris = RBSpotify.sanitiseIncomingURIBlob(pasted_blob: contents)
+        AppDelegate.appDelegate().isSearching = true
         
+        let incoming_uris = RBSpotify.sanitiseIncomingURIBlob(pasted_blob: contents)
         if incoming_uris.allSatisfy({ $0.uri.hasPrefix("spotify:track:") }) {
             // we can use the fancy batching-fetch-songs mechanism.
-            AppDelegate.appDelegate().isSearching = true
             var stub_songs: [RBSpotifySongTableRow] = []
             for s in incoming_uris {
                 logger.info("Hydrating song \(s)")
@@ -59,7 +59,6 @@ class RBQueueTableView: RBTableView {
             }
         } else {
             // deal with pasted items one-by-one
-            AppDelegate.appDelegate().isSearching = true
             Publishers.mergeMappedRetainingOrder(incoming_uris,
                                                  mapTransform: { AppDelegate.appDelegate().spotify.api.dealWithUnknownSpotifyURI($0) })
                 .receive(on: RunLoop.main)
