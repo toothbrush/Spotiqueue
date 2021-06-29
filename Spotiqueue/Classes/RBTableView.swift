@@ -20,13 +20,13 @@ class RBTableView: NSTableView {
                               byExtendingSelection: false)
     }
 
-    func searchForAlbum() {
+    func browseDetailsOnRow() {
         guard selectedRowIndexes.count == 1 else {
             NSSound.beep()
             return
         }
         if let songRow: RBSpotifySongTableRow = self.associatedArrayController().selectedObjects.first as? RBSpotifySongTableRow {
-            AppDelegate.appDelegate().diveDeeperOnRow(for: songRow)
+            AppDelegate.appDelegate().browseDetails(for: songRow)
         }
     }
 
@@ -105,10 +105,10 @@ class RBTableView: NSTableView {
             focusSearchResults()
         } else if flags == .command
                     && event.keyCode == kVK_RightArrow { // cmd-right, search for album
-            searchForAlbum()
+            browseDetailsOnRow()
         } else if flags == .command
-                    && event.characters == ";" { // cmd-;, search for album, because cmd-L is taken?
-            searchForAlbum()
+                    && event.characters == "l" { // cmd-L, search for album
+            browseDetailsOnRow()
         } else if event.characters == "/"
                     && flags.isEmpty {
             focusSearchField()

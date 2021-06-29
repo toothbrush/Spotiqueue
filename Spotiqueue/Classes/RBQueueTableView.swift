@@ -103,10 +103,10 @@ class RBQueueTableView: RBTableView {
         self.selectRow(row: firstDeletionIdx)
     }
 
-    override func searchForAlbum() {
+    override func browseDetailsOnRow() {
         // rather a hack, but from the queue table we probably want to always to album browse, not artist browse if we've "toevallig" previously already done one on potentially an entire other track or artist.
         AppDelegate.appDelegate().lastSearch = .Freetext
-        super.searchForAlbum()
+        super.browseDetailsOnRow()
     }
 
     func moveSelectionUp() {
