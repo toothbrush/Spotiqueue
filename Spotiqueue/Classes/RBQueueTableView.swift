@@ -18,6 +18,10 @@ class RBQueueTableView: RBTableView {
 
     @objc func paste(_ sender: AnyObject?) {
         guard let contents = NSPasteboard.general.pasteboardItems?.first?.string(forType: .string) else { return }
+        addTracksToQueue(from: contents)
+    }
+
+    func addTracksToQueue(from contents: String) {
         let incoming_uris = RBSpotify.sanitiseIncomingURIBlob(pasted_blob: contents)
         
         if incoming_uris.allSatisfy({ $0.uri.hasPrefix("spotify:track:") }) {
