@@ -14,10 +14,6 @@
 
 # Lower priority
 
-* Save queue to .. NSUserDefaults? Text file?  On termination.
-
-* When loading, if list of tracks found in NSUserDefaults, populate queue.
-
 * Loved tracks retrieval
 * Add/remove star
 
