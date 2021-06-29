@@ -17,16 +17,18 @@ class RBQueueTableView: RBTableView {
     }
 
     @objc func paste(_ sender: AnyObject?) {
+        AppDelegate.appDelegate().isSearching = true
         guard let contents = NSPasteboard.general.pasteboardItems?.first?.string(forType: .string) else { return }
         addTracksToQueue(from: contents)
     }
 
     func addTracksToQueue(from contents: String) {
+        AppDelegate.appDelegate().isSearching = true
         let incoming_uris = RBSpotify.sanitiseIncomingURIBlob(pasted_blob: contents)
         guard !incoming_uris.isEmpty else {
+            AppDelegate.appDelegate().isSearching = false
             return
         }
-        AppDelegate.appDelegate().isSearching = true
         
         if incoming_uris.allSatisfy({ $0.uri.hasPrefix("spotify:track:") }) {
             // we can use the fancy batching-fetch-songs mechanism.
@@ -39,12 +41,13 @@ class RBQueueTableView: RBTableView {
             }
             AppDelegate.appDelegate().queueArrayController.add(contentsOf: stub_songs)
             
+            AppDelegate.appDelegate().runningTasks = Int((Double(stub_songs.count) / 50.0).rounded(.up))
             for chunk in stub_songs.chunked(size: 50) {
                 AppDelegate.appDelegate().spotify.api.tracks(chunk.map({ $0.spotify_uri }))
                     .receive(on: RunLoop.main)
                     .sink(
                         receiveCompletion: { completion in
-                            AppDelegate.appDelegate().isSearching = false
+                            AppDelegate.appDelegate().runningTasks -= 1
                             logger.info("completion: \(completion)")
                         },
                         receiveValue: { tracks in
