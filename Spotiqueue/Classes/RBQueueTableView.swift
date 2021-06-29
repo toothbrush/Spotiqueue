@@ -22,9 +22,12 @@ class RBQueueTableView: RBTableView {
     }
 
     func addTracksToQueue(from contents: String) {
+        let incoming_uris = RBSpotify.sanitiseIncomingURIBlob(pasted_blob: contents)
+        guard !incoming_uris.isEmpty else {
+            return
+        }
         AppDelegate.appDelegate().isSearching = true
         
-        let incoming_uris = RBSpotify.sanitiseIncomingURIBlob(pasted_blob: contents)
         if incoming_uris.allSatisfy({ $0.uri.hasPrefix("spotify:track:") }) {
             // we can use the fancy batching-fetch-songs mechanism.
             var stub_songs: [RBSpotifySongTableRow] = []
