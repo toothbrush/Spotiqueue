@@ -195,6 +195,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         self.searchTableView.nextKeyView = self.queueTableView
         self.queueTableView.nextKeyView = self.searchField
         self.window.makeFirstResponder(self.searchField)
+
+        // I choose to check whether we're authorised here, because if we aren't pasting will result in a bunch of ugly URI entries in the queue.  They work, but meh.  The way around this would be to observe the auth-state of self.spotify, and only try loading the queue from UserDefaults at that point, but honestly having a queue saved but not being authorised is a bit of an edge-case.  Queue isn't valuable, you can rebuild it or save it in a playlist if you really care to.
+        if self.spotify.isAuthorized,
+           let savedQueuedTracks = UserDefaults.standard.string(forKey: "queuedTracks") {
+            self.queueTableView.addTracksToQueue(from: savedQueuedTracks)
+        }
     }
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
@@ -242,8 +248,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         return nil
     }
 
-    func applicationWillTerminate(_ aNotification: Notification) {
-        // Insert code here to tear down your application
+    func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {
+        if self.queue.isEmpty {
+            UserDefaults.standard.removeObject(forKey: "queuedTracks")
+            UserDefaults.standard.synchronize()
+        } else {
+            let queuedTracks: String = self.queue.map { $0.copyText() }.joined(separator: "\n")
+            UserDefaults.standard.set(queuedTracks, forKey: "queuedTracks")
+            UserDefaults.standard.synchronize()
+            logger.info("Saved queued tracks.")
+        }
+        return .terminateNow
     }
 
     // from https://stackoverflow.com/questions/1991072/how-to-handle-with-a-default-url-scheme
