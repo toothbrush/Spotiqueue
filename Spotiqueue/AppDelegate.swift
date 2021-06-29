@@ -538,48 +538,49 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         spotify.api.artistFullAlbums(artist.uri!)
             .sink(
                 receiveCompletion: { completion in
-                    dispatchGroup.leave()
                     switch completion {
                         case .finished:
                             logger.info("finished loading artists' albums")
                         case .failure(let error):
                             logger.error("Couldn't load artist's albums: \(error.localizedDescription)")
                     }
+                    dispatchGroup.leave()
                 },
                 receiveValue: { albums in
                     albumsReceived += albums
                 }
             )
             .store(in: &cancellables)
-        dispatchGroup.wait()
 
-        runningTasks = albumsReceived.count
-        for album in albumsReceived {
-            spotify.api.albumTracks(album.uri!, limit: 50)
-                .extendPagesConcurrently(spotify.api)
-                .receive(on: RunLoop.main)
-                .sink(receiveCompletion: { [self] completion in
-                    runningTasks -= 1
-                    switch completion {
-                        case .finished:
-                            logger.info("finished loading tracks for album \(album.name)")
-                        case .failure(let error):
-                            logger.error("Couldn't load album's tracks: \(error.localizedDescription)")
+        dispatchGroup.notify(queue: .main) {
+            self.runningTasks = albumsReceived.count
+            for album in albumsReceived {
+                self.spotify.api.albumTracks(album.uri!, limit: 50)
+                    .extendPagesConcurrently(self.spotify.api)
+                    .receive(on: RunLoop.main)
+                    .sink(receiveCompletion: { [self] completion in
+                        runningTasks -= 1
+                        switch completion {
+                            case .finished:
+                                logger.info("finished loading tracks for album \(album.name)")
+                            case .failure(let error):
+                                logger.error("Couldn't load album's tracks: \(error.localizedDescription)")
+                        }
+                    },
+                    receiveValue: { tracksPage in
+                        let simplifiedTracks = tracksPage.items
+                        // create a new array of table rows from the page of simplified tracks
+                        let newTableRows = simplifiedTracks.map{ t in
+                            RBSpotifySongTableRow.init(track: t, album: album, artist: artist)
+                        }
+                        // append the new table rows to the full array
+                        self.searchResults.append(contentsOf: newTableRows)
+                        // after finishing we want the cursor at the top. however, the "streaming" results means some newer albums might have showed up later, pushing your selection down.
+                        self.searchTableView.selectRow(row: 0)
                     }
-                },
-                receiveValue: { tracksPage in
-                    let simplifiedTracks = tracksPage.items
-                    // create a new array of table rows from the page of simplified tracks
-                    let newTableRows = simplifiedTracks.map{ t in
-                        RBSpotifySongTableRow.init(track: t, album: album, artist: artist)
-                    }
-                    // append the new table rows to the full array
-                    self.searchResults.append(contentsOf: newTableRows)
-                    // after finishing we want the cursor at the top. however, the "streaming" results means some newer albums might have showed up later, pushing your selection down.
-                    self.searchTableView.selectRow(row: 0)
-                }
-                )
-                .store(in: &cancellables)
+                    )
+                    .store(in: &self.cancellables)
+            }
         }
     }
 
