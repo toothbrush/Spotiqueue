@@ -41,6 +41,8 @@
 
 * Leave the app idle for a long time, play a track ->
   spotiqueue_worker session is invalid and client shuts down.
+  https://github.com/librespot-org/librespot/issues/276,
+  https://github.com/librespot-org/librespot/discussions/609
 
 * Blake's idea: show most recent search in label next to search
   field.
