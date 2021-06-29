@@ -90,6 +90,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet weak var window: NSWindow!
     @IBOutlet weak var searchResultsArrayController: NSArrayController!
     @IBOutlet weak var queueArrayController: NSArrayController!
+    @IBOutlet weak var searchLabel: NSTextField!
 
     @objc dynamic var searchResults: Array<RBSpotifySongTableRow> = []
     @objc dynamic var queue: Array<RBSpotifySongTableRow> = []
@@ -105,7 +106,24 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet weak var progressBar: NSProgressIndicator!
 
     var playerState: PlayerState = .Stopped
-    var currentSearch: SearchCommand = .None
+    var currentSearch: SearchCommand = .None {
+        didSet {
+            switch currentSearch {
+                case .None:
+                    searchLabel.stringValue = "Search Results"
+                case .Freetext(let searchText):
+                    searchLabel.stringValue = "Search: “\(searchText)”"
+                case .Album(let album):
+                    searchLabel.stringValue = "Album: “\(album.name)”"
+                case .Artist(let artist):
+                    searchLabel.stringValue = "Artist: “\(artist.name)”"
+                case .AllPlaylists:
+                    searchLabel.stringValue = "User Playlists"
+                case .Playlist(let title, _):
+                    searchLabel.stringValue = "Playlist: “\(title)”"
+            }
+        }
+    }
 
     var loginWindow: RBLoginWindow?
 

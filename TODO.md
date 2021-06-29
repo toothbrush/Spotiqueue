@@ -40,9 +40,6 @@
   https://github.com/librespot-org/librespot/issues/276,
   https://github.com/librespot-org/librespot/discussions/609
 
-* Blake's idea: show most recent search in label next to search
-  field.
-
 * Might also be good to keep track of what "previous" means.  List of
   search and browse actions you can replay?
 
