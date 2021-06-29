@@ -48,7 +48,7 @@
 	<key>NSSupportsAutomaticTermination</key>
 	<true/>
 	<key>NSSupportsSuddenTermination</key>
-	<true/>
+	<false/>
 	<key>SUFeedURL</key>
 	<string>https://raw.githubusercontent.com/toothbrush/Spotiqueue/main/updates/appcast.xml</string>
 	<key>SUPublicEDKey</key>
