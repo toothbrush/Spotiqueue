@@ -270,6 +270,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         } else if flags.isEmpty
                     && event.keyCode == kVK_Escape {
             if self.window.firstResponder == self.filterResultsField.currentEditor() {
+                // Esc should probably cancel the local filtering, too.
+                self.filterResultsField.stringValue = ""
                 self.window.makeFirstResponder(self.searchTableView)
             } else {
                 cancellables.forEach { $0.cancel() }
