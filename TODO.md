@@ -24,8 +24,6 @@
 
 * Little Credits or Help screen
 
-* Why are the table column headers sometimes differently-coloured???
-
 * I want a key shortcut to search for the currently playing song or
   album. Consider adding a menu item.
 
