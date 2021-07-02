@@ -40,11 +40,6 @@ class RBTableView: NSTableView {
         NSApplication.shared.windows.first?.makeFirstResponder(searchTableView)
     }
 
-    func focusSearchField() {
-        let searchField = AppDelegate.appDelegate().searchField
-        NSApplication.shared.windows.first?.makeFirstResponder(searchField)
-    }
-    
     @objc func copy(_ sender: AnyObject?) {
         // https://bluelemonbits.com/2016/08/02/copy-one-or-multiple-nstableview-rows-swift/
 
@@ -109,9 +104,6 @@ class RBTableView: NSTableView {
         } else if flags == .command
                     && event.characters == ";" { // cmd-;, search for album, because cmd-L is taken?
             browseDetailsOnRow()
-        } else if event.characters == "/"
-                    && flags.isEmpty {
-            focusSearchField()
         } else if event.characters == " "
                     && flags.isEmpty {
             AppDelegate.appDelegate().playOrPause()
