@@ -10,6 +10,14 @@ import Cocoa
 
 class RBFilterField: NSTextField {
 
+    enum FilterState {
+        case Filtering
+        case NoFilter
+        case BadFilter
+    }
+
+    var filterState: FilterState = .NoFilter
+
     func focusSearchTable() {
         AppDelegate.appDelegate().window.makeFirstResponder(AppDelegate.appDelegate().searchTableView)
     }
@@ -62,7 +70,15 @@ class RBFilterField: NSTextField {
 
     func updateFilter() {
         // We don't directly build the predicate from the filter string because it's.. subtle.
-        AppDelegate.appDelegate().searchResultsArrayController.filterPredicate = buildFilter(filterString: self.stringValue)
+        // also, this "if" is important, because we want to maintain the most recent _non-broken_ filter.
+        if self.stringValue.isEmpty {
+            filterState = .NoFilter
+            AppDelegate.appDelegate().searchResultsArrayController.filterPredicate = nil
+        }
+
+        if let newFilter = buildFilter(filterString: self.stringValue) {
+            AppDelegate.appDelegate().searchResultsArrayController.filterPredicate = newFilter
+        }
     }
 
     override func textDidChange(_ notification: Notification) {
