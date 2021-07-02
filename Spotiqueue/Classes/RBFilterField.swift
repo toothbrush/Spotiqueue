@@ -29,16 +29,26 @@ class RBFilterField: NSTextField {
             return nil
         }
         var filter: NSPredicate? = nil
+
+        // We want to do substring matching, unless the user really doesn't want us to.
+        var massagedFilterString = filterString
+        if massagedFilterString.first != "^" {
+            massagedFilterString = ".*" + massagedFilterString
+        }
+        if massagedFilterString.last != "$" {
+            massagedFilterString = massagedFilterString + ".*"
+        }
+
         do {
             // We don't like exceptions, so let's attempt to build the regex before .. using it.  There's likely a more performant way of doing this.  It'd be great to have a version of NSPredicate that throws, but that doesn't appear to exist.
-            _ = try NSRegularExpression(pattern: filterString, options: [])
+            _ = try NSRegularExpression(pattern: massagedFilterString, options: [])
 
             // The Predicate Programming Guide: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/Predicates/AdditionalChapters/Introduction.html#//apple_ref/doc/uid/TP40001789
             // "[cd]" specifies case and diacritic insensitivity
-            filter = NSPredicate(format: "SELF.title MATCHES [cd] %@", argumentArray: [filterString])
+            filter = NSPredicate(format: "SELF.title MATCHES [cd] %@", argumentArray: [massagedFilterString])
         }
         catch {
-            logger.warning("Filter string '\(filterString)' isn't a valid regex.")
+            logger.warning("Filter string '\(massagedFilterString)' isn't a valid regex.")
         }
 
         return filter
