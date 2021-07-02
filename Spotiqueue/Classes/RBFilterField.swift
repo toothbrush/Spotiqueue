@@ -55,9 +55,13 @@ class RBFilterField: NSTextField {
         return filter
     }
 
-    override func textDidChange(_ notification: Notification) {
+    func updateFilter() {
         // We don't directly build the predicate from the filter string because it's.. subtle.
         AppDelegate.appDelegate().searchResultsArrayController.filterPredicate = buildFilter(filterString: self.stringValue)
+    }
+
+    override func textDidChange(_ notification: Notification) {
+        updateFilter()
         super.textDidChange(notification)
     }
 }

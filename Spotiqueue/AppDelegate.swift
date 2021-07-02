@@ -272,6 +272,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             if self.window.firstResponder == self.filterResultsField.currentEditor() {
                 // Esc should probably cancel the local filtering, too.
                 self.filterResultsField.stringValue = ""
+                (self.filterResultsField as! RBFilterField).updateFilter()
                 self.window.makeFirstResponder(self.searchTableView)
             } else {
                 cancellables.forEach { $0.cancel() }
