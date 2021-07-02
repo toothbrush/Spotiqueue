@@ -39,10 +39,12 @@ class RBFilterField: NSTextField {
     func buildFilter(filterString: String) -> NSPredicate? {
         // If the filter field is blanked, we want to display all items.
         guard !filterString.isEmpty else {
+            filterState = .NoFilter
             return nil
         }
         var filter: NSPredicate? = nil
 
+        filterState = .Filtering
         // We want to do substring matching, unless the user really doesn't want us to.
         var massagedFilterString = filterString
         if massagedFilterString.first != "^" {
@@ -63,6 +65,7 @@ class RBFilterField: NSTextField {
         }
         catch {
             logger.warning("Filter string '\(massagedFilterString)' isn't a valid regex.")
+            filterState = .BadFilter
         }
 
         return filter
@@ -78,6 +81,17 @@ class RBFilterField: NSTextField {
 
         if let newFilter = buildFilter(filterString: self.stringValue) {
             AppDelegate.appDelegate().searchResultsArrayController.filterPredicate = newFilter
+        }
+
+        self.drawsBackground = true
+        switch filterState {
+            case .NoFilter:
+                // Reset default appearance
+                self.backgroundColor = NSColor.textBackgroundColor
+            case .Filtering:
+                self.backgroundColor = NSColor(srgbRed: 0.0, green: 1.0, blue: 0.0, alpha: 0.4)
+            case .BadFilter:
+                self.backgroundColor = NSColor(srgbRed: 1.0, green: 0.0, blue: 0.0, alpha: 0.4)
         }
     }
 
