@@ -289,6 +289,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 cancellables.forEach { $0.cancel() }
                 self.isSearching = false
             }
+        } else if flags.isEmpty
+                    && event.keyCode == kVK_Tab
+                    && self.window.firstResponder == self.filterResultsField.currentEditor() {
+            self.window.makeFirstResponder(self.searchTableView)
         } else {
             return event
         }
