@@ -107,24 +107,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet weak var filterResultsField: NSTextField!
 
     var playerState: PlayerState = .Stopped
-    var currentSearch: SearchCommand = .None {
-        didSet {
-            switch currentSearch {
-                case .None:
-                    searchLabel.stringValue = "Search Results"
-                case .Freetext(let searchText):
-                    searchLabel.stringValue = "Search: “\(searchText)”"
-                case .Album(let album):
-                    searchLabel.stringValue = "Album: “\(album.name)”"
-                case .Artist(let artist):
-                    searchLabel.stringValue = "Artist: “\(artist.name)”"
-                case .AllPlaylists:
-                    searchLabel.stringValue = "User Playlists"
-                case .Playlist(let title, _):
-                    searchLabel.stringValue = "Playlist: “\(title)”"
-            }
-        }
-    }
+    var currentSearch: SearchCommand = .None
 
     var loginWindow: RBLoginWindow?
 
@@ -213,6 +196,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         
         self.addObserver(self, forKeyPath: "queueArrayController.arrangedObjects", options: .new, context: nil)
+        self.addObserver(self, forKeyPath: "searchResultsArrayController.arrangedObjects", options: [.initial, .new], context: nil)
 
         // setup "focus loop" / tab order
         self.window.initialFirstResponder = self.searchField
@@ -242,6 +226,34 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 }
             } else {
                 logger.info("\(keyPath): \(String(describing: change))")
+            }
+        } else if keyPath == "searchResultsArrayController.arrangedObjects" {
+            var nrResultsAppendix: String = ""
+            if self.searchResults.count > 0 {
+                if !self.filterResultsField.stringValue.isEmpty,
+                   let filtered = self.searchResultsArrayController.arrangedObjects as? Array<RBSpotifySongTableRow> {
+                    // There's a filter applied; let's show match count.
+                    nrResultsAppendix = "(\(filtered.count) / \(self.searchResults.count) results)"
+                } else {
+                    nrResultsAppendix = "(\(self.searchResults.count) results)"
+                }
+            } else {
+                nrResultsAppendix = "(no results)"
+            }
+
+            switch currentSearch {
+                case .None:
+                    searchLabel.stringValue = "Search Results"
+                case .Freetext(let searchText):
+                    searchLabel.stringValue = "Search: “\(searchText)” \(nrResultsAppendix)"
+                case .Album(let album):
+                    searchLabel.stringValue = "Album: “\(album.name)” \(nrResultsAppendix)"
+                case .Artist(let artist):
+                    searchLabel.stringValue = "Artist: “\(artist.name)” \(nrResultsAppendix)"
+                case .AllPlaylists:
+                    searchLabel.stringValue = "User Playlists \(nrResultsAppendix)"
+                case .Playlist(let title, _):
+                    searchLabel.stringValue = "Playlist: “\(title)” \(nrResultsAppendix)"
             }
         }
     }
