@@ -45,7 +45,8 @@ class RBFilterField: NSTextField {
 
             // The Predicate Programming Guide: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/Predicates/AdditionalChapters/Introduction.html#//apple_ref/doc/uid/TP40001789
             // "[cd]" specifies case and diacritic insensitivity
-            filter = NSPredicate(format: "SELF.title MATCHES [cd] %@", argumentArray: [massagedFilterString])
+            filter = NSPredicate(format: "SELF.title MATCHES [cd] %@ || SELF.artist MATCHES [cd] %@ || SELF.album MATCHES [cd] %@",
+                                 argumentArray: [massagedFilterString, massagedFilterString, massagedFilterString])
         }
         catch {
             logger.warning("Filter string '\(massagedFilterString)' isn't a valid regex.")

@@ -6,12 +6,6 @@
 
 * Media keys, globally
 
-# Ideas
-
-* Some sort of local "filter results" function (in search view).  Press "/" or something?
-  present only items matching (regex) filter in at least one of their fields?
-
-
 # Lower priority
 
 * Loved tracks retrieval
