@@ -18,6 +18,7 @@
                 <outlet property="albumImage" destination="BMX-yB-dah" id="8xA-A6-Bob"/>
                 <outlet property="albumTitleLabel" destination="Mxf-Pa-N9U" id="26z-pe-k3T"/>
                 <outlet property="durationLabel" destination="ijX-rD-el8" id="rYJ-ck-xJg"/>
+                <outlet property="filterResultsField" destination="I9H-ml-iSW" id="VNV-5l-joO"/>
                 <outlet property="progressBar" destination="q94-z4-FfB" id="Dx4-YB-2cA"/>
                 <outlet property="queueArrayController" destination="ueN-np-pxA" id="mqC-lc-mVO"/>
                 <outlet property="queueHeaderLabel" destination="ers-rB-7hD" id="Iuw-M6-9Tr"/>
@@ -769,8 +770,24 @@
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
+                    <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="I9H-ml-iSW" userLabel="Filter results" customClass="RBFilterField" customModule="Spotiqueue" customModuleProvider="target">
+                        <rect key="frame" x="634" y="137" width="200" height="21"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="200" id="Y2L-Ze-BCe"/>
+                            <constraint firstAttribute="height" constant="21" id="Z7K-rx-nnf"/>
+                        </constraints>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="NlN-uS-Wgt">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                        <connections>
+                            <action selector="filterFieldAction:" target="Voe-Tx-rLC" id="Bqk-EY-6ft"/>
+                        </connections>
+                    </textField>
                 </subviews>
                 <constraints>
+                    <constraint firstItem="I9H-ml-iSW" firstAttribute="bottom" secondItem="XO6-ft-PxZ" secondAttribute="bottom" id="0wA-KN-2Ug"/>
                     <constraint firstItem="XO6-ft-PxZ" firstAttribute="width" secondItem="iUA-JW-urq" secondAttribute="width" priority="999" id="1nh-Ti-owM"/>
                     <constraint firstAttribute="trailing" secondItem="YTG-en-bjx" secondAttribute="trailing" constant="20" symbolic="YES" id="2EB-5G-bCn"/>
                     <constraint firstItem="T2h-BB-MEE" firstAttribute="centerY" secondItem="NxD-rt-1LN" secondAttribute="centerY" id="3c3-dd-c4S"/>
@@ -783,6 +800,7 @@
                     <constraint firstItem="iV4-Go-1uE" firstAttribute="leading" secondItem="bzB-yg-BgL" secondAttribute="trailing" constant="8" symbolic="YES" id="8DV-OX-xCJ"/>
                     <constraint firstItem="Mxf-Pa-N9U" firstAttribute="leading" secondItem="jBE-uh-Tyh" secondAttribute="trailing" constant="8" symbolic="YES" id="Aby-Ne-bsp"/>
                     <constraint firstItem="DHR-Fg-IYC" firstAttribute="top" secondItem="XO6-ft-PxZ" secondAttribute="bottom" constant="8" symbolic="YES" id="Aeb-d1-oqw"/>
+                    <constraint firstItem="I9H-ml-iSW" firstAttribute="leading" secondItem="XO6-ft-PxZ" secondAttribute="leading" id="Db8-8Z-w8j"/>
                     <constraint firstItem="T2h-BB-MEE" firstAttribute="top" secondItem="EiT-Mj-1SZ" secondAttribute="top" constant="20" symbolic="YES" id="FsZ-9V-FRG"/>
                     <constraint firstItem="XO6-ft-PxZ" firstAttribute="leading" secondItem="iUA-JW-urq" secondAttribute="trailing" constant="8" id="Ijs-SV-CWv"/>
                     <constraint firstItem="iUA-JW-urq" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="20" symbolic="YES" id="KuZ-ZV-ijm"/>

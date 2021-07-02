@@ -104,6 +104,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet weak var saveSongButton: NSButton!
     @IBOutlet weak var searchSpinner: NSProgressIndicator!
     @IBOutlet weak var progressBar: NSProgressIndicator!
+    @IBOutlet weak var filterResultsField: NSTextField!
 
     var playerState: PlayerState = .Stopped
     var currentSearch: SearchCommand = .None {
@@ -168,6 +169,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     @IBAction func nextSongButtonPressed(_ sender: Any) {
         self.playNextQueuedTrack()
+    }
+
+    @IBAction func filterFieldAction(_ sender: Any) {
+        self.window.makeFirstResponder(self.searchTableView)
     }
 
     var spotify: RBSpotify = RBSpotify()
