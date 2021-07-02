@@ -107,7 +107,7 @@ class RBTableView: NSTableView {
                     && event.keyCode == kVK_RightArrow { // cmd-right, search for album
             browseDetailsOnRow()
         } else if flags == .command
-                    && event.characters == "l" { // cmd-L, search for album
+                    && event.characters == ";" { // cmd-;, search for album, because cmd-L is taken?
             browseDetailsOnRow()
         } else if event.characters == "/"
                     && flags.isEmpty {

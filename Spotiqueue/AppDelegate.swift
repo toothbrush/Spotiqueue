@@ -251,6 +251,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             && event.characters == "f" {
             self.window.makeFirstResponder(searchField)
         } else if flags == .command
+                    && event.characters == "l" {
+            self.window.makeFirstResponder(searchField)
+        } else if flags == .command
                     && event.characters == "q" {
             for window in NSApp.windows {
                 window.close()
