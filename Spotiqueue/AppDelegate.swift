@@ -219,7 +219,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             if let queueTracks = queueArrayController.arrangedObjects as? [RBSpotifySongTableRow] {
                 let totalLengthSeconds = queueTracks.map(\.durationSeconds).reduce(0, +)
                 if totalLengthSeconds > 0 {
-                    queueHeaderLabel.stringValue = String(format: "Queue (total: %@)", totalLengthSeconds.positionalTime)
+                    queueHeaderLabel.stringValue = String(format: "Queue (%@ total)", totalLengthSeconds.positionalTime)
                 } else {
                     queueHeaderLabel.stringValue = "Queue"
                 }
