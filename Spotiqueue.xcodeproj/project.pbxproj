@@ -25,6 +25,7 @@
 		DABEC90D2653534300CA3F67 /* RBSpotifySongTableRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABEC90C2653534300CA3F67 /* RBSpotifySongTableRow.swift */; };
 		DABEC90F26536F5800CA3F67 /* RBSecrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABEC90E26536F5800CA3F67 /* RBSecrets.swift */; };
 		DABEC9122653799100CA3F67 /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = DABEC9112653799100CA3F67 /* KeychainSwift */; };
+		DACA708E268EA0D5009714DC /* RBFilterField.swift in Sources */ = {isa = PBXBuildFile; fileRef = DACA708D268EA0D5009714DC /* RBFilterField.swift */; };
 		DAD7D74F267775A800A5510E /* libspotiqueue_worker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAD7D74E267775A800A5510E /* libspotiqueue_worker.a */; };
 		DAE1F18226534D660013704F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE1F18126534D660013704F /* AppDelegate.swift */; };
 		DAE1F18426534D670013704F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DAE1F18326534D670013704F /* Assets.xcassets */; };
@@ -72,6 +73,7 @@
 		DA9564442674816D001BEDCA /* spotiqueue_worker_bindings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = spotiqueue_worker_bindings.h; path = spotiqueue_worker/spotiqueue_worker_bindings.h; sourceTree = "<group>"; };
 		DABEC90C2653534300CA3F67 /* RBSpotifySongTableRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RBSpotifySongTableRow.swift; sourceTree = "<group>"; };
 		DABEC90E26536F5800CA3F67 /* RBSecrets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RBSecrets.swift; sourceTree = "<group>"; };
+		DACA708D268EA0D5009714DC /* RBFilterField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RBFilterField.swift; sourceTree = "<group>"; };
 		DAD7D74E267775A800A5510E /* libspotiqueue_worker.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libspotiqueue_worker.a; path = spotiqueue_worker/target/release/libspotiqueue_worker.a; sourceTree = "<group>"; };
 		DAE1F17E26534D660013704F /* Spotiqueue.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Spotiqueue.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAE1F18126534D660013704F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -133,6 +135,7 @@
 				DABEC90E26536F5800CA3F67 /* RBSecrets.swift */,
 				DA5AFB0D26565CD300C6C468 /* RBSpotify.swift */,
 				DABEC90C2653534300CA3F67 /* RBSpotifySongTableRow.swift */,
+				DACA708D268EA0D5009714DC /* RBFilterField.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -294,6 +297,7 @@
 				EC9B31A82677048000E5C44B /* RBLoginWindow.swift in Sources */,
 				DA5AFB31265BB59900C6C468 /* CalendarExtensions.swift in Sources */,
 				DABEC90F26536F5800CA3F67 /* RBSecrets.swift in Sources */,
+				DACA708E268EA0D5009714DC /* RBFilterField.swift in Sources */,
 				DA5AFB2D265A86FD00C6C468 /* RBTableView.swift in Sources */,
 				DAFAB407265D1BE90096810C /* NSImageViewExtensions.swift in Sources */,
 				DA343EDF26621394000980E2 /* FormatterExtensions.swift in Sources */,
@@ -440,7 +444,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 666;
+				CURRENT_PROJECT_VERSION = 676;
 				DEVELOPMENT_TEAM = QG72S9L5L3;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -476,7 +480,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 666;
+				CURRENT_PROJECT_VERSION = 676;
 				DEVELOPMENT_TEAM = QG72S9L5L3;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
