@@ -34,8 +34,5 @@
   https://github.com/librespot-org/librespot/issues/276,
   https://github.com/librespot-org/librespot/discussions/609
 
-* Might also be good to keep track of what "previous" means.  List of
-  search and browse actions you can replay?
-
 * Idea: backspace in search window takes you "up" a detail level if
   you've done a detail browse.

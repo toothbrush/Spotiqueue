@@ -104,9 +104,22 @@ class RBQueueTableView: RBTableView {
     }
 
     override func browseDetailsOnRow() {
-        // rather a hack, but from the queue table we probably want to always to album browse, not artist browse if we've "toevallig" previously already done one on potentially an entire other track or artist.
-        AppDelegate.appDelegate().currentSearch = .None
-        super.browseDetailsOnRow()
+        guard !AppDelegate.appDelegate().isSearching else {
+            return
+        }
+        guard selectedRowIndexes.count == 1 else {
+            NSSound.beep()
+            return
+        }
+
+        // ugh, there should probably be a "do_stuff_before_searching" in which to factor this stuff out, but oh well.
+        AppDelegate.appDelegate().isSearching = true
+        AppDelegate.appDelegate().searchResults = []
+        AppDelegate.appDelegate().filterResultsField.clearFilter()
+        AppDelegate.appDelegate().window.makeFirstResponder(AppDelegate.appDelegate().searchTableView)
+        if let songRow: RBSpotifySongTableRow = self.associatedArrayController().selectedObjects.first as? RBSpotifySongTableRow {
+            AppDelegate.appDelegate().albumTracks(for: songRow.spotify_album)
+        }
     }
 
     func moveSelectionUp() {

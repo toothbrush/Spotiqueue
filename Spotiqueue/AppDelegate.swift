@@ -68,7 +68,6 @@ enum PlayerState {
 }
 
 enum SearchCommand {
-    case None
     case Freetext(String)
     case Album(Album)
     case Artist(Artist)
@@ -107,7 +106,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet weak var filterResultsField: RBFilterField!
 
     var playerState: PlayerState = .Stopped
-    var currentSearch: SearchCommand = .None
+    var searchHistory: [SearchCommand] = []
 
     var loginWindow: RBLoginWindow?
 
@@ -241,19 +240,21 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 nrResultsAppendix = "(no results)"
             }
 
-            switch currentSearch {
-                case .None:
-                    searchLabel.stringValue = "Search Results"
-                case .Freetext(let searchText):
-                    searchLabel.stringValue = "Search: “\(searchText)” \(nrResultsAppendix)"
-                case .Album(let album):
-                    searchLabel.stringValue = "Album: “\(album.name)” \(nrResultsAppendix)"
-                case .Artist(let artist):
-                    searchLabel.stringValue = "Artist: “\(artist.name)” \(nrResultsAppendix)"
-                case .AllPlaylists:
-                    searchLabel.stringValue = "User Playlists \(nrResultsAppendix)"
-                case .Playlist(let title, _):
-                    searchLabel.stringValue = "Playlist: “\(title)” \(nrResultsAppendix)"
+            if let history = searchHistory.last {
+                switch history {
+                    case .Freetext(let searchText):
+                        searchLabel.stringValue = "Search: “\(searchText)” \(nrResultsAppendix)"
+                    case .Album(let album):
+                        searchLabel.stringValue = "Album: “\(album.name)” \(nrResultsAppendix)"
+                    case .Artist(let artist):
+                        searchLabel.stringValue = "Artist: “\(artist.name)” \(nrResultsAppendix)"
+                    case .AllPlaylists:
+                        searchLabel.stringValue = "User Playlists \(nrResultsAppendix)"
+                    case .Playlist(let title, _):
+                        searchLabel.stringValue = "Playlist: “\(title)” \(nrResultsAppendix)"
+                }
+            } else {
+                searchLabel.stringValue = "Search Results"
             }
         }
     }
@@ -414,7 +415,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         searchResults = []
         self.filterResultsField.clearFilter()
         searchResultsArrayController.sortDescriptors = []
-        currentSearch = .AllPlaylists
+        searchHistory.append(.AllPlaylists)
         
         spotify.api.currentUserPlaylists()
             .extendPagesConcurrently(spotify.api)
@@ -446,19 +447,22 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         self.filterResultsField.clearFilter()
         self.window.makeFirstResponder(searchTableView)
 
-        switch currentSearch {
-            case .None:
-                albumTracks(for: row.spotify_album)
-            case .Freetext:
-                albumTracks(for: row.spotify_album)
-            case .Album:
-                artistTracks(for: row.spotify_artist)
-            case .Artist:
-                albumTracks(for: row.spotify_album)
-            case .AllPlaylists:
-                searchPlaylistTracks(for: row.spotify_uri, withTitle: row.title)
-            case .Playlist:
-                albumTracks(for: row.spotify_album)
+        if let history = searchHistory.last {
+            switch history {
+                case .Freetext:
+                    albumTracks(for: row.spotify_album)
+                case .Album:
+                    artistTracks(for: row.spotify_artist)
+                case .Artist:
+                    albumTracks(for: row.spotify_album)
+                case .AllPlaylists:
+                    searchPlaylistTracks(for: row.spotify_uri, withTitle: row.title)
+                case .Playlist:
+                    albumTracks(for: row.spotify_album)
+            }
+        } else {
+            // The default case.
+            albumTracks(for: row.spotify_album)
         }
     }
     
@@ -469,7 +473,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         
         // okay, so listing a playlist's tracks isn't strictly a free-text search, but mainly we use that to tell Spotiqueue that a followup "detail-browse" should get the album for a track, and the one after that should get the artist's entire library.
-        currentSearch = .Playlist(title, playlist_uri)
+        searchHistory.append(.Playlist(title, playlist_uri))
         searchResultsArrayController.sortDescriptors = []
 
         loadPlaylistTracksInto(for: playlist_uri, in: .Search)
@@ -537,13 +541,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
-    private func albumTracks(for album: Album?) {
+    func albumTracks(for album: Album?) {
         guard let album = album else {
             logger.warning("Called with nil album!  Doing nothing.")
             return
         }
         
-        currentSearch = .Album(album)
+        searchHistory.append(.Album(album))
         // retrieve album tracks
         spotify.api.albumTracks(
             album.uri!,
@@ -563,7 +567,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 receiveValue: { tracksPage in
                     let simplifiedTracks = tracksPage.items
                     // create a new array of table rows from the page of simplified tracks
-                    let newTableRows = simplifiedTracks.map{ t in
+                    let newTableRows = simplifiedTracks.map { t in
                         RBSpotifySongTableRow.init(track: t, album: album, artist: t.artists!.first!)
                     }
                     // append the new table rows to the full array
@@ -587,7 +591,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             return
         }
 
-        currentSearch = .Artist(artist)
+        searchHistory.append(.Artist(artist))
         let dispatchGroup = DispatchGroup()
 
         var albumsReceived: [Album] = []
@@ -655,7 +659,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         searchResults = []
         self.filterResultsField.clearFilter()
-        currentSearch = .Freetext(searchString)
+        searchHistory.append(.Freetext(searchString))
 
         // cheap and dirty way of saying "this many pages expected"
         runningTasks = 4
