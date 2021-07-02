@@ -22,6 +22,11 @@ class RBSearchTableView: RBTableView {
         enqueueSelection(at_the_top: true, and_then_advance: true)
     }
 
+    func focusFilterField() {
+        let filterField = AppDelegate.appDelegate().filterResultsField
+        NSApplication.shared.windows.first?.makeFirstResponder(filterField)
+    }
+
     func enqueueSelection(at_the_top: Bool = false, and_then_advance: Bool = false) {
         guard !selectedSearchTracks().isEmpty else {
             NSSound.beep()
@@ -65,6 +70,9 @@ class RBSearchTableView: RBTableView {
         } else if event.characters == "h" // cmd-"h" key
                     && flags == .command {
             enqueueSelection()
+        } else if event.characters == "/"
+                    && flags.isEmpty {
+            focusFilterField()
         } else {
             super.keyDown(with: event)
         }
