@@ -251,7 +251,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="1260" height="587"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <scrollView focusRingType="exterior" autohidesScrollers="YES" horizontalLineScroll="24" horizontalPageScroll="10" verticalLineScroll="24" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XO6-ft-PxZ" userLabel="search result table">
+                    <scrollView autohidesScrollers="YES" horizontalLineScroll="24" horizontalPageScroll="10" verticalLineScroll="24" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XO6-ft-PxZ" userLabel="search result table">
                         <rect key="frame" x="634" y="137" width="606" height="400"/>
                         <clipView key="contentView" id="aXf-af-pkH">
                             <rect key="frame" x="1" y="1" width="604" height="383"/>
@@ -449,7 +449,7 @@
                             <action selector="search:" target="Voe-Tx-rLC" id="djP-Vq-pro"/>
                         </connections>
                     </searchField>
-                    <scrollView focusRingType="exterior" autohidesScrollers="YES" horizontalLineScroll="24" horizontalPageScroll="10" verticalLineScroll="24" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iUA-JW-urq" userLabel="queue table">
+                    <scrollView autohidesScrollers="YES" horizontalLineScroll="24" horizontalPageScroll="10" verticalLineScroll="24" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iUA-JW-urq" userLabel="queue table">
                         <rect key="frame" x="20" y="137" width="606" height="400"/>
                         <clipView key="contentView" id="Q3G-Cd-ica">
                             <rect key="frame" x="1" y="1" width="604" height="398"/>
