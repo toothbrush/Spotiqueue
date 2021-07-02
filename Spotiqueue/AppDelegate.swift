@@ -269,8 +269,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             retrieveAllPlaylists()
         } else if flags.isEmpty
                     && event.keyCode == kVK_Escape {
-            cancellables.forEach { $0.cancel() }
-            self.isSearching = false
+            if self.window.firstResponder == self.filterResultsField.currentEditor() {
+                self.window.makeFirstResponder(self.searchTableView)
+            } else {
+                cancellables.forEach { $0.cancel() }
+                self.isSearching = false
+            }
         } else {
             return event
         }
