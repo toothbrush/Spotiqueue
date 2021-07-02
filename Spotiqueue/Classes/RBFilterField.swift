@@ -23,6 +23,11 @@ class RBFilterField: NSTextField {
         }
     }
 
+    func clearFilter() {
+        self.stringValue = ""
+        self.updateFilter()
+    }
+
     func buildFilter(filterString: String) -> NSPredicate? {
         // If the filter field is blanked, we want to display all items.
         guard !filterString.isEmpty else {

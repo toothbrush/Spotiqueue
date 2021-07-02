@@ -104,7 +104,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet weak var saveSongButton: NSButton!
     @IBOutlet weak var searchSpinner: NSProgressIndicator!
     @IBOutlet weak var progressBar: NSProgressIndicator!
-    @IBOutlet weak var filterResultsField: NSTextField!
+    @IBOutlet weak var filterResultsField: RBFilterField!
 
     var playerState: PlayerState = .Stopped
     var currentSearch: SearchCommand = .None
@@ -283,8 +283,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                     && event.keyCode == kVK_Escape {
             if self.window.firstResponder == self.filterResultsField.currentEditor() {
                 // Esc should probably cancel the local filtering, too.
-                self.filterResultsField.stringValue = ""
-                (self.filterResultsField as! RBFilterField).updateFilter()
+                self.filterResultsField.clearFilter()
                 self.window.makeFirstResponder(self.searchTableView)
             } else {
                 cancellables.forEach { $0.cancel() }
@@ -409,6 +408,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         self.isSearching = true
 
         searchResults = []
+        self.filterResultsField.clearFilter()
         searchResultsArrayController.sortDescriptors = []
         currentSearch = .AllPlaylists
         
@@ -439,6 +439,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         self.isSearching = true
         searchResults = []
+        self.filterResultsField.clearFilter()
         self.window.makeFirstResponder(searchTableView)
 
         switch currentSearch {
@@ -649,6 +650,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         logger.info("Searching for \"\(searchString)\"...")
 
         searchResults = []
+        self.filterResultsField.clearFilter()
         currentSearch = .Freetext(searchString)
 
         // cheap and dirty way of saying "this many pages expected"
