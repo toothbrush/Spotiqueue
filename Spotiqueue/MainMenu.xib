@@ -372,7 +372,7 @@
                                 </textFieldCell>
                             </textField>
                             <progressIndicator maxValue="100" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="Rz8-eH-DFf">
-                                <rect key="frame" x="224" y="0.0" width="16" height="16"/>
+                                <rect key="frame" x="224" y="3" width="16" height="16"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="16" id="VZT-Uv-8go"/>
                                     <constraint firstAttribute="height" constant="16" id="Ww1-Ji-E1i"/>
@@ -396,6 +396,7 @@
                         </subviews>
                         <constraints>
                             <constraint firstAttribute="height" constant="22" id="6bS-3R-Yqs"/>
+                            <constraint firstItem="T2h-BB-MEE" firstAttribute="centerY" secondItem="Rz8-eH-DFf" secondAttribute="centerY" id="z82-2s-2vS"/>
                         </constraints>
                         <visibilityPriorities>
                             <integer value="1000"/>
