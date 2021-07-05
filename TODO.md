@@ -1,12 +1,8 @@
 # TODO list
 
-## Other
-
 * Automatically switch audio output sink when using Sound.prefpane - https://github.com/RustAudio/rodio/issues/327
 
 * Media keys, globally
-
-# Lower priority
 
 * Loved tracks retrieval
 * Add/remove star
@@ -33,4 +29,4 @@
   https://github.com/librespot-org/librespot/discussions/609
 
 * Idea: backspace in search window takes you "up" a detail level if
-  you've done a detail browse.
+  you've done a detail browse. AKA "show previous search results".
