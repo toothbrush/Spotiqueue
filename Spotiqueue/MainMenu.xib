@@ -690,7 +690,7 @@
                             <constraint firstAttribute="height" constant="16" id="1BH-xS-Bta"/>
                             <constraint firstAttribute="width" constant="200" id="89g-1g-qJz"/>
                         </constraints>
-                        <textFieldCell key="cell" lineBreakMode="clipping" title="Search" id="mls-mM-HTp">
+                        <textFieldCell key="cell" lineBreakMode="truncatingTail" truncatesLastVisibleLine="YES" title="Search" id="mls-mM-HTp">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
