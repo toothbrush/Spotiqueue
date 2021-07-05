@@ -3,23 +3,20 @@
     <channel>
         <title>Spotiqueue</title>
         <item>
-            <title>2.2.0</title>
-            <pubDate>Tue, 29 Jun 2021 11:47:06 +1000</pubDate>
+            <title>2.3.0</title>
+            <pubDate>Mon, 05 Jul 2021 18:52:51 +1000</pubDate>
             <description><![CDATA[
-            <h2>New Features</h2>
+            <h2>Updates</h2>
             <ul>
-            <li>Ability to paste songs, albums or playlists into the queue (<tt>⌘V</tt> when queue has focus) – try pasting <tt>spotify:album:2XY6A8TMHbPaffK00b72BO</tt> or a Spotify link like https://open.spotify.com/playlist/60NJZPEWekQZhuVKclRXgB?si=e9f2de627d8342c3</li>
-            <li>Disabled dark mode</li>
-            <li>Display total queue time</li>
-            <li>Display a user's playlists (<tt>⌘O</tt>)</li>
-            <li>Copy songs by selecting and <tt>⌘C</tt></li>
+            <li>Ability to filter search results locally - press <tt>&#47;</tt>. Supports regex!</li>
+            <li>Persists queue over sessions.</li>
+            <li>Fix search spinner weirdness.</li>
+            <li><tt>Esc</tt> cancels search in progress.</li>
+            <li>...plus some other little fixes.</li>
             </ul>
-            <h3>Bug fixes:</h3>
-            <ul><li>Focus loop fixed (TAB between search box, results and queue)</li></ul>
-            ]]>
-            </description>
+            ]]></description>
             <sparkle:minimumSystemVersion>10.15</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/toothbrush/Spotiqueue/releases/download/v2.2.0/Spotiqueue-v2.2.0.zip" sparkle:version="616" sparkle:shortVersionString="2.2.0" length="9470980" type="application/octet-stream" sparkle:edSignature="9FCAgavXoq6k4mmIors4RFkyLKsCYGU8wC294/jcObDT3zNefDDElmgREfNw0hs4idXwA+SK5uR714xx4YwLCA=="/>
+            <enclosure url="https://github.com/toothbrush/Spotiqueue/releases/download/v2.3.0/Spotiqueue-v2.3.0.zip" sparkle:version="726" sparkle:shortVersionString="2.3.0" length="9484999" type="application/octet-stream" sparkle:edSignature="UlD6il+OJzvYREaHoV1K7ulYtQ9rrz1BrY2jVRnpcm9u64gG2PXWW9F5mCvBh/Unbg1K0SESLS1QdKHQbTqxBA=="/>
         </item>
     </channel>
 </rss>
