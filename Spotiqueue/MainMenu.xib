@@ -364,15 +364,15 @@
                         <rect key="frame" x="642" y="545" width="598" height="22"/>
                         <subviews>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="100" translatesAutoresizingMaskIntoConstraints="NO" id="Rzo-OP-RL5" userLabel="Search label">
-                                <rect key="frame" x="-2" y="0.0" width="220" height="16"/>
+                                <rect key="frame" x="-2" y="0.0" width="244" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="truncatingTail" truncatesLastVisibleLine="YES" title="Label" id="wYI-KX-9zI">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <progressIndicator maxValue="100" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="Rz8-eH-DFf">
-                                <rect key="frame" x="224" y="3" width="16" height="16"/>
+                            <progressIndicator hidden="YES" maxValue="100" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="Rz8-eH-DFf">
+                                <rect key="frame" x="0.0" y="3" width="16" height="16"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="16" id="VZT-Uv-8go"/>
                                     <constraint firstAttribute="height" constant="16" id="Ww1-Ji-E1i"/>
