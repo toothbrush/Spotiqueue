@@ -34,5 +34,3 @@
 
 * Idea: backspace in search window takes you "up" a detail level if
   you've done a detail browse.
-
-* Search label should auto size to fill space until search box.
