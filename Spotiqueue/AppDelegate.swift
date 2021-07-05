@@ -232,30 +232,31 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 if !self.filterResultsField.stringValue.isEmpty,
                    let filtered = self.searchResultsArrayController.arrangedObjects as? Array<RBSpotifySongTableRow> {
                     // There's a filter applied; let's show match count.
-                    nrResultsAppendix = "(\(filtered.count) / \(self.searchResults.count) results)"
+                    nrResultsAppendix = "(\(filtered.count) / \(self.searchResults.count) items)"
                 } else {
-                    nrResultsAppendix = "(\(self.searchResults.count) results)"
+                    nrResultsAppendix = "(\(self.searchResults.count) items)"
                 }
             } else {
-                nrResultsAppendix = "(no results)"
+                nrResultsAppendix = "(no items)"
             }
 
             if let history = searchHistory.last {
                 switch history {
                     case .Freetext(let searchText):
-                        searchLabel.stringValue = "Search: “\(searchText)” \(nrResultsAppendix)"
+                        searchLabel.stringValue = "Search: “\(searchText)”"
                     case .Album(let album):
-                        searchLabel.stringValue = "Album: “\(album.name)” \(nrResultsAppendix)"
+                        searchLabel.stringValue = "Album: “\(album.name)”"
                     case .Artist(let artist):
-                        searchLabel.stringValue = "Artist: “\(artist.name)” \(nrResultsAppendix)"
+                        searchLabel.stringValue = "Artist: “\(artist.name)”"
                     case .AllPlaylists:
-                        searchLabel.stringValue = "User Playlists \(nrResultsAppendix)"
+                        searchLabel.stringValue = "User Playlists"
                     case .Playlist(let title, _):
-                        searchLabel.stringValue = "Playlist: “\(title)” \(nrResultsAppendix)"
+                        searchLabel.stringValue = "Playlist: “\(title)”"
                 }
             } else {
                 searchLabel.stringValue = "Search Results"
             }
+            searchTableView.tableColumns.first?.title = "Title \(nrResultsAppendix)"
         }
     }
 
