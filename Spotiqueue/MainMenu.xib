@@ -697,7 +697,7 @@
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="I9H-ml-iSW" userLabel="Filter results" customClass="RBFilterField" customModule="Spotiqueue" customModuleProvider="target">
-                        <rect key="frame" x="634" y="116" width="200" height="21"/>
+                        <rect key="frame" x="634" y="112" width="200" height="21"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="200" id="Y2L-Ze-BCe"/>
                             <constraint firstAttribute="height" constant="21" id="Z7K-rx-nnf"/>
@@ -713,7 +713,7 @@
                     </textField>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="I9H-ml-iSW" firstAttribute="top" secondItem="XO6-ft-PxZ" secondAttribute="bottom" id="0wA-KN-2Ug"/>
+                    <constraint firstItem="I9H-ml-iSW" firstAttribute="top" secondItem="XO6-ft-PxZ" secondAttribute="bottom" constant="4" id="0wA-KN-2Ug"/>
                     <constraint firstItem="XO6-ft-PxZ" firstAttribute="width" secondItem="iUA-JW-urq" secondAttribute="width" priority="999" id="1nh-Ti-owM"/>
                     <constraint firstAttribute="trailing" secondItem="YTG-en-bjx" secondAttribute="trailing" constant="20" symbolic="YES" id="2EB-5G-bCn"/>
                     <constraint firstItem="T2h-BB-MEE" firstAttribute="centerY" secondItem="NxD-rt-1LN" secondAttribute="centerY" id="3c3-dd-c4S"/>
