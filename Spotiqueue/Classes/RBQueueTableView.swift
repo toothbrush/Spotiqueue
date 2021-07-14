@@ -151,6 +151,7 @@ class RBQueueTableView: RBTableView {
             enter()
         } else if (event.keyCode == kVK_Delete         // Backspace
                     || event.keyCode == kVK_ForwardDelete   // Delete
+                    || event.characters == "x"
                     || event.characters == "d")
                     && flags.isEmpty {
             delete()
