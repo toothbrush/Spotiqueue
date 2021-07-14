@@ -175,7 +175,7 @@
             <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1415"/>
             <view key="contentView" id="EiT-Mj-1SZ">
                 <rect key="frame" x="0.0" y="0.0" width="1260" height="587"/>
-                <autoresizingMask key="autoresizingMask"/>
+                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                 <subviews>
                     <scrollView autohidesScrollers="YES" horizontalLineScroll="24" horizontalPageScroll="10" verticalLineScroll="24" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XO6-ft-PxZ" userLabel="search result table">
                         <rect key="frame" x="634" y="137" width="606" height="400"/>
@@ -348,7 +348,7 @@
                             <constraint firstAttribute="height" relation="greaterThanOrEqual" priority="999" constant="400" id="ZCD-3B-3Eh"/>
                         </constraints>
                         <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="Ke9-47-fK2">
-                            <rect key="frame" x="1" y="383" width="604" height="16"/>
+                            <rect key="frame" x="1" y="325" width="603" height="16"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                         <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="fDt-9x-vYf">
