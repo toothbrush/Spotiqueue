@@ -119,6 +119,18 @@ class RBTableView: NSTableView {
         } else if event.keyCode == kVK_PageDown
                     && flags.isEmpty {
             self.selectRow(row: selectedRow + nbVisibleRows() - 1)
+        } else if event.charactersIgnoringModifiers == "b"
+                    && flags == [.control] {
+            self.selectRow(row: selectedRow - nbVisibleRows() + 1)
+        } else if event.charactersIgnoringModifiers == "f"
+                    && flags == [.control] {
+            self.selectRow(row: selectedRow + nbVisibleRows() - 1)
+        } else if event.charactersIgnoringModifiers == "u"
+                    && flags == [.control] {
+            self.selectRow(row: selectedRow - nbVisibleRows()/2 + 1)
+        } else if event.charactersIgnoringModifiers == "d"
+                    && flags == [.control] {
+            self.selectRow(row: selectedRow + nbVisibleRows()/2 - 1)
         } else {
             super.keyDown(with: event)
         }
