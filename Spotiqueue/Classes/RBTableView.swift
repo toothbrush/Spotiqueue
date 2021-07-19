@@ -86,6 +86,12 @@ class RBTableView: NSTableView {
         } else if event.characters == "G"
                     && flags == .shift {
             selectRow(row: self.numberOfRows - 1)
+        } else if event.keyCode == kVK_Home
+                    && flags.isEmpty {
+            self.selectRow(row: 0)
+        } else if event.keyCode == kVK_End
+                    && flags.isEmpty {
+            self.selectRow(row: numberOfRows - 1)
         } else if flags.isEmpty
                     && event.keyCode == kVK_LeftArrow { // left arrow
             focusQueue()
@@ -107,14 +113,12 @@ class RBTableView: NSTableView {
         } else if event.characters == " "
                     && flags.isEmpty {
             AppDelegate.appDelegate().playOrPause()
-        } else if event.keyCode == kVK_PageUp && flags.isEmpty {
+        } else if event.keyCode == kVK_PageUp
+                    && flags.isEmpty {
             self.selectRow(row: selectedRow - nbVisibleRows() + 1)
-        } else if event.keyCode == kVK_PageDown && flags.isEmpty {
+        } else if event.keyCode == kVK_PageDown
+                    && flags.isEmpty {
             self.selectRow(row: selectedRow + nbVisibleRows() - 1)
-        } else if event.keyCode == kVK_Home && flags.isEmpty {
-            self.selectRow(row: 0)
-        } else if event.keyCode == kVK_End && flags.isEmpty {
-            self.selectRow(row: numberOfRows)
         } else {
             super.keyDown(with: event)
         }
