@@ -117,7 +117,19 @@ final class RBSpotifySongTableRow: NSObject {
     // This is what we want it to look like if copied to pasteboard.
     func copyText() -> String {
         if !self.artist.isEmpty && !self.title.isEmpty {
-            return String(format: "%@ (%@ – %@)", self.spotify_uri, self.artist, self.title)
+            return String(format: "%@ (%@ – %@)", self.spotify_open_link(), self.artist, self.title)
+        } else {
+            return self.spotify_open_link()
+        }
+    }
+    
+    func spotify_open_link() -> String {
+        // 1. split by ':'
+        // 2. grab index 1 and 2
+        // 3. put into https://open.spotify.com/track/6XitBI9LDUsOXzveJGfYXg style link
+        let split = self.spotify_uri.split(separator: ":")
+        if split.count == 3 {
+            return "https://open.spotify.com/\(split[1])/\(split[2])"
         } else {
             return self.spotify_uri
         }
