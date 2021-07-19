@@ -155,6 +155,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     @IBAction func filterFieldAction(_ sender: Any) {
         self.window.makeFirstResponder(self.searchTableView)
+        self.searchTableView.selectRow(row: 0)
     }
 
     var spotify: RBSpotify = RBSpotify()
