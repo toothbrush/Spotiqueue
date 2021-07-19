@@ -183,7 +183,7 @@
                             <rect key="frame" x="1" y="1" width="604" height="398"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" autosaveColumns="NO" rowHeight="24" rowSizeStyle="automatic" headerView="Etz-Zh-YRF" viewBased="YES" id="kdh-74-V14" customClass="RBSearchTableView" customModule="Spotiqueue" customModuleProvider="target">
+                                <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" autosaveColumns="NO" typeSelect="NO" rowHeight="24" rowSizeStyle="automatic" headerView="Etz-Zh-YRF" viewBased="YES" id="kdh-74-V14" customClass="RBSearchTableView" customModule="Spotiqueue" customModuleProvider="target">
                                     <rect key="frame" x="0.0" y="0.0" width="604" height="370"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <size key="intercellSpacing" width="17" height="0.0"/>
@@ -415,7 +415,7 @@
                             <rect key="frame" x="1" y="1" width="604" height="398"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" autosaveColumns="NO" rowHeight="24" rowSizeStyle="automatic" headerView="bdB-YS-DxR" viewBased="YES" id="rTj-ma-zaY" customClass="RBQueueTableView" customModule="Spotiqueue" customModuleProvider="target">
+                                <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" autosaveColumns="NO" typeSelect="NO" rowHeight="24" rowSizeStyle="automatic" headerView="bdB-YS-DxR" viewBased="YES" id="rTj-ma-zaY" customClass="RBQueueTableView" customModule="Spotiqueue" customModuleProvider="target">
                                     <rect key="frame" x="0.0" y="0.0" width="604" height="370"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <size key="intercellSpacing" width="17" height="0.0"/>
