@@ -16,10 +16,10 @@ Beware of rough edges. Scratches my itch, no other guarantees granted.
 * Left and right arrows or `h`, `l` switch focus between queue and search results.
 * Supports some Vim keys (e.g., `j`,`k`,`g`,`G`).
 * Holding the command-key and using the navigation keys moves selected tracks up or down in the queue.
-* Tab cycles through search (`⌘F` or `⌘L`), search results and queue.
+* Tab cycles through search (`⌘F` or `⌘L`), search results, and queue.
 * Space bar pauses and unpauses (unless search field has focus).
 * Pressing ⏎ (Return) on a single item plays it immediately.
-* Pressing ⏎ with multiple songs selected enqueues them (and starts playing, if currently paused).
+* Pressing ⏎ with multiple songs selected adds them to the top of the queue and starts playing them.
 * `⌘←` enqueues, `⌘⇧←` enqueues at the top of the queue.
 * `⌘N` skips to the next track. Also useful for starting playback.
 
@@ -29,3 +29,10 @@ If you don't like hassling about with XCode (quite rightly so), you can find com
 [here](https://github.com/toothbrush/Spotiqueue/releases).  Unfortunately for now you need at least
 macOS 10.15, because the app makes heavy use of the Combine framework.  It should be able to
 auto-update once installed.
+
+## Development
+
+You'll need to have [Rust tools installed](https://www.rust-lang.org/tools/install), from there the
+Xcode project should simply be able to be built & run.  The `spotiqueue_worker` library is wrapped
+in a Xcode dependency project, see [the `cargo-xcode`
+documentation](https://lib.rs/crates/cargo-xcode).

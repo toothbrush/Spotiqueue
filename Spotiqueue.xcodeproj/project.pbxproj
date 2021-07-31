@@ -10,6 +10,7 @@
 		DA343EDF26621394000980E2 /* FormatterExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA343EDE26621394000980E2 /* FormatterExtensions.swift */; };
 		DA343EE1266213B6000980E2 /* TimeIntervalExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA343EE0266213B6000980E2 /* TimeIntervalExtensions.swift */; };
 		DA343EE326622367000980E2 /* SpotifyAPIExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA343EE226622367000980E2 /* SpotifyAPIExtensions.swift */; };
+		DA593BC126B5021D0039DB72 /* libspotiqueue_worker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA593BC026B502000039DB72 /* libspotiqueue_worker.a */; };
 		DA5AFB0C2656591300C6C468 /* Stenographer in Frameworks */ = {isa = PBXBuildFile; productRef = DA5AFB0B2656591300C6C468 /* Stenographer */; };
 		DA5AFB0E26565CD300C6C468 /* RBSpotify.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5AFB0D26565CD300C6C468 /* RBSpotify.swift */; };
 		DA5AFB1026567AB300C6C468 /* TrackExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5AFB0F26567AB300C6C468 /* TrackExtensions.swift */; };
@@ -26,7 +27,6 @@
 		DABEC90F26536F5800CA3F67 /* RBSecrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABEC90E26536F5800CA3F67 /* RBSecrets.swift */; };
 		DABEC9122653799100CA3F67 /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = DABEC9112653799100CA3F67 /* KeychainSwift */; };
 		DACA708E268EA0D5009714DC /* RBFilterField.swift in Sources */ = {isa = PBXBuildFile; fileRef = DACA708D268EA0D5009714DC /* RBFilterField.swift */; };
-		DAD7D74F267775A800A5510E /* libspotiqueue_worker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAD7D74E267775A800A5510E /* libspotiqueue_worker.a */; };
 		DAE1F18226534D660013704F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE1F18126534D660013704F /* AppDelegate.swift */; };
 		DAE1F18426534D670013704F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DAE1F18326534D670013704F /* Assets.xcassets */; };
 		DAFAB407265D1BE90096810C /* NSImageViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAFAB406265D1BE90096810C /* NSImageViewExtensions.swift */; };
@@ -40,6 +40,16 @@
 		ECB750492676E4D80011DFF6 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = ECB750482676E4D80011DFF6 /* MainMenu.xib */; };
 		ECEFFD4A2689AE6D004C33AE /* PublishersExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECEFFD492689AE6D004C33AE /* PublishersExtensions.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		DA593BBF26B502000039DB72 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DA593BBA26B502000039DB72 /* spotiqueue_worker.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = CA606788D0A6F2996E6A3E81;
+			remoteInfo = "spotiqueue_worker-staticlib";
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		DAD7D73826775A6A00A5510E /* Embed Frameworks */ = {
@@ -59,6 +69,7 @@
 		DA343EDE26621394000980E2 /* FormatterExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormatterExtensions.swift; sourceTree = "<group>"; };
 		DA343EE0266213B6000980E2 /* TimeIntervalExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeIntervalExtensions.swift; sourceTree = "<group>"; };
 		DA343EE226622367000980E2 /* SpotifyAPIExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyAPIExtensions.swift; sourceTree = "<group>"; };
+		DA593BBA26B502000039DB72 /* spotiqueue_worker.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = spotiqueue_worker.xcodeproj; path = spotiqueue_worker/spotiqueue_worker.xcodeproj; sourceTree = "<group>"; };
 		DA5AFB0D26565CD300C6C468 /* RBSpotify.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RBSpotify.swift; sourceTree = "<group>"; };
 		DA5AFB0F26567AB300C6C468 /* TrackExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackExtensions.swift; sourceTree = "<group>"; };
 		DA5AFB12265682D300C6C468 /* RBSearchTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RBSearchTableView.swift; sourceTree = "<group>"; };
@@ -74,7 +85,6 @@
 		DABEC90C2653534300CA3F67 /* RBSpotifySongTableRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RBSpotifySongTableRow.swift; sourceTree = "<group>"; };
 		DABEC90E26536F5800CA3F67 /* RBSecrets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RBSecrets.swift; sourceTree = "<group>"; };
 		DACA708D268EA0D5009714DC /* RBFilterField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RBFilterField.swift; sourceTree = "<group>"; };
-		DAD7D74E267775A800A5510E /* libspotiqueue_worker.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libspotiqueue_worker.a; path = spotiqueue_worker/target/release/libspotiqueue_worker.a; sourceTree = "<group>"; };
 		DAE1F17E26534D660013704F /* Spotiqueue.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Spotiqueue.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAE1F18126534D660013704F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DAE1F18326534D670013704F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -95,6 +105,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DA593BC126B5021D0039DB72 /* libspotiqueue_worker.a in Frameworks */,
 				DA95643326746A9F001BEDCA /* libresolv.tbd in Frameworks */,
 				DA5AFB212658B7D100C6C468 /* CoreAudio.framework in Frameworks */,
 				DA5AFB1F2658B7C800C6C468 /* CoreFoundation.framework in Frameworks */,
@@ -103,7 +114,6 @@
 				DAAE2F012653EA1F00FF0344 /* SpotifyAPI in Frameworks */,
 				DABEC9122653799100CA3F67 /* KeychainSwift in Frameworks */,
 				EC97CFB5267AFFA400A0361C /* Sparkle.framework in Frameworks */,
-				DAD7D74F267775A800A5510E /* libspotiqueue_worker.a in Frameworks */,
 				DA5AFB0C2656591300C6C468 /* Stenographer in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -111,6 +121,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		DA593BBB26B502000039DB72 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				DA593BC026B502000039DB72 /* libspotiqueue_worker.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		DA5AFB1126567B2400C6C468 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -143,7 +161,6 @@
 		DA5AFB152658A6C500C6C468 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				DAD7D74E267775A800A5510E /* libspotiqueue_worker.a */,
 				EC97CFB3267AFF7700A0361C /* Sparkle.framework */,
 				DA95643226746A9F001BEDCA /* libresolv.tbd */,
 				DA5AFB202658B7D100C6C468 /* CoreAudio.framework */,
@@ -156,6 +173,7 @@
 		DAE1F17526534D660013704F = {
 			isa = PBXGroup;
 			children = (
+				DA593BBA26B502000039DB72 /* spotiqueue_worker.xcodeproj */,
 				DAE1F18026534D660013704F /* Spotiqueue */,
 				DAE1F17F26534D660013704F /* Products */,
 				DA5AFB152658A6C500C6C468 /* Frameworks */,
@@ -266,12 +284,28 @@
 			);
 			productRefGroup = DAE1F17F26534D660013704F /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = DA593BBB26B502000039DB72 /* Products */;
+					ProjectRef = DA593BBA26B502000039DB72 /* spotiqueue_worker.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				DAE1F17D26534D660013704F /* Spotiqueue */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		DA593BC026B502000039DB72 /* libspotiqueue_worker.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libspotiqueue_worker.a;
+			remoteRef = DA593BBF26B502000039DB72 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		DAE1F17C26534D660013704F /* Resources */ = {
@@ -444,7 +478,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 737;
+				CURRENT_PROJECT_VERSION = 741;
 				DEVELOPMENT_TEAM = QG72S9L5L3;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -457,10 +491,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/spotiqueue_worker/target/release",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				MARKETING_VERSION = 2.2.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rustlingbroccoli.Spotiqueue;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -480,7 +511,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 737;
+				CURRENT_PROJECT_VERSION = 741;
 				DEVELOPMENT_TEAM = QG72S9L5L3;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -493,10 +524,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/spotiqueue_worker/target/release",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				MARKETING_VERSION = 2.2.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rustlingbroccoli.Spotiqueue;
 				PRODUCT_NAME = "$(TARGET_NAME)";

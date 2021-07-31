@@ -1,7 +1,5 @@
 # TODO list
 
-* Reintroduce auto-rebuild of Rust library when releasing.
-
 * Automatically switch audio output sink when using Sound.prefpane - https://github.com/RustAudio/rodio/issues/327
 
 * Media keys, globally
