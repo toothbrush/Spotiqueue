@@ -18,5 +18,22 @@
             <sparkle:minimumSystemVersion>10.15</sparkle:minimumSystemVersion>
             <enclosure url="https://github.com/toothbrush/Spotiqueue/releases/download/v2.3.0/Spotiqueue-v2.3.0.zip" sparkle:version="726" sparkle:shortVersionString="2.3.0" length="9484999" type="application/octet-stream" sparkle:edSignature="UlD6il+OJzvYREaHoV1K7ulYtQ9rrz1BrY2jVRnpcm9u64gG2PXWW9F5mCvBh/Unbg1K0SESLS1QdKHQbTqxBA=="/>
         </item>
+        <item>
+            <title>2.3.1</title>
+            <pubDate>Sat, 31 Jul 2021 16:40:17 +1000</pubDate>
+            <description><![CDATA[
+            <h2>Updates</h2>
+            <ul>
+            <li>Ability to copy album link <tt>C-S-c</tt>, as well as track link <tt>C-c</tt> (as before)!</li>
+            <li><tt>?</tt> finds currently-playing album</li>
+            <li>Friendlier <tt>open.spotify.com</tt> link when copying</li>
+            <li>Now <tt>x</tt> also deletes queue items</li>
+            <li>Added <tt>C-{b,f,u,d}</tt> Vim-like paging keys</li>
+            <li>...plus some other little fixes.</li>
+            </ul>
+            ]]></description>
+            <sparkle:minimumSystemVersion>10.15</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/toothbrush/Spotiqueue/releases/download/v2.3.1/Spotiqueue-v2.3.1.zip" sparkle:version="759" sparkle:shortVersionString="2.3.1" length="9489555" type="application/octet-stream" sparkle:edSignature="jOcU0yZiVGitXDmr+O49OdQZZpEO2ppp3kDkDmrPm7xRTdwvX04Drpc9tG7Q9wqzzinBVmcz9+zVrkrmUqonCQ=="/>
+        </item>
     </channel>
 </rss>
