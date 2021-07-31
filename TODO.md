@@ -21,7 +21,12 @@
 * Little Credits or Help screen
 
 * I want a key shortcut to search for the currently playing song or
-  album. Consider adding a menu item.
+  album. Consider adding a menu item.  Maybe `?` key puts album of
+  current track into search results.
+
+* Ability to copy album link, not track link, of highlighted item.
+
+* Also, the ability to copy currently playing track / album link.
 
 * Leave the app idle for a long time, play a track ->
   spotiqueue_worker session is invalid and client shuts down.
