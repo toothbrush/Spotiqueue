@@ -440,7 +440,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         self.window.makeFirstResponder(searchTableView)
     }
     
-    func browseDetails(for row: RBSpotifySongTableRow) {
+    func browseDetails(for row: RBSpotifySongTableRow, consideringHistory: Bool = true) {
         guard !self.isSearching else {
             return
         }
@@ -449,7 +449,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         self.filterResultsField.clearFilter()
         self.window.makeFirstResponder(searchTableView)
 
-        if let history = searchHistory.last {
+        if let history = searchHistory.last, consideringHistory {
             switch history {
                 case .Freetext:
                     albumTracks(for: row.spotify_album)

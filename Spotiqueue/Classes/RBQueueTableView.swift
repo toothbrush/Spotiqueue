@@ -112,13 +112,8 @@ class RBQueueTableView: RBTableView {
             return
         }
 
-        // ugh, there should probably be a "do_stuff_before_searching" in which to factor this stuff out, but oh well.
-        AppDelegate.appDelegate().isSearching = true
-        AppDelegate.appDelegate().searchResults = []
-        AppDelegate.appDelegate().filterResultsField.clearFilter()
-        AppDelegate.appDelegate().window.makeFirstResponder(AppDelegate.appDelegate().searchTableView)
         if let songRow: RBSpotifySongTableRow = self.associatedArrayController().selectedObjects.first as? RBSpotifySongTableRow {
-            AppDelegate.appDelegate().albumTracks(for: songRow.spotify_album)
+            AppDelegate.appDelegate().browseDetails(for: songRow, consideringHistory: false)
         }
     }
 
