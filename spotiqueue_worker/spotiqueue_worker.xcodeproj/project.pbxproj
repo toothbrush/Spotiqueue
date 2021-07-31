@@ -172,6 +172,7 @@
 		CA601198953EA4AF167120C5 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
 				CARGO_FLAGS = "";
 				CARGO_TARGET_DIR = "$(BUILD_DIR)/cargo-target";
@@ -186,6 +187,7 @@
 		CA60712A569787A3DDA37EC8 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
 				CARGO_FLAGS = "--release";
 				CARGO_TARGET_DIR = "$(BUILD_DIR)/cargo-target";
