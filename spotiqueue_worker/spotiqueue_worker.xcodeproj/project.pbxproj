@@ -1,215 +1,90 @@
 // !$*UTF8*$!
 {
 	archiveVersion = 1;
-	objectVersion = 42;
+	classes = {
+	};
+	objectVersion = 48;
 	objects = {
-		CA6082D5087E358A423B78E1 = {
-			isa = PBXGroup;
-			children = (
-				CA608C4066FA1B9855E8FC84,
-ADDEDBA66A6E2,
-CA604CF49B10C8688338886F,
 
-			);
-			sourceTree = "<group>";
-		};
-
-		
-		CA606788D0A6F2996E6A3E81 /* staticlib */ = {
-			isa = PBXFileReference;
-			explicitFileType = "archive.ar";
-			includeInIndex = 0;
-			name = libspotiqueue_worker.a;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};CA6032F99B66987AD35F8A1F /* spotiqueue_worker-staticlib */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = CA60191541D57F698E4224B8;
-			buildPhases = (
-				CA601F9EC8CCD3DD47A172EA
-			);
-			buildRules = (
-			);
-			dependencies = (
-				CA60B808C3005BF7041D21AA
-			);
-			name = "spotiqueue_worker-staticlib";
-			productName = "libspotiqueue_worker.a";
-			productReference = CA606788D0A6F2996E6A3E81;
-			productType = "com.apple.product-type.library.static";
-		};
-		CA603CFA703E0026F343F10C = {
+/* Begin PBXAggregateTarget section */
+		CA603CFA703E0026F343F10C /* Cargo */ = {
 			isa = PBXAggregateTarget;
-			buildConfigurationList = CA60B659DCA9F42DA038621E;
+			buildConfigurationList = CA60B659DCA9F42DA038621E /* Build configuration list for PBXAggregateTarget "Cargo" */;
 			buildPhases = (
-				CA60B9AD396E93ECDE66909C
+				CA60B9AD396E93ECDE66909C /* Cargo build */,
 			);
 			dependencies = (
 			);
 			name = Cargo;
 			productName = Cargo;
 		};
-			CA601F9EC8CCD3DD47A172EA = {
-					isa = PBXShellScriptBuildPhase;
-					buildActionMask = 2147483647;
-					name = "Copy files (libspotiqueue_worker.a)";
-					files = (
-					);
-					inputFileListPaths = (
-					);
-					inputPaths = (
-						"$(CARGO_XCODE_PRODUCTS_DIR)/libspotiqueue_worker.a",
-					);
-					outputFileListPaths = (
-					);
-					outputPaths = (
-						"$(BUILT_PRODUCTS_DIR)/libspotiqueue_worker.a",
-					);
-					runOnlyForDeploymentPostprocessing = 0;
-					shellPath = /bin/sh;
-					shellScript = "ln -f \"${CARGO_XCODE_PRODUCTS_DIR}/libspotiqueue_worker.a\" \"${BUILT_PRODUCTS_DIR}/\"";
-				};
-				
-		CA60191541D57F698E4224B8 /* staticlib */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				CA608EC0BE03388FC119A9D9 /* Release */,
-				CA60E30BE7E1377C7457BDAC /* Debug */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-			CA608EC0BE03388FC119A9D9 /* staticlib */ = {
-				isa = XCBuildConfiguration;
-				buildSettings = {
-					PRODUCT_NAME = "spotiqueue_worker";
-					SKIP_INSTALL = YES;
-				INSTALL_GROUP = "";
-				INSTALL_MODE_FLAG = "";
-				INSTALL_OWNER = "";
-				};
-				name = Release;
-			};
-			CA60E30BE7E1377C7457BDAC /* staticlib */ = {
-				isa = XCBuildConfiguration;
-				buildSettings = {
-					PRODUCT_NAME = "spotiqueue_worker";
-					SKIP_INSTALL = YES;
-				INSTALL_GROUP = "";
-				INSTALL_MODE_FLAG = "";
-				INSTALL_OWNER = "";
-				};
-				name = Debug;
-			};CA60B9AD396E93ECDE66909C = {
-				isa = PBXShellScriptBuildPhase;
-				buildActionMask = 2147483647;
-				name = "Cargo build";
-				files = (
-				);
-				inputFileListPaths = (
-				);
-				inputPaths = (
-					"$(SRCROOT)/Cargo.toml"
-				);
-				outputFileListPaths = (
-				);
-				outputPaths = (
-				);
-				runOnlyForDeploymentPostprocessing = 0;
-				shellPath = /bin/bash;
-				shellScript = "set -e; export PATH=$PATH:~/.cargo/bin:/usr/local/bin;
-if [ \"$ACTION\" = \"clean\" ]; then
-	cargo clean;
-else
-	cargo build $CARGO_FLAGS;
-fi
-";
-		};
-			
-				CA608C4066FA1B9855E8FC84 /* Cargo.toml */ = {
-					isa = PBXFileReference;
-					lastKnownFileType = "sourcecode.text-based-dylib-definition";
-					fileEncoding = 4;
-					path = Cargo.toml;
-					sourceTree = "<group>";
-			};
-					/* Rust needs libresolv */
-					ADDEDBA66A6E1 = {
-						isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition";
-						name = libresolv.tbd; path = usr/lib/libresolv.tbd; sourceTree = SDKROOT;
-					};
-				
-				ADDEDBA66A6E2 = {
-					isa = PBXGroup;
-					children = (
-						ADDEDBA66A6E1
-					);
-					name = "Required Libraries";
-					sourceTree = "<group>";
-				};
+/* End PBXAggregateTarget section */
 
-		CA604CF49B10C8688338886F = {
-			isa = PBXGroup;
-			children = (
-				CA606788D0A6F2996E6A3E81,
-
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-
-		CA608C5933024C7817A28E08 = {
+/* Begin PBXContainerItemProxy section */
+		CA608C5933024C7817A28E08 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = CA60DA0A4EE34F93DCB13DC3;
+			containerPortal = CA60DA0A4EE34F93DCB13DC3 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = CA603CFA703E0026F343F10C;
 			remoteInfo = Cargo;
 		};
+/* End PBXContainerItemProxy section */
 
-		CA60B808C3005BF7041D21AA = {
-			isa = PBXTargetDependency;
-			target = CA603CFA703E0026F343F10C;
-			targetProxy = CA608C5933024C7817A28E08;
-		};
+/* Begin PBXFileReference section */
+		ADDEDBA66A6E1 /* libresolv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libresolv.tbd; path = usr/lib/libresolv.tbd; sourceTree = SDKROOT; };
+		CA606788D0A6F2996E6A3E81 /* libspotiqueue_worker.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libspotiqueue_worker.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		CA608C4066FA1B9855E8FC84 /* Cargo.toml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.text-based-dylib-definition"; path = Cargo.toml; sourceTree = "<group>"; };
+/* End PBXFileReference section */
 
-		CA60B659DCA9F42DA038621E = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				CA60712A569787A3DDA37EC8 /* Release */,
-				CA601198953EA4AF167120C5 /* Debug */,
+/* Begin PBXGroup section */
+		ADDEDBA66A6E2 /* Required Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				ADDEDBA66A6E1 /* libresolv.tbd */,
 			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			name = "Required Libraries";
+			sourceTree = "<group>";
 		};
-
-		CA60712A569787A3DDA37EC8 = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CARGO_TARGET_DIR = "$(BUILD_DIR)/cargo-target"; /* for cargo */
-				CARGO_XCODE_PRODUCTS_DIR = "$(BUILD_DIR)/cargo-target/release"; /* for xcode scripts */
-				CARGO_FLAGS = "--release";
-				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
-				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = macosx;
-				PRODUCT_NAME = "spotiqueue_worker";
-			};
-			name = Release;
+		CA604CF49B10C8688338886F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				CA606788D0A6F2996E6A3E81 /* libspotiqueue_worker.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
 		};
-
-		CA601198953EA4AF167120C5 = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CARGO_TARGET_DIR = "$(BUILD_DIR)/cargo-target";
-				CARGO_XCODE_PRODUCTS_DIR = "$(BUILD_DIR)/cargo-target/debug";
-				CARGO_FLAGS = "";
-				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
-				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = macosx;
-				PRODUCT_NAME = "spotiqueue_worker";
-			};
-			name = Debug;
+		CA6082D5087E358A423B78E1 = {
+			isa = PBXGroup;
+			children = (
+				CA608C4066FA1B9855E8FC84 /* Cargo.toml */,
+				ADDEDBA66A6E2 /* Required Libraries */,
+				CA604CF49B10C8688338886F /* Products */,
+			);
+			sourceTree = "<group>";
 		};
+/* End PBXGroup section */
 
-		CA60DA0A4EE34F93DCB13DC3 = {
+/* Begin PBXNativeTarget section */
+		CA6032F99B66987AD35F8A1F /* spotiqueue_worker-staticlib */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CA60191541D57F698E4224B8 /* Build configuration list for PBXNativeTarget "spotiqueue_worker-staticlib" */;
+			buildPhases = (
+				CA601F9EC8CCD3DD47A172EA /* Copy files (libspotiqueue_worker.a) */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				CA60B808C3005BF7041D21AA /* PBXTargetDependency */,
+			);
+			name = "spotiqueue_worker-staticlib";
+			productName = libspotiqueue_worker.a;
+			productReference = CA606788D0A6F2996E6A3E81 /* libspotiqueue_worker.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		CA60DA0A4EE34F93DCB13DC3 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0920;
@@ -222,21 +97,150 @@ fi
 						CreatedOnToolsVersion = 9.2;
 						ProvisioningStyle = Automatic;
 					};
-					                };
+				};
 			};
-			buildConfigurationList = CA60B659DCA9F42DA038621E;
+			buildConfigurationList = CA60B659DCA9F42DA038621E /* Build configuration list for PBXAggregateTarget "Cargo" */;
 			compatibilityVersion = "Xcode 8.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
 			mainGroup = CA6082D5087E358A423B78E1;
-			productRefGroup = CA604CF49B10C8688338886F;
+			productRefGroup = CA604CF49B10C8688338886F /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				CA6032F99B66987AD35F8A1F,
-CA603CFA703E0026F343F10C,
-
+				CA6032F99B66987AD35F8A1F /* spotiqueue_worker-staticlib */,
+				CA603CFA703E0026F343F10C /* Cargo */,
 			);
 		};
+/* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		CA601F9EC8CCD3DD47A172EA /* Copy files (libspotiqueue_worker.a) */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(CARGO_XCODE_PRODUCTS_DIR)/libspotiqueue_worker.a",
+			);
+			name = "Copy files (libspotiqueue_worker.a)";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(BUILT_PRODUCTS_DIR)/libspotiqueue_worker.a",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "ln -f \"${CARGO_XCODE_PRODUCTS_DIR}/libspotiqueue_worker.a\" \"${BUILT_PRODUCTS_DIR}/\"";
+		};
+		CA60B9AD396E93ECDE66909C /* Cargo build */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Cargo.toml",
+			);
+			name = "Cargo build";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = "set -e; export PATH=$PATH:~/.cargo/bin:/usr/local/bin;\nif [ \"$ACTION\" = \"clean\" ]; then\n\tcargo clean;\nelse\n\tcargo build $CARGO_FLAGS;\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		CA60B808C3005BF7041D21AA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CA603CFA703E0026F343F10C /* Cargo */;
+			targetProxy = CA608C5933024C7817A28E08 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		CA601198953EA4AF167120C5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				CARGO_FLAGS = "";
+				CARGO_TARGET_DIR = "$(BUILD_DIR)/cargo-target";
+				CARGO_XCODE_PRODUCTS_DIR = "$(BUILD_DIR)/cargo-target/debug";
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = spotiqueue_worker;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		CA60712A569787A3DDA37EC8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				CARGO_FLAGS = "--release";
+				CARGO_TARGET_DIR = "$(BUILD_DIR)/cargo-target";
+				CARGO_XCODE_PRODUCTS_DIR = "$(BUILD_DIR)/cargo-target/release";
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = spotiqueue_worker;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		CA608EC0BE03388FC119A9D9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INSTALL_GROUP = "";
+				INSTALL_MODE_FLAG = "";
+				INSTALL_OWNER = "";
+				PRODUCT_NAME = spotiqueue_worker;
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		CA60E30BE7E1377C7457BDAC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INSTALL_GROUP = "";
+				INSTALL_MODE_FLAG = "";
+				INSTALL_OWNER = "";
+				PRODUCT_NAME = spotiqueue_worker;
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		CA60191541D57F698E4224B8 /* Build configuration list for PBXNativeTarget "spotiqueue_worker-staticlib" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CA608EC0BE03388FC119A9D9 /* Release */,
+				CA60E30BE7E1377C7457BDAC /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CA60B659DCA9F42DA038621E /* Build configuration list for PBXAggregateTarget "Cargo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CA60712A569787A3DDA37EC8 /* Release */,
+				CA601198953EA4AF167120C5 /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
 	};
-	rootObject = CA60DA0A4EE34F93DCB13DC3;
+	rootObject = CA60DA0A4EE34F93DCB13DC3 /* Project object */;
 }
-	
