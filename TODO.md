@@ -11,12 +11,6 @@
 
 * Little Credits or Help screen
 
-* I want a key shortcut to search for the currently playing song or
-  album. Consider adding a menu item.  Maybe `?` key puts album of
-  current track into search results.
-
-* Also, the ability to copy currently playing track / album link.
-
 * Idea: backspace in search window takes you "up" a detail level if
   you've done a detail browse. AKA "show previous search results".
 

@@ -159,7 +159,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     var spotify: RBSpotify = RBSpotify()
-    var currentSong: RBSpotifySongTableRow?
+    @objc dynamic var currentSong: RBSpotifySongTableRow?
+
+    @IBAction func findCurrentTrackAlbum(_ sender: Any) {
+        guard let song = self.currentSong else { return }
+        self.browseDetails(for: song, consideringHistory: false)
+    }
 
     private var cancellables: Set<AnyCancellable> = []
 

@@ -125,6 +125,17 @@
                                     <action selector="selectAll:" target="-1" id="HHr-2Y-eTh"/>
                                 </connections>
                             </menuItem>
+                            <menuItem title="Find current track" keyEquivalent="?" id="JXi-aC-xbB">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="findCurrentTrackAlbum:" target="Voe-Tx-rLC" id="oEr-jm-ym2"/>
+                                    <binding destination="Voe-Tx-rLC" name="enabled" keyPath="self.currentSong" id="gXa-wv-MZX">
+                                        <dictionary key="options">
+                                            <string key="NSValueTransformerName">NSIsNotNil</string>
+                                        </dictionary>
+                                    </binding>
+                                </connections>
+                            </menuItem>
                         </items>
                     </menu>
                 </menuItem>
