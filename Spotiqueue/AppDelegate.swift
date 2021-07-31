@@ -106,7 +106,26 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet weak var filterResultsField: RBFilterField!
 
     var playerState: PlayerState = .Stopped
-    var searchHistory: [SearchCommand] = []
+    var searchHistory: [SearchCommand] = [] {
+        didSet {
+            if let history = searchHistory.last {
+                switch history {
+                    case .Freetext(let searchText):
+                        searchLabel.stringValue = "Search: “\(searchText)”"
+                    case .Album(let album):
+                        searchLabel.stringValue = "Album: “\(album.name)”"
+                    case .Artist(let artist):
+                        searchLabel.stringValue = "Artist: “\(artist.name)”"
+                    case .AllPlaylists:
+                        searchLabel.stringValue = "User Playlists"
+                    case .Playlist(let title, _):
+                        searchLabel.stringValue = "Playlist: “\(title)”"
+                }
+            } else {
+                searchLabel.stringValue = "Search Results"
+            }
+        }
+    }
 
     var loginWindow: RBLoginWindow?
 
@@ -246,22 +265,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 nrResultsAppendix = "(no items)"
             }
 
-            if let history = searchHistory.last {
-                switch history {
-                    case .Freetext(let searchText):
-                        searchLabel.stringValue = "Search: “\(searchText)”"
-                    case .Album(let album):
-                        searchLabel.stringValue = "Album: “\(album.name)”"
-                    case .Artist(let artist):
-                        searchLabel.stringValue = "Artist: “\(artist.name)”"
-                    case .AllPlaylists:
-                        searchLabel.stringValue = "User Playlists"
-                    case .Playlist(let title, _):
-                        searchLabel.stringValue = "Playlist: “\(title)”"
-                }
-            } else {
-                searchLabel.stringValue = "Search Results"
-            }
             searchTableView.tableColumns.first?.title = "Title \(nrResultsAppendix)"
         }
     }
@@ -325,7 +328,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         #if !DEBUG
         AppMover.moveIfNecessary()
         #endif
-        
+        self.searchHistory = [] // empty history.  side-effect: update search label... :/
         NSAppleEventManager
             .shared()
             .setEventHandler(
