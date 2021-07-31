@@ -307,7 +307,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             UserDefaults.standard.removeObject(forKey: "queuedTracks")
             UserDefaults.standard.synchronize()
         } else {
-            let queuedTracks: String = self.queue.map { $0.copyText() }.joined(separator: "\n")
+            let queuedTracks: String = self.queue.map { $0.copyTextTrack() }.joined(separator: "\n")
             UserDefaults.standard.set(queuedTracks, forKey: "queuedTracks")
             UserDefaults.standard.synchronize()
             logger.info("Saved queued tracks.")

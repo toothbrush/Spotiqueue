@@ -42,10 +42,23 @@ class RBTableView: NSTableView {
 
     @objc func copy(_ sender: AnyObject?) {
         // https://bluelemonbits.com/2016/08/02/copy-one-or-multiple-nstableview-rows-swift/
-
+        var copyTrackInsteadOfAlbum = true
+        var previousValue = ""
+        if let trigger = sender as? NSMenuItem {
+            if trigger.title.contains("album") {
+                copyTrackInsteadOfAlbum = false
+            }
+        }
         var copiedItems: [String] = []
         for obj in self.associatedArrayController().selectedObjects as? [RBSpotifySongTableRow] ?? [] {
-            copiedItems.append(obj.copyText())
+            let copyText = copyTrackInsteadOfAlbum ?
+                obj.copyTextTrack() :
+                obj.copyTextAlbum()
+            // avoid very obvious duplicates, e.g. when copying album link having selected many tracks from the same album
+            if !copyText.isEmpty && copyText != previousValue {
+                copiedItems.append(copyText)
+            }
+            previousValue = copyText
         }
         let pasteBoard = NSPasteboard.general
         if !copiedItems.isEmpty {

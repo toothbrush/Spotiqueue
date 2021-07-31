@@ -96,21 +96,33 @@
                 </menuItem>
                 <menuItem title="Edit" id="5QF-Oa-p0T">
                     <modifierMask key="keyEquivalentModifierMask"/>
-                    <menu key="submenu" title="Edit" id="W48-6f-4Dl">
+                    <menu key="submenu" title="Edit" id="YJO-2T-0cl">
                         <items>
-                            <menuItem title="Copy" keyEquivalent="c" id="x3v-GG-iWU">
+                            <menuItem title="Copy" id="2aK-o7-sgE">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <menu key="submenu" title="Copy" id="y8u-ta-p3c">
+                                    <items>
+                                        <menuItem title="Copy track(s)" keyEquivalent="c" id="o9J-ap-iPv">
+                                            <connections>
+                                                <action selector="copy:" target="-1" id="Q1u-ak-kSV"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Copy album(s)" keyEquivalent="C" id="rxz-hU-tLm">
+                                            <connections>
+                                                <action selector="copy:" target="-1" id="AE6-LF-w9W"/>
+                                            </connections>
+                                        </menuItem>
+                                    </items>
+                                </menu>
+                            </menuItem>
+                            <menuItem title="Paste" keyEquivalent="v" id="odL-7t-i7F">
                                 <connections>
-                                    <action selector="copy:" target="-1" id="G1f-GL-Joy"/>
+                                    <action selector="paste:" target="-1" id="1J3-fu-UbT"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Paste" keyEquivalent="v" id="gVA-U4-sdL">
+                            <menuItem title="Select All" keyEquivalent="a" id="qRg-Cx-JWA">
                                 <connections>
-                                    <action selector="paste:" target="-1" id="UvS-8e-Qdg"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem title="Select All" keyEquivalent="a" id="Ruw-6m-B2m">
-                                <connections>
-                                    <action selector="selectAll:" target="-1" id="VNm-Mi-diN"/>
+                                    <action selector="selectAll:" target="-1" id="HHr-2Y-eTh"/>
                                 </connections>
                             </menuItem>
                         </items>
@@ -348,7 +360,7 @@
                             <constraint firstAttribute="height" relation="greaterThanOrEqual" priority="999" constant="400" id="ZCD-3B-3Eh"/>
                         </constraints>
                         <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="Ke9-47-fK2">
-                            <rect key="frame" x="1" y="325" width="603" height="16"/>
+                            <rect key="frame" x="1" y="384" width="604" height="15"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                         <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="fDt-9x-vYf">
@@ -591,7 +603,7 @@
                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="350" id="ueA-sc-fxx"/>
                         </constraints>
                         <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="xWo-IC-g7R">
-                            <rect key="frame" x="1" y="354" width="364" height="16"/>
+                            <rect key="frame" x="1" y="384" width="604" height="15"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                         <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="OVK-QR-vuF">

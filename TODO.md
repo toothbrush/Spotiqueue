@@ -15,8 +15,6 @@
   album. Consider adding a menu item.  Maybe `?` key puts album of
   current track into search results.
 
-* Ability to copy album link, not track link, of highlighted item.
-
 * Also, the ability to copy currently playing track / album link.
 
 * Idea: backspace in search window takes you "up" a detail level if

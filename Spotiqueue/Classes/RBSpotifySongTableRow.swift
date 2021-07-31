@@ -115,15 +115,22 @@ final class RBSpotifySongTableRow: NSObject {
     }
     
     // This is what we want it to look like if copied to pasteboard.
-    func copyText() -> String {
+    func copyTextTrack() -> String {
         if !self.artist.isEmpty && !self.title.isEmpty {
-            return String(format: "%@ (%@ – %@)", self.spotify_open_link(), self.artist, self.title)
+            return String(format: "%@ (%@ – %@)", self.spotify_open_link_track(), self.artist, self.title)
         } else {
-            return self.spotify_open_link()
+            return self.spotify_open_link_track()
         }
     }
-    
-    func spotify_open_link() -> String {
+    func copyTextAlbum() -> String {
+        if !self.artist.isEmpty && !self.album.isEmpty {
+            return String(format: "%@ (%@ – %@)", self.spotify_open_link_album(), self.artist, self.album)
+        } else {
+            return self.spotify_open_link_album()
+        }
+    }
+
+    func spotify_open_link_track() -> String {
         // 1. split by ':'
         // 2. grab index 1 and 2
         // 3. put into https://open.spotify.com/track/6XitBI9LDUsOXzveJGfYXg style link
@@ -132,6 +139,17 @@ final class RBSpotifySongTableRow: NSObject {
             return "https://open.spotify.com/\(split[1])/\(split[2])"
         } else {
             return self.spotify_uri
+        }
+    }
+
+    func spotify_open_link_album() -> String {
+        // 1. split by ':'
+        // 2. grab index 1 and 2
+        // 3. put into https://open.spotify.com/track/6XitBI9LDUsOXzveJGfYXg style link
+        if let split = self.spotify_album?.uri?.split(separator: ":"), split.count == 3 {
+            return "https://open.spotify.com/\(split[1])/\(split[2])"
+        } else {
+            return self.spotify_album?.uri ?? ""
         }
     }
     
