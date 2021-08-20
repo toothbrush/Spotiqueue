@@ -1,5 +1,14 @@
 # TODO list
 
+* little transparent toaster telling you what you've copied to clipboard
+
+* when regex-filtering then widening, no need to clobber user's selection.  can actually be useful
+  for finding things in a long list.
+
+* Add all features to app menus for discoverability.
+
+* very quick fade in / out when pausing?
+
 * Media keys, globally
 
 * Create playlist.. maybe? By default suggest name "Artist - Album"
