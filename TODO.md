@@ -1,5 +1,7 @@
 # TODO list
 
+* checkbox or something, indicating whether to auto-advance.
+
 * little transparent toaster telling you what you've copied to clipboard
 
 * when regex-filtering then widening, no need to clobber user's selection.  can actually be useful
