@@ -10,6 +10,7 @@
 		DA343EDF26621394000980E2 /* FormatterExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA343EDE26621394000980E2 /* FormatterExtensions.swift */; };
 		DA343EE1266213B6000980E2 /* TimeIntervalExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA343EE0266213B6000980E2 /* TimeIntervalExtensions.swift */; };
 		DA343EE326622367000980E2 /* SpotifyAPIExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA343EE226622367000980E2 /* SpotifyAPIExtensions.swift */; };
+		DA4F1AA926E61BDD00952E8F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = DA4F1AA826E61BDD00952E8F /* main.m */; };
 		DA593BC126B5021D0039DB72 /* libspotiqueue_worker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA593BC026B502000039DB72 /* libspotiqueue_worker.a */; };
 		DA5AFB0C2656591300C6C468 /* Stenographer in Frameworks */ = {isa = PBXBuildFile; productRef = DA5AFB0B2656591300C6C468 /* Stenographer */; };
 		DA5AFB0E26565CD300C6C468 /* RBSpotify.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5AFB0D26565CD300C6C468 /* RBSpotify.swift */; };
@@ -69,6 +70,7 @@
 		DA343EDE26621394000980E2 /* FormatterExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormatterExtensions.swift; sourceTree = "<group>"; };
 		DA343EE0266213B6000980E2 /* TimeIntervalExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeIntervalExtensions.swift; sourceTree = "<group>"; };
 		DA343EE226622367000980E2 /* SpotifyAPIExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyAPIExtensions.swift; sourceTree = "<group>"; };
+		DA4F1AA826E61BDD00952E8F /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		DA593BBA26B502000039DB72 /* spotiqueue_worker.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = spotiqueue_worker.xcodeproj; path = spotiqueue_worker/spotiqueue_worker.xcodeproj; sourceTree = "<group>"; };
 		DA5AFB0D26565CD300C6C468 /* RBSpotify.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RBSpotify.swift; sourceTree = "<group>"; };
 		DA5AFB0F26567AB300C6C468 /* TrackExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackExtensions.swift; sourceTree = "<group>"; };
@@ -197,6 +199,7 @@
 				EC90ED34267B44C0003C3C0D /* UI */,
 				DAE1F18126534D660013704F /* AppDelegate.swift */,
 				ECB750482676E4D80011DFF6 /* MainMenu.xib */,
+				DA4F1AA826E61BDD00952E8F /* main.m */,
 				DAE1F18326534D670013704F /* Assets.xcassets */,
 				DAE1F18826534D670013704F /* Info.plist */,
 				DAE1F18926534D670013704F /* Spotiqueue.entitlements */,
@@ -333,6 +336,7 @@
 				DABEC90F26536F5800CA3F67 /* RBSecrets.swift in Sources */,
 				DACA708E268EA0D5009714DC /* RBFilterField.swift in Sources */,
 				DA5AFB2D265A86FD00C6C468 /* RBTableView.swift in Sources */,
+				DA4F1AA926E61BDD00952E8F /* main.m in Sources */,
 				DAFAB407265D1BE90096810C /* NSImageViewExtensions.swift in Sources */,
 				DA343EDF26621394000980E2 /* FormatterExtensions.swift in Sources */,
 				DA343EE1266213B6000980E2 /* TimeIntervalExtensions.swift in Sources */,
@@ -478,7 +482,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 760;
+				CURRENT_PROJECT_VERSION = 761;
 				DEVELOPMENT_TEAM = QG72S9L5L3;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -511,7 +515,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 760;
+				CURRENT_PROJECT_VERSION = 761;
 				DEVELOPMENT_TEAM = QG72S9L5L3;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (

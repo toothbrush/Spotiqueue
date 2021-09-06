@@ -75,7 +75,6 @@ enum SearchCommand {
     case Playlist(String, SpotifyURIConvertible)
 }
 
-@NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
 
     @IBAction func checkForUpdates(_ sender: Any) {
