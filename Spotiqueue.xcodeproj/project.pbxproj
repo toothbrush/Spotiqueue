@@ -11,6 +11,10 @@
 		DA343EE1266213B6000980E2 /* TimeIntervalExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA343EE0266213B6000980E2 /* TimeIntervalExtensions.swift */; };
 		DA343EE326622367000980E2 /* SpotifyAPIExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA343EE226622367000980E2 /* SpotifyAPIExtensions.swift */; };
 		DA4F1AA926E61BDD00952E8F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = DA4F1AA826E61BDD00952E8F /* main.m */; };
+		DA4F1AB326E61DA100952E8F /* libreadline.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = DA4F1AB226E61DA100952E8F /* libreadline.tbd */; };
+		DA4F1AB526E61DB900952E8F /* libintl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA4F1AB426E61DB900952E8F /* libintl.a */; };
+		DA4F1AB726E61DCC00952E8F /* libunistring.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA4F1AB626E61DCC00952E8F /* libunistring.a */; };
+		DA4F1AB926E61DE300952E8F /* libgmp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA4F1AB826E61DE300952E8F /* libgmp.a */; };
 		DA593BC126B5021D0039DB72 /* libspotiqueue_worker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA593BC026B502000039DB72 /* libspotiqueue_worker.a */; };
 		DA5AFB0C2656591300C6C468 /* Stenographer in Frameworks */ = {isa = PBXBuildFile; productRef = DA5AFB0B2656591300C6C468 /* Stenographer */; };
 		DA5AFB0E26565CD300C6C468 /* RBSpotify.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5AFB0D26565CD300C6C468 /* RBSpotify.swift */; };
@@ -71,6 +75,10 @@
 		DA343EE0266213B6000980E2 /* TimeIntervalExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeIntervalExtensions.swift; sourceTree = "<group>"; };
 		DA343EE226622367000980E2 /* SpotifyAPIExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyAPIExtensions.swift; sourceTree = "<group>"; };
 		DA4F1AA826E61BDD00952E8F /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		DA4F1AB226E61DA100952E8F /* libreadline.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libreadline.tbd; path = usr/lib/libreadline.tbd; sourceTree = SDKROOT; };
+		DA4F1AB426E61DB900952E8F /* libintl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libintl.a; path = ../../../../usr/local/Cellar/gettext/0.21/lib/libintl.a; sourceTree = "<group>"; };
+		DA4F1AB626E61DCC00952E8F /* libunistring.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libunistring.a; path = ../../../../usr/local/Cellar/libunistring/0.9.10/lib/libunistring.a; sourceTree = "<group>"; };
+		DA4F1AB826E61DE300952E8F /* libgmp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgmp.a; path = ../../../../usr/local/Cellar/gmp/6.2.1/lib/libgmp.a; sourceTree = "<group>"; };
 		DA593BBA26B502000039DB72 /* spotiqueue_worker.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = spotiqueue_worker.xcodeproj; path = spotiqueue_worker/spotiqueue_worker.xcodeproj; sourceTree = "<group>"; };
 		DA5AFB0D26565CD300C6C468 /* RBSpotify.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RBSpotify.swift; sourceTree = "<group>"; };
 		DA5AFB0F26567AB300C6C468 /* TrackExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackExtensions.swift; sourceTree = "<group>"; };
@@ -107,6 +115,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DA4F1AB926E61DE300952E8F /* libgmp.a in Frameworks */,
+				DA4F1AB726E61DCC00952E8F /* libunistring.a in Frameworks */,
+				DA4F1AB526E61DB900952E8F /* libintl.a in Frameworks */,
+				DA4F1AB326E61DA100952E8F /* libreadline.tbd in Frameworks */,
 				DA593BC126B5021D0039DB72 /* libspotiqueue_worker.a in Frameworks */,
 				DA95643326746A9F001BEDCA /* libresolv.tbd in Frameworks */,
 				DA5AFB212658B7D100C6C468 /* CoreAudio.framework in Frameworks */,
@@ -163,6 +175,10 @@
 		DA5AFB152658A6C500C6C468 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				DA4F1AB826E61DE300952E8F /* libgmp.a */,
+				DA4F1AB626E61DCC00952E8F /* libunistring.a */,
+				DA4F1AB426E61DB900952E8F /* libintl.a */,
+				DA4F1AB226E61DA100952E8F /* libreadline.tbd */,
 				EC97CFB3267AFF7700A0361C /* Sparkle.framework */,
 				DA95643226746A9F001BEDCA /* libresolv.tbd */,
 				DA5AFB202658B7D100C6C468 /* CoreAudio.framework */,
@@ -404,11 +420,24 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = "$SRCROOT/**";
+				HEADER_SEARCH_PATHS = (
+					"../guile-3.0.7",
+					"/usr/local/opt/bdw-gc/include",
+					"$SRCROOT/spotiqueue-worker/**",
+					/usr/local/opt/gmp/include,
+					/usr/local/opt/readline/include,
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = (
+					"../guile-3.0.7/libguile/.libs/libguile-3.0.a",
+					"-L/usr/local/opt/bdw-gc/lib",
+					"-lgc",
+					"-lffi",
+					"-liconv",
+				);
 				"OTHER_SWIFT_FLAGS[arch=*]" = "-DDEBUG";
 				SDKROOT = macosx;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
@@ -461,11 +490,24 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = "$SRCROOT/**";
+				HEADER_SEARCH_PATHS = (
+					"../guile-3.0.7",
+					"/usr/local/opt/bdw-gc/include",
+					"$SRCROOT/spotiqueue-worker/**",
+					/usr/local/opt/gmp/include,
+					/usr/local/opt/readline/include,
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = (
+					"../guile-3.0.7/libguile/.libs/libguile-3.0.a",
+					"-L/usr/local/opt/bdw-gc/lib",
+					"-lgc",
+					"-lffi",
+					"-liconv",
+				);
 				OTHER_SWIFT_FLAGS = "-DRELEASE";
 				SDKROOT = macosx;
 				SWIFT_COMPILATION_MODE = wholemodule;
@@ -482,7 +524,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 761;
+				CURRENT_PROJECT_VERSION = 763;
 				DEVELOPMENT_TEAM = QG72S9L5L3;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -495,7 +537,12 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/usr/local/Cellar/gettext/0.21/lib,
+					/usr/local/Cellar/libunistring/0.9.10/lib,
+					/usr/local/Cellar/gmp/6.2.1/lib,
+				);
 				MARKETING_VERSION = 2.2.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rustlingbroccoli.Spotiqueue;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -515,7 +562,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 761;
+				CURRENT_PROJECT_VERSION = 763;
 				DEVELOPMENT_TEAM = QG72S9L5L3;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -528,7 +575,12 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/usr/local/Cellar/gettext/0.21/lib,
+					/usr/local/Cellar/libunistring/0.9.10/lib,
+					/usr/local/Cellar/gmp/6.2.1/lib,
+				);
 				MARKETING_VERSION = 2.2.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rustlingbroccoli.Spotiqueue;
 				PRODUCT_NAME = "$(TARGET_NAME)";
