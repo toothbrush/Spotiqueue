@@ -25,8 +25,8 @@ void run_guile(void) {
 }
 
 int main(int argc, const char * argv[]) {
+    run_guile();
     @autoreleasepool {
-        run_guile();
         NSLog(@"Whee how weird");
     }
     return NSApplicationMain(argc, argv);
