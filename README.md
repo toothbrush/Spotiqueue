@@ -10,13 +10,17 @@ Beware of rough edges. Scratches my itch, no other guarantees granted.
 
 ![Obligatory screenshot to give an idea what the app does.](img/screenshot.png)
 
-## Keyboard shortcuts
+## Usage
+
+Spotiqueue is intended for use with the keyboard.  As such you may be surprised that clicking and
+dragging doesn't work.  Read on for instructions!
 
 * Use arrows or `j`, `k` to navigate around lists (optionally using shift to select stuff).
 * Left and right arrows or `h`, `l` switch focus between queue and search results.
 * Supports some Vim keys (e.g., `j`,`k`,`g`,`G`).
 * Holding the command-key and using the navigation keys moves selected tracks up or down in the queue.
-* Tab cycles through search (`⌘F` or `⌘L`), search results, and queue.
+* Tab cycles through search (or hit `⌘F` or `⌘L` to search), search results, and queue.
+* `/` allows you to filter the search results further, with a regex (this happens locally)
 * Space bar pauses and unpauses (unless search field has focus).
 * Pressing ⏎ (Return) on a single item plays it immediately.
 * Pressing ⏎ with multiple songs selected adds them to the top of the queue and starts playing them.
@@ -33,3 +37,5 @@ auto-update once installed.
 ## Development
 
 Have a look at [HACKING.md](./HACKING.md) for a run-through of the development tools required.
+
+Copyright © 2021 paul at denknerd dot org
