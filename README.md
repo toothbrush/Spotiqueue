@@ -32,7 +32,4 @@ auto-update once installed.
 
 ## Development
 
-You'll need to have [Rust tools installed](https://www.rust-lang.org/tools/install), from there the
-Xcode project should simply be able to be built & run.  The `spotiqueue_worker` library is wrapped
-in a Xcode dependency project, see [the `cargo-xcode`
-documentation](https://lib.rs/crates/cargo-xcode).
+Have a look at [HACKING.md](./HACKING.md) for a run-through of the development tools required.
