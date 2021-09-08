@@ -191,7 +191,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     // Here is another extensive howto around table views and such https://www.raywenderlich.com/921-cocoa-bindings-on-macos
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
-        scm_c_eval_string("(begin (display 'InsideAppKit) (newline))");
+        //scm_c_eval_string("(begin (display 'InsideAppKit) (newline))");
         loginWindow = RBLoginWindow(windowNibName: "RBLoginWindow")
         if let window = loginWindow?.window {
             self.window?.beginSheet(window, completionHandler: { [self] response in
