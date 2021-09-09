@@ -34,11 +34,11 @@ class RBSecrets: NSObject {
                 logger.error("Error reading file: \(error)")
             }
         }
-        #endif
-
+        #else
         if let key = keychain.get(s.rawValue) {
             return key
         }
+        #endif
         logger.critical("Failure to read <\(s.rawValue)> from Keychain!")
         logger.debug("Keychain.lastResultCode = \(keychain.lastResultCode)")
         return nil
@@ -58,12 +58,13 @@ class RBSecrets: NSObject {
         catch let error {
             logger.error("Error writing file: \(error)")
         }
-        #endif
-
+        #else
+        // Fine, only touch the Keychain proper if we're in real-life mode.
         if !keychain.set(v, forKey: s.rawValue, withAccess: .accessibleAfterFirstUnlock) {
             logger.critical("Failure to save <\(s.rawValue)> to keychain")
             logger.debug("Keychain.lastResultCode = \(keychain.lastResultCode)")
         }
+        #endif
     }
 
     static func deleteSecret(s: Secret) {
