@@ -49,6 +49,8 @@
 ;;; END init.scm
 
 ;;; This is what would live in a user's config.
+;; TODO figure out a bit of XDG convention?
+;; TODO actually put this into ~/.local/share/spotiqueue/init.scm
 
 (define (paul:player-started song)
   (if (not (song? song))
@@ -74,3 +76,6 @@
 (add-hook! player-endoftrack-hook paul:player-endoftrack)
 (add-hook! player-paused-hook paul:paused)
 (add-hook! player-unpaused-hook paul:unpaused)
+
+;; TODO
+;; (window:maximise) ; to fill screen
