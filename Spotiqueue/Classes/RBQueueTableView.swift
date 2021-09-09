@@ -24,7 +24,7 @@ class RBQueueTableView: RBTableView {
 
     func addTracksToQueue(from contents: String) {
         AppDelegate.appDelegate().isSearching = true
-        let incoming_uris = RBSpotify.sanitiseIncomingURIBlob(pasted_blob: contents)
+        let incoming_uris = RBSpotifyAPI.sanitiseIncomingURIBlob(pasted_blob: contents)
         guard !incoming_uris.isEmpty else {
             AppDelegate.appDelegate().isSearching = false
             return
@@ -32,11 +32,11 @@ class RBQueueTableView: RBTableView {
         
         if incoming_uris.allSatisfy({ $0.uri.hasPrefix("spotify:track:") }) {
             // we can use the fancy batching-fetch-songs mechanism.
-            var stub_songs: [RBSpotifySongTableRow] = []
+            var stub_songs: [RBSpotifySong] = []
             for s in incoming_uris {
                 logger.info("Hydrating song \(s)")
                 stub_songs.append(
-                    RBSpotifySongTableRow(spotify_uri: s.uri)
+                    RBSpotifySong(spotify_uri: s.uri)
                 )
             }
             AppDelegate.appDelegate().queueArrayController.add(contentsOf: stub_songs)
@@ -74,7 +74,7 @@ class RBQueueTableView: RBTableView {
                 },
                 receiveValue: { tracks in
                     AppDelegate.appDelegate()
-                        .insertTracks(newRows: tracks.joined().map({ RBSpotifySongTableRow(track: $0)}),
+                        .insertTracks(newRows: tracks.joined().map({ RBSpotifySong(track: $0)}),
                                       in: .Queue,
                                       at_the_top: false,
                                       and_then_advance: false)
@@ -112,7 +112,7 @@ class RBQueueTableView: RBTableView {
             return
         }
 
-        if let songRow: RBSpotifySongTableRow = self.associatedArrayController().selectedObjects.first as? RBSpotifySongTableRow {
+        if let songRow: RBSpotifySong = self.associatedArrayController().selectedObjects.first as? RBSpotifySong {
             AppDelegate.appDelegate().browseDetails(for: songRow, consideringHistory: false)
         }
     }

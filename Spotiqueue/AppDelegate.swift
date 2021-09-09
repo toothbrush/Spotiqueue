@@ -90,8 +90,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet weak var queueArrayController: NSArrayController!
     @IBOutlet weak var searchLabel: NSTextField!
 
-    @objc dynamic var searchResults: Array<RBSpotifySongTableRow> = []
-    @objc dynamic var queue: Array<RBSpotifySongTableRow> = []
+    @objc dynamic var searchResults: Array<RBSpotifySong> = []
+    @objc dynamic var queue: Array<RBSpotifySong> = []
 
     // MARK: View element bindings
     @IBOutlet weak var queueHeaderLabel: NSTextField!
@@ -176,8 +176,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         self.searchTableView.selectRow(row: 0)
     }
 
-    var spotify: RBSpotify = RBSpotify()
-    @objc dynamic var currentSong: RBSpotifySongTableRow?
+    var spotify: RBSpotifyAPI = RBSpotifyAPI()
+    @objc dynamic var currentSong: RBSpotifySong?
 
     @IBAction func findCurrentTrackAlbum(_ sender: Any) {
         guard let song = self.currentSong else { return }
@@ -241,7 +241,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         if keyPath == "queueArrayController.arrangedObjects" {
             // sum up the durations and put the info into the queue heading label
-            if let queueTracks = queueArrayController.arrangedObjects as? [RBSpotifySongTableRow] {
+            if let queueTracks = queueArrayController.arrangedObjects as? [RBSpotifySong] {
                 let totalLengthSeconds = queueTracks.map(\.durationSeconds).reduce(0, +)
                 if totalLengthSeconds > 0 {
                     queueHeaderLabel.stringValue = String(format: "Queue (%@ total)", totalLengthSeconds.positionalTime)
@@ -255,7 +255,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             var nrResultsAppendix: String = ""
             if self.searchResults.count > 0 {
                 if !self.filterResultsField.stringValue.isEmpty,
-                   let filtered = self.searchResultsArrayController.arrangedObjects as? Array<RBSpotifySongTableRow> {
+                   let filtered = self.searchResultsArrayController.arrangedObjects as? Array<RBSpotifySong> {
                     // There's a filter applied; let's show match count.
                     nrResultsAppendix = "(\(filtered.count) / \(self.searchResults.count) items)"
                 } else {
@@ -341,7 +341,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     @objc func handleURL(event: NSAppleEventDescriptor, reply: NSAppleEventDescriptor) {
         if let url = event.paramDescriptor(forKeyword: keyDirectObject)?.stringValue?.removingPercentEncoding {
-            if url.hasPrefix(RBSpotify.loginCallbackURL.description) {
+            if url.hasPrefix(RBSpotifyAPI.loginCallbackURL.description) {
                 logger.info("received redirect from Spotify: '\(url)'")
                 // This property is used to display an activity indicator in
                 // `LoginView` indicating that the access and refresh tokens
@@ -352,7 +352,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 // access and refresh tokens.
                 spotify.api.authorizationManager.requestAccessAndRefreshTokens(
                     redirectURIWithQuery: URL(string: url)!,
-                    codeVerifier: RBSpotify.codeVerifier,
+                    codeVerifier: RBSpotifyAPI.codeVerifier,
                     // This value must be the same as the one used to create the
                     // authorization URL. Otherwise, an error will be thrown.
                     state: spotify.authorizationState
@@ -439,7 +439,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             }
             , receiveValue: { playlists in
                 for pl in playlists {
-                    self.searchResults.append(RBSpotifySongTableRow(playlist: pl))
+                    self.searchResults.append(RBSpotifySong(playlist: pl))
                 }
                 self.searchTableView.selectRow(row: 0)
             })
@@ -448,7 +448,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         self.window.makeFirstResponder(searchTableView)
     }
     
-    func browseDetails(for row: RBSpotifySongTableRow, consideringHistory: Bool = true) {
+    func browseDetails(for row: RBSpotifySong, consideringHistory: Bool = true) {
         guard !self.isSearching else {
             return
         }
@@ -517,10 +517,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 }
             },
             receiveValue: { items in
-                var newRows: Array<RBSpotifySongTableRow> = []
+                var newRows: Array<RBSpotifySong> = []
                 for playlistItemContainer in items {
                     if case .track(let track) = playlistItemContainer.item {
-                        newRows.append(RBSpotifySongTableRow.init(track: track))
+                        newRows.append(RBSpotifySong.init(track: track))
                     }
                 }
                 self.insertTracks(newRows: newRows,
@@ -531,7 +531,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             .store(in: &cancellables)
     }
     
-    func insertTracks(newRows: Array<RBSpotifySongTableRow>,
+    func insertTracks(newRows: Array<RBSpotifySong>,
                       in target: SongList,
                       at_the_top: Bool = false,
                       and_then_advance: Bool = false) {
@@ -578,7 +578,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                     let simplifiedTracks = tracksPage.items
                     // create a new array of table rows from the page of simplified tracks
                     let newTableRows = simplifiedTracks.map { t in
-                        RBSpotifySongTableRow.init(track: t, album: album, artist: t.artists!.first!)
+                        RBSpotifySong.init(track: t, album: album, artist: t.artists!.first!)
                     }
                     // append the new table rows to the full array
                     self.searchResults.append(contentsOf: newTableRows)
@@ -642,7 +642,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                         let simplifiedTracks = tracksPage.items
                         // create a new array of table rows from the page of simplified tracks
                         let newTableRows = simplifiedTracks.map{ t in
-                            RBSpotifySongTableRow.init(track: t, album: album, artist: artist)
+                            RBSpotifySong.init(track: t, album: album, artist: artist)
                         }
                         // append the new table rows to the full array
                         self.searchResults.append(contentsOf: newTableRows)
@@ -691,10 +691,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 },
                 receiveValue: { [self] searchResultsReturn in
                     for result in searchResultsReturn.tracks?.items ?? [] {
-                        searchResults.append(RBSpotifySongTableRow(track: result))
+                        searchResults.append(RBSpotifySong(track: result))
                     }
                     logger.info("[query \(i)] Received \(self.searchResults.count) tracks")
-                    searchResultsArrayController.sortDescriptors = RBSpotifySongTableRow.trackSortDescriptors
+                    searchResultsArrayController.sortDescriptors = RBSpotifySong.trackSortDescriptors
                     searchResultsArrayController.rearrangeObjects()
                     searchTableView.selectRow(row: 0)
                 }

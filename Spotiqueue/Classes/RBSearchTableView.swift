@@ -78,10 +78,10 @@ class RBSearchTableView: RBTableView {
         }
     }
 
-    func selectedSearchTracks() -> [RBSpotifySongTableRow] {
+    func selectedSearchTracks() -> [RBSpotifySong] {
         return AppDelegate
             .appDelegate()
             .searchResultsArrayController
-            .selectedObjects as? [RBSpotifySongTableRow] ?? []
+            .selectedObjects as? [RBSpotifySong] ?? []
     }
 }

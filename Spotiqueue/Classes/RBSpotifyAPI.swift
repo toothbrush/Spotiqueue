@@ -18,7 +18,7 @@ import SpotifyWebAPI
  Its most important role is to handle changes to the authorzation
  information and save them to persistent storage in the keychain.
  */
-final class RBSpotify: ObservableObject {
+final class RBSpotifyAPI: ObservableObject {
 
     static func sanitiseIncomingURIBlob(pasted_blob: String) -> [SpotifyURIConvertible] {
         pasted_blob
@@ -95,7 +95,7 @@ final class RBSpotify: ObservableObject {
     /// the Spotify web API.
     let api = SpotifyAPI(
         authorizationManager: AuthorizationCodeFlowPKCEManager(
-            clientId: RBSpotify.clientId
+            clientId: RBSpotifyAPI.clientId
         )
     )
 
@@ -177,7 +177,7 @@ final class RBSpotify: ObservableObject {
 
         let url = api.authorizationManager.makeAuthorizationURL(
             redirectURI: Self.loginCallbackURL,
-            codeChallenge: RBSpotify.codeChallenge,
+            codeChallenge: RBSpotifyAPI.codeChallenge,
             // This same value **MUST** be provided for the state parameter of
             // `authorizationManager.requestAccessAndRefreshTokens(redirectURIWithQuery:state:)`.
             // Otherwise, an error will be thrown.

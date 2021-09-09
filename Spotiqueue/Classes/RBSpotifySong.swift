@@ -9,7 +9,7 @@
 import Cocoa
 import SpotifyWebAPI
 
-final class RBSpotifySongTableRow: NSObject {
+final class RBSpotifySong: NSObject {
 
     enum PlayableItem {
         case Playlist
