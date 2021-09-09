@@ -1,4 +1,5 @@
 (display "guile(init.scm): Loading Spotiqueue bootstrap config...\n")
+(use-modules (ice-9 format))
 
 ;; Define the key maps
 (define global-map)
@@ -17,3 +18,16 @@
 
 (assoc-set! queue-panel-map "x" 'queue:delete-selected-tracks)
 (assoc-set! queue-panel-map "H-k" 'queue:move-selected-tracks-up)
+
+(define (paul:player-stopped)
+  (begin
+    (display "hey, the song has stopped.")
+    (newline)))
+
+(define (paul:player-started song)
+  (begin
+    (format #t "hey, a song has started: ~s" song)
+    (newline)))
+
+(add-hook! player-started-hook paul:player-started)
+(add-hook! player-stopped-hook paul:player-stopped)
