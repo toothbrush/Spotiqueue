@@ -43,3 +43,10 @@
 
 ;; TODO
 ;; (window:maximise) ; to fill screen
+
+(use-modules (system repl server))
+(with-exception-handler
+    (lambda (exn) (display "Couldn't bind port, skipping.\n"))
+  (lambda ()
+    (spawn-server (make-tcp-server-socket))) ; loopback:37146 by default
+  #:unwind? #t)
