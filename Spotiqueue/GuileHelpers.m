@@ -7,6 +7,7 @@
 //
 
 #import "GuileHelpers.h"
+#import "Spotiqueue-Swift.h"
 
 /// Meh, i can't directly use C-macros in Swift, and a lot of useful things are C macros.  Here i'll re-expose a few as Objective-C functions.
 
@@ -18,6 +19,14 @@ bool _scm_is_true(SCM value) {
     return scm_is_true(value);
 }
 
+SCM _scm_false(void) {
+    return SCM_BOOL_F;
+}
+
 SCM get_homedir(void) {
     return scm_from_utf8_string(NSHomeDirectory().UTF8String);
+}
+
+SCM current_song(void) {
+    return [RBSongBridge get_current_song];
 }

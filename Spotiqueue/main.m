@@ -12,6 +12,7 @@
 static void* register_functions (void* data)
 {
     scm_c_define_gsubr("spotiqueue:get-homedir", 0, 0, 0, &get_homedir);
+    scm_c_define_gsubr("spotiqueue:current-song", 0, 0, 0, &current_song);
     scm_display(scm_from_utf8_string("guile: Successfully booted.\n"), scm_current_output_port());
     return NULL;
 }

@@ -13,6 +13,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 SCM _scm_empty_list(void);
 bool _scm_is_true(SCM value);
+SCM _scm_false(void);
 SCM get_homedir(void);
+SCM current_song(void);
 
 NS_ASSUME_NONNULL_END
