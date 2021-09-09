@@ -5,7 +5,8 @@
 ;;; This file is read by Spotiqueue as soon as it starts up.  It exposes some helpers and hooks for
 ;;; users.
 
-(display "guile(init.scm): Loading Spotiqueue bootstrap config...\n")
+(display "guile(init.scm): Loading Spotiqueue bootstrap config...")
+(newline)
 
 ;; Import some library functions
 (use-modules (ice-9 format)) ;; For a better (format ...)
