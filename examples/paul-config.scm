@@ -2,6 +2,9 @@
 (use-modules (ice-9 textual-ports)
              (ice-9 format))
 
+(define (paul:formatted-time)
+  (strftime "[%a %e/%b/%Y %H:%M:%S %Z]" (localtime (current-time))))
+
 (define* (write-text path text #:key (append #f))
   (let ((file (open-file path (if append "a" "w"))))
     (put-string file text)
@@ -16,7 +19,7 @@
     (format #t "hey, a song has started: ~s\n" song)
     (write-text
      (string-append my-homedir "/spotiqueue-played.txt")
-     (format #f "~a\n" song)
+     (format #f "~a ~a\n" (paul:formatted-time) song)
      #:append #t)))
 
 (define (paul:player-endoftrack song)
