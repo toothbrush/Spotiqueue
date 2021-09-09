@@ -1,5 +1,7 @@
 (display "guile(init.scm): Loading Spotiqueue bootstrap config...\n")
-(use-modules (ice-9 format))
+
+;; Import some library functions
+(use-modules (ice-9 format)) ;; For a better (format ...)
 
 ;; Define the key maps
 (define global-map)
