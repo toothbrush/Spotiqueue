@@ -31,6 +31,10 @@
 (define (paul:unpaused)
   (display "guile: Resumed/Unpaused.\n"))
 
+(reset-hook! player-endoftrack-hook)
+(reset-hook! player-paused-hook)
+(reset-hook! player-started-hook)
+(reset-hook! player-unpaused-hook)
 (add-hook! player-endoftrack-hook paul:player-endoftrack)
 (add-hook! player-paused-hook paul:paused)
 (add-hook! player-started-hook paul:player-started)
