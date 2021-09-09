@@ -53,7 +53,6 @@ public func player_update_hook(hook: StatusUpdate, position_ms: UInt32, duration
                 AppDelegate.appDelegate().playerState = .Stopped
                 // Okay, it seems we get the "stop" signal from a previous song, like, halfway through the next one.  This is a bit confusing.  We could pass along the request_id, which seems to increment, and ignore "previous songs'" stop signals.  Ugh.  You know what, probably nobody will use this anyway.
                 // In fact, come to think of it, maybe we should fully ditch the Stopped signal, and pretend that the only way to stop is by EndOfTrack/Pause.  A "full" stop is simply an EndOfTrack which is never followed by a Playing signal.
-                RBSongBridge.player_stopped_hook()
                 AppDelegate.appDelegate().position = 0
                 AppDelegate.appDelegate().duration = 0
             }

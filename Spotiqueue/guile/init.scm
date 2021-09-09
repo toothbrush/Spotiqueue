@@ -33,7 +33,6 @@
 ;; Define the hooks
 (define player-started-hook (make-hook 1))
 (define player-endoftrack-hook (make-hook 1))
-(define player-stopped-hook (make-hook 0))
 
 ;; This is what we want the API to look like, eventually:
 ;; (define-key queue-panel-map "x" 'queue:delete-selected-tracks)
@@ -48,10 +47,6 @@
 ;;; END init.scm
 
 ;;; This is what would live in a user's config.
-(define (paul:player-stopped)
-  (begin
-    (display "hey, the song has stopped.")
-    (newline)))
 
 (define (paul:player-started song)
   (if (not (song? song))
@@ -69,4 +64,3 @@
 
 (add-hook! player-started-hook paul:player-started)
 (add-hook! player-endoftrack-hook paul:player-endoftrack)
-(add-hook! player-stopped-hook paul:player-stopped)
