@@ -10,11 +10,7 @@
 
 static void* register_functions (void* data)
 {
-    SCM test = scm_c_eval_string("(+ 3 5)");
-    int foo = scm_to_int(test);
-    printf("int foo = %d\n", foo);
-
-    scm_c_eval_string("(begin (display 'HelloWorld) (newline))");
+    scm_display(scm_from_locale_string("guile: Successfully booted.\n"), scm_current_output_port());
     return NULL;
 }
 
