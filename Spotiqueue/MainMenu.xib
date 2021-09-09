@@ -334,7 +334,7 @@
                                                 </tableCellView>
                                             </prototypeCellViews>
                                         </tableColumn>
-                                        <tableColumn width="111" minWidth="40" maxWidth="1000" id="ihb-ks-z5o">
+                                        <tableColumn width="200" minWidth="200" maxWidth="1000" id="ihb-ks-z5o">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Artist">
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
@@ -348,11 +348,11 @@
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                             <prototypeCellViews>
                                                 <tableCellView id="3rp-nd-L3o">
-                                                    <rect key="frame" x="487" y="0.0" width="108" height="24"/>
+                                                    <rect key="frame" x="487" y="0.0" width="200" height="24"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
                                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YFH-MS-yGD">
-                                                            <rect key="frame" x="0.0" y="4" width="108" height="16"/>
+                                                            <rect key="frame" x="0.0" y="4" width="292" height="16"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                             <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Black Country, New Road" id="Wni-jN-zKG">
                                                                 <font key="font" usesAppearanceFont="YES"/>
