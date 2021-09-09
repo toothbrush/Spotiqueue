@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DA19341726E9A06F00BEC661 /* RBSongBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA19341626E9A06F00BEC661 /* RBSongBridge.swift */; };
 		DA343EDF26621394000980E2 /* FormatterExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA343EDE26621394000980E2 /* FormatterExtensions.swift */; };
 		DA343EE1266213B6000980E2 /* TimeIntervalExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA343EE0266213B6000980E2 /* TimeIntervalExtensions.swift */; };
 		DA343EE326622367000980E2 /* SpotifyAPIExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA343EE226622367000980E2 /* SpotifyAPIExtensions.swift */; };
@@ -70,6 +71,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		DA19341626E9A06F00BEC661 /* RBSongBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RBSongBridge.swift; sourceTree = "<group>"; };
 		DA343EDE26621394000980E2 /* FormatterExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormatterExtensions.swift; sourceTree = "<group>"; };
 		DA343EE0266213B6000980E2 /* TimeIntervalExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeIntervalExtensions.swift; sourceTree = "<group>"; };
 		DA343EE226622367000980E2 /* SpotifyAPIExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyAPIExtensions.swift; sourceTree = "<group>"; };
@@ -164,6 +166,7 @@
 				DA5AFB0D26565CD300C6C468 /* RBSpotifyAPI.swift */,
 				DABEC90C2653534300CA3F67 /* RBSpotifySong.swift */,
 				DACA708D268EA0D5009714DC /* RBFilterField.swift */,
+				DA19341626E9A06F00BEC661 /* RBSongBridge.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -357,6 +360,7 @@
 				DACA708E268EA0D5009714DC /* RBFilterField.swift in Sources */,
 				DA5AFB2D265A86FD00C6C468 /* RBTableView.swift in Sources */,
 				DA4F1AA926E61BDD00952E8F /* main.m in Sources */,
+				DA19341726E9A06F00BEC661 /* RBSongBridge.swift in Sources */,
 				DAFAB407265D1BE90096810C /* NSImageViewExtensions.swift in Sources */,
 				DA343EDF26621394000980E2 /* FormatterExtensions.swift in Sources */,
 				DA343EE1266213B6000980E2 /* TimeIntervalExtensions.swift in Sources */,
@@ -518,7 +522,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 782;
+				CURRENT_PROJECT_VERSION = 784;
 				DEVELOPMENT_TEAM = QG72S9L5L3;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -558,7 +562,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 782;
+				CURRENT_PROJECT_VERSION = 784;
 				DEVELOPMENT_TEAM = QG72S9L5L3;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
