@@ -33,6 +33,8 @@
 ;; Define the hooks
 (define player-started-hook (make-hook 1))
 (define player-endoftrack-hook (make-hook 1))
+(define player-paused-hook (make-hook 0))
+(define player-unpaused-hook (make-hook 0))
 
 ;; This is what we want the API to look like, eventually:
 ;; (define-key queue-panel-map "x" 'queue:delete-selected-tracks)
@@ -62,5 +64,13 @@
     (format #t "end of track: ~s" song)
     (newline)))
 
+(define (paul:paused)
+  (display "guile: Paused.\n"))
+
+(define (paul:unpaused)
+  (display "guile: Resumed/Unpaused.\n"))
+
 (add-hook! player-started-hook paul:player-started)
 (add-hook! player-endoftrack-hook paul:player-endoftrack)
+(add-hook! player-paused-hook paul:paused)
+(add-hook! player-unpaused-hook paul:unpaused)

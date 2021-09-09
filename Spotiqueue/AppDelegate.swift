@@ -719,8 +719,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             case .Stopped:
                 return
             case .Playing:
+                RBSongBridge.player_paused_hook()
                 spotiqueue_pause_playback()
             case .Paused:
+                RBSongBridge.player_unpaused_hook()
                 spotiqueue_unpause_playback()
         }
     }

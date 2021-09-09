@@ -52,5 +52,11 @@ struct RBSongBridge {
         hook_with_song(hook_name: "player-endoftrack-hook", song: song)
     }
 
+    static func player_paused_hook() {
+        hook_0(hook_name: "player-paused-hook")
+    }
+
+    static func player_unpaused_hook() {
+        hook_0(hook_name: "player-unpaused-hook")
     }
 }
