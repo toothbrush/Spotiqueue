@@ -123,9 +123,6 @@ class RBTableView: NSTableView {
         } else if flags == .command
                     && event.characters == ";" { // cmd-;, search for album, because cmd-L is taken?
             browseDetailsOnRow()
-        } else if event.characters == " "
-                    && flags.isEmpty {
-            AppDelegate.appDelegate().playOrPause()
         } else if event.keyCode == kVK_PageUp
                     && flags.isEmpty {
             self.selectRow(row: selectedRow - nbVisibleRows() + 1)

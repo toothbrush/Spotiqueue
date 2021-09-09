@@ -94,6 +94,19 @@
                         </items>
                     </menu>
                 </menuItem>
+                <menuItem title="Control" id="Dhl-dR-P3Z">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <menu key="submenu" title="Control" id="47t-tj-n1F">
+                        <items>
+                            <menuItem title="Play/Pause" keyEquivalent=" " id="d4j-pq-EgF">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="playOrPause" target="Voe-Tx-rLC" id="GeT-ll-zUJ"/>
+                                </connections>
+                            </menuItem>
+                        </items>
+                    </menu>
+                </menuItem>
                 <menuItem title="Edit" id="5QF-Oa-p0T">
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <menu key="submenu" title="Edit" id="YJO-2T-0cl">

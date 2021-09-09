@@ -714,7 +714,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
-    func playOrPause() {
+    @IBAction func playOrPause(_ sender: Any) {
         switch self.playerState {
             case .Stopped:
                 return
