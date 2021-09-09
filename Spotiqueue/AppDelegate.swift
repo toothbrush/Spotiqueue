@@ -49,6 +49,7 @@ public func player_update_hook(hook: StatusUpdate, position_ms: UInt32, duration
         case Stopped:
             DispatchQueue.main.async{
                 AppDelegate.appDelegate().playerState = .Stopped
+                AppDelegate.appDelegate().currentSong = nil
                 AppDelegate.appDelegate().position = 0
                 AppDelegate.appDelegate().duration = 0
             }
@@ -725,11 +726,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         guard let nextTrack = queue.first else {
             return
         }
-        spotiqueue_play_track(nextTrack.spotify_uri)
+        self.currentSong = nextTrack
+        spotiqueue_play_track(self.currentSong!.spotify_uri)
         self.albumTitleLabel.cell?.title = nextTrack.album
         self.songTitleLabel.cell?.title = nextTrack.prettyTitle()
 
-        self.currentSong = nextTrack
         // ehm awkward, attempting to get second largest image.
         if let image = nextTrack.album_image {
             self.albumImage.imageFromServerURL(image.url.absoluteString, placeHolder: nil)
