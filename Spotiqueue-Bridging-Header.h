@@ -8,3 +8,5 @@
 #include <Carbon/Carbon.h>
 
 #include <libguile.h>
+
+#import "GuileHelpers.h"

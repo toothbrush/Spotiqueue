@@ -36,7 +36,7 @@ struct RBSongBridge {
         let hook = scm_variable_ref(scm_c_lookup(hook_name))
 
         if scm_to_bool(scm_hook_p(hook)) == 1 {
-            scm_run_hook(hook, scm_c_eval_string("'()")) // TODO find a better way of creating an empty list...
+            scm_run_hook(hook, _scm_empty_list())
         } else {
             logger.error("Expected a hook, found instead: ")
             scm_display(hook, scm_current_output_port())
