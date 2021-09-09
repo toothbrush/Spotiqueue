@@ -10,7 +10,7 @@
 
 static void* register_functions (void* data)
 {
-    scm_display(scm_from_locale_string("guile: Successfully booted.\n"), scm_current_output_port());
+    scm_display(scm_from_utf8_string("guile: Successfully booted.\n"), scm_current_output_port());
     return NULL;
 }
 
