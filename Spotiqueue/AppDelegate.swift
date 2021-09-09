@@ -45,7 +45,6 @@ public func player_update_hook(hook: StatusUpdate, position_ms: UInt32, duration
                 AppDelegate.appDelegate().playerState = .Playing
                 AppDelegate.appDelegate().position = Double(position_ms/1000)
                 AppDelegate.appDelegate().duration = Double(duration_ms/1000)
-                RBSongBridge.player_playing_hook(song_uri: AppDelegate.appDelegate().currentSong!.spotify_uri)
             }
         case Stopped:
             DispatchQueue.main.async{
@@ -729,6 +728,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         self.currentSong = nextTrack
         spotiqueue_play_track(self.currentSong!.spotify_uri)
+        RBSongBridge.player_playing_hook(song_uri: self.currentSong!.spotify_uri)
         self.albumTitleLabel.cell?.title = nextTrack.album
         self.songTitleLabel.cell?.title = nextTrack.prettyTitle()
 
