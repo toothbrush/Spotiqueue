@@ -1,5 +1,6 @@
 ;;; This is an example of what would live in a user's config.
-(use-modules (ice-9 textual-ports))
+(use-modules (ice-9 textual-ports)
+             (ice-9 format))
 
 (define* (write-text path text #:key (append #f))
   (let ((file (open-file path (if append "a" "w"))))
