@@ -18,16 +18,8 @@ static void* register_functions (void* data)
     return NULL;
 }
 
-void run_guile(void) {
-    printf("hello from C, before Guile\n");
+int main(int argc, const char * argv[]) {
     scm_init_guile();
     scm_with_guile(&register_functions, NULL);
-}
-
-int main(int argc, const char * argv[]) {
-    run_guile();
-    @autoreleasepool {
-        NSLog(@"Whee how weird");
-    }
     return NSApplicationMain(argc, argv);
 }
