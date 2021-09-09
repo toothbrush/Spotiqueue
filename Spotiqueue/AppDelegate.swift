@@ -45,6 +45,7 @@ public func player_update_hook(hook: StatusUpdate, position_ms: UInt32, duration
                 AppDelegate.appDelegate().playerState = .Playing
                 AppDelegate.appDelegate().position = Double(position_ms/1000)
                 AppDelegate.appDelegate().duration = Double(duration_ms/1000)
+                RBSongBridge.player_playing_hook(song_uri: AppDelegate.appDelegate().currentSong!.spotify_uri)
             }
         case Stopped:
             DispatchQueue.main.async{
