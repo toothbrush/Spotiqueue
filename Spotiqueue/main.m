@@ -17,5 +17,14 @@ static void* register_functions (void* data)
 int main(int argc, const char * argv[]) {
     scm_init_guile();
     scm_with_guile(&register_functions, NULL);
+
+    @autoreleasepool {
+        NSBundle* mainBundle;
+        // Get the main bundle for the app.
+        mainBundle = [NSBundle mainBundle];
+        NSString* init_scm = [mainBundle pathForResource:@"init" ofType:@"scm"];
+        scm_c_primitive_load([init_scm UTF8String]);
+    }
+
     return NSApplicationMain(argc, argv);
 }
