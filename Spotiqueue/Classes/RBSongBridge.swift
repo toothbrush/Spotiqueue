@@ -14,7 +14,7 @@ struct RBSongBridge {
 
         let hook = scm_variable_ref(scm_c_lookup(hook_name))
 
-        if scm_to_bool(scm_hook_p(hook)) == 1 {
+        if _scm_is_true(scm_hook_p(hook)) {
             // Beware, make-song is the generated record creator thing, but it's a syntax transformer which can't be called directly, so we have a wrapper function called _make-song.
             let song_record = scm_call_5(scm_variable_ref(scm_c_lookup("_make-song")),
                                          scm_from_utf8_string(song.spotify_uri), // uri
@@ -35,7 +35,7 @@ struct RBSongBridge {
 
         let hook = scm_variable_ref(scm_c_lookup(hook_name))
 
-        if scm_to_bool(scm_hook_p(hook)) == 1 {
+        if _scm_is_true(scm_hook_p(hook)) {
             scm_run_hook(hook, _scm_empty_list())
         } else {
             logger.error("Expected a hook, found instead: ")

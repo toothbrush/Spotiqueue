@@ -12,5 +12,6 @@
 NS_ASSUME_NONNULL_BEGIN
 
 SCM _scm_empty_list(void);
+bool _scm_is_true(SCM value);
 
 NS_ASSUME_NONNULL_END

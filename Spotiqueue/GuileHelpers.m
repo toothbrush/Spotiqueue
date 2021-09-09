@@ -13,3 +13,7 @@
 SCM _scm_empty_list(void) {
     return SCM_EOL;
 }
+
+bool _scm_is_true(SCM value) {
+    return scm_is_true(value);
+}
