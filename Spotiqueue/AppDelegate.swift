@@ -274,10 +274,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func localKeyShortcuts(event: NSEvent) -> NSEvent? {
-        logger.info("I saw an event! \(event.description)")
-        if event.type == .keyDown {
-            logger.info("keycode = \(event.keyCode), characters: >\(String(describing: event.characters))<")
-        }
         let flags = event.modifierFlags.intersection(.deviceIndependentFlagsMask).subtracting([.function, .numericPad])
         if flags == .command
             && event.characters == "f" {
