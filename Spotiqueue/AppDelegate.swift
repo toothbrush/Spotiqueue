@@ -730,7 +730,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         spotiqueue_play_track(self.currentSong!.spotify_uri)
         RBSongBridge.player_playing_hook(song: self.currentSong!)
         self.albumTitleLabel.cell?.title = nextTrack.album
-        self.songTitleLabel.cell?.title = nextTrack.prettyTitle()
+        self.songTitleLabel.cell?.title = nextTrack.prettyArtistDashTitle()
 
         // ehm awkward, attempting to get second largest image.
         if let image = nextTrack.album_image {

@@ -153,7 +153,7 @@ final class RBSpotifySong: NSObject {
         }
     }
     
-    func prettyTitle() -> String {
+    func prettyArtistDashTitle() -> String {
         if artist.isEmpty {
             return self.title
         } else {
