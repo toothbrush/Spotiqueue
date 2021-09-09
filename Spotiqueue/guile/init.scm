@@ -46,37 +46,24 @@
 (assoc-set! queue-panel-map "x" 'queue:delete-selected-tracks)
 (assoc-set! queue-panel-map "H-k" 'queue:move-selected-tracks-up)
 
+;; Find and load a user's config, in ~/.config/spotiqueue/init.scm, if it exists.  Finding $HOME in
+;; Guile-proper is a bit annoying, because we need to rely on it managing to work out who we're
+;; running as, and fishing the info out of /etc/passwd (!).  This works well when running Guile in a
+;; terminal, but fails in a graphical app.  Likely $UID isn't set?  Anyway we just lean on
+;; Objective-C to give us the user's home here.
+(let* ((homedir (spotiqueue:get-homedir))
+       (user-config-file (string-append homedir "/.config/spotiqueue/init.scm")))
+  (begin
+    (format #t "Looking for user config in: ~a... " user-config-file)
+    (if (stat user-config-file #f)
+        (begin
+          (display "found!")
+          (newline)
+          (load user-config-file))
+        (begin
+          (display "FAIL")
+          (newline)
+          (display "User-config file doesn't exist, skipping.")
+          (newline)))))
 
 ;;; END init.scm
-
-;;; This is what would live in a user's config.
-;; TODO figure out a bit of XDG convention?
-;; TODO actually put this into ~/.local/share/spotiqueue/init.scm
-
-(define (paul:player-started song)
-  (if (not (song? song))
-      (error "eek, not a song!"))
-  (begin
-    (format #t "hey, a song has started: ~s" song)
-    (newline)))
-
-(define (paul:player-endoftrack song)
-  (if (not (song? song))
-      (error "eek, not a song!"))
-  (begin
-    (format #t "end of track: ~s" song)
-    (newline)))
-
-(define (paul:paused)
-  (display "guile: Paused.\n"))
-
-(define (paul:unpaused)
-  (display "guile: Resumed/Unpaused.\n"))
-
-(add-hook! player-started-hook paul:player-started)
-(add-hook! player-endoftrack-hook paul:player-endoftrack)
-(add-hook! player-paused-hook paul:paused)
-(add-hook! player-unpaused-hook paul:unpaused)
-
-;; TODO
-;; (window:maximise) ; to fill screen
