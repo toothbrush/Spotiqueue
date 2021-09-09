@@ -728,7 +728,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         self.currentSong = nextTrack
         spotiqueue_play_track(self.currentSong!.spotify_uri)
-        RBSongBridge.player_playing_hook(song_uri: self.currentSong!.spotify_uri)
+        RBSongBridge.player_playing_hook(song: self.currentSong!)
         self.albumTitleLabel.cell?.title = nextTrack.album
         self.songTitleLabel.cell?.title = nextTrack.prettyTitle()
 
