@@ -28,10 +28,12 @@ public func player_update_hook(hook: StatusUpdate, position_ms: UInt32, duration
     logger.info("Hook spotiqueue-worker hook ==> \(hook.rawValue)")
     switch hook {
         case EndOfTrack:
+            // We can't call end_of_track to Scheme inside the async / main-thread block, because we can't be sure when it'll be run, and want to grab the current song before it's obliterated by the "stopped" signal which comes right after the EndOfTrack signal.
             DispatchQueue.main.async{
                 AppDelegate.appDelegate().playerState = .Stopped
                 AppDelegate.appDelegate().position = 0
                 AppDelegate.appDelegate().duration = 0
+                AppDelegate.appDelegate().endOfTrack() // Fire off Guile hook.
                 AppDelegate.appDelegate().playNextQueuedTrack()
             }
         case Paused:
@@ -49,7 +51,7 @@ public func player_update_hook(hook: StatusUpdate, position_ms: UInt32, duration
         case Stopped:
             DispatchQueue.main.async{
                 AppDelegate.appDelegate().playerState = .Stopped
-                AppDelegate.appDelegate().currentSong = nil
+                RBSongBridge.player_stopped_hook()
                 AppDelegate.appDelegate().position = 0
                 AppDelegate.appDelegate().duration = 0
             }
@@ -720,6 +722,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             case .Paused:
                 spotiqueue_unpause_playback()
         }
+    }
+
+    func endOfTrack() {
+        guard let previousSong = self.currentSong else {
+            logger.error("AppDelegate.endOfTrack called but self.currentSong == nil!")
+            return
+        }
+        RBSongBridge.player_endoftrack_hook(song: previousSong)
     }
 
     func playNextQueuedTrack() {

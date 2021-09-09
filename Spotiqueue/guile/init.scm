@@ -1,3 +1,10 @@
+;;; BEGIN init.scm
+;;;
+;;; Copyright © 2021 paul at denknerd dot org
+;;;
+;;; This file is read by Spotiqueue as soon as it starts up.  It exposes some helpers and hooks for
+;;; users.
+
 (display "guile(init.scm): Loading Spotiqueue bootstrap config...\n")
 
 ;; Import some library functions
@@ -25,6 +32,7 @@
 
 ;; Define the hooks
 (define player-started-hook (make-hook 1))
+(define player-endoftrack-hook (make-hook 1))
 (define player-stopped-hook (make-hook 0))
 
 ;; This is what we want the API to look like, eventually:
@@ -36,6 +44,10 @@
 (assoc-set! queue-panel-map "x" 'queue:delete-selected-tracks)
 (assoc-set! queue-panel-map "H-k" 'queue:move-selected-tracks-up)
 
+
+;;; END init.scm
+
+;;; This is what would live in a user's config.
 (define (paul:player-stopped)
   (begin
     (display "hey, the song has stopped.")
@@ -48,5 +60,13 @@
     (format #t "hey, a song has started: ~s" song)
     (newline)))
 
+(define (paul:player-endoftrack song)
+  (if (not (song? song))
+      (error "eek, not a song!"))
+  (begin
+    (format #t "end of track: ~s" song)
+    (newline)))
+
 (add-hook! player-started-hook paul:player-started)
+(add-hook! player-endoftrack-hook paul:player-endoftrack)
 (add-hook! player-stopped-hook paul:player-stopped)
