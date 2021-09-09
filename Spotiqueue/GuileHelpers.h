@@ -13,5 +13,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 SCM _scm_empty_list(void);
 bool _scm_is_true(SCM value);
+SCM get_homedir(void);
 
 NS_ASSUME_NONNULL_END

@@ -17,3 +17,7 @@ SCM _scm_empty_list(void) {
 bool _scm_is_true(SCM value) {
     return scm_is_true(value);
 }
+
+SCM get_homedir(void) {
+    return scm_from_utf8_string(NSHomeDirectory().UTF8String);
+}
