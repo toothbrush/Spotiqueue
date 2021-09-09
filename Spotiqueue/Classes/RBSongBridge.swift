@@ -8,13 +8,7 @@
 
 import Foundation
 
-@objc class RBSongBridge: NSObject {
-    var spotify_uri: String
-
-    init(song: RBSpotifySong) {
-        spotify_uri = song.spotify_uri
-    }
-
+struct RBSongBridge {
     private static func hook_with_song(hook_name: String, song: RBSpotifySong) {
         assert(Thread.isMainThread)
 
