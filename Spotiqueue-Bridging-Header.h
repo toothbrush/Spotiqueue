@@ -6,3 +6,5 @@
 
 // Gimme useful keycode values, thanks https://boredzo.org/blog/archives/2007-05-22/virtual-key-codes
 #include <Carbon/Carbon.h>
+
+#include <libguile.h>

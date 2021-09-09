@@ -424,7 +424,14 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = "$SRCROOT/spotiqueue-worker/**";
+				HEADER_SEARCH_PATHS = (
+					"$SRCROOT/spotiqueue-worker/**",
+					/usr/local/Cellar/guile/3.0.7/include/guile/3.0,
+					"/usr/local/opt/bdw-gc/include",
+					/usr/local/opt/readline/include,
+					/usr/local/opt/gmp/include,
+					/usr/local/opt/gmp,
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -482,7 +489,14 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = "$SRCROOT/spotiqueue-worker/**";
+				HEADER_SEARCH_PATHS = (
+					"$SRCROOT/spotiqueue-worker/**",
+					/usr/local/Cellar/guile/3.0.7/include/guile/3.0,
+					"/usr/local/opt/bdw-gc/include",
+					/usr/local/opt/readline/include,
+					/usr/local/opt/gmp/include,
+					/usr/local/opt/gmp,
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -504,7 +518,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 778;
+				CURRENT_PROJECT_VERSION = 782;
 				DEVELOPMENT_TEAM = QG72S9L5L3;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -519,14 +533,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				MARKETING_VERSION = 2.2.1;
-				OTHER_CFLAGS = (
-					"-D_THREAD_SAFE",
-					"-I/usr/local/Cellar/guile/3.0.7/include/guile/3.0",
-					"-I/usr/local/opt/gmp",
-					"-I/usr/local/opt/gmp/include",
-					"-I/usr/local/opt/readline/include",
-					"-I/usr/local/opt/bdw-gc/include",
-				);
+				OTHER_CFLAGS = "-D_THREAD_SAFE";
 				OTHER_LDFLAGS = (
 					/usr/local/lib/libgc.a,
 					/usr/local/lib/libgmp.a,
@@ -551,7 +558,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 778;
+				CURRENT_PROJECT_VERSION = 782;
 				DEVELOPMENT_TEAM = QG72S9L5L3;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -566,14 +573,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				MARKETING_VERSION = 2.2.1;
-				OTHER_CFLAGS = (
-					"-D_THREAD_SAFE",
-					"-I/usr/local/Cellar/guile/3.0.7/include/guile/3.0",
-					"-I/usr/local/opt/gmp",
-					"-I/usr/local/opt/gmp/include",
-					"-I/usr/local/opt/readline/include",
-					"-I/usr/local/opt/bdw-gc/include",
-				);
+				OTHER_CFLAGS = "-D_THREAD_SAFE";
 				OTHER_LDFLAGS = (
 					/usr/local/lib/libgc.a,
 					/usr/local/lib/libgmp.a,
