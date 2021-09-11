@@ -38,3 +38,7 @@ SCM current_song(void) {
 SCM pause_or_unpause(void) {
     return [RBSongBridge pause_or_unpause];
 }
+
+SCM next_song(void) {
+    return scm_from_bool([RBSongBridge next_song]);
+}

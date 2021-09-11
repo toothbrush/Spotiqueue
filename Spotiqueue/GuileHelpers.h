@@ -18,5 +18,6 @@ SCM _scm_true(void);
 SCM get_homedir(void);
 SCM current_song(void);
 SCM pause_or_unpause(void);
+SCM next_song(void);
 
 NS_ASSUME_NONNULL_END

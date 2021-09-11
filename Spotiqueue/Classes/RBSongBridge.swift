@@ -71,6 +71,12 @@ import Foundation
         return _scm_true()
     }
 
+    @objc static func next_song() -> Bool {
+        DispatchQueue.main.sync {
+            AppDelegate.appDelegate().playNextQueuedTrack()
+        }
+    }
+
     @objc static func get_current_song() -> SCM {
         // We're liable to be calling this from a background thread.
         let song: RBSpotifySong? = DispatchQueue.main.sync {
