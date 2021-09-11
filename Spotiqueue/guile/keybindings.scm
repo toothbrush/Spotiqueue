@@ -4,6 +4,7 @@
 ;;;
 ;;; This file contains code used to define custom keymaps and bindings.
 (define-module (spotiqueue keybindings)
+  #:use-module (spotiqueue key-constants)
   #:use-module (ice-9 format)
   #:use-module (ice-9 optargs))
 (module-export-all! (current-module))
@@ -22,12 +23,13 @@
    "pwpwpwpwpw" ; p = protected/boxed/SCM value, w = writable (deprecated/ignored)
    (lambda (kbd port)
      ;; I keep getting warnings, probably because (ice-9 format) isn't yet loaded at compile time... ^.-
-     (format port "<<key> ~@[C-~]~@[H-~]~@[M-~]~@[S-~]~a>"
-             (kbd-ctrl kbd)
-             (kbd-cmd kbd)
-             (kbd-alt kbd)
-             (kbd-shift kbd)
-             (kbd-key kbd)))))
+     (let ((keysym (hash-ref keycode->keysym (kbd-key kbd))))
+       (format port "<<key> ~@[C-~]~@[H-~]~@[M-~]~@[S-~]~a>"
+               (kbd-ctrl kbd)
+               (kbd-cmd kbd)
+               (kbd-alt kbd)
+               (kbd-shift kbd)
+               keysym)))))
 
 (define (kbd-ctrl kbd)
   (struct-ref kbd 0))
