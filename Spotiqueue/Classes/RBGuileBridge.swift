@@ -94,11 +94,11 @@ import Foundation
         DispatchQueue.main.sync {
             switch AppDelegate.appDelegate().playerState {
                 case .Paused:
-                    return scm_string_to_symbol(scm_from_utf8_string("paused"))
+                    return scm_from_utf8_symbol("paused")
                 case .Playing:
-                    return scm_string_to_symbol(scm_from_utf8_string("playing"))
+                    return scm_from_utf8_symbol("playing")
                 case .Stopped:
-                    return scm_string_to_symbol(scm_from_utf8_string("stopped"))
+                    return scm_from_utf8_symbol("stopped")
             }
         }
     }
