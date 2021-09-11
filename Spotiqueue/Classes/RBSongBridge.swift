@@ -10,7 +10,7 @@ import Foundation
 
 @objc class RBSongBridge: NSObject {
     private static func song_to_scm_record(song: RBSpotifySong) -> SCM {
-        return scm_call_5(scm_variable_ref(scm_c_lookup("_make-song")),
+        return scm_call_5(scm_variable_ref(scm_c_lookup("make-song")),
                           scm_from_utf8_string(song.spotify_uri), // uri
                           scm_from_utf8_string(song.title), // title
                           scm_from_utf8_string(song.artist), // artist

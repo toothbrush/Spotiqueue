@@ -4,27 +4,15 @@
 ;;;
 ;;; This file is read by Spotiqueue as soon as it starts up.  It exposes some helpers and hooks for
 ;;; users.
-
-(display "guile(init.scm): Loading Spotiqueue bootstrap config...")
-(newline)
+(define-module (spotiqueue init)
+               #:declarative? #f)
 
 ;; Import some library functions
 (use-modules (ice-9 format)) ;; For a better (format ...)
 (use-modules (srfi srfi-9)) ;; For Records, https://www.gnu.org/software/guile/manual/html_node/SRFI_002d9-Records.html
+(use-modules (spotiqueue records))
 
-;; Define a song representation for callbacks
-(define-record-type <song>
-  (make-song uri title artist album duration)
-  song?
-  (uri      song-name)
-  (title    song-age)
-  (artist   song-salary)
-  (album    song-album)
-  (duration song-duration))
-
-(define (_make-song uri title artist album duration)
-  "OMG, we have this because you can't eval a macro, and make-song is a macro."
-  (make-song uri title artist album duration))
+(format #t "guile ~s: Loading Spotiqueue bootstrap config...~%" (module-name (current-module)))
 
 ;; Define the key maps
 (define global-map)

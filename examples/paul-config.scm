@@ -1,6 +1,9 @@
 ;;; This is an example of what would live in a user's config.
 (use-modules (ice-9 textual-ports)
-             (ice-9 format))
+             (ice-9 format)
+             (srfi srfi-9 gnu))
+(use-modules (spotiqueue records))
+(format #t "guile ~s: Loading paul's config.~%" (module-name (current-module)))
 
 (define (paul:formatted-time)
   (strftime "[%a %e/%b/%Y %H:%M:%S %Z]" (localtime (current-time))))
