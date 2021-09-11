@@ -33,10 +33,11 @@ int main(int argc, const char * argv[]) {
         NSBundle* mainBundle;
         // Get the main bundle for the app.
         mainBundle = [NSBundle mainBundle];
-        NSString* records_scm = [mainBundle pathForResource:@"records" ofType:@"scm"];
-        scm_c_primitive_load([records_scm UTF8String]);
-        NSString* init_scm = [mainBundle pathForResource:@"init" ofType:@"scm"];
-        scm_c_primitive_load([init_scm UTF8String]);
+        // TODO add a load path, just call init.scm, and be done with it.
+        scm_c_primitive_load([[mainBundle pathForResource:@"records" ofType:@"scm"] UTF8String]);
+        scm_c_primitive_load([[mainBundle pathForResource:@"key-constants" ofType:@"scm"] UTF8String]);
+        scm_c_primitive_load([[mainBundle pathForResource:@"keybindings" ofType:@"scm"] UTF8String]);
+        scm_c_primitive_load([[mainBundle pathForResource:@"init" ofType:@"scm"] UTF8String]);
     }
 
     return NSApplicationMain(argc, argv);

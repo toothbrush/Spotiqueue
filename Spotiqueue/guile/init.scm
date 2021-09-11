@@ -8,6 +8,7 @@
   #:use-module (ice-9 format)
   #:use-module (spotiqueue internal)
   #:use-module (spotiqueue records)
+  #:use-module (spotiqueue keybindings)
   #:declarative? #f)
 
 (format #t "guile ~s: Loading Spotiqueue bootstrap config...~%" (module-name (current-module)))
@@ -29,8 +30,8 @@
 
 ;; TODO add convenience functions for binding keys to procedures (we'll accept anything that evaluates to a Scheme procedure).
 
-(assoc-set! queue-panel-map "x" 'queue:delete-selected-tracks)
-(assoc-set! queue-panel-map "H-k" 'queue:move-selected-tracks-up)
+(assoc-set! queue-panel-map (kbd 'ANSI_X) 'queue:delete-selected-tracks)
+(assoc-set! queue-panel-map (kbd 'ANSI_K #:cmd #t) 'queue:move-selected-tracks-up)
 
 ;; Find and load a user's config, in ~/.config/spotiqueue/init.scm, if it exists.  Finding $HOME in
 ;; Guile-proper is a bit annoying, because we need to rely on it managing to work out who we're

@@ -45,8 +45,6 @@
   ;; Why doesn't hash-ref work here?!  Is it because symbols somehow "belong" to the module where
   ;; they've been defined?  Anyway, hashq-ref solves the issue for me, for now.
   (let ((keycode (hashq-ref keysym->keycode keysym)))
-    (display keycode)
-    (newline)
     (if keycode
         (make-struct/no-tail <kbd> ctrl cmd alt shift keycode)
         (raise-exception "Unknown key specified."))))
