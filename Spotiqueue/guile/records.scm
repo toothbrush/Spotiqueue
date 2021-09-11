@@ -1,3 +1,10 @@
+;;; BEGIN records.scm
+;;;
+;;; Copyright © 2021 paul at denknerd dot org
+;;;
+;;; This file contains definitions of records that are useful to users.  For example, when you
+;;; subscribe to hooks, some of them will pass you a <song> object.
+
 (define-module (spotiqueue records)
                #:use-module (srfi srfi-9)
                #:export
@@ -25,3 +32,5 @@
 (define (song-artist song) (_song-artist song))
 (define (song-album song) (_song-album song))
 (define (song-duration song) (_song-duration song))
+
+;;; END records.scm
