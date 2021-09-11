@@ -22,6 +22,16 @@ class RBQueueTableView: RBTableView {
         addTracksToQueue(from: contents)
     }
 
+    /// This function is hopefully useful for calling from Guile land. e.g.
+    ///
+    /// ```
+    /// (spotiqueue:enqueue "spotify:album:asdf" "spotify:track:1234")
+    /// ```
+    ///
+    func addTracksToQueue(from manyUris: [String]) {
+        addTracksToQueue(from: manyUris.joined(separator: "\n"))
+    }
+
     func addTracksToQueue(from contents: String) {
         AppDelegate.appDelegate().isSearching = true
         let incoming_uris = RBSpotifyAPI.sanitiseIncomingURIBlob(pasted_blob: contents)
