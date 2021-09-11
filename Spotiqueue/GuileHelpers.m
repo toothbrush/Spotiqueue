@@ -23,10 +23,18 @@ SCM _scm_false(void) {
     return SCM_BOOL_F;
 }
 
+SCM _scm_true(void) {
+    return SCM_BOOL_T;
+}
+
 SCM get_homedir(void) {
     return scm_from_utf8_string(NSHomeDirectory().UTF8String);
 }
 
 SCM current_song(void) {
     return [RBSongBridge get_current_song];
+}
+
+SCM pause_or_unpause(void) {
+    return [RBSongBridge pause_or_unpause];
 }

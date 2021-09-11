@@ -64,6 +64,13 @@ import Foundation
         hook_0(hook_name: "player-unpaused-hook")
     }
 
+    @objc static func pause_or_unpause() -> SCM {
+        DispatchQueue.main.sync {
+            AppDelegate.appDelegate().playOrPause(Self.className())
+        }
+        return _scm_true()
+    }
+
     @objc static func get_current_song() -> SCM {
         // We're liable to be calling this from a background thread.
         let song: RBSpotifySong? = DispatchQueue.main.sync {
