@@ -9,17 +9,17 @@
 #import <libguile.h>
 #import "GuileHelpers.h"
 
-static void* register_functions (void* data)
+static void register_functions (void* data)
 {
     scm_c_define_gsubr("spotiqueue:get-homedir", 0, 0, 0, &get_homedir);
     scm_c_define_gsubr("spotiqueue:current-song", 0, 0, 0, &current_song);
-    scm_display(scm_from_utf8_string("guile: Successfully booted.\n"), scm_current_output_port());
-    return NULL;
+    scm_c_export("spotiqueue:get-homedir", "spotiqueue:current-song", NULL);
+    scm_simple_format(scm_current_output_port(), scm_from_utf8_string("guile ~a: Successfully booted.~%"), scm_list_1(scm_c_eval_string("(module-name (current-module))")));
 }
 
 int main(int argc, const char * argv[]) {
     scm_init_guile();
-    scm_with_guile(&register_functions, NULL);
+    scm_c_define_module("spotiqueue internal", &register_functions, NULL);
 
     @autoreleasepool {
         NSBundle* mainBundle;

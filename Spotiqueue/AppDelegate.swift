@@ -195,7 +195,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     // Here is another extensive howto around table views and such https://www.raywenderlich.com/921-cocoa-bindings-on-macos
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
-        //scm_c_eval_string("(begin (display 'InsideAppKit) (newline))");
         loginWindow = RBLoginWindow(windowNibName: "RBLoginWindow")
         if let window = loginWindow?.window {
             self.window?.beginSheet(window, completionHandler: { [self] response in
@@ -222,7 +221,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 s.updateDurationDisplay()
             }
         }
-        
+
         self.addObserver(self, forKeyPath: "queueArrayController.arrangedObjects", options: .new, context: nil)
         self.addObserver(self, forKeyPath: "searchResultsArrayController.arrangedObjects", options: [.initial, .new], context: nil)
 
@@ -239,10 +238,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             self.queueTableView.addTracksToQueue(from: savedQueuedTracks)
         }
     }
-    
+
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         guard let keyPath = keyPath else { return }
-        
+
         if keyPath == "queueArrayController.arrangedObjects" {
             // sum up the durations and put the info into the queue heading label
             if let queueTracks = queueArrayController.arrangedObjects as? [RBSpotifySong] {
@@ -426,7 +425,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         self.filterResultsField.clearFilter()
         searchResultsArrayController.sortDescriptors = []
         searchHistory.append(.AllPlaylists)
-        
+
         spotify.api.currentUserPlaylists()
             .extendPagesConcurrently(spotify.api)
             .collectAndSortByOffset()
@@ -444,10 +443,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 self.searchTableView.selectRow(row: 0)
             })
             .store(in: &cancellables)
-        
+
         self.window.makeFirstResponder(searchTableView)
     }
-    
+
     func browseDetails(for row: RBSpotifySong, consideringHistory: Bool = true) {
         guard !self.isSearching else {
             return
@@ -475,25 +474,25 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             albumTracks(for: row.spotify_album)
         }
     }
-    
+
     private func searchPlaylistTracks(for playlist_uri: String?, withTitle title: String) {
         guard let playlist_uri = playlist_uri else {
             logger.warning("Called with nil playlist URI!  Doing nothing.")
             return
         }
-        
+
         // okay, so listing a playlist's tracks isn't strictly a free-text search, but mainly we use that to tell Spotiqueue that a followup "detail-browse" should get the album for a track, and the one after that should get the artist's entire library.
         searchHistory.append(.Playlist(title, playlist_uri))
         searchResultsArrayController.sortDescriptors = []
 
         loadPlaylistTracksInto(for: playlist_uri, in: .Search)
     }
-    
+
     enum SongList {
         case Queue
         case Search
     }
-    
+
     func loadPlaylistTracksInto(for playlist_uri: String?,
                                 in target: SongList,
                                 at_the_top: Bool = false,
@@ -502,7 +501,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             logger.warning("Called with nil playlist URI!  Doing nothing.")
             return
         }
-        
+
         spotify.api.playlistItems(playlist_uri)
             .extendPagesConcurrently(spotify.api)
             .collectAndSortByOffset()
@@ -530,7 +529,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             })
             .store(in: &cancellables)
     }
-    
+
     func insertTracks(newRows: Array<RBSpotifySong>,
                       in target: SongList,
                       at_the_top: Bool = false,
@@ -556,7 +555,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             logger.warning("Called with nil album!  Doing nothing.")
             return
         }
-        
+
         searchHistory.append(.Album(album))
         // retrieve album tracks
         spotify.api.albumTracks(
