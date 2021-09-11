@@ -5,6 +5,15 @@
 (use-modules (spotiqueue records))
 (format #t "guile ~s: Loading paul's config.~%" (module-name (current-module)))
 
+(set-record-type-printer! <song>
+                          (lambda (record port)
+                            (format port
+                                    "~a ~a - ~a (~a)"
+                                    (song-uri record)
+                                    (song-artist record)
+                                    (song-title record)
+                                    (song-album record))))
+
 (define (paul:formatted-time)
   (strftime "[%a %e/%b/%Y %H:%M:%S %Z]" (localtime (current-time))))
 
