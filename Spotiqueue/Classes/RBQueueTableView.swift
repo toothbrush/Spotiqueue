@@ -151,6 +151,12 @@ class RBQueueTableView: RBTableView {
 
     override func keyDown(with event: NSEvent) {
         let flags = event.modifierFlags.intersection(.deviceIndependentFlagsMask).subtracting([.function, .numericPad])
+
+        if RBGuileBridge.guile_handle_key(keycode: event.keyCode) {
+            // If a key is bound in a Guile script, that takes precedence, so we want to bail out here.  Otherwise, continue and execute the default "hard-coded" keybindings.
+            return
+        }
+
         if event.keyCode == kVK_Return
             && flags.isEmpty { // Enter/Return key
             enter()

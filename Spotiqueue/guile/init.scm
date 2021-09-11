@@ -14,9 +14,9 @@
 (format #t "guile ~s: Loading Spotiqueue bootstrap config...~%" (module-name (current-module)))
 
 ;; Define the key maps
-(define global-map)
-(define queue-panel-map)
-(define search-panel-map)
+(define global-map (make-hash-table 10))
+(define queue-panel-map (make-hash-table 10))
+(define search-panel-map (make-hash-table 10))
 
 ;; Define the hooks.  The single argument is a <song> record.
 (define player-started-hook (make-hook 1))
@@ -24,14 +24,17 @@
 (define player-paused-hook (make-hook 0))
 (define player-unpaused-hook (make-hook 0))
 
-;; This is what we want the API to look like, eventually:
-;; (define-key queue-panel-map "x" 'queue:delete-selected-tracks)
-;; (define-key queue-panel-map "H-k" 'queue:move-selected-tracks-up)
+;; TODO Check that arguments to define-key are reasonable.
+(define (define-key map key action)
+  (hash-set! map key action))
 
-;; TODO add convenience functions for binding keys to procedures (we'll accept anything that evaluates to a Scheme procedure).
+(define (no-op)
+  (display "Key pressed, no-op bound.\n"))
 
-(assoc-set! queue-panel-map (kbd 'ANSI_X) 'queue:delete-selected-tracks)
-(assoc-set! queue-panel-map (kbd 'ANSI_K #:cmd #t) 'queue:move-selected-tracks-up)
+(define-key queue-panel-map (kbd 'ANSI_X)          'no-op)
+(define-key queue-panel-map (kbd 'ANSI_K #:cmd #t) 'no-op)
+;; (define-key queue-panel-map (kbd 'ANSI_X)          'queue:delete-selected-tracks)
+;; (define-key queue-panel-map (kbd 'ANSI_K #:cmd #t) 'queue:move-selected-tracks-up)
 
 ;; Find and load a user's config, in ~/.config/spotiqueue/init.scm, if it exists.  Finding $HOME in
 ;; Guile-proper is a bit annoying, because we need to rely on it managing to work out who we're

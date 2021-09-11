@@ -46,3 +46,14 @@ SCM next_song(void) {
 SCM player_state(void) {
     return [RBGuileBridge get_player_state];
 }
+
+SCM key_to_guile_struct(UInt16 keycode) {
+    SCM vtable = scm_variable_ref(scm_c_lookup("<kbd>"));
+    return scm_make_struct_no_tail(vtable,
+                                   scm_list_5(_scm_false(), // ctrl
+                                              _scm_false(), // command
+                                              _scm_false(), // alt
+                                              _scm_false(), // shift
+                                              scm_from_unsigned_integer(keycode))
+                                   );
+}

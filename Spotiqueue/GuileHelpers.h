@@ -20,5 +20,6 @@ SCM current_song(void);
 SCM pause_or_unpause(void);
 SCM next_song(void);
 SCM player_state(void);
+SCM key_to_guile_struct(UInt16 keycode);
 
 NS_ASSUME_NONNULL_END

@@ -102,4 +102,22 @@ import Foundation
             }
         }
     }
+    
+    static func guile_handle_key(keycode: UInt16) -> Bool {
+        // TODO handle all the modifiers, and allow different keymaps.
+        let guile_key = key_to_guile_struct(keycode)
+        let action: SCM = scm_hash_ref(scm_variable_ref(scm_c_lookup("queue-panel-map")),
+                                       guile_key,
+                                       _scm_false())
+        
+        if(!_scm_is_true(action)) {
+            scm_simple_format(_scm_true(),
+                              scm_from_utf8_string("~a not bound by user.~%"),
+                              scm_list_1(guile_key))
+            return false
+        }
+
+        scm_call_0(scm_eval(action, scm_current_module()))
+        return true
+    }
 }
