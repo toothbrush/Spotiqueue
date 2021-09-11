@@ -42,3 +42,7 @@ SCM pause_or_unpause(void) {
 SCM next_song(void) {
     return scm_from_bool([RBSongBridge next_song]);
 }
+
+SCM player_state(void) {
+    return [RBSongBridge get_player_state];
+}

@@ -89,4 +89,17 @@ import Foundation
             return _scm_false()
         }
     }
+
+    @objc static func get_player_state() -> SCM {
+        DispatchQueue.main.sync {
+            switch AppDelegate.appDelegate().playerState {
+                case .Paused:
+                    return scm_string_to_symbol(scm_from_utf8_string("paused"))
+                case .Playing:
+                    return scm_string_to_symbol(scm_from_utf8_string("playing"))
+                case .Stopped:
+                    return scm_string_to_symbol(scm_from_utf8_string("stopped"))
+            }
+        }
+    }
 }
