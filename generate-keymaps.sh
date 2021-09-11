@@ -126,6 +126,10 @@ EOF
 
 while read in; do
     echo "${in}" \
-        | perl -ne '/(kVK_([^: ]+)):/ && print "print(\"(hashq-set! keycode->sym \\($1) (quote $2))\")\n";'
+        | perl -ne '/(kVK_([^: ]+)):/ && print "print(\"(hashq-set! keycode->keysym \\($1) (quote $2))\")\n";'
+done <<< "${data}"
 
+while read in; do
+    echo "${in}" \
+        | perl -ne '/(kVK_([^: ]+)):/ && print "print(\"(hashq-set! keysym->keycode (quote $2) \\($1))\")\n";'
 done <<< "${data}"
