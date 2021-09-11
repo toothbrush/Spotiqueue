@@ -34,7 +34,7 @@ public func player_update_hook(hook: StatusUpdate, position_ms: UInt32, duration
                 AppDelegate.appDelegate().position = 0
                 AppDelegate.appDelegate().duration = 0
                 AppDelegate.appDelegate().endOfTrack() // Fire off Guile hook.
-                AppDelegate.appDelegate().playNextQueuedTrack()
+                _ = AppDelegate.appDelegate().playNextQueuedTrack()
             }
         case Paused:
             DispatchQueue.main.async{
@@ -172,7 +172,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // spotify.api.currentUserSavedTracks()
     }
     @IBAction func nextSongButtonPressed(_ sender: Any) {
-        self.playNextQueuedTrack()
+        _ = self.playNextQueuedTrack()
     }
 
     @IBAction func filterFieldAction(_ sender: Any) {
@@ -546,7 +546,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
 
         if and_then_advance {
-            self.playNextQueuedTrack()
+            _ = self.playNextQueuedTrack()
         }
     }
 
@@ -730,9 +730,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         RBSongBridge.player_endoftrack_hook(song: previousSong)
     }
 
-    func playNextQueuedTrack() {
+    func playNextQueuedTrack() -> Bool {
         guard let nextTrack = queue.first else {
-            return
+            return false
         }
         self.currentSong = nextTrack
         spotiqueue_play_track(self.currentSong!.spotify_uri)
@@ -745,6 +745,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             self.albumImage.imageFromServerURL(image.url.absoluteString, placeHolder: nil)
         }
         queue.remove(at: 0)
+        return true
     }
 
     func preloadNextQueuedTrack() {

@@ -17,7 +17,7 @@
 (define queue-panel-map)
 (define search-panel-map)
 
-;; Define the hooks
+;; Define the hooks.  The single argument is a <song> record.
 (define player-started-hook (make-hook 1))
 (define player-endoftrack-hook (make-hook 1))
 (define player-paused-hook (make-hook 0))

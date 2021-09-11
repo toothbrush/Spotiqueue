@@ -90,7 +90,7 @@ class RBQueueTableView: RBTableView {
             return
         }
         AppDelegate.appDelegate().queue.removeFirst(self.selectedRow)
-        AppDelegate.appDelegate().playNextQueuedTrack()
+        _ = AppDelegate.appDelegate().playNextQueuedTrack()
     }
 
     func delete() {
