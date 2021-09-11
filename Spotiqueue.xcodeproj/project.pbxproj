@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		DA19341726E9A06F00BEC661 /* RBSongBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA19341626E9A06F00BEC661 /* RBSongBridge.swift */; };
+		DA19341726E9A06F00BEC661 /* RBGuileBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA19341626E9A06F00BEC661 /* RBGuileBridge.swift */; };
 		DA2E89A026E9E779003BF91C /* GuileHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = DA2E899F26E9E779003BF91C /* GuileHelpers.m */; };
 		DA2E89D626EC3ADF003BF91C /* records.scm in Resources */ = {isa = PBXBuildFile; fileRef = DA2E89D326EC3ADF003BF91C /* records.scm */; };
 		DA2E89F326EC6741003BF91C /* keybindings.scm in Resources */ = {isa = PBXBuildFile; fileRef = DA2E89F226EC6741003BF91C /* keybindings.scm */; };
@@ -74,7 +74,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		DA19341626E9A06F00BEC661 /* RBSongBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RBSongBridge.swift; sourceTree = "<group>"; };
+		DA19341626E9A06F00BEC661 /* RBGuileBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RBGuileBridge.swift; sourceTree = "<group>"; };
 		DA2E899E26E9E779003BF91C /* GuileHelpers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GuileHelpers.h; sourceTree = "<group>"; };
 		DA2E899F26E9E779003BF91C /* GuileHelpers.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GuileHelpers.m; sourceTree = "<group>"; };
 		DA2E89D326EC3ADF003BF91C /* records.scm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = records.scm; sourceTree = "<group>"; };
@@ -173,7 +173,7 @@
 				DA5AFB0D26565CD300C6C468 /* RBSpotifyAPI.swift */,
 				DABEC90C2653534300CA3F67 /* RBSpotifySong.swift */,
 				DACA708D268EA0D5009714DC /* RBFilterField.swift */,
-				DA19341626E9A06F00BEC661 /* RBSongBridge.swift */,
+				DA19341626E9A06F00BEC661 /* RBGuileBridge.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -373,7 +373,7 @@
 				DACA708E268EA0D5009714DC /* RBFilterField.swift in Sources */,
 				DA5AFB2D265A86FD00C6C468 /* RBTableView.swift in Sources */,
 				DA4F1AA926E61BDD00952E8F /* main.m in Sources */,
-				DA19341726E9A06F00BEC661 /* RBSongBridge.swift in Sources */,
+				DA19341726E9A06F00BEC661 /* RBGuileBridge.swift in Sources */,
 				DAFAB407265D1BE90096810C /* NSImageViewExtensions.swift in Sources */,
 				DA343EDF26621394000980E2 /* FormatterExtensions.swift in Sources */,
 				DA343EE1266213B6000980E2 /* TimeIntervalExtensions.swift in Sources */,

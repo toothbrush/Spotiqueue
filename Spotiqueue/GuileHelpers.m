@@ -32,17 +32,17 @@ SCM get_homedir(void) {
 }
 
 SCM current_song(void) {
-    return [RBSongBridge get_current_song];
+    return [RBGuileBridge get_current_song];
 }
 
 SCM pause_or_unpause(void) {
-    return [RBSongBridge pause_or_unpause];
+    return [RBGuileBridge pause_or_unpause];
 }
 
 SCM next_song(void) {
-    return scm_from_bool([RBSongBridge next_song]);
+    return scm_from_bool([RBGuileBridge next_song]);
 }
 
 SCM player_state(void) {
-    return [RBSongBridge get_player_state];
+    return [RBGuileBridge get_player_state];
 }

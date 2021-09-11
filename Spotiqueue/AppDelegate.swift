@@ -714,10 +714,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             case .Stopped:
                 return
             case .Playing:
-                RBSongBridge.player_paused_hook()
+                RBGuileBridge.player_paused_hook()
                 spotiqueue_pause_playback()
             case .Paused:
-                RBSongBridge.player_unpaused_hook()
+                RBGuileBridge.player_unpaused_hook()
                 spotiqueue_unpause_playback()
         }
     }
@@ -727,7 +727,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             logger.error("AppDelegate.endOfTrack called but self.currentSong == nil!")
             return
         }
-        RBSongBridge.player_endoftrack_hook(song: previousSong)
+        RBGuileBridge.player_endoftrack_hook(song: previousSong)
     }
 
     func playNextQueuedTrack() -> Bool {
@@ -736,7 +736,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         self.currentSong = nextTrack
         spotiqueue_play_track(self.currentSong!.spotify_uri)
-        RBSongBridge.player_playing_hook(song: self.currentSong!)
+        RBGuileBridge.player_playing_hook(song: self.currentSong!)
         self.albumTitleLabel.cell?.title = nextTrack.album
         self.songTitleLabel.cell?.title = nextTrack.prettyArtistDashTitle()
 
