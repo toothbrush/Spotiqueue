@@ -38,8 +38,7 @@
   (if (not (song? song))
       (error "eek, not a song!"))
   (begin
-    (format #t "end of track: ~s" song)
-    (newline)))
+    (format #t "end of track: ~s~%" song)))
 
 (define (paul:paused)
   (display "guile: Paused.\n"))

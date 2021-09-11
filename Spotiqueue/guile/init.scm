@@ -45,12 +45,10 @@
     (format #t "Looking for user config in: ~a... " user-config-file)
     (if (stat user-config-file #f)
         (begin
-          (display "found!")
-          (newline)
+          (format #t "found!~%")
           (load user-config-file))
         (begin
-          (display "FAIL")
-          (newline)
+          (format #t "FAIL!~%")
           (display "User-config file doesn't exist, skipping.")
           (newline)))))
 
