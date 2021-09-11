@@ -25,6 +25,8 @@ int main(int argc, const char * argv[]) {
         NSBundle* mainBundle;
         // Get the main bundle for the app.
         mainBundle = [NSBundle mainBundle];
+        NSString* records_scm = [mainBundle pathForResource:@"records" ofType:@"scm"];
+        scm_c_primitive_load([records_scm UTF8String]);
         NSString* init_scm = [mainBundle pathForResource:@"init" ofType:@"scm"];
         scm_c_primitive_load([init_scm UTF8String]);
     }
