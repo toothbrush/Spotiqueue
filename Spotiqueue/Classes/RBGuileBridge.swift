@@ -117,7 +117,7 @@ import Foundation
     @objc static func queue_delete_selected_tracks() -> SCM {
         // I go through this song-and-dance because i expect actions from Scheme world to mostly be triggered by keypresses which originate on the Main thread.  So, we can't be saying dispatch-on-main-sync, because that causes a deadlock.  However, if we've connected to Scheme from, say, Emacs, we'll be on a background thread, and in that case we probably want the actions to be blocking so that our user knows when the action has completed (for example, they might be waiting for the queue to be successfully be cleared before enqueueing something new.
         block_on_main {
-            AppDelegate.appDelegate().queueTableView.delete()
+            AppDelegate.appDelegate().queueTableView.delete_selected_tracks()
             return _scm_true()
         }
     }

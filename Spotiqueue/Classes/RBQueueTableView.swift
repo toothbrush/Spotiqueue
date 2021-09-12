@@ -103,7 +103,7 @@ class RBQueueTableView: RBTableView {
         _ = AppDelegate.appDelegate().playNextQueuedTrack()
     }
 
-    func delete() {
+    func delete_selected_tracks() {
         guard self.selectedRowIndexes.count > 0 else {
             NSSound.beep()
             return
