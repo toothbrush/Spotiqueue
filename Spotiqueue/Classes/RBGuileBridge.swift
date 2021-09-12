@@ -54,8 +54,10 @@ import Foundation
         }
     }
 
-    static func selection_copied_hook(copied: Int) {
-        hook_1(hook_name: "selection-copied-hook", arg1: scm_from_int32(Int32(copied)))
+    // TODO don't include "artist" in pretty-for-copy of playlists
+    static func selection_copied_hook(copied: [String]) {
+        let args: SCM = _scm_list_of_strings(copied)
+        hook_1(hook_name: "selection-copied-hook", arg1: args)
     }
 
     static func player_playing_hook(song: RBSpotifySong) {

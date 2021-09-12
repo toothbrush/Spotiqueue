@@ -35,6 +35,20 @@ SCM current_song(void) {
     return [RBGuileBridge get_current_song];
 }
 
+SCM _scm_list_of_strings(NSArray* strings) {
+    SCM lst = scm_make_list(scm_from_uint64([strings count]),
+                            SCM_UNDEFINED);
+
+    int32_t pos = 0;
+    for (NSString* s in strings) {
+        NSLog(@"string -> %@", s);
+        scm_list_set_x(lst, scm_from_int32(pos), scm_from_utf8_string([s UTF8String]));
+        pos++;
+    }
+
+    return lst;
+}
+
 SCM pause_or_unpause(void) {
     return [RBGuileBridge pause_or_unpause];
 }

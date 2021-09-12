@@ -13,6 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 // We only need to expose things we'll actually be calling from outside of GuileHelpers.
 SCM _scm_empty_list(void);
+SCM _scm_list_of_strings(NSArray* strings);
 bool _scm_is_true(SCM value);
 SCM _scm_false(void);
 SCM _scm_true(void);

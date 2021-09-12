@@ -4,7 +4,8 @@
              (ice-9 format)
              (ice-9 popen)
              (ice-9 receive)
-             (srfi srfi-9 gnu))
+             (srfi srfi-9 gnu)
+             (texinfo string-utils))
 (use-modules (spotiqueue records))
 (format #t "guile ~s: Loading paul's config.~%" (module-name (current-module)))
 
@@ -59,14 +60,21 @@
 (add-hook! player-unpaused-hook paul:unpaused)
 
 ;; Don't do this!
+;; TODO run hooks on a background thread.
 ;; (add-hook! selection-copied-hook (lambda (itms) (sleep 5)))
 
 (add-hook! selection-copied-hook
            (lambda (itms)
              (begin
-               (format #t "Copied ~d items.~%" itms)
-               (let* ((message (format #f "~c Copied ~d items ~c" (integer->char #x1F4BF) itms (integer->char #x1f3b5)))
-                      (commands `(("/usr/local/bin/hs" "-c" ,(format #f "hs.alert.show(\"~a\")" message)))))
+               (let* ((message (format #f
+                                       "~c Copied \"\"~d\" items ~c"
+                                       (integer->char #x1F4BF)
+                                       (length itms)
+                                       (integer->char #x1f3b5)))
+                      ;; Okay it's not great but i'm escaping quotes so that it remains valid Lua code...
+                      (hs-alert (format #f "hs.alert.show(\"~a\")" (escape-special-chars message #\" #\\)))
+                      (commands `(("/usr/local/bin/hs" "-c" ,hs-alert))))
+                 (format #t "~a~%" message)
                  (receive (from to pids) (pipeline commands)
                    (close to)
                    (close from))))))
