@@ -177,7 +177,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     @IBAction func filterFieldAction(_ sender: Any) {
         self.window.makeFirstResponder(self.searchTableView)
-        self.searchTableView.selectRow(row: 0)
+        if self.searchTableView.selectedRowIndexes.isEmpty {
+            self.searchTableView.selectRow(row: 0)
+        }
     }
 
     var spotify: RBSpotifyAPI = RBSpotifyAPI()
@@ -291,9 +293,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             retrieveAllPlaylists()
         } else if flags.isEmpty
                     && event.keyCode == kVK_Escape {
-            if self.window.firstResponder == self.filterResultsField.currentEditor() {
+            if (self.window.firstResponder == self.searchTableView && !self.isSearching)
+                || self.window.firstResponder == self.filterResultsField.currentEditor() {
                 // Esc should probably cancel the local filtering, too.
                 self.filterResultsField.clearFilter()
+                self.searchTableView.scrollRowToVisible(self.searchTableView.selectedRow)
                 self.window.makeFirstResponder(self.searchTableView)
             } else {
                 cancellables.forEach { $0.cancel() }
