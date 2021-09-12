@@ -16,6 +16,7 @@ SCM _scm_empty_list(void);
 bool _scm_is_true(SCM value);
 SCM _scm_false(void);
 SCM _scm_true(void);
+SCM _scm_to_bool(bool x);
 SCM key_to_guile_struct(UInt16 keycode, bool ctrl, bool command, bool alt, bool shift);
 
 void register_funcs_objc(void);

@@ -39,8 +39,12 @@ SCM pause_or_unpause(void) {
     return [RBGuileBridge pause_or_unpause];
 }
 
+SCM _scm_to_bool(bool x) {
+    return scm_from_bool(x);
+}
+
 SCM next_song(void) {
-    return scm_from_bool([RBGuileBridge next_song]);
+    return [RBGuileBridge next_song];
 }
 
 SCM player_state(void) {
@@ -58,17 +62,23 @@ SCM key_to_guile_struct(UInt16 keycode, bool ctrl, bool command, bool alt, bool 
                                    );
 }
 
+SCM queue_delete_selected(void) {
+    return [RBGuileBridge queue_delete_selected_tracks];
+}
+
 void register_funcs_objc(void) {
     scm_c_define_gsubr("player:homedir", 0, 0, 0, &get_homedir);
     scm_c_define_gsubr("player:current-song", 0, 0, 0, &current_song);
     scm_c_define_gsubr("player:toggle-pause", 0, 0, 0, &pause_or_unpause);
     scm_c_define_gsubr("player:next", 0, 0, 0, &next_song);
     scm_c_define_gsubr("player:state", 0, 0, 0, &player_state);
+    scm_c_define_gsubr("queue:delete-selected-tracks", 0, 0, 0, &queue_delete_selected);
     scm_c_export("player:homedir",
                  "player:current-song",
                  "player:toggle-pause",
                  "player:next",
                  "player:state",
+                 "queue:delete-selected-tracks",
                  NULL);
     scm_simple_format(scm_current_output_port(), scm_from_utf8_string("guile ~a: Successfully booted.~%"), scm_list_1(scm_c_eval_string("(module-name (current-module))")));
 }
