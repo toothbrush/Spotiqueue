@@ -23,8 +23,9 @@
 
 * Little Credits or Help screen
 
-* Idea: backspace in search window takes you "up" a detail level if
-  you've done a detail browse. AKA "show previous search results".
+* Idea: backspace in search window takes you "up" a detail level if you've done a detail browse. AKA
+  "show previous search results".  One approach could be to store the list of tracks returned by
+  various searches, up to e.g. 10 ago.
 
 ## Things i can't do much about
 
