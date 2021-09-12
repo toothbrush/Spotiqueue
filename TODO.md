@@ -6,6 +6,8 @@
 
 * Media keys, globally - meh use Hammerspoon
 
+* Allow filtering search results through a hook.  E.g., never listen to Coldplay.
+
 * Create playlist:
 
     * Initially simply create from queue contents, but it'd be nice to have a way (from Guile) to
@@ -18,6 +20,12 @@
   and the edge of the view.
 
 * Little Credits or Help screen
+
+* Documentation for Guile interface.
+
+* Bug: tracks with UTF-8 in titles get persisted to disk with ??
+
+* Bug: cannot use UTF-8 directly in source.
 
 * Idea: backspace in search window takes you "up" a detail level if you've done a detail browse. AKA
   "show previous search results".  One approach could be to store the list of tracks returned by
