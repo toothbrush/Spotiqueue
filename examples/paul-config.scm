@@ -26,7 +26,7 @@
     (put-string file text)
     (close-port file)))
 
-(define my-homedir (player:homedir))
+(define my-homedir (getenv "HOME"))
 
 (define (paul:player-started song)
   (if (not (song? song))
