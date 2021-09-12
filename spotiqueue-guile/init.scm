@@ -39,9 +39,6 @@
 (define (define-key map key action)
   (hash-set! map key action))
 
-(define (no-op)
-  (display "Key pressed, no-op bound.\n"))
-
 (define-key queue-panel-map (kbd 'ANSI_X)        'queue:delete-selected-tracks)
 (define-key queue-panel-map (kbd 'ANSI_D)        'queue:delete-selected-tracks)
 (define-key queue-panel-map (kbd 'Delete)        'queue:delete-selected-tracks)
