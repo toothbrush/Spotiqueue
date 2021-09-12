@@ -37,9 +37,11 @@
 (define (no-op)
   (display "Key pressed, no-op bound.\n"))
 
-(define-key queue-panel-map (kbd 'ANSI_X)          'no-op)
-(define-key queue-panel-map (kbd 'ANSI_K #:cmd #t) 'no-op)
-;; (define-key queue-panel-map (kbd 'ANSI_X)          'queue:delete-selected-tracks)
+(define-key queue-panel-map (kbd 'ANSI_X)        'queue:delete-selected-tracks)
+(define-key queue-panel-map (kbd 'ANSI_D)        'queue:delete-selected-tracks)
+(define-key queue-panel-map (kbd 'Delete)        'queue:delete-selected-tracks)
+(define-key queue-panel-map (kbd 'ForwardDelete) 'queue:delete-selected-tracks)
+
 ;; (define-key queue-panel-map (kbd 'ANSI_K #:cmd #t) 'queue:move-selected-tracks-up)
 
 ;; Find and load a user's config, in ~/.config/spotiqueue/init.scm, if it exists.  Finding $HOME in

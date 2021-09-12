@@ -164,12 +164,6 @@ class RBQueueTableView: RBTableView {
         if event.keyCode == kVK_Return
             && flags.isEmpty { // Enter/Return key
             enter()
-        } else if (event.keyCode == kVK_Delete         // Backspace
-                    || event.keyCode == kVK_ForwardDelete   // Delete
-                    || event.characters == "x"
-                    || event.characters == "d")
-                    && flags.isEmpty {
-            delete()
         } else if event.keyCode == kVK_DownArrow       // down arrow
                     && flags == [.command] {
             moveSelectionDown()
