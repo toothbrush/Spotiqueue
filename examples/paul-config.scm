@@ -22,7 +22,7 @@
     (put-string file text)
     (close-port file)))
 
-(define my-homedir (spotiqueue:get-homedir))
+(define my-homedir (player:homedir))
 
 (define (paul:player-started song)
   (if (not (song? song))

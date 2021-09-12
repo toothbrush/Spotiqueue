@@ -25,7 +25,7 @@ class RBQueueTableView: RBTableView {
     /// This function is hopefully useful for calling from Guile land. e.g.
     ///
     /// ```
-    /// (spotiqueue:enqueue "spotify:album:asdf" "spotify:track:1234")
+    /// (enqueue "spotify:album:asdf" "spotify:track:1234")
     /// ```
     ///
     func addTracksToQueue(from manyUris: [String]) {
@@ -39,7 +39,7 @@ class RBQueueTableView: RBTableView {
             AppDelegate.appDelegate().isSearching = false
             return
         }
-        
+
         if incoming_uris.allSatisfy({ $0.uri.hasPrefix("spotify:track:") }) {
             // we can use the fancy batching-fetch-songs mechanism.
             var stub_songs: [RBSpotifySong] = []
@@ -50,7 +50,7 @@ class RBQueueTableView: RBTableView {
                 )
             }
             AppDelegate.appDelegate().queueArrayController.add(contentsOf: stub_songs)
-            
+
             AppDelegate.appDelegate().runningTasks = Int((Double(stub_songs.count) / 50.0).rounded(.up))
             for chunk in stub_songs.chunked(size: 50) {
                 AppDelegate.appDelegate().spotify.api.tracks(chunk.map({ $0.spotify_uri }))
@@ -92,7 +92,7 @@ class RBQueueTableView: RBTableView {
                 .store(in: &cancellables)
         }
     }
-    
+
     func enter() {
         guard self.selectedRowIndexes.count == 1 else {
             logger.info("hmm, enter pressed on non-single track selection..")

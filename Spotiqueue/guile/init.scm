@@ -41,7 +41,7 @@
 ;; running as, and fishing the info out of /etc/passwd (!).  This works well when running Guile in a
 ;; terminal, but fails in a graphical app.  Likely $UID isn't set?  Anyway we just lean on
 ;; Objective-C to give us the user's home here.
-(let* ((homedir (spotiqueue:get-homedir))
+(let* ((homedir (player:homedir))
        (user-config-file (string-append homedir "/.config/spotiqueue/init.scm")))
   (begin
     (format #t "Looking for user config in: ~a... " user-config-file)
