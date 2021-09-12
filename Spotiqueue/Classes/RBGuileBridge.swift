@@ -105,7 +105,7 @@ import Foundation
     
     static func guile_handle_key(keycode: UInt16) -> Bool {
         // TODO handle all the modifiers, and allow different keymaps.
-        let guile_key = key_to_guile_struct(keycode)
+        let guile_key = key_to_guile_struct(keycode, false, false, false, false)
         let action: SCM = scm_hash_ref(scm_variable_ref(scm_c_lookup("queue-panel-map")),
                                        guile_key,
                                        _scm_false())

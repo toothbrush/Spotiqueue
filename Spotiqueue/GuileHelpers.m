@@ -47,7 +47,7 @@ SCM player_state(void) {
     return [RBGuileBridge get_player_state];
 }
 
-SCM key_to_guile_struct(UInt16 keycode) {
+SCM key_to_guile_struct(UInt16 keycode, bool ctrl, bool command, bool alt, bool shift) {
     SCM vtable = scm_variable_ref(scm_c_lookup("<kbd>"));
     return scm_make_struct_no_tail(vtable,
                                    scm_list_5(scm_from_unsigned_integer(keycode),
@@ -56,4 +56,20 @@ SCM key_to_guile_struct(UInt16 keycode) {
                                               _scm_false(), // alt
                                               _scm_false()) // shift
                                    );
+}
+
+void register_funcs_objc(void) {
+    scm_c_define_gsubr("spotiqueue:get-homedir", 0, 0, 0, &get_homedir);
+    scm_c_define_gsubr("spotiqueue:current-song", 0, 0, 0, &current_song);
+    scm_c_define_gsubr("spotiqueue:toggle-pause", 0, 0, 0, &pause_or_unpause);
+    scm_c_define_gsubr("spotiqueue:next", 0, 0, 0, &next_song);
+    scm_c_define_gsubr("spotiqueue:player-state", 0, 0, 0, &player_state);
+    scm_c_export("spotiqueue:get-homedir",
+                 "spotiqueue:current-song",
+                 "spotiqueue:toggle-pause",
+                 "spotiqueue:next",
+                 "spotiqueue:player-state",
+                 NULL);
+    scm_simple_format(scm_current_output_port(), scm_from_utf8_string("guile ~a: Successfully booted.~%"), scm_list_1(scm_c_eval_string("(module-name (current-module))")));
+
 }

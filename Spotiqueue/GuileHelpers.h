@@ -11,15 +11,13 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+// We only need to expose things we'll actually be calling from outside of GuileHelpers.
 SCM _scm_empty_list(void);
 bool _scm_is_true(SCM value);
 SCM _scm_false(void);
 SCM _scm_true(void);
-SCM get_homedir(void);
-SCM current_song(void);
-SCM pause_or_unpause(void);
-SCM next_song(void);
-SCM player_state(void);
-SCM key_to_guile_struct(UInt16 keycode);
+SCM key_to_guile_struct(UInt16 keycode, bool ctrl, bool command, bool alt, bool shift);
+
+void register_funcs_objc(void);
 
 NS_ASSUME_NONNULL_END
