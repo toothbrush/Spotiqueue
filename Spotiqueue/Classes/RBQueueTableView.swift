@@ -152,7 +152,11 @@ class RBQueueTableView: RBTableView {
     override func keyDown(with event: NSEvent) {
         let flags = event.modifierFlags.intersection(.deviceIndependentFlagsMask).subtracting([.function, .numericPad])
 
-        if RBGuileBridge.guile_handle_key(keycode: event.keyCode) {
+        if RBGuileBridge.guile_handle_key(keycode: event.keyCode,
+                                          control: flags.contains(.control),
+                                          command: flags.contains(.command),
+                                          alt: flags.contains(.option),
+                                          shift: flags.contains(.shift)) {
             // If a key is bound in a Guile script, that takes precedence, so we want to bail out here.  Otherwise, continue and execute the default "hard-coded" keybindings.
             return
         }
