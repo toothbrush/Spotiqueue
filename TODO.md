@@ -2,11 +2,10 @@
 
 * checkbox or something, indicating whether to auto-advance.
 
-* little transparent toaster telling you what you've copied to clipboard
+* little transparent toaster telling you what you've copied to clipboard - maybe use hammerspoon or
+  something else external.  We do need a hook, then.
 
 * Add all features to app menus for discoverability.
-
-* very quick fade in / out when pausing?
 
 * Media keys, globally - meh use Hammerspoon
 
@@ -27,6 +26,8 @@
   "show previous search results".  One approach could be to store the list of tracks returned by
   various searches, up to e.g. 10 ago.
 
+* Make `?` highlight the currently-playing track in the search results, too.
+
 ## Things i can't do much about
 
 * Leave the app idle for a long time, play a track ->
@@ -37,4 +38,5 @@
 * Automatically switch audio output sink when using Sound.prefpane.
   https://github.com/RustAudio/rodio/issues/327
 
-* Make `?` highlight the currently-playing track in the search results, too.
+* very quick fade in / out when pausing? - maybe shorten the audio buffer in librespot? Turns out
+  it's something i can't easily fix, because they also adjust audio volume per buffer chunk, grr.

@@ -55,6 +55,10 @@
 (add-hook! player-started-hook paul:player-started)
 (add-hook! player-unpaused-hook paul:unpaused)
 
+(add-hook! selection-copied-hook
+           (lambda (itms) (begin
+                        (format #t "Copied ~d items.~%" itms))))
+
 ;; TODO
 ;; (window:maximise) ; to fill screen
 

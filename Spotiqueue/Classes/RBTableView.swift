@@ -64,6 +64,7 @@ class RBTableView: NSTableView {
         if !copiedItems.isEmpty {
             pasteBoard.clearContents()
             pasteBoard.setString(copiedItems.joined(separator: "\n"), forType: NSPasteboard.PasteboardType.string)
+            RBGuileBridge.selection_copied_hook(copied: copiedItems.count)
         }
     }
     

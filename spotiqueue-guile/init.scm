@@ -30,6 +30,10 @@
 (define player-paused-hook (make-hook 0))
 (define player-unpaused-hook (make-hook 0))
 
+;; The selection-copied hook will get a count of items copied as its single argument, we might later
+;; pass the copied items represented as strings (just as they'll end up on the pasteboard).
+(define selection-copied-hook (make-hook 1))
+
 ;; TODO Check that arguments to define-key are reasonable.
 (define (define-key map key action)
   (hash-set! map key action))

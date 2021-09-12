@@ -10,6 +10,7 @@ import Foundation
 
 @objc class RBGuileBridge: NSObject {
     private static func song_to_scm_record(song: RBSpotifySong) -> SCM {
+        // Beware, _make-song is the generated record creator thing, but it's a syntax transformer which can't be called directly, so we have a wrapper function called make-song.
         return scm_call_5(scm_variable_ref(scm_c_lookup("make-song")),
                           scm_from_utf8_string(song.spotify_uri), // uri
                           scm_from_utf8_string(song.title), // title
@@ -19,14 +20,17 @@ import Foundation
     }
 
     private static func hook_with_song(hook_name: String, song: RBSpotifySong) {
+        let song_record = song_to_scm_record(song: song)
+        hook_1(hook_name: hook_name, arg1: song_record)
+    }
+
+    private static func hook_1(hook_name: String, arg1: SCM) {
         assert(Thread.isMainThread)
 
         let hook = scm_variable_ref(scm_c_lookup(hook_name))
 
         if _scm_is_true(scm_hook_p(hook)) {
-            // Beware, make-song is the generated record creator thing, but it's a syntax transformer which can't be called directly, so we have a wrapper function called _make-song.
-            let song_record = song_to_scm_record(song: song)
-            scm_run_hook(hook, scm_list_1(song_record))
+            scm_run_hook(hook, scm_list_1(arg1))
         } else {
             logger.error("Expected a hook, found instead: ")
             scm_display(hook, scm_current_output_port())
@@ -46,6 +50,10 @@ import Foundation
             scm_display(hook, scm_current_output_port())
             scm_newline(scm_current_output_port())
         }
+    }
+
+    static func selection_copied_hook(copied: Int) {
+        hook_1(hook_name: "selection-copied-hook", arg1: scm_from_int32(Int32(copied)))
     }
 
     static func player_playing_hook(song: RBSpotifySong) {
