@@ -10,8 +10,12 @@
 
 * Media keys, globally
 
-* Create playlist.. maybe? By default suggest name "Artist - Album"
-  based on first selected item?  Or based on current queue?
+* Create playlist:
+
+    * Initially simply create from queue contents, but it'd be nice to have a way (from Guile) to
+      create a playlist and add particular songs to it.
+
+    * Name could be the artist/album of the first entry?  Maybe pop up a box asking what to call it?
 
 * When moving tracks in queue consider scrolling such that there's a
   3-4 track "buffer" of not-selected tracks between the selected block
