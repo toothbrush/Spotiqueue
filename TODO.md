@@ -2,9 +2,6 @@
 
 * checkbox or something, indicating whether to auto-advance.
 
-* little transparent toaster telling you what you've copied to clipboard - maybe use hammerspoon or
-  something else external.  We do need a hook, then.
-
 * Add all features to app menus for discoverability.
 
 * Media keys, globally - meh use Hammerspoon

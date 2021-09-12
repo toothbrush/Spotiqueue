@@ -1,6 +1,9 @@
+; coding: UTF-8
 ;;; This is an example of what would live in a user's config.
 (use-modules (ice-9 textual-ports)
              (ice-9 format)
+             (ice-9 popen)
+             (ice-9 receive)
              (srfi srfi-9 gnu))
 (use-modules (spotiqueue records))
 (format #t "guile ~s: Loading paul's config.~%" (module-name (current-module)))
@@ -55,9 +58,18 @@
 (add-hook! player-started-hook paul:player-started)
 (add-hook! player-unpaused-hook paul:unpaused)
 
+;; Don't do this!
+;; (add-hook! selection-copied-hook (lambda (itms) (sleep 5)))
+
 (add-hook! selection-copied-hook
-           (lambda (itms) (begin
-                        (format #t "Copied ~d items.~%" itms))))
+           (lambda (itms)
+             (begin
+               (format #t "Copied ~d items.~%" itms)
+               (let* ((message (format #f "~c Copied ~d items ~c" (integer->char #x1F4BF) itms (integer->char #x1f3b5)))
+                      (commands `(("/usr/local/bin/hs" "-c" ,(format #f "hs.alert.show(\"~a\")" message)))))
+                 (receive (from to pids) (pipeline commands)
+                   (close to)
+                   (close from))))))
 
 ;; TODO
 ;; (window:maximise) ; to fill screen

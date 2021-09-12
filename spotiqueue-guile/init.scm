@@ -1,3 +1,4 @@
+; coding: UTF-8
 ;;; BEGIN init.scm
 ;;;
 ;;; Copyright © 2021 paul at denknerd dot org

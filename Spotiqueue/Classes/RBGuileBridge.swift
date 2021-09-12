@@ -41,6 +41,8 @@ import Foundation
     private static func hook_0(hook_name: String) {
         assert(Thread.isMainThread)
 
+        // HMMM big TODO here.  We actually shouldn't run user hooks on the Main thread, because the user may sleep(4), but we can't simply use DispatchQueue.global(qos: .userInitiated).async {}, either, since even after scm_init_guile() we aren't able to do the scm_c_lookup.  Unsure how to share state!
+
         let hook = scm_variable_ref(scm_c_lookup(hook_name))
 
         if _scm_is_true(scm_hook_p(hook)) {
