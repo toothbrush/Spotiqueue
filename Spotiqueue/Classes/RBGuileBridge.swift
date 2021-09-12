@@ -65,33 +65,34 @@ import Foundation
     }
 
     @objc static func pause_or_unpause() -> SCM {
-        DispatchQueue.main.sync {
+        block_on_main {
             AppDelegate.appDelegate().playOrPause(Self.className())
+            return _scm_true()
         }
-        return _scm_true()
     }
 
-    @objc static func next_song() -> Bool {
-        DispatchQueue.main.sync {
-            AppDelegate.appDelegate().playNextQueuedTrack()
+    @objc static func next_song() -> SCM {
+        block_on_main {
+            let success = AppDelegate.appDelegate().playNextQueuedTrack()
+            return _scm_to_bool(success)
         }
     }
 
     @objc static func get_current_song() -> SCM {
         // We're liable to be calling this from a background thread.
-        let song: RBSpotifySong? = DispatchQueue.main.sync {
-            AppDelegate.appDelegate().currentSong
-        }
+        block_on_main {
+            let song: RBSpotifySong? = AppDelegate.appDelegate().currentSong
 
-        if let song = song {
-            return song_to_scm_record(song: song)
-        } else {
-            return _scm_false()
+            if let song = song {
+                return song_to_scm_record(song: song)
+            } else {
+                return _scm_false()
+            }
         }
     }
 
     @objc static func get_player_state() -> SCM {
-        DispatchQueue.main.sync {
+        block_on_main {
             switch AppDelegate.appDelegate().playerState {
                 case .Paused:
                     return scm_from_utf8_symbol("paused")
@@ -99,6 +100,16 @@ import Foundation
                     return scm_from_utf8_symbol("playing")
                 case .Stopped:
                     return scm_from_utf8_symbol("stopped")
+            }
+        }
+    }
+
+    static func block_on_main(closure: () -> SCM) -> SCM {
+        if Thread.isMainThread {
+            return closure()
+        } else {
+            return DispatchQueue.main.sync {
+                closure()
             }
         }
     }
