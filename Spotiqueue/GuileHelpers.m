@@ -55,10 +55,11 @@ SCM key_to_guile_struct(UInt16 keycode, bool ctrl, bool command, bool alt, bool 
     SCM vtable = scm_variable_ref(scm_c_lookup("<kbd>"));
     return scm_make_struct_no_tail(vtable,
                                    scm_list_5(scm_from_unsigned_integer(keycode),
-                                              _scm_false(), // ctrl
-                                              _scm_false(), // command
-                                              _scm_false(), // alt
-                                              _scm_false()) // shift
+                                              scm_from_bool(ctrl),
+                                              scm_from_bool(command),
+                                              scm_from_bool(alt),
+                                              scm_from_bool(shift)
+                                              )
                                    );
 }
 
