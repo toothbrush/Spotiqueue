@@ -8,7 +8,7 @@
 
 * very quick fade in / out when pausing?
 
-* Media keys, globally
+* Media keys, globally - meh use Hammerspoon
 
 * Create playlist:
 
