@@ -13,6 +13,7 @@
 		DA2E8A1D26ED957A003BF91C /* records.scm in CopyFiles */ = {isa = PBXBuildFile; fileRef = DA2E89D326EC3ADF003BF91C /* records.scm */; };
 		DA2E8A1E26ED957D003BF91C /* keybindings.scm in CopyFiles */ = {isa = PBXBuildFile; fileRef = DA2E89F226EC6741003BF91C /* keybindings.scm */; };
 		DA2E8A1F26ED9580003BF91C /* key-constants.scm in CopyFiles */ = {isa = PBXBuildFile; fileRef = DA2E89FA26EC8929003BF91C /* key-constants.scm */; };
+		DA2E8A5726EF5D95003BF91C /* DateExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA2E8A5626EF5D95003BF91C /* DateExtensions.swift */; };
 		DA343EDF26621394000980E2 /* FormatterExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA343EDE26621394000980E2 /* FormatterExtensions.swift */; };
 		DA343EE1266213B6000980E2 /* TimeIntervalExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA343EE0266213B6000980E2 /* TimeIntervalExtensions.swift */; };
 		DA343EE326622367000980E2 /* SpotifyAPIExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA343EE226622367000980E2 /* SpotifyAPIExtensions.swift */; };
@@ -94,6 +95,7 @@
 		DA2E89D326EC3ADF003BF91C /* records.scm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = records.scm; sourceTree = "<group>"; };
 		DA2E89F226EC6741003BF91C /* keybindings.scm */ = {isa = PBXFileReference; lastKnownFileType = text; path = keybindings.scm; sourceTree = "<group>"; };
 		DA2E89FA26EC8929003BF91C /* key-constants.scm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "key-constants.scm"; sourceTree = "<group>"; };
+		DA2E8A5626EF5D95003BF91C /* DateExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtensions.swift; sourceTree = "<group>"; };
 		DA343EDE26621394000980E2 /* FormatterExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormatterExtensions.swift; sourceTree = "<group>"; };
 		DA343EE0266213B6000980E2 /* TimeIntervalExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeIntervalExtensions.swift; sourceTree = "<group>"; };
 		DA343EE226622367000980E2 /* SpotifyAPIExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyAPIExtensions.swift; sourceTree = "<group>"; };
@@ -175,6 +177,7 @@
 				DA343EE226622367000980E2 /* SpotifyAPIExtensions.swift */,
 				DA343EE0266213B6000980E2 /* TimeIntervalExtensions.swift */,
 				DA5AFB0F26567AB300C6C468 /* TrackExtensions.swift */,
+				DA2E8A5626EF5D95003BF91C /* DateExtensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -383,6 +386,7 @@
 				DAE1F18226534D660013704F /* AppDelegate.swift in Sources */,
 				EC9B31A82677048000E5C44B /* RBLoginWindow.swift in Sources */,
 				DA5AFB31265BB59900C6C468 /* CalendarExtensions.swift in Sources */,
+				DA2E8A5726EF5D95003BF91C /* DateExtensions.swift in Sources */,
 				DABEC90F26536F5800CA3F67 /* RBSecrets.swift in Sources */,
 				DACA708E268EA0D5009714DC /* RBFilterField.swift in Sources */,
 				DA5AFB2D265A86FD00C6C468 /* RBTableView.swift in Sources */,
@@ -550,7 +554,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 949;
+				CURRENT_PROJECT_VERSION = 950;
 				DEVELOPMENT_TEAM = QG72S9L5L3;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -590,7 +594,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 949;
+				CURRENT_PROJECT_VERSION = 950;
 				DEVELOPMENT_TEAM = QG72S9L5L3;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
