@@ -1,4 +1,3 @@
-; coding: UTF-8
 ;;; This is an example of what would live in a user's config.
 (use-modules (ice-9 textual-ports)
              (ice-9 format)
@@ -91,3 +90,5 @@
   (lambda ()
     (spawn-server (make-tcp-server-socket))) ; loopback:37146 by default
   #:unwind? #t)
+
+(format #t "yay unicode 😊 📼 ~%")

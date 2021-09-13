@@ -15,7 +15,13 @@ static void register_functions (void* data)
 }
 
 int main(int argc, const char * argv[]) {
+    // I want my emojis to work! 😂
+    // The million-dollar question is why the ; locale: .. hint at the top of the file is ignored.
+    setenv("LANG", "en_US.UTF-8", 1);
+
     scm_init_guile();
+    // For this weird guy, see https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Recognize-Coding and https://www.gnu.org/software/guile/manual/html_node/Locales.html
+    scm_setlocale(scm_from_int(LC_ALL), scm_from_utf8_string(""));
     scm_c_define_module("spotiqueue internal", &register_functions, NULL);
 
     @autoreleasepool {

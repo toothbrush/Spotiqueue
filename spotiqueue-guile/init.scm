@@ -1,4 +1,3 @@
-; coding: UTF-8
 ;;; BEGIN init.scm
 ;;;
 ;;; Copyright © 2021 paul at denknerd dot org
@@ -10,6 +9,11 @@
 ;; The reason for this is that we want to call this module (spotiqueue init), so it has to live in a
 ;; spotiqueue folder with its siblings.
 (add-to-load-path (canonicalize-path (string-append (dirname (current-filename)) file-name-separator-string "..")))
+
+;; TODO find out a way we can make this module sensibly loadable from `guile' in the shell without
+;; having Spotiqueue running...  Is that even useful?
+
+;; If i want to use this module naming scheme i should have the source files in a folder called `spotiqueue'.  Grr, there are already so many of those i'll just nest them in guile/spotiqueue i guess.
 
 (define-module (spotiqueue init)
   #:use-module (ice-9 format)
