@@ -8,6 +8,7 @@
 
 import Cocoa
 import Combine
+import SpotifyWebAPI
 
 class RBQueueTableView: RBTableView {
     var cancellables: Set<AnyCancellable> = []
@@ -169,11 +170,55 @@ class RBQueueTableView: RBTableView {
         alert.beginSheetModal(for: AppDelegate.appDelegate().window) { result in
             if result == .alertFirstButtonReturn {
                 // OK button
-                logger.info("first button")
+                let spotify = AppDelegate.appDelegate().spotify
+                logger.info(playlistNameField.stringValue.strip())
+                logger.info(String(format: "%@ created by Spotiqueue", Date().string(format: "yyyy-MM-dd")))
+                let details = PlaylistDetails(name: playlistNameField.stringValue.strip(),
+                                              isPublic: false,
+                                              isCollaborative: false,
+                                              description:
+                                                String(format: "%@ created by Spotiqueue", Date().string(format: "yyyy-MM-dd")))
+                var createdPlaylistURI = ""
+//                var createdPlaylistSnaphotId = ""
+                let itemsToAddToPlaylist: [SpotifyURIConvertible] =
+                    AppDelegate.appDelegate().queue.map { song in
+                        song.spotify_uri
+                    }
+                let publisher: AnyPublisher<Playlist<PlaylistItems>, Error> =
+                    spotify.api.currentUserProfile()
+                    .flatMap { user -> AnyPublisher<Playlist<PlaylistItems>, Error> in
+                        return spotify.api.createPlaylist(for: user.uri, details)
+                    }
+                    .flatMap { playlist -> AnyPublisher<String, Error> in
+                        createdPlaylistURI = playlist.uri
+
+                        // add tracks and episodes to the playlist
+                        return spotify.api.addToPlaylist(
+                            playlist.uri, uris: itemsToAddToPlaylist
+                        )
+                    }
+                    .flatMap { snapshotId -> AnyPublisher<Playlist<PlaylistItems>, Error> in
+                        // retrieve the playlist
+//                        createdPlaylistSnaphotId = snapshotId
+                        return spotify.api.playlist(createdPlaylistURI)
+                    }
+                    .eraseToAnyPublisher()
+
+                publisher
+                    .sink { completion in
+                        switch completion {
+                            case .failure(let error):
+                                logger.error("Couldn't create playlist: \(error.localizedDescription)")
+                            case .finished:
+                                logger.info("Done with playlist creation.")
+                        }
+                    } receiveValue: { newPlaylist in
+                        logger.info("Created playlist with snapshot id: \(newPlaylist.snapshotId)")
+                    }
+                    .store(in: &self.cancellables)
             } else {
                 // cancel button
                 logger.info("else button")
-
             }
         }
     }
