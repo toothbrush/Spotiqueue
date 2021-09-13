@@ -184,23 +184,20 @@ class RBQueueTableView: RBTableView {
                     AppDelegate.appDelegate().queue.map { song in
                         song.spotify_uri
                     }
-                let publisher: AnyPublisher<Playlist<PlaylistItems>, Error> =
+                let publisher: AnyPublisher<String, Error> =
                     spotify.api.currentUserProfile()
                     .flatMap { user -> AnyPublisher<Playlist<PlaylistItems>, Error> in
                         return spotify.api.createPlaylist(for: user.uri, details)
                     }
-                    .flatMap { playlist -> AnyPublisher<String, Error> in
+                    .flatMap { playlist -> Publishers.MergeMany<AnyPublisher<String, Error>> in
                         createdPlaylistURI = playlist.uri
 
                         // add tracks and episodes to the playlist
-                        return spotify.api.addToPlaylist(
-                            playlist.uri, uris: itemsToAddToPlaylist
-                        )
-                    }
-                    .flatMap { snapshotId -> AnyPublisher<Playlist<PlaylistItems>, Error> in
-                        // retrieve the playlist
-//                        createdPlaylistSnaphotId = snapshotId
-                        return spotify.api.playlist(createdPlaylistURI)
+                        let publishers = itemsToAddToPlaylist.chunked(size: 100).map { chunk in
+                            spotify.api.addToPlaylist(createdPlaylistURI,
+                                                      uris: chunk)
+                        }
+                        return Publishers.MergeMany(publishers)
                     }
                     .eraseToAnyPublisher()
 
@@ -212,8 +209,8 @@ class RBQueueTableView: RBTableView {
                             case .finished:
                                 logger.info("Done with playlist creation: \(createdPlaylistURI).")
                         }
-                    } receiveValue: { newPlaylist in
-                        logger.info("Updated playlist with snapshot id: \(newPlaylist.snapshotId)")
+                    } receiveValue: { snapshotId in
+                        logger.info("Updated playlist with snapshot id: \(snapshotId)")
                     }
                     .store(in: &self.cancellables)
             } else {
