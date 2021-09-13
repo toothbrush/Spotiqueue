@@ -58,8 +58,8 @@
 (add-hook! player-started-hook paul:player-started)
 (add-hook! player-unpaused-hook paul:unpaused)
 
-;; Unbind a key i don't like:
-(define-key queue-panel-map (kbd 'Delete) #nil)
+;; Unbind a key i don't like, as an example:
+(define-key queue-panel-map (kbd 'ForwardDelete) #nil)
 
 ;; Don't do this!
 ;; TODO run hooks on a background thread.
