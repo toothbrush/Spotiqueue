@@ -210,10 +210,10 @@ class RBQueueTableView: RBTableView {
                             case .failure(let error):
                                 logger.error("Couldn't create playlist: \(error.localizedDescription)")
                             case .finished:
-                                logger.info("Done with playlist creation.")
+                                logger.info("Done with playlist creation: \(createdPlaylistURI).")
                         }
                     } receiveValue: { newPlaylist in
-                        logger.info("Created playlist with snapshot id: \(newPlaylist.snapshotId)")
+                        logger.info("Updated playlist with snapshot id: \(newPlaylist.snapshotId)")
                     }
                     .store(in: &self.cancellables)
             } else {
