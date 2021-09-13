@@ -34,3 +34,5 @@
 
 * Automatically switch audio output sink when using Sound.prefpane.
   https://github.com/RustAudio/rodio/issues/327
+
+* Make `?` highlight the currently-playing track in the search results, too.
