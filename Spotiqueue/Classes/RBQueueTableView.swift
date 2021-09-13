@@ -150,6 +150,29 @@ class RBQueueTableView: RBTableView {
         }
     }
 
+    private func addItemsToPlaylist(spotify: RBSpotifyAPI,
+                                    playlist_uri: String,
+                                    items: [SpotifyURIConvertible]) {
+        // beware, this will be called in a background thread, so no UI.
+        let chunks = items.chunked(size: 100)
+        Publishers.mergeMappedRetainingOrder(chunks, mapTransform: { chunk in
+            spotify.api.addToPlaylist(playlist_uri,
+                                      uris: chunk)
+        })
+        .receive(on: RunLoop.main)
+        .sink { completion in
+            switch completion {
+                case .failure(let error):
+                    logger.error("Couldn't add batch to playlist: \(error.localizedDescription)")
+                case .finished:
+                    logger.info("Done adding chunks to playlist \(playlist_uri).")
+            }
+        } receiveValue: { snapshotIds in
+            logger.info("Updated playlist, snapshot id: \(snapshotIds)")
+        }
+        .store(in: &cancellables)
+    }
+
     func saveCurrentQueueAsPlaylist() {
         guard !AppDelegate.appDelegate().queue.isEmpty else {
             // saving an empty queue makes no sense.
@@ -179,38 +202,25 @@ class RBQueueTableView: RBTableView {
                                               description:
                                                 String(format: "%@ created by Spotiqueue", Date().string(format: "yyyy-MM-dd")))
                 var createdPlaylistURI = ""
-//                var createdPlaylistSnaphotId = ""
                 let itemsToAddToPlaylist: [SpotifyURIConvertible] =
                     AppDelegate.appDelegate().queue.map { song in
                         song.spotify_uri
                     }
-                let publisher: AnyPublisher<String, Error> =
-                    spotify.api.currentUserProfile()
-                    .flatMap { user -> AnyPublisher<Playlist<PlaylistItems>, Error> in
-                        return spotify.api.createPlaylist(for: user.uri, details)
-                    }
-                    .flatMap { playlist -> Publishers.MergeMany<AnyPublisher<String, Error>> in
-                        createdPlaylistURI = playlist.uri
 
-                        // add tracks and episodes to the playlist
-                        let publishers = itemsToAddToPlaylist.chunked(size: 100).map { chunk in
-                            spotify.api.addToPlaylist(createdPlaylistURI,
-                                                      uris: chunk)
-                        }
-                        return Publishers.MergeMany(publishers)
-                    }
-                    .eraseToAnyPublisher()
-
-                publisher
+                spotify.api.createPlaylist(for: spotify.currentUser!.uri, details)
                     .sink { completion in
                         switch completion {
                             case .failure(let error):
                                 logger.error("Couldn't create playlist: \(error.localizedDescription)")
                             case .finished:
                                 logger.info("Done with playlist creation: \(createdPlaylistURI).")
+                                self.addItemsToPlaylist(spotify: spotify,
+                                                        playlist_uri: createdPlaylistURI,
+                                                        items: itemsToAddToPlaylist)
                         }
-                    } receiveValue: { snapshotId in
-                        logger.info("Updated playlist with snapshot id: \(snapshotId)")
+                    } receiveValue: { playlist in
+                        createdPlaylistURI = playlist.uri
+                        logger.info("Created playlist, uri: \(createdPlaylistURI)")
                     }
                     .store(in: &self.cancellables)
             } else {
