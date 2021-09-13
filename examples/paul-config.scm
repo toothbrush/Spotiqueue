@@ -69,10 +69,8 @@
            (lambda (itms)
              (begin
                (let* ((message (format #f
-                                       "~c Copied \"\"~d\" items ~c"
-                                       (integer->char #x1F4BF)
-                                       (length itms)
-                                       (integer->char #x1f3b5)))
+                                       "💿 Copied ~r item~:p 🎵"
+                                       (length itms)))
                       ;; Okay it's not great but i'm escaping quotes so that it remains valid Lua code...
                       (hs-alert (format #f "hs.alert.show(\"~a\")" (escape-special-chars message #\" #\\)))
                       (commands `(("/usr/local/bin/hs" "-c" ,hs-alert))))
