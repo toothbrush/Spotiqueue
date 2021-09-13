@@ -149,6 +149,35 @@ class RBQueueTableView: RBTableView {
         }
     }
 
+    func saveCurrentQueueAsPlaylist() {
+        guard !AppDelegate.appDelegate().queue.isEmpty else {
+            // saving an empty queue makes no sense.
+            return
+        }
+        let alert = NSAlert()
+        alert.messageText = "Create Playlist"
+        alert.informativeText = "Name for new playlist:"
+        alert.alertStyle = NSAlert.Style.informational
+        let playlistNameField = NSTextField(frame: NSRect(x: 0, y: 0, width: 300, height: 24))
+        playlistNameField.stringValue = String(format: "%@ – %@",
+                                               AppDelegate.appDelegate().queue.first!.artist,
+                                               AppDelegate.appDelegate().queue.first!.album)
+        alert.accessoryView = playlistNameField
+        alert.addButton(withTitle: "OK")
+        alert.addButton(withTitle: "Cancel")
+        alert.window.initialFirstResponder = playlistNameField
+        alert.beginSheetModal(for: AppDelegate.appDelegate().window) { result in
+            if result == .alertFirstButtonReturn {
+                // OK button
+                logger.info("first button")
+            } else {
+                // cancel button
+                logger.info("else button")
+
+            }
+        }
+    }
+
     override func keyDown(with event: NSEvent) {
         let flags = event.modifierFlags.intersection(.deviceIndependentFlagsMask).subtracting([.function, .numericPad])
 

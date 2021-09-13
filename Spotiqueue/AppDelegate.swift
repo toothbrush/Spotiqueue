@@ -309,6 +309,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                     && event.keyCode == kVK_Tab
                     && self.window.firstResponder == self.filterResultsField.currentEditor() {
             self.window.makeFirstResponder(self.searchTableView)
+        } else if event.characters == "s"       // cmd-s = save current queue as playlist
+                    && flags == [.command] {
+            queueTableView.saveCurrentQueueAsPlaylist()
         } else {
             return event
         }
