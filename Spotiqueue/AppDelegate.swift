@@ -292,7 +292,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                     && event.characters == "o" {
             retrieveAllPlaylists()
         } else if flags.isEmpty
-                    && event.keyCode == kVK_Escape {
+                    && event.keyCode == kVK_Escape
+                    && self.window.sheets.isEmpty // we don't want Esc eaten up if a modal is displayed
+        {
             if (self.window.firstResponder == self.searchTableView && !self.isSearching)
                 || self.window.firstResponder == self.filterResultsField.currentEditor() {
                 // Esc should probably cancel the local filtering, too.
