@@ -54,7 +54,6 @@ import Foundation
         }
     }
 
-    // TODO don't include "artist" in pretty-for-copy of playlists
     static func selection_copied_hook(copied: [String]) {
         let args: SCM = _scm_list_of_strings(copied)
         hook_1(hook_name: "selection-copied-hook", arg1: args)
@@ -133,14 +132,14 @@ import Foundation
             return _scm_true()
         }
     }
-    
+
     static func guile_handle_key(keycode: UInt16, control: Bool, command: Bool, alt: Bool, shift: Bool) -> Bool {
         // TODO handle different keymaps.
         let guile_key = key_to_guile_struct(keycode, control, command, alt, shift)
         let action: SCM = scm_hash_ref(scm_variable_ref(scm_c_lookup("queue-panel-map")),
                                        guile_key,
                                        _scm_false())
-        
+
         if(!_scm_is_true(action)) {
             scm_simple_format(_scm_true(),
                               scm_from_utf8_string("~a not bound by user.~%"),

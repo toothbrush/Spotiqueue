@@ -116,12 +116,17 @@ final class RBSpotifySong: NSObject {
     
     // This is what we want it to look like if copied to pasteboard.
     func copyTextTrack() -> String {
+        if self.myKind == .Playlist {
+            return String(format: "%@ (%@)", self.spotify_open_link_track(), self.title)
+        }
+
         if !self.artist.isEmpty && !self.title.isEmpty {
             return String(format: "%@ (%@ – %@)", self.spotify_open_link_track(), self.artist, self.title)
         } else {
             return self.spotify_open_link_track()
         }
     }
+
     func copyTextAlbum() -> String {
         if !self.artist.isEmpty && !self.album.isEmpty {
             return String(format: "%@ (%@ – %@)", self.spotify_open_link_album(), self.artist, self.album)
