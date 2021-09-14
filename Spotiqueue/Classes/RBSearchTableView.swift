@@ -7,8 +7,11 @@
 //
 
 import Cocoa
+import Combine
+import SpotifyWebAPI
 
 class RBSearchTableView: RBTableView {
+    var cancellables: Set<AnyCancellable> = []
 
     override func associatedArrayController() -> NSArrayController {
         AppDelegate.appDelegate().searchResultsArrayController
@@ -73,8 +76,69 @@ class RBSearchTableView: RBTableView {
         } else if event.characters == "/"
                     && flags.isEmpty {
             focusFilterField()
+        } else if [kVK_Delete,
+                   kVK_ForwardDelete,
+                   kVK_ANSI_X,
+                   kVK_ANSI_D].contains(Int(event.keyCode))
+                    && flags.isEmpty {
+            attemptDeletePlaylist()
         } else {
             super.keyDown(with: event)
+        }
+    }
+
+    func attemptDeletePlaylist() {
+        guard let lastSearch = AppDelegate.appDelegate().searchHistory.last else {
+            // by definition if we've not yet searched, we can't be in "list playlists" mode.
+            return
+        }
+        switch lastSearch {
+            case .AllPlaylists:
+                if self.selectedSearchTracks().count == 1,
+                   let pl = self.selectedSearchTracks().first {
+                    deletePlaylistWithConfirmation(playlist: pl)
+                }
+            default:
+                return
+        }
+    }
+
+    func deletePlaylistWithConfirmation(playlist: RBSpotifySong) {
+        let alert = NSAlert()
+        alert.messageText = "Delete Playlist"
+        alert.informativeText = "Are you sure you want to delete this playlist?"
+        alert.alertStyle = NSAlert.Style.warning
+        let font = NSFont.systemFont(ofSize: 20, weight: .bold)
+        let attributes = [NSAttributedString.Key.font: font]
+        let playlistNameField = NSTextField(labelWithAttributedString:
+                                                NSAttributedString(string: playlist.title,
+                                                                   attributes: attributes))
+        alert.accessoryView = playlistNameField
+        alert.addButton(withTitle: "OK")
+        alert.addButton(withTitle: "Cancel")
+        alert.beginSheetModal(for: AppDelegate.appDelegate().window) { result in
+            if result == .alertFirstButtonReturn {
+                // OK button. Clear the playlist from the view, first:
+                // we can assume that one (1) playlist is highlighted, otherwise our ancestor-function wouldn't have called us.
+                let selected_row = self.selectedRow
+                AppDelegate.appDelegate().searchResults.removeAll { r in
+                    r.spotify_uri == playlist.spotify_uri
+                }
+                self.selectRow(row: selected_row)
+                // Now, actually ask Spotify to remove it.  Turns out Spotify's API doesn't have a real "delete" verb, you have to unfollow your own playlist.  Even if it's private 🤦‍♀️
+                AppDelegate.appDelegate().spotify
+                    .api
+                    .unfollowPlaylistForCurrentUser(playlist.spotify_uri)
+                    .sink { completion in
+                        switch completion {
+                            case .failure(let error):
+                                logger.error("Couldn't unfollow playlist: \(error.localizedDescription)")
+                            case .finished:
+                                logger.info("Unfollowed playlist \(playlist.spotify_uri).")
+                        }
+                    }
+                    .store(in: &self.cancellables)
+            }
         }
     }
 
