@@ -18,10 +18,6 @@
 
 * Documentation for Guile interface.
 
-* Bug: tracks with UTF-8 in titles get persisted to disk with ??
-
-* Bug: cannot use UTF-8 directly in source.
-
 * Idea: backspace in search window takes you "up" a detail level if you've done a detail browse. AKA
   "show previous search results".  One approach could be to store the list of tracks returned by
   various searches, up to e.g. 10 ago.
