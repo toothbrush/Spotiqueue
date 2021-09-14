@@ -10,13 +10,6 @@
 
 * Allow filtering search results through a hook.  E.g., never listen to Coldplay.
 
-* Create playlist:
-
-    * Initially simply create from queue contents, but it'd be nice to have a way (from Guile) to
-      create a playlist and add particular songs to it.
-
-    * Name could be the artist/album of the first entry?  Maybe pop up a box asking what to call it?
-
 * When moving tracks in queue consider scrolling such that there's a
   3-4 track "buffer" of not-selected tracks between the selected block
   and the edge of the view.

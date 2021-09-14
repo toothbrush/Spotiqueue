@@ -150,27 +150,43 @@ class RBQueueTableView: RBTableView {
         }
     }
 
+    let ADD_TO_PLAYLIST_CHUNKSIZE: Int = 100 // The maximum supported by the Spotify API.
+    /*
+     It's not beautiful, but i had immense trouble with a) chunking a bunch of tracks and adding them one after the other to a playlist.  Using MergeMany still resulted in jumbled playlists, perhaps because the Spotify API doesn't like being hit that quickly in succession.  Anyway this "tail recursive" approach is a bit of an abomination (special callout for the 2s delay) but at least it's reliable.
+     */
     private func addItemsToPlaylist(spotify: RBSpotifyAPI,
                                     playlist_uri: String,
-                                    items: [SpotifyURIConvertible]) {
+                                    items: [SpotifyURIConvertible],
+                                    step: Int = 0) {
         // beware, this will be called in a background thread, so no UI.
-        let chunks = items.chunked(size: 100)
-        Publishers.mergeMappedRetainingOrder(chunks, mapTransform: { chunk in
-            spotify.api.addToPlaylist(playlist_uri,
-                                      uris: chunk)
-        })
-        .receive(on: RunLoop.main)
-        .sink { completion in
-            switch completion {
-                case .failure(let error):
-                    logger.error("Couldn't add batch to playlist: \(error.localizedDescription)")
-                case .finished:
-                    logger.info("Done adding chunks to playlist \(playlist_uri).")
-            }
-        } receiveValue: { snapshotIds in
-            logger.info("Updated playlist, snapshot id: \(snapshotIds)")
+        guard !items.isEmpty else {
+            return
         }
-        .store(in: &cancellables)
+        let chunk: [SpotifyURIConvertible] = Array(items.prefix(ADD_TO_PLAYLIST_CHUNKSIZE))
+        let rest:  [SpotifyURIConvertible] = Array(items.dropFirst(ADD_TO_PLAYLIST_CHUNKSIZE))
+        spotify.api.addToPlaylist(playlist_uri, uris: chunk)
+            .delay(for: 2, scheduler: RunLoop.main)
+            .sink { completion in
+                switch completion {
+                    case .failure(let error):
+                        DispatchQueue.main.async {
+                            logger.error("Couldn't add batch to playlist: \(error.localizedDescription)")
+                        }
+                    case .finished:
+                        DispatchQueue.main.async {
+                            logger.info("[step \(step)] Done adding chunks to playlist \(playlist_uri).")
+                        }
+                        self.addItemsToPlaylist(spotify: spotify,
+                                                playlist_uri: playlist_uri,
+                                                items: rest,
+                                                step: step + 1)
+                }
+            } receiveValue: { snapshotIds in
+                DispatchQueue.main.async {
+                    logger.info("[step \(step)] Updated playlist, snapshot id: \(snapshotIds)")
+                }
+            }
+            .store(in: &cancellables)
     }
 
     func saveCurrentQueueAsPlaylist() {
