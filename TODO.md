@@ -4,9 +4,9 @@
 
 * checkbox or something, indicating whether to auto-advance.
 
-* Add all features to app menus for discoverability.
+* Save to playlist from either search or queue.
 
-* Media keys, globally - meh use Hammerspoon
+* Add all features to app menus for discoverability.
 
 * Allow filtering search results through a hook.  E.g., never listen to Coldplay.
 
