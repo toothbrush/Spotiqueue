@@ -102,6 +102,7 @@ class RBQueueTableView: RBTableView {
         }
         AppDelegate.appDelegate().queue.removeFirst(self.selectedRow)
         _ = AppDelegate.appDelegate().playNextQueuedTrack()
+        selectRow(row: 0)
     }
 
     func delete_selected_tracks() {
