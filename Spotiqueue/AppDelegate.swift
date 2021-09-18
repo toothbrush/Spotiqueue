@@ -598,6 +598,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                     switch completion {
                         case .finished:
                             logger.info("finished loading album object")
+                            // If there is a self.currentSong and it's on the just-found album, let's highlight that track.
+                            if let current_song = self.currentSong, current_song.album_uri == album.uri {
+                                logger.info("What a coincidence, we're browsing the album of the currently-playing track.")
+                                if let idx = self.searchResults.firstIndex(where: { sItem in
+                                    sItem.spotify_uri == current_song.spotify_uri
+                                }) {
+                                    self.searchTableView.selectRow(row: idx)
+                                }
+                            }
                         case .failure(let error):
                             logger.error("Couldn't load album: \(error.localizedDescription)")
                     }

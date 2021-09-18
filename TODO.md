@@ -16,8 +16,6 @@
   "show previous search results".  One approach could be to store the list of tracks returned by
   various searches, up to e.g. 10 ago.
 
-* Make `?` highlight the currently-playing track in the search results, too.
-
 ## Things i can't do much about
 
 * Leave the app idle for a long time, play a track ->
