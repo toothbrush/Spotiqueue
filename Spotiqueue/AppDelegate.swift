@@ -171,13 +171,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     // MARK: Button action bindings
-    @IBAction func saveSongButtonPressed(_ sender: Any) {
-        guard let _ = currentSong else {
-            return
-        }
-        // do complicated and potentially slow stuff here.
-        // spotify.api.currentUserSavedTracks()
-    }
 
     @IBAction func nextTrackButtonPressed(_ sender: Any) {
         _ = self.playNextQueuedTrack()
