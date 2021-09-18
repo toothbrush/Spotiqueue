@@ -79,8 +79,7 @@
                    (close to)
                    (close from))))))
 
-;; TODO
-;; (window:maximise) ; to fill screen
+;; TODO (window:maximise) ; to fill screen
 
 (use-modules (system repl server))
 (with-exception-handler

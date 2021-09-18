@@ -1,5 +1,7 @@
 # TODO list
 
+* Guile exception handling.
+
 * Show queue count in title tile, like search results.
 
 * checkbox or something, indicating whether to auto-advance.
