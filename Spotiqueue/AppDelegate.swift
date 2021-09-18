@@ -260,6 +260,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 } else {
                     queueHeaderLabel.stringValue = "Queue"
                 }
+                let nrResultsAppendix = String(format: "(%@ items)", self.queue.isEmpty ? "no" : String(self.queue.count))
+                queueTableView.tableColumns.first?.title = "Title \(nrResultsAppendix)"
             } else {
                 logger.info("\(keyPath): \(String(describing: change))")
             }

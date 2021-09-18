@@ -2,8 +2,6 @@
 
 * Guile exception handling.
 
-* Show queue count in title tile, like search results.
-
 * Add all features to app menus for discoverability.
 
 * Allow filtering search results through a hook.  E.g., never listen to Coldplay.
