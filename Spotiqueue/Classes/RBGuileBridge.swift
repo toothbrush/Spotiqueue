@@ -9,7 +9,7 @@
 import Foundation
 
 @objc class RBGuileBridge: NSObject {
-    private static func track_to_scm_record(track: RBSpotifyTrack) -> SCM {
+    private static func track_to_scm_record(track: RBSpotifyItem) -> SCM {
         // Beware, _make-track is the generated record creator thing, but it's a syntax transformer which can't be called directly, so we have a wrapper function called make-track.
         return scm_call_5(scm_variable_ref(scm_c_lookup("make-track")),
                           scm_from_utf8_string(track.spotify_uri), // uri
@@ -19,7 +19,7 @@ import Foundation
                           scm_from_int32(Int32(track.durationSeconds))) // duration in seconds
     }
 
-    private static func hook_with_track(hook_name: String, track: RBSpotifyTrack) {
+    private static func hook_with_track(hook_name: String, track: RBSpotifyItem) {
         let track_record = track_to_scm_record(track: track)
         hook_1(hook_name: hook_name, arg1: track_record)
     }
@@ -59,11 +59,11 @@ import Foundation
         hook_1(hook_name: "selection-copied-hook", arg1: args)
     }
 
-    static func player_playing_hook(track: RBSpotifyTrack) {
+    static func player_playing_hook(track: RBSpotifyItem) {
         hook_with_track(hook_name: "player-started-hook", track: track)
     }
 
-    static func player_endoftrack_hook(track: RBSpotifyTrack) {
+    static func player_endoftrack_hook(track: RBSpotifyItem) {
         hook_with_track(hook_name: "player-endoftrack-hook", track: track)
     }
 
@@ -99,7 +99,7 @@ import Foundation
     @objc static func get_current_track() -> SCM {
         // We're liable to be calling this from a background thread.
         block_on_main {
-            let track: RBSpotifyTrack? = AppDelegate.appDelegate().currentTrack
+            let track: RBSpotifyItem? = AppDelegate.appDelegate().currentTrack
 
             if let track = track {
                 return track_to_scm_record(track: track)

@@ -35,7 +35,7 @@ class RBSearchTableView: RBTableView {
             return
         }
 
-        if selectedSearchTracks().allSatisfy({ $0.myKind == .Playlist }) {
+        if selectedSearchTracks().allSatisfy({ $0.itemType == .Playlist }) {
             // let's say we can only enqueue one playlist at a time. it's a mess otherwise (among other issues, the fact that top-enqueueing batches of tracks is weird, and that this is an async call so the shortest playlist is added first).
             guard selectedSearchTracks().count == 1 else {
                 NSSound.beep()
@@ -45,7 +45,7 @@ class RBSearchTableView: RBTableView {
                                                              in: .Queue,
                                                              at_the_top: at_the_top,
                                                              and_then_advance: and_then_advance)
-        } else if selectedSearchTracks().allSatisfy({ $0.myKind == .Track }) {
+        } else if selectedSearchTracks().allSatisfy({ $0.itemType == .Track }) {
             AppDelegate.appDelegate().insertTracks(newRows: self.selectedSearchTracks(),
                                                    in: .Queue,
                                                    at_the_top: at_the_top,
@@ -115,7 +115,7 @@ class RBSearchTableView: RBTableView {
         }
     }
 
-    func deletePlaylistWithConfirmation(playlist: RBSpotifyTrack) {
+    func deletePlaylistWithConfirmation(playlist: RBSpotifyItem) {
         let alert = NSAlert()
         alert.messageText = "Delete Playlist"
         alert.informativeText = "Are you sure you want to delete this playlist?"
@@ -171,10 +171,10 @@ class RBSearchTableView: RBTableView {
     }
 
 
-    func selectedSearchTracks() -> [RBSpotifyTrack] {
+    func selectedSearchTracks() -> [RBSpotifyItem] {
         return AppDelegate
             .appDelegate()
             .searchResultsArrayController
-            .selectedObjects as? [RBSpotifyTrack] ?? []
+            .selectedObjects as? [RBSpotifyItem] ?? []
     }
 }

@@ -41,11 +41,11 @@ class RBQueueTableView: RBTableView {
 
         if incoming_uris.allSatisfy({ $0.uri.hasPrefix("spotify:track:") }) {
             // we can use the fancy batching-fetch-tracks mechanism.
-            var stub_tracks: [RBSpotifyTrack] = []
+            var stub_tracks: [RBSpotifyItem] = []
             for s in incoming_uris {
                 logger.info("Hydrating track \(s)")
                 stub_tracks.append(
-                    RBSpotifyTrack(spotify_uri: s.uri)
+                    RBSpotifyItem(spotify_uri: s.uri)
                 )
             }
             AppDelegate.appDelegate().queueArrayController.add(contentsOf: stub_tracks)
@@ -83,7 +83,7 @@ class RBQueueTableView: RBTableView {
                 },
                 receiveValue: { tracks in
                     AppDelegate.appDelegate()
-                        .insertTracks(newRows: tracks.joined().map({ RBSpotifyTrack(track: $0)}),
+                        .insertTracks(newRows: tracks.joined().map({ RBSpotifyItem(track: $0)}),
                                       in: .Queue,
                                       at_the_top: false,
                                       and_then_advance: false)
@@ -122,7 +122,7 @@ class RBQueueTableView: RBTableView {
             return
         }
 
-        if let trackRow: RBSpotifyTrack = self.associatedArrayController().selectedObjects.first as? RBSpotifyTrack {
+        if let trackRow: RBSpotifyItem = self.associatedArrayController().selectedObjects.first as? RBSpotifyItem {
             AppDelegate.appDelegate().browseDetails(for: trackRow, consideringHistory: false)
         }
     }

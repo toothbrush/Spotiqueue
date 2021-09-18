@@ -96,8 +96,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet weak var queueArrayController: NSArrayController!
     @IBOutlet weak var searchLabel: NSTextField!
 
-    @objc dynamic var searchResults: Array<RBSpotifyTrack> = []
-    @objc dynamic var queue: Array<RBSpotifyTrack> = []
+    @objc dynamic var searchResults: Array<RBSpotifyItem> = []
+    @objc dynamic var queue: Array<RBSpotifyItem> = []
 
     // MARK: View element bindings
     @IBOutlet weak var queueHeaderLabel: NSTextField!
@@ -184,7 +184,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     var spotify: RBSpotifyAPI = RBSpotifyAPI()
-    @objc dynamic var currentTrack: RBSpotifyTrack?
+    @objc dynamic var currentTrack: RBSpotifyItem?
 
     @IBAction func findCurrentTrackAlbum(_ sender: Any) {
         guard let track = self.currentTrack else { return }
@@ -247,7 +247,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         if keyPath == "queueArrayController.arrangedObjects" {
             // sum up the durations and put the info into the queue heading label
-            if let queueTracks = queueArrayController.arrangedObjects as? [RBSpotifyTrack] {
+            if let queueTracks = queueArrayController.arrangedObjects as? [RBSpotifyItem] {
                 let totalLengthSeconds = queueTracks.map(\.durationSeconds).reduce(0, +)
                 if totalLengthSeconds > 0 {
                     queueHeaderLabel.stringValue = String(format: "Queue (%@ total)", totalLengthSeconds.positionalTime)
@@ -263,7 +263,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             var nrResultsAppendix: String = ""
             if self.searchResults.count > 0 {
                 if !self.filterResultsField.stringValue.isEmpty,
-                   let filtered = self.searchResultsArrayController.arrangedObjects as? Array<RBSpotifyTrack> {
+                   let filtered = self.searchResultsArrayController.arrangedObjects as? Array<RBSpotifyItem> {
                     // There's a filter applied; let's show match count.
                     nrResultsAppendix = "(\(filtered.count) / \(self.searchResults.count) items)"
                 } else {
@@ -461,7 +461,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             }
             , receiveValue: { playlists in
                 for pl in playlists {
-                    self.searchResults.append(RBSpotifyTrack(playlist: pl))
+                    self.searchResults.append(RBSpotifyItem(playlist: pl))
                 }
                 self.searchTableView.selectRow(row: 0)
             })
@@ -470,7 +470,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         self.window.makeFirstResponder(searchTableView)
     }
 
-    func browseDetails(for row: RBSpotifyTrack, consideringHistory: Bool = true) {
+    func browseDetails(for row: RBSpotifyItem, consideringHistory: Bool = true) {
         guard !self.isSearching else {
             return
         }
@@ -539,10 +539,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 }
             },
             receiveValue: { items in
-                var newRows: Array<RBSpotifyTrack> = []
+                var newRows: Array<RBSpotifyItem> = []
                 for playlistItemContainer in items {
                     if case .track(let track) = playlistItemContainer.item {
-                        newRows.append(RBSpotifyTrack.init(track: track))
+                        newRows.append(RBSpotifyItem.init(track: track))
                     }
                 }
                 self.insertTracks(newRows: newRows,
@@ -553,7 +553,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             .store(in: &cancellables)
     }
 
-    func insertTracks(newRows: Array<RBSpotifyTrack>,
+    func insertTracks(newRows: Array<RBSpotifyItem>,
                       in target: TrackList,
                       at_the_top: Bool = false,
                       and_then_advance: Bool = false) {
@@ -609,7 +609,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                     let simplifiedTracks = tracksPage.items
                     // create a new array of table rows from the page of simplified tracks
                     let newTableRows = simplifiedTracks.map { t in
-                        RBSpotifyTrack.init(track: t, album: album, artist: t.artists!.first!)
+                        RBSpotifyItem.init(track: t, album: album, artist: t.artists!.first!)
                     }
                     // append the new table rows to the full array
                     self.searchResults.append(contentsOf: newTableRows)
@@ -673,7 +673,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                         let simplifiedTracks = tracksPage.items
                         // create a new array of table rows from the page of simplified tracks
                         let newTableRows = simplifiedTracks.map{ t in
-                            RBSpotifyTrack.init(track: t, album: album, artist: artist)
+                            RBSpotifyItem.init(track: t, album: album, artist: artist)
                         }
                         // append the new table rows to the full array
                         self.searchResults.append(contentsOf: newTableRows)
@@ -722,10 +722,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 },
                 receiveValue: { [self] searchResultsReturn in
                     for result in searchResultsReturn.tracks?.items ?? [] {
-                        searchResults.append(RBSpotifyTrack(track: result))
+                        searchResults.append(RBSpotifyItem(track: result))
                     }
                     logger.info("[query \(i)] Received \(self.searchResults.count) tracks")
-                    searchResultsArrayController.sortDescriptors = RBSpotifyTrack.trackSortDescriptors
+                    searchResultsArrayController.sortDescriptors = RBSpotifyItem.trackSortDescriptors
                     searchResultsArrayController.rearrangeObjects()
                     searchTableView.selectRow(row: 0)
                 }

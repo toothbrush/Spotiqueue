@@ -31,7 +31,7 @@
 		DA5AFB31265BB59900C6C468 /* CalendarExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5AFB30265BB59900C6C468 /* CalendarExtensions.swift */; };
 		DA95643326746A9F001BEDCA /* libresolv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = DA95643226746A9F001BEDCA /* libresolv.tbd */; };
 		DAAE2F012653EA1F00FF0344 /* SpotifyAPI in Frameworks */ = {isa = PBXBuildFile; productRef = DAAE2F002653EA1F00FF0344 /* SpotifyAPI */; };
-		DABEC90D2653534300CA3F67 /* RBSpotifyTrack.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABEC90C2653534300CA3F67 /* RBSpotifyTrack.swift */; };
+		DABEC90D2653534300CA3F67 /* RBSpotifyItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABEC90C2653534300CA3F67 /* RBSpotifyItem.swift */; };
 		DABEC90F26536F5800CA3F67 /* RBSecrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABEC90E26536F5800CA3F67 /* RBSecrets.swift */; };
 		DABEC9122653799100CA3F67 /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = DABEC9112653799100CA3F67 /* KeychainSwift */; };
 		DACA708E268EA0D5009714DC /* RBFilterField.swift in Sources */ = {isa = PBXBuildFile; fileRef = DACA708D268EA0D5009714DC /* RBFilterField.swift */; };
@@ -113,7 +113,7 @@
 		DA5AFB30265BB59900C6C468 /* CalendarExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarExtensions.swift; sourceTree = "<group>"; };
 		DA95643226746A9F001BEDCA /* libresolv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libresolv.tbd; path = usr/lib/libresolv.tbd; sourceTree = SDKROOT; };
 		DA9564442674816D001BEDCA /* spotiqueue_worker_bindings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = spotiqueue_worker_bindings.h; path = spotiqueue_worker/spotiqueue_worker_bindings.h; sourceTree = "<group>"; };
-		DABEC90C2653534300CA3F67 /* RBSpotifyTrack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RBSpotifyTrack.swift; sourceTree = "<group>"; };
+		DABEC90C2653534300CA3F67 /* RBSpotifyItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RBSpotifyItem.swift; sourceTree = "<group>"; };
 		DABEC90E26536F5800CA3F67 /* RBSecrets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RBSecrets.swift; sourceTree = "<group>"; };
 		DACA708D268EA0D5009714DC /* RBFilterField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RBFilterField.swift; sourceTree = "<group>"; };
 		DAE1F17E26534D660013704F /* Spotiqueue.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Spotiqueue.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -200,7 +200,7 @@
 				EC90ED33267B446F003C3C0D /* Tables */,
 				DABEC90E26536F5800CA3F67 /* RBSecrets.swift */,
 				DA5AFB0D26565CD300C6C468 /* RBSpotifyAPI.swift */,
-				DABEC90C2653534300CA3F67 /* RBSpotifyTrack.swift */,
+				DABEC90C2653534300CA3F67 /* RBSpotifyItem.swift */,
 				DACA708D268EA0D5009714DC /* RBFilterField.swift */,
 				DA19341626E9A06F00BEC661 /* RBGuileBridge.swift */,
 			);
@@ -405,7 +405,7 @@
 				DA343EE1266213B6000980E2 /* TimeIntervalExtensions.swift in Sources */,
 				DA5AFB13265682D300C6C468 /* RBSearchTableView.swift in Sources */,
 				ECEFFD4A2689AE6D004C33AE /* PublishersExtensions.swift in Sources */,
-				DABEC90D2653534300CA3F67 /* RBSpotifyTrack.swift in Sources */,
+				DABEC90D2653534300CA3F67 /* RBSpotifyItem.swift in Sources */,
 				EC34C8B82665C17C00786C78 /* ComparableExtensions.swift in Sources */,
 				DA5AFB1026567AB300C6C468 /* TrackExtensions.swift in Sources */,
 				DA5AFB2F265A89BD00C6C468 /* RBQueueTableView.swift in Sources */,
@@ -562,7 +562,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 982;
+				CURRENT_PROJECT_VERSION = 983;
 				DEVELOPMENT_TEAM = QG72S9L5L3;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -602,7 +602,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 982;
+				CURRENT_PROJECT_VERSION = 983;
 				DEVELOPMENT_TEAM = QG72S9L5L3;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (

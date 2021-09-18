@@ -9,9 +9,8 @@
 import Cocoa
 import SpotifyWebAPI
 
-final class RBSpotifyTrack: NSObject {
-
-    enum PlayableItem {
+final class RBSpotifyItem: NSObject {
+    enum ItemType {
         case Playlist
         case Track
     }
@@ -25,7 +24,7 @@ final class RBSpotifyTrack: NSObject {
     @objc dynamic var year: Int
     @objc dynamic var length: String = ""
 
-    var myKind: PlayableItem = .Track
+    var itemType: ItemType = .Track
     
     var spotify_uri: String
     var spotify_album: Album?
@@ -59,7 +58,7 @@ final class RBSpotifyTrack: NSObject {
         self.title = playlist.name
         self.artist = playlist.owner?.displayName ?? ""
         self.track_number = playlist.items.total
-        self.myKind = .Playlist
+        self.itemType = .Playlist
     }
     
     init(spotify_uri: String) {
@@ -116,7 +115,7 @@ final class RBSpotifyTrack: NSObject {
     
     // This is what we want it to look like if copied to pasteboard.
     func copyTextTrack() -> String {
-        if self.myKind == .Playlist {
+        if self.itemType == .Playlist {
             return String(format: "%@ (%@)", self.spotify_open_link_track(), self.title)
         }
 
