@@ -1,3 +1,13 @@
+;;; BEGIN key-constants.scm
+;;;
+;;; Copyright © 2021 paul at denknerd dot org
+;;;
+;;; This file is mostly/sort of auto-generated.  It contains mappings to and from human-friendly key
+;;; symbols such as ANSI_A and the internal keycodes used by macOS.  These keycodes refer to
+;;; physical buttons, and so the ANSI_ prefix is significant: the keycode represents the button
+;;; located where the ANSI-variant would be located on the physical keyboard.  I use a standard
+;;; keyboard, so if you use something exotic i'm afraid you'll have to try it out and report back.
+
 (define-module (spotiqueue key-constants))
 (module-export-all! (current-module))
 
@@ -231,3 +241,5 @@
 (hashq-set! keysym->keycode (quote RightArrow) 124)
 (hashq-set! keysym->keycode (quote DownArrow) 125)
 (hashq-set! keysym->keycode (quote UpArrow) 126)
+
+;;; END key-constants.scm

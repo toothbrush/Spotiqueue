@@ -4,8 +4,6 @@
 
 * Add all features to app menus for discoverability.
 
-* Allow filtering search results through a hook.  E.g., never listen to Coldplay.
-
 * When moving tracks in queue consider scrolling such that there's a
   3-4 track "buffer" of not-selected tracks between the selected block
   and the edge of the view.
@@ -32,3 +30,11 @@
 
 * very quick fade in / out when pausing? - maybe shorten the audio buffer in librespot? Turns out
   it's something i can't easily fix, because they also adjust audio volume per buffer chunk, grr.
+
+## Guile bindings ideas
+
+* Allow filtering search results through a hook.  E.g., never show Coldplay in the results.
+
+* Last.fm scrobbling with Guile.
+
+* Get current queue or search results contents as a list.

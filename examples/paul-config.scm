@@ -1,4 +1,14 @@
-;;; This is an example of what would live in a user's config.
+;;; BEGIN paul-config.scm
+;;;
+;;; Copyright © 2021 paul at denknerd dot org
+;;;
+;;; This is an example of what would live in a user's config.  It is in fact the actual thing i use
+;;; at the moment, i have a symlink:
+;;;
+;;; ~/.config/spotiqueue/init.scm -> ~/src/Spotiqueue/examples/paul-config.scm.
+;;;
+;;; I hope to use this file to collect a few neat ideas of things you can customise using the Guile
+;;; bindings provided by Spotiqueue.
 (use-modules (ice-9 textual-ports)
              (ice-9 format)
              (ice-9 popen)
@@ -89,3 +99,5 @@
   #:unwind? #t)
 
 (format #t "Yay, unicode works 😊 📼 ~%")
+
+;;; END paul-config.scm
