@@ -69,7 +69,7 @@
            (lambda (itms)
              (begin
                (let* ((message (format #f
-                                       "💿 Copied ~r item~:p 🎵"
+                                       "💿 Copied ~r item~:p 🎧"
                                        (length itms)))
                       ;; Okay it's not great but i'm escaping quotes so that it remains valid Lua code...
                       (hs-alert (format #f "hs.alert.show(\"~a\")" (escape-special-chars message #\" #\\)))
@@ -89,4 +89,4 @@
     (spawn-server (make-tcp-server-socket))) ; loopback:37146 by default
   #:unwind? #t)
 
-(format #t "yay unicode 😊 📼 ~%")
+(format #t "Yay, unicode works 😊 📼 ~%")
