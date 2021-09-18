@@ -8,10 +8,9 @@
 
 import Cocoa
 import Combine
+import SpotifyWebAPI
 
 class RBQueueTableView: RBTableView {
-    var cancellables: Set<AnyCancellable> = []
-
     override func associatedArrayController() -> NSArrayController {
         AppDelegate.appDelegate().queueArrayController
     }
@@ -22,27 +21,37 @@ class RBQueueTableView: RBTableView {
         addTracksToQueue(from: contents)
     }
 
+    /// This function is hopefully useful for calling from Guile land. e.g.
+    ///
+    /// ```
+    /// (enqueue "spotify:album:asdf" "spotify:track:1234")
+    /// ```
+    ///
+    func addTracksToQueue(from manyUris: [String]) {
+        addTracksToQueue(from: manyUris.joined(separator: "\n"))
+    }
+
     func addTracksToQueue(from contents: String) {
         AppDelegate.appDelegate().isSearching = true
-        let incoming_uris = RBSpotify.sanitiseIncomingURIBlob(pasted_blob: contents)
+        let incoming_uris = RBSpotifyAPI.sanitiseIncomingURIBlob(pasted_blob: contents)
         guard !incoming_uris.isEmpty else {
             AppDelegate.appDelegate().isSearching = false
             return
         }
-        
+
         if incoming_uris.allSatisfy({ $0.uri.hasPrefix("spotify:track:") }) {
-            // we can use the fancy batching-fetch-songs mechanism.
-            var stub_songs: [RBSpotifySongTableRow] = []
+            // we can use the fancy batching-fetch-tracks mechanism.
+            var stub_tracks: [RBSpotifyItem] = []
             for s in incoming_uris {
-                logger.info("Hydrating song \(s)")
-                stub_songs.append(
-                    RBSpotifySongTableRow(spotify_uri: s.uri)
+                logger.info("Hydrating track \(s)")
+                stub_tracks.append(
+                    RBSpotifyItem(spotify_uri: s.uri)
                 )
             }
-            AppDelegate.appDelegate().queueArrayController.add(contentsOf: stub_songs)
-            
-            AppDelegate.appDelegate().runningTasks = Int((Double(stub_songs.count) / 50.0).rounded(.up))
-            for chunk in stub_songs.chunked(size: 50) {
+            AppDelegate.appDelegate().queueArrayController.add(contentsOf: stub_tracks)
+
+            AppDelegate.appDelegate().runningTasks = Int((Double(stub_tracks.count) / 50.0).rounded(.up))
+            for chunk in stub_tracks.chunked(size: 50) {
                 AppDelegate.appDelegate().spotify.api.tracks(chunk.map({ $0.spotify_uri }))
                     .receive(on: RunLoop.main)
                     .sink(
@@ -74,7 +83,7 @@ class RBQueueTableView: RBTableView {
                 },
                 receiveValue: { tracks in
                     AppDelegate.appDelegate()
-                        .insertTracks(newRows: tracks.joined().map({ RBSpotifySongTableRow(track: $0)}),
+                        .insertTracks(newRows: tracks.joined().map({ RBSpotifyItem(track: $0)}),
                                       in: .Queue,
                                       at_the_top: false,
                                       and_then_advance: false)
@@ -82,7 +91,7 @@ class RBQueueTableView: RBTableView {
                 .store(in: &cancellables)
         }
     }
-    
+
     func enter() {
         guard self.selectedRowIndexes.count == 1 else {
             logger.info("hmm, enter pressed on non-single track selection..")
@@ -90,10 +99,11 @@ class RBQueueTableView: RBTableView {
             return
         }
         AppDelegate.appDelegate().queue.removeFirst(self.selectedRow)
-        AppDelegate.appDelegate().playNextQueuedTrack()
+        _ = AppDelegate.appDelegate().playNextQueuedTrack()
+        selectRow(row: 0)
     }
 
-    func delete() {
+    func delete_selected_tracks() {
         guard self.selectedRowIndexes.count > 0 else {
             NSSound.beep()
             return
@@ -112,12 +122,12 @@ class RBQueueTableView: RBTableView {
             return
         }
 
-        if let songRow: RBSpotifySongTableRow = self.associatedArrayController().selectedObjects.first as? RBSpotifySongTableRow {
-            AppDelegate.appDelegate().browseDetails(for: songRow, consideringHistory: false)
+        if let trackRow: RBSpotifyItem = self.associatedArrayController().selectedObjects.first as? RBSpotifyItem {
+            AppDelegate.appDelegate().browseDetails(for: trackRow, consideringHistory: false)
         }
     }
 
-    func moveSelectionUp() {
+    func moveSelectedTracksUp() {
         guard !self.selectedRowIndexes.isEmpty else {
             NSSound.beep()
             return
@@ -128,7 +138,7 @@ class RBQueueTableView: RBTableView {
         }
     }
 
-    func moveSelectionDown() {
+    func moveSelectedTracksDown() {
         guard !self.selectedRowIndexes.isEmpty else {
             NSSound.beep()
             return
@@ -139,23 +149,47 @@ class RBQueueTableView: RBTableView {
         }
     }
 
+    func saveCurrentQueueAsPlaylist() {
+        guard !AppDelegate.appDelegate().queue.isEmpty else {
+            // saving an empty queue makes no sense.
+            return
+        }
+        let itemsToAddToPlaylist: [SpotifyURIConvertible] =
+            AppDelegate.appDelegate().queue.map { track in
+                track.spotify_uri
+            }
+        let suggestedName: String = String(format: "%@ – %@",
+                                           AppDelegate.appDelegate().queue.first!.artist,
+                                           AppDelegate.appDelegate().queue.first!.album)
+
+        saveAsPlaylistWithConfirmation(suggestedName: suggestedName, messageText: "Save Queue as Playlist", itemsToAddToPlaylist: itemsToAddToPlaylist)
+    }
+
     override func keyDown(with event: NSEvent) {
         let flags = event.modifierFlags.intersection(.deviceIndependentFlagsMask).subtracting([.function, .numericPad])
+
+        if RBGuileBridge.guile_handle_key(map: .queue,
+                                          keycode: event.keyCode,
+                                          control: flags.contains(.control),
+                                          command: flags.contains(.command),
+                                          alt: flags.contains(.option),
+                                          shift: flags.contains(.shift)) {
+            // If a key is bound in a Guile script, that takes precedence, so we want to bail out here.  Otherwise, continue and execute the default "hard-coded" keybindings.
+            return
+        }
+
         if event.keyCode == kVK_Return
             && flags.isEmpty { // Enter/Return key
             enter()
-        } else if (event.keyCode == kVK_Delete         // Backspace
-                    || event.keyCode == kVK_ForwardDelete   // Delete
-                    || event.characters == "x"
-                    || event.characters == "d")
-                    && flags.isEmpty {
-            delete()
         } else if event.keyCode == kVK_DownArrow       // down arrow
                     && flags == [.command] {
-            moveSelectionDown()
+            moveSelectedTracksDown()
         } else if event.keyCode == kVK_UpArrow       // up arrow
                     && flags == [.command] {
-            moveSelectionUp()
+            moveSelectedTracksUp()
+        } else if event.characters == "s"       // cmd-s = save current queue as playlist
+                    && flags == [.command] {
+            saveCurrentQueueAsPlaylist()
         } else {
             super.keyDown(with: event)
         }

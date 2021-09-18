@@ -1,20 +1,8 @@
 # TODO list
 
-* checkbox or something, indicating whether to auto-advance.
-
-* little transparent toaster telling you what you've copied to clipboard
-
-* when regex-filtering then widening, no need to clobber user's selection.  can actually be useful
-  for finding things in a long list.
+* Guile exception handling.
 
 * Add all features to app menus for discoverability.
-
-* very quick fade in / out when pausing?
-
-* Media keys, globally
-
-* Create playlist.. maybe? By default suggest name "Artist - Album"
-  based on first selected item?  Or based on current queue?
 
 * When moving tracks in queue consider scrolling such that there's a
   3-4 track "buffer" of not-selected tracks between the selected block
@@ -22,8 +10,11 @@
 
 * Little Credits or Help screen
 
-* Idea: backspace in search window takes you "up" a detail level if
-  you've done a detail browse. AKA "show previous search results".
+* Documentation for Guile interface.
+
+* Idea: backspace in search window takes you "up" a detail level if you've done a detail browse. AKA
+  "show previous search results".  One approach could be to store the list of tracks returned by
+  various searches, up to e.g. 10 ago.
 
 ## Things i can't do much about
 
@@ -35,4 +26,13 @@
 * Automatically switch audio output sink when using Sound.prefpane.
   https://github.com/RustAudio/rodio/issues/327
 
-* Make `?` highlight the currently-playing track in the search results, too.
+* very quick fade in / out when pausing? - maybe shorten the audio buffer in librespot? Turns out
+  it's something i can't easily fix, because they also adjust audio volume per buffer chunk, grr.
+
+## Guile bindings ideas
+
+* Allow filtering search results through a hook.  E.g., never show Coldplay in the results.
+
+* Last.fm scrobbling with Guile.
+
+* Get current queue or search results contents as a list.

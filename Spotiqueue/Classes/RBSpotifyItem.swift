@@ -1,5 +1,5 @@
 //
-//  SpotifySong.swift
+//  SpotifyTrack.swift
 //  Spotiqueue
 //
 //  Created by Paul on 18/5/21.
@@ -9,9 +9,8 @@
 import Cocoa
 import SpotifyWebAPI
 
-final class RBSpotifySongTableRow: NSObject {
-
-    enum PlayableItem {
+final class RBSpotifyItem: NSObject {
+    enum ItemType {
         case Playlist
         case Track
     }
@@ -25,7 +24,7 @@ final class RBSpotifySongTableRow: NSObject {
     @objc dynamic var year: Int
     @objc dynamic var length: String = ""
 
-    var myKind: PlayableItem = .Track
+    var itemType: ItemType = .Track
     
     var spotify_uri: String
     var spotify_album: Album?
@@ -39,10 +38,10 @@ final class RBSpotifySongTableRow: NSObject {
 
     convenience init(track: Track) {
         guard let album = track.album else {
-            fatalError("Trying to construct RBSpotifySongTableRow with simplified Track.")
+            fatalError("Trying to construct \(Self.className()) with simplified Track.")
         }
         guard let artist = track.artists?.first else {
-            fatalError("Trying to construct RBSpotifySongTableRow with simplified Track.")
+            fatalError("Trying to construct \(Self.className()) with simplified Track.")
         }
         self.init(track: track, album: album, artist: artist)
     }
@@ -59,7 +58,7 @@ final class RBSpotifySongTableRow: NSObject {
         self.title = playlist.name
         self.artist = playlist.owner?.displayName ?? ""
         self.track_number = playlist.items.total
-        self.myKind = .Playlist
+        self.itemType = .Playlist
     }
     
     init(spotify_uri: String) {
@@ -82,10 +81,10 @@ final class RBSpotifySongTableRow: NSObject {
     
     func hydrate(with fullTrack: Track) {
         guard let album = fullTrack.album else {
-            fatalError("Trying to hydrate RBSpotifySongTableRow with simplified Track.")
+            fatalError("Trying to hydrate \(Self.className()) with simplified Track.")
         }
         guard let artist = fullTrack.artists?.first else {
-            fatalError("Trying to hydrate RBSpotifySongTableRow with simplified Track.")
+            fatalError("Trying to hydrate \(Self.className()) with simplified Track.")
         }
         hydrate(with: fullTrack, album: album, artist: artist)
     }
@@ -116,12 +115,17 @@ final class RBSpotifySongTableRow: NSObject {
     
     // This is what we want it to look like if copied to pasteboard.
     func copyTextTrack() -> String {
+        if self.itemType == .Playlist {
+            return String(format: "%@ (%@)", self.spotify_open_link_track(), self.title)
+        }
+
         if !self.artist.isEmpty && !self.title.isEmpty {
             return String(format: "%@ (%@ – %@)", self.spotify_open_link_track(), self.artist, self.title)
         } else {
             return self.spotify_open_link_track()
         }
     }
+
     func copyTextAlbum() -> String {
         if !self.artist.isEmpty && !self.album.isEmpty {
             return String(format: "%@ (%@ – %@)", self.spotify_open_link_album(), self.artist, self.album)
@@ -153,7 +157,7 @@ final class RBSpotifySongTableRow: NSObject {
         }
     }
     
-    func prettyTitle() -> String {
+    func prettyArtistDashTitle() -> String {
         if artist.isEmpty {
             return self.title
         } else {

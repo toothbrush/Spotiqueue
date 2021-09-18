@@ -17,31 +17,31 @@
             <connections>
                 <outlet property="albumImage" destination="BMX-yB-dah" id="8xA-A6-Bob"/>
                 <outlet property="albumTitleLabel" destination="Mxf-Pa-N9U" id="26z-pe-k3T"/>
+                <outlet property="autoAdvanceButton" destination="YTG-en-bjx" id="OxA-gG-wAH"/>
                 <outlet property="durationLabel" destination="ijX-rD-el8" id="rYJ-ck-xJg"/>
                 <outlet property="filterResultsField" destination="I9H-ml-iSW" id="VNV-5l-joO"/>
                 <outlet property="progressBar" destination="q94-z4-FfB" id="Dx4-YB-2cA"/>
                 <outlet property="queueArrayController" destination="ueN-np-pxA" id="mqC-lc-mVO"/>
                 <outlet property="queueHeaderLabel" destination="ers-rB-7hD" id="Iuw-M6-9Tr"/>
                 <outlet property="queueTableView" destination="rTj-ma-zaY" id="iLq-mj-ogd"/>
-                <outlet property="saveSongButton" destination="YTG-en-bjx" id="OxA-gG-wAH"/>
                 <outlet property="searchField" destination="T2h-BB-MEE" id="Olc-dc-Cro"/>
                 <outlet property="searchFieldCell" destination="EnN-fl-XWg" id="vRs-fB-Pan"/>
                 <outlet property="searchLabel" destination="Rzo-OP-RL5" id="KkF-Lo-jqq"/>
                 <outlet property="searchResultsArrayController" destination="cJI-F4-neh" id="Ncy-gz-ctc"/>
                 <outlet property="searchSpinner" destination="Rz8-eH-DFf" id="hYr-5o-Es1"/>
                 <outlet property="searchTableView" destination="kdh-74-V14" id="Zwh-2d-qyB"/>
-                <outlet property="songTitleLabel" destination="iV4-Go-1uE" id="e3W-ym-mUP"/>
+                <outlet property="trackTitleLabel" destination="iV4-Go-1uE" id="e3W-ym-mUP"/>
                 <outlet property="window" destination="QvC-M9-y7g" id="gIp-Ho-8D9"/>
             </connections>
         </customObject>
-        <arrayController objectClassName="Spotiqueue.SpotifySongTableRow" id="cJI-F4-neh" userLabel="searchResults">
-            <classReference key="objectClass" className="SpotifySongTableRow" moduleName="Spotiqueue"/>
+        <arrayController objectClassName="Spotiqueue.RBSpotifyTrack" id="cJI-F4-neh" userLabel="searchResults">
+            <classReference key="objectClass" className="RBSpotifyTrack" moduleName="Spotiqueue" moduleProvider="target"/>
             <connections>
                 <binding destination="Voe-Tx-rLC" name="contentArray" keyPath="self.searchResults" id="ol7-5Z-Tgg"/>
             </connections>
         </arrayController>
-        <arrayController objectClassName="Spotiqueue.SpotifySongTableRow" id="ueN-np-pxA" userLabel="queue">
-            <classReference key="objectClass" className="SpotifySongTableRow" moduleName="Spotiqueue"/>
+        <arrayController objectClassName="Spotiqueue.RBSpotifyTrack" id="ueN-np-pxA" userLabel="queue">
+            <classReference key="objectClass" className="RBSpotifyTrack" moduleName="Spotiqueue" moduleProvider="target"/>
             <connections>
                 <binding destination="Voe-Tx-rLC" name="contentArray" keyPath="self.queue" id="bM9-ch-RTT"/>
             </connections>
@@ -94,6 +94,19 @@
                         </items>
                     </menu>
                 </menuItem>
+                <menuItem title="Control" id="Dhl-dR-P3Z">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <menu key="submenu" title="Control" id="47t-tj-n1F">
+                        <items>
+                            <menuItem title="Play/Pause" keyEquivalent=" " id="d4j-pq-EgF">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="playOrPause" target="Voe-Tx-rLC" id="GeT-ll-zUJ"/>
+                                </connections>
+                            </menuItem>
+                        </items>
+                    </menu>
+                </menuItem>
                 <menuItem title="Edit" id="5QF-Oa-p0T">
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <menu key="submenu" title="Edit" id="YJO-2T-0cl">
@@ -129,7 +142,7 @@
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="findCurrentTrackAlbum:" target="Voe-Tx-rLC" id="oEr-jm-ym2"/>
-                                    <binding destination="Voe-Tx-rLC" name="enabled" keyPath="self.currentSong" id="gXa-wv-MZX">
+                                    <binding destination="Voe-Tx-rLC" name="enabled" keyPath="self.currentTrack" id="gXa-wv-MZX">
                                         <dictionary key="options">
                                             <string key="NSValueTransformerName">NSIsNotNil</string>
                                         </dictionary>
@@ -203,11 +216,11 @@
                     <scrollView autohidesScrollers="YES" horizontalLineScroll="24" horizontalPageScroll="10" verticalLineScroll="24" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XO6-ft-PxZ" userLabel="search result table">
                         <rect key="frame" x="634" y="137" width="606" height="400"/>
                         <clipView key="contentView" id="aXf-af-pkH">
-                            <rect key="frame" x="1" y="1" width="604" height="398"/>
+                            <rect key="frame" x="1" y="1" width="604" height="383"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" autosaveColumns="NO" typeSelect="NO" rowHeight="24" rowSizeStyle="automatic" headerView="Etz-Zh-YRF" viewBased="YES" id="kdh-74-V14" customClass="RBSearchTableView" customModule="Spotiqueue" customModuleProvider="target">
-                                    <rect key="frame" x="0.0" y="0.0" width="604" height="370"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="693" height="355"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <size key="intercellSpacing" width="17" height="0.0"/>
                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -227,7 +240,7 @@
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                             <prototypeCellViews>
                                                 <tableCellView id="aaw-Nt-4B0">
-                                                    <rect key="frame" x="8" y="0.0" width="298" height="24"/>
+                                                    <rect key="frame" x="18" y="0.0" width="298" height="24"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
                                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bcc-Xa-r0V">
@@ -263,7 +276,7 @@
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                             <prototypeCellViews>
                                                 <tableCellView id="Fm0-Ny-Gc0">
-                                                    <rect key="frame" x="323" y="0.0" width="30" height="24"/>
+                                                    <rect key="frame" x="333" y="0.0" width="30" height="24"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
                                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nNw-qM-SrP">
@@ -299,7 +312,7 @@
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                             <prototypeCellViews>
                                                 <tableCellView id="HKU-0n-lna">
-                                                    <rect key="frame" x="370" y="0.0" width="100" height="24"/>
+                                                    <rect key="frame" x="380" y="0.0" width="100" height="24"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
                                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mDT-Tw-DHx">
@@ -321,7 +334,7 @@
                                                 </tableCellView>
                                             </prototypeCellViews>
                                         </tableColumn>
-                                        <tableColumn width="111" minWidth="40" maxWidth="1000" id="ihb-ks-z5o">
+                                        <tableColumn width="200" minWidth="200" maxWidth="1000" id="ihb-ks-z5o">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Artist">
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
@@ -335,11 +348,11 @@
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                             <prototypeCellViews>
                                                 <tableCellView id="3rp-nd-L3o">
-                                                    <rect key="frame" x="487" y="0.0" width="108" height="24"/>
+                                                    <rect key="frame" x="497" y="0.0" width="197" height="24"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
                                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YFH-MS-yGD">
-                                                            <rect key="frame" x="0.0" y="4" width="108" height="16"/>
+                                                            <rect key="frame" x="0.0" y="4" width="289" height="16"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                             <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Black Country, New Road" id="Wni-jN-zKG">
                                                                 <font key="font" usesAppearanceFont="YES"/>
@@ -370,7 +383,7 @@
                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="350" id="6cz-Kd-Tp0"/>
                             <constraint firstAttribute="height" relation="greaterThanOrEqual" priority="999" constant="400" id="ZCD-3B-3Eh"/>
                         </constraints>
-                        <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="Ke9-47-fK2">
+                        <scroller key="horizontalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="Ke9-47-fK2">
                             <rect key="frame" x="1" y="384" width="604" height="15"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
@@ -379,7 +392,7 @@
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                         <tableHeaderView key="headerView" wantsLayer="YES" id="Etz-Zh-YRF">
-                            <rect key="frame" x="0.0" y="0.0" width="604" height="28"/>
+                            <rect key="frame" x="0.0" y="0.0" width="693" height="28"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </tableHeaderView>
                     </scrollView>
@@ -647,15 +660,15 @@
                         <imageCell key="cell" refusesFirstResponder="YES" focusRingType="none" alignment="left" imageScaling="proportionallyUpOrDown" imageFrameStyle="photo" id="9JM-gk-0H4"/>
                     </imageView>
                     <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Mxf-Pa-N9U">
-                        <rect key="frame" x="181" y="61" width="868" height="17"/>
+                        <rect key="frame" x="181" y="61" width="861" height="17"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" focusRingType="none" title="-" id="zUB-QR-0tE">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <textField identifier="artist and song title" focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="iV4-Go-1uE">
-                        <rect key="frame" x="181" y="86" width="868" height="17"/>
+                    <textField identifier="artist and track title" focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="iV4-Go-1uE">
+                        <rect key="frame" x="181" y="86" width="861" height="17"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" focusRingType="none" title="-" id="vyc-8S-hJE">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -663,10 +676,10 @@
                         </textFieldCell>
                     </textField>
                     <button focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="TXk-jt-DHV">
-                        <rect key="frame" x="1140" y="81" width="107" height="32"/>
+                        <rect key="frame" x="1133" y="81" width="114" height="32"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="20" id="bIb-Tp-dMJ"/>
-                            <constraint firstAttribute="width" constant="93" id="oTu-b0-bGm"/>
+                            <constraint firstAttribute="width" constant="100" id="oTu-b0-bGm"/>
                         </constraints>
                         <buttonCell key="cell" type="push" title="Next (⌘N)" bezelStyle="rounded" alignment="center" borderStyle="border" focusRingType="none" imageScaling="proportionallyDown" inset="2" id="g4T-Pk-Hts">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -675,7 +688,7 @@
                             <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                         </buttonCell>
                         <connections>
-                            <action selector="nextSongButtonPressed:" target="Voe-Tx-rLC" id="r2S-Yh-inr"/>
+                            <action selector="nextTrackButtonPressed:" target="Voe-Tx-rLC" id="r2S-Yh-inr"/>
                         </connections>
                     </button>
                     <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="jBE-uh-Tyh">
@@ -690,17 +703,12 @@
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <button hidden="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="YTG-en-bjx">
-                        <rect key="frame" x="1147" y="59" width="93" height="19"/>
-                        <buttonCell key="cell" type="recessed" title="★ (⌘S)" bezelStyle="recessed" alignment="center" enabled="NO" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="t1h-b7-7TB">
+                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="YTG-en-bjx">
+                        <rect key="frame" x="1140" y="59" width="100" height="19"/>
+                        <buttonCell key="cell" type="recessed" title="Auto-advance" bezelStyle="recessed" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="t1h-b7-7TB">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
-                            <font key="font" size="12" name="HiraKakuProN-W6"/>
-                            <string key="keyEquivalent">s</string>
-                            <modifierMask key="keyEquivalentModifierMask" command="YES"/>
+                            <font key="font" metaFont="system"/>
                         </buttonCell>
-                        <connections>
-                            <action selector="saveSongButtonPressed:" target="Voe-Tx-rLC" id="oIg-u1-et9"/>
-                        </connections>
                     </button>
                     <box autoresizesSubviews="NO" focusRingType="none" verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="DHR-Fg-IYC">
                         <rect key="frame" x="12" y="126" width="1236" height="5"/>
