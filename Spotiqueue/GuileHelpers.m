@@ -36,12 +36,10 @@ SCM current_track(void) {
 }
 
 SCM _scm_list_of_strings(NSArray* strings) {
-    SCM lst = scm_make_list(scm_from_uint64([strings count]),
-                            SCM_UNDEFINED);
+    SCM lst = scm_make_list(scm_from_uint64([strings count]), SCM_UNDEFINED);
 
     int32_t pos = 0;
     for (NSString* s in strings) {
-        NSLog(@"string -> %@", s);
         scm_list_set_x(lst, scm_from_int32(pos), scm_from_utf8_string([s UTF8String]));
         pos++;
     }
