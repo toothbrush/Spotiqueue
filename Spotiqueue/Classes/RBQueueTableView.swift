@@ -129,7 +129,7 @@ class RBQueueTableView: RBTableView {
         }
     }
 
-    func moveSelectionUp() {
+    func moveSelectedTracksUp() {
         guard !self.selectedRowIndexes.isEmpty else {
             NSSound.beep()
             return
@@ -140,7 +140,7 @@ class RBQueueTableView: RBTableView {
         }
     }
 
-    func moveSelectionDown() {
+    func moveSelectedTracksDown() {
         guard !self.selectedRowIndexes.isEmpty else {
             NSSound.beep()
             return
@@ -250,7 +250,8 @@ class RBQueueTableView: RBTableView {
     override func keyDown(with event: NSEvent) {
         let flags = event.modifierFlags.intersection(.deviceIndependentFlagsMask).subtracting([.function, .numericPad])
 
-        if RBGuileBridge.guile_handle_key(keycode: event.keyCode,
+        if RBGuileBridge.guile_handle_key(map: .queue,
+                                          keycode: event.keyCode,
                                           control: flags.contains(.control),
                                           command: flags.contains(.command),
                                           alt: flags.contains(.option),
@@ -264,10 +265,10 @@ class RBQueueTableView: RBTableView {
             enter()
         } else if event.keyCode == kVK_DownArrow       // down arrow
                     && flags == [.command] {
-            moveSelectionDown()
+            moveSelectedTracksDown()
         } else if event.keyCode == kVK_UpArrow       // up arrow
                     && flags == [.command] {
-            moveSelectionUp()
+            moveSelectedTracksUp()
         } else {
             super.keyDown(with: event)
         }

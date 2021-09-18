@@ -65,6 +65,10 @@ SCM player_state(void) {
     return [RBGuileBridge get_player_state];
 }
 
+SCM focus_search_box(void) {
+    return [RBGuileBridge focus_search_box];
+}
+
 SCM key_to_guile_struct(UInt16 keycode, bool ctrl, bool command, bool alt, bool shift) {
     SCM vtable = scm_variable_ref(scm_c_lookup("<kbd>"));
     return scm_make_struct_no_tail(vtable,
@@ -88,12 +92,14 @@ void register_funcs_objc(void) {
     scm_c_define_gsubr("player:next", 0, 0, 0, &next_song);
     scm_c_define_gsubr("player:state", 0, 0, 0, &player_state);
     scm_c_define_gsubr("queue:delete-selected-tracks", 0, 0, 0, &queue_delete_selected);
+    scm_c_define_gsubr("window:focus-search-box", 0, 0, 0, &focus_search_box);
     scm_c_export("player:homedir",
                  "player:current-song",
                  "player:toggle-pause",
                  "player:next",
                  "player:state",
                  "queue:delete-selected-tracks",
+                 "window:focus-search-box",
                  NULL);
     scm_simple_format(scm_current_output_port(), scm_from_utf8_string("guile ~a: Successfully booted.~%"), scm_list_1(scm_c_eval_string("(module-name (current-module))")));
 }

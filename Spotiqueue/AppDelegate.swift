@@ -273,15 +273,30 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             searchTableView.tableColumns.first?.title = "Title \(nrResultsAppendix)"
         }
     }
+    
+    func focusSearchBox() {
+        self.window.makeFirstResponder(searchField)
+    }
 
     func localKeyShortcuts(event: NSEvent) -> NSEvent? {
         let flags = event.modifierFlags.intersection(.deviceIndependentFlagsMask).subtracting([.function, .numericPad])
+
+        if RBGuileBridge.guile_handle_key(map: .global,
+                                          keycode: event.keyCode,
+                                          control: flags.contains(.control),
+                                          command: flags.contains(.command),
+                                          alt: flags.contains(.option),
+                                          shift: flags.contains(.shift)) {
+            // If a key is bound in a Guile script, that takes precedence, so we want to bail out here.  Otherwise, continue and execute the default "hard-coded" keybindings.
+            return nil
+        }
+
         if flags == .command
             && event.characters == "f" {
-            self.window.makeFirstResponder(searchField)
+            self.focusSearchBox()
         } else if flags == .command
                     && event.characters == "l" {
-            self.window.makeFirstResponder(searchField)
+            self.focusSearchBox()
         } else if flags == .command
                     && event.characters == "q" {
             for window in NSApp.windows {
@@ -308,7 +323,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         } else if flags.isEmpty
                     && event.keyCode == kVK_Tab
                     && self.window.firstResponder == self.filterResultsField.currentEditor() {
-            self.window.makeFirstResponder(self.searchTableView)
+            self.focusSearchBox()
         } else if event.characters == "s"       // cmd-s = save current queue as playlist
                     && flags == [.command] {
             queueTableView.saveCurrentQueueAsPlaylist()

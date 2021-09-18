@@ -43,6 +43,9 @@
 (define (define-key map key action)
   (hash-set! map key action))
 
+(define-key global-map (kbd 'ANSI_F #:cmd #t) 'window:focus-search-box)
+(define-key global-map (kbd 'ANSI_L #:cmd #t) 'window:focus-search-box)
+
 (define-key queue-panel-map (kbd 'ANSI_X)        'queue:delete-selected-tracks)
 (define-key queue-panel-map (kbd 'ANSI_D)        'queue:delete-selected-tracks)
 (define-key queue-panel-map (kbd 'Delete)        'queue:delete-selected-tracks)

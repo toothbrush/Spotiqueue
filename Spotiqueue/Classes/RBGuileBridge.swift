@@ -89,6 +89,13 @@ import Foundation
         }
     }
 
+    @objc static func focus_search_box() -> SCM {
+        block_on_main {
+            AppDelegate.appDelegate().focusSearchBox()
+            return _scm_true()
+        }
+    }
+
     @objc static func get_current_song() -> SCM {
         // We're liable to be calling this from a background thread.
         block_on_main {
@@ -133,10 +140,15 @@ import Foundation
         }
     }
 
-    static func guile_handle_key(keycode: UInt16, control: Bool, command: Bool, alt: Bool, shift: Bool) -> Bool {
-        // TODO handle different keymaps.
+    enum KeyMap: String {
+        case queue = "queue-panel-map"
+        case search = "search-panel-map"
+        case global = "global-map"
+    }
+
+    static func guile_handle_key(map: KeyMap, keycode: UInt16, control: Bool, command: Bool, alt: Bool, shift: Bool) -> Bool {
         let guile_key = key_to_guile_struct(keycode, control, command, alt, shift)
-        let action: SCM = scm_hash_ref(scm_variable_ref(scm_c_lookup("queue-panel-map")),
+        let action: SCM = scm_hash_ref(scm_variable_ref(scm_c_lookup(map.rawValue)),
                                        guile_key,
                                        _scm_false())
 

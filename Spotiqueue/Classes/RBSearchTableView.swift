@@ -57,7 +57,17 @@ class RBSearchTableView: RBTableView {
     override func keyDown(with event: NSEvent) {
         // OMGWOW it took me a long time to figure out that arrow keys are special.  They count as both "function" and "numeric" keys. facepalm!
         let flags = event.modifierFlags.intersection(.deviceIndependentFlagsMask).subtracting([.function, .numericPad])
-                
+
+        if RBGuileBridge.guile_handle_key(map: .search,
+                                          keycode: event.keyCode,
+                                          control: flags.contains(.control),
+                                          command: flags.contains(.command),
+                                          alt: flags.contains(.option),
+                                          shift: flags.contains(.shift)) {
+            // If a key is bound in a Guile script, that takes precedence, so we want to bail out here.  Otherwise, continue and execute the default "hard-coded" keybindings.
+            return
+        }
+
         if event.keyCode == kVK_Return
             && flags.isEmpty { // Enter/Return key
             enter()
