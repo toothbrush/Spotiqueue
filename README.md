@@ -102,7 +102,7 @@ it'll automatically get loaded next time Spotiqueue starts up:
 ```
 
 For more details, check out [the example `init.scm` file](./examples/paul-config.scm), which i use
-myself.
+myself.  You'll probably also want to look at [the Scheme internals of Spotiqueue](./guile/spotiqueue/).
 
 ## Download
 
