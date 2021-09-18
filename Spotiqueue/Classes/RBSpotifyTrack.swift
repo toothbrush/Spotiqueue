@@ -1,5 +1,5 @@
 //
-//  SpotifySong.swift
+//  SpotifyTrack.swift
 //  Spotiqueue
 //
 //  Created by Paul on 18/5/21.
@@ -9,7 +9,7 @@
 import Cocoa
 import SpotifyWebAPI
 
-final class RBSpotifySong: NSObject {
+final class RBSpotifyTrack: NSObject {
 
     enum PlayableItem {
         case Playlist
@@ -39,10 +39,10 @@ final class RBSpotifySong: NSObject {
 
     convenience init(track: Track) {
         guard let album = track.album else {
-            fatalError("Trying to construct RBSpotifySongTableRow with simplified Track.")
+            fatalError("Trying to construct \(Self.className()) with simplified Track.")
         }
         guard let artist = track.artists?.first else {
-            fatalError("Trying to construct RBSpotifySongTableRow with simplified Track.")
+            fatalError("Trying to construct \(Self.className()) with simplified Track.")
         }
         self.init(track: track, album: album, artist: artist)
     }
@@ -82,10 +82,10 @@ final class RBSpotifySong: NSObject {
     
     func hydrate(with fullTrack: Track) {
         guard let album = fullTrack.album else {
-            fatalError("Trying to hydrate RBSpotifySongTableRow with simplified Track.")
+            fatalError("Trying to hydrate \(Self.className()) with simplified Track.")
         }
         guard let artist = fullTrack.artists?.first else {
-            fatalError("Trying to hydrate RBSpotifySongTableRow with simplified Track.")
+            fatalError("Trying to hydrate \(Self.className()) with simplified Track.")
         }
         hydrate(with: fullTrack, album: album, artist: artist)
     }

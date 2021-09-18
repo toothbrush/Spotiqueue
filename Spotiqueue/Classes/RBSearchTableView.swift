@@ -115,7 +115,7 @@ class RBSearchTableView: RBTableView {
         }
     }
 
-    func deletePlaylistWithConfirmation(playlist: RBSpotifySong) {
+    func deletePlaylistWithConfirmation(playlist: RBSpotifyTrack) {
         let alert = NSAlert()
         alert.messageText = "Delete Playlist"
         alert.informativeText = "Are you sure you want to delete this playlist?"
@@ -160,8 +160,8 @@ class RBSearchTableView: RBTableView {
             return
         }
         let itemsToAddToPlaylist: [SpotifyURIConvertible] =
-            AppDelegate.appDelegate().searchResults.map { song in
-                song.spotify_uri
+            AppDelegate.appDelegate().searchResults.map { track in
+                track.spotify_uri
             }
         let suggestedName: String = String(format: "%@ – %@",
                                            AppDelegate.appDelegate().searchResults.first!.artist,
@@ -171,10 +171,10 @@ class RBSearchTableView: RBTableView {
     }
 
 
-    func selectedSearchTracks() -> [RBSpotifySong] {
+    func selectedSearchTracks() -> [RBSpotifyTrack] {
         return AppDelegate
             .appDelegate()
             .searchResultsArrayController
-            .selectedObjects as? [RBSpotifySong] ?? []
+            .selectedObjects as? [RBSpotifyTrack] ?? []
     }
 }

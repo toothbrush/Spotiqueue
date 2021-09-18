@@ -29,7 +29,7 @@
 (define queue-panel-map (make-hash-table 10))
 (define search-panel-map (make-hash-table 10))
 
-;; Define the hooks.  The single argument is a <song> record.
+;; Define the hooks.  The single argument is a <track> record.
 (define player-started-hook (make-hook 1))
 (define player-endoftrack-hook (make-hook 1))
 (define player-paused-hook (make-hook 0))

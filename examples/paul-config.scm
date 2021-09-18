@@ -18,14 +18,14 @@
 (use-modules (spotiqueue records))
 (format #t "guile ~s: Loading paul's config.~%" (module-name (current-module)))
 
-(set-record-type-printer! <song>
+(set-record-type-printer! <track>
                           (lambda (record port)
                             (format port
                                     "~a ~a - ~a (~a)"
-                                    (song-uri record)
-                                    (song-artist record)
-                                    (song-title record)
-                                    (song-album record))))
+                                    (track-uri record)
+                                    (track-artist record)
+                                    (track-title record)
+                                    (track-album record))))
 
 (define (paul:formatted-time)
   (strftime "[%a %e/%b/%Y %H:%M:%S %Z]" (localtime (current-time))))
@@ -37,21 +37,21 @@
 
 (define my-homedir (getenv "HOME"))
 
-(define (paul:player-started song)
-  (if (not (song? song))
-      (error "eek, not a song!"))
+(define (paul:player-started track)
+  (if (not (track? track))
+      (error "eek, not a track!"))
   (begin
-    (format #t "hey, a song has started: ~s\n" song)
+    (format #t "hey, a track has started: ~s\n" track)
     (write-text
      (string-append my-homedir "/spotiqueue-played.txt")
-     (format #f "~a ~a\n" (paul:formatted-time) song)
+     (format #f "~a ~a\n" (paul:formatted-time) track)
      #:append #t)))
 
-(define (paul:player-endoftrack song)
-  (if (not (song? song))
-      (error "eek, not a song!"))
+(define (paul:player-endoftrack track)
+  (if (not (track? track))
+      (error "eek, not a track!"))
   (begin
-    (format #t "end of track: ~s~%" song)))
+    (format #t "end of track: ~s~%" track)))
 
 (define (paul:paused)
   (display "guile: Paused.\n"))

@@ -31,8 +31,8 @@ SCM get_homedir(void) {
     return scm_from_utf8_string(NSHomeDirectory().UTF8String);
 }
 
-SCM current_song(void) {
-    return [RBGuileBridge get_current_song];
+SCM current_track(void) {
+    return [RBGuileBridge get_current_track];
 }
 
 SCM _scm_list_of_strings(NSArray* strings) {
@@ -57,8 +57,8 @@ SCM _scm_to_bool(bool x) {
     return scm_from_bool(x);
 }
 
-SCM next_song(void) {
-    return [RBGuileBridge next_song];
+SCM next_track(void) {
+    return [RBGuileBridge next_track];
 }
 
 SCM player_state(void) {
@@ -87,14 +87,14 @@ SCM queue_delete_selected(void) {
 
 void register_funcs_objc(void) {
     scm_c_define_gsubr("player:homedir", 0, 0, 0, &get_homedir);
-    scm_c_define_gsubr("player:current-song", 0, 0, 0, &current_song);
+    scm_c_define_gsubr("player:current-track", 0, 0, 0, &current_track);
     scm_c_define_gsubr("player:toggle-pause", 0, 0, 0, &pause_or_unpause);
-    scm_c_define_gsubr("player:next", 0, 0, 0, &next_song);
+    scm_c_define_gsubr("player:next", 0, 0, 0, &next_track);
     scm_c_define_gsubr("player:state", 0, 0, 0, &player_state);
     scm_c_define_gsubr("queue:delete-selected-tracks", 0, 0, 0, &queue_delete_selected);
     scm_c_define_gsubr("window:focus-search-box", 0, 0, 0, &focus_search_box);
     scm_c_export("player:homedir",
-                 "player:current-song",
+                 "player:current-track",
                  "player:toggle-pause",
                  "player:next",
                  "player:state",

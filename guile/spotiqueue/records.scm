@@ -3,34 +3,34 @@
 ;;; Copyright © 2021 paul at denknerd dot org
 ;;;
 ;;; This file contains definitions of record types that are useful to users.  For example, when you
-;;; subscribe to hooks, some of them will pass you a <song> object.
+;;; subscribe to hooks, some of them will pass you a <track> object.
 
 (define-module (spotiqueue records)
                #:use-module (srfi srfi-9)
                #:export
-                 (<song> make-song song? song-uri song-title song-artist song-album song-duration))
+                 (<track> make-track track? track-uri track-title track-artist track-album track-duration))
 
 (format #t "guile ~s: Loading Spotiqueue record definitions...~%" (module-name (current-module)))
 
-;; Define a song representation for callbacks
-(define-record-type <song>
-  (_make-song uri title artist album duration)
-  _song?
-  (uri      _song-uri)
-  (title    _song-title)
-  (artist   _song-artist)
-  (album    _song-album)
-  (duration _song-duration))
+;; Define a track representation for callbacks
+(define-record-type <track>
+  (_make-track uri title artist album duration)
+  _track?
+  (uri      _track-uri)
+  (title    _track-title)
+  (artist   _track-artist)
+  (album    _track-album)
+  (duration _track-duration))
 
 ;; OMG, we have these because you can't eval a syntax transformer from C??
-(define (make-song uri title artist album duration)
-  (_make-song uri title artist album duration))
+(define (make-track uri title artist album duration)
+  (_make-track uri title artist album duration))
 
-(define (song? song) (_song? song))
-(define (song-uri song) (_song-uri song))
-(define (song-title song) (_song-title song))
-(define (song-artist song) (_song-artist song))
-(define (song-album song) (_song-album song))
-(define (song-duration song) (_song-duration song))
+(define (track? track) (_track? track))
+(define (track-uri track) (_track-uri track))
+(define (track-title track) (_track-title track))
+(define (track-artist track) (_track-artist track))
+(define (track-album track) (_track-album track))
+(define (track-duration track) (_track-duration track))
 
 ;;; END records.scm

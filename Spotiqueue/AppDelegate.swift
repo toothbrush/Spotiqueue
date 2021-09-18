@@ -28,7 +28,7 @@ public func player_update_hook(hook: StatusUpdate, position_ms: UInt32, duration
     logger.info("Hook spotiqueue-worker hook ==> \(hook.rawValue)")
     switch hook {
         case EndOfTrack:
-            // We can't call end_of_track to Scheme inside the async / main-thread block, because we can't be sure when it'll be run, and want to grab the current song before it's obliterated by the "stopped" signal which comes right after the EndOfTrack signal.
+            // We can't call end_of_track to Scheme inside the async / main-thread block, because we can't be sure when it'll be run, and want to grab the current track before it's obliterated by the "stopped" signal which comes right after the EndOfTrack signal.
             DispatchQueue.main.async{
                 AppDelegate.appDelegate().playerState = .Stopped
                 AppDelegate.appDelegate().position = 0
@@ -53,7 +53,7 @@ public func player_update_hook(hook: StatusUpdate, position_ms: UInt32, duration
         case Stopped:
             DispatchQueue.main.async{
                 AppDelegate.appDelegate().playerState = .Stopped
-                // Okay, it seems we get the "stop" signal from a previous song, like, halfway through the next one.  This is a bit confusing.  We could pass along the request_id, which seems to increment, and ignore "previous songs'" stop signals.  Ugh.  You know what, probably nobody will use this anyway.
+                // Okay, it seems we get the "stop" signal from a previous track, like, halfway through the next one.  This is a bit confusing.  We could pass along the request_id, which seems to increment, and ignore "previous tracks'" stop signals.  Ugh.  You know what, probably nobody will use this anyway.
                 // In fact, come to think of it, maybe we should fully ditch the Stopped signal, and pretend that the only way to stop is by EndOfTrack/Pause.  A "full" stop is simply an EndOfTrack which is never followed by a Playing signal.
                 AppDelegate.appDelegate().position = 0
                 AppDelegate.appDelegate().duration = 0
@@ -96,14 +96,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet weak var queueArrayController: NSArrayController!
     @IBOutlet weak var searchLabel: NSTextField!
 
-    @objc dynamic var searchResults: Array<RBSpotifySong> = []
-    @objc dynamic var queue: Array<RBSpotifySong> = []
+    @objc dynamic var searchResults: Array<RBSpotifyTrack> = []
+    @objc dynamic var queue: Array<RBSpotifyTrack> = []
 
     // MARK: View element bindings
     @IBOutlet weak var queueHeaderLabel: NSTextField!
     @IBOutlet weak var albumImage: NSImageView!
     @IBOutlet weak var albumTitleLabel: NSTextField!
-    @IBOutlet weak var songTitleLabel: NSTextField!
+    @IBOutlet weak var trackTitleLabel: NSTextField!
     @IBOutlet weak var durationLabel: NSTextField!
     @IBOutlet weak var autoAdvanceButton: NSButton!
     @IBOutlet weak var searchSpinner: NSProgressIndicator!
@@ -178,7 +178,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // do complicated and potentially slow stuff here.
         // spotify.api.currentUserSavedTracks()
     }
-    @IBAction func nextSongButtonPressed(_ sender: Any) {
+
+    @IBAction func nextTrackButtonPressed(_ sender: Any) {
         _ = self.playNextQueuedTrack()
     }
 
@@ -190,11 +191,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     var spotify: RBSpotifyAPI = RBSpotifyAPI()
-    @objc dynamic var currentSong: RBSpotifySong?
+    @objc dynamic var currentTrack: RBSpotifyTrack?
 
     @IBAction func findCurrentTrackAlbum(_ sender: Any) {
-        guard let song = self.currentSong else { return }
-        self.browseDetails(for: song, consideringHistory: false)
+        guard let track = self.currentTrack else { return }
+        self.browseDetails(for: track, consideringHistory: false)
     }
 
     private var cancellables: Set<AnyCancellable> = []
@@ -253,7 +254,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         if keyPath == "queueArrayController.arrangedObjects" {
             // sum up the durations and put the info into the queue heading label
-            if let queueTracks = queueArrayController.arrangedObjects as? [RBSpotifySong] {
+            if let queueTracks = queueArrayController.arrangedObjects as? [RBSpotifyTrack] {
                 let totalLengthSeconds = queueTracks.map(\.durationSeconds).reduce(0, +)
                 if totalLengthSeconds > 0 {
                     queueHeaderLabel.stringValue = String(format: "Queue (%@ total)", totalLengthSeconds.positionalTime)
@@ -269,7 +270,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             var nrResultsAppendix: String = ""
             if self.searchResults.count > 0 {
                 if !self.filterResultsField.stringValue.isEmpty,
-                   let filtered = self.searchResultsArrayController.arrangedObjects as? Array<RBSpotifySong> {
+                   let filtered = self.searchResultsArrayController.arrangedObjects as? Array<RBSpotifyTrack> {
                     // There's a filter applied; let's show match count.
                     nrResultsAppendix = "(\(filtered.count) / \(self.searchResults.count) items)"
                 } else {
@@ -467,7 +468,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             }
             , receiveValue: { playlists in
                 for pl in playlists {
-                    self.searchResults.append(RBSpotifySong(playlist: pl))
+                    self.searchResults.append(RBSpotifyTrack(playlist: pl))
                 }
                 self.searchTableView.selectRow(row: 0)
             })
@@ -476,7 +477,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         self.window.makeFirstResponder(searchTableView)
     }
 
-    func browseDetails(for row: RBSpotifySong, consideringHistory: Bool = true) {
+    func browseDetails(for row: RBSpotifyTrack, consideringHistory: Bool = true) {
         guard !self.isSearching else {
             return
         }
@@ -517,13 +518,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         loadPlaylistTracksInto(for: playlist_uri, in: .Search)
     }
 
-    enum SongList {
+    enum TrackList {
         case Queue
         case Search
     }
 
     func loadPlaylistTracksInto(for playlist_uri: String?,
-                                in target: SongList,
+                                in target: TrackList,
                                 at_the_top: Bool = false,
                                 and_then_advance: Bool = false) {
         guard let playlist_uri = playlist_uri else {
@@ -545,10 +546,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 }
             },
             receiveValue: { items in
-                var newRows: Array<RBSpotifySong> = []
+                var newRows: Array<RBSpotifyTrack> = []
                 for playlistItemContainer in items {
                     if case .track(let track) = playlistItemContainer.item {
-                        newRows.append(RBSpotifySong.init(track: track))
+                        newRows.append(RBSpotifyTrack.init(track: track))
                     }
                 }
                 self.insertTracks(newRows: newRows,
@@ -559,8 +560,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             .store(in: &cancellables)
     }
 
-    func insertTracks(newRows: Array<RBSpotifySong>,
-                      in target: SongList,
+    func insertTracks(newRows: Array<RBSpotifyTrack>,
+                      in target: TrackList,
                       at_the_top: Bool = false,
                       and_then_advance: Bool = false) {
         switch target {
@@ -598,11 +599,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                     switch completion {
                         case .finished:
                             logger.info("finished loading album object")
-                            // If there is a self.currentSong and it's on the just-found album, let's highlight that track.
-                            if let current_song = self.currentSong, current_song.album_uri == album.uri {
+                            // If there is a self.currentTrack and it's on the just-found album, let's highlight that track.
+                            if let current_track = self.currentTrack, current_track.album_uri == album.uri {
                                 logger.info("What a coincidence, we're browsing the album of the currently-playing track.")
                                 if let idx = self.searchResults.firstIndex(where: { sItem in
-                                    sItem.spotify_uri == current_song.spotify_uri
+                                    sItem.spotify_uri == current_track.spotify_uri
                                 }) {
                                     self.searchTableView.selectRow(row: idx)
                                 }
@@ -615,7 +616,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                     let simplifiedTracks = tracksPage.items
                     // create a new array of table rows from the page of simplified tracks
                     let newTableRows = simplifiedTracks.map { t in
-                        RBSpotifySong.init(track: t, album: album, artist: t.artists!.first!)
+                        RBSpotifyTrack.init(track: t, album: album, artist: t.artists!.first!)
                     }
                     // append the new table rows to the full array
                     self.searchResults.append(contentsOf: newTableRows)
@@ -679,7 +680,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                         let simplifiedTracks = tracksPage.items
                         // create a new array of table rows from the page of simplified tracks
                         let newTableRows = simplifiedTracks.map{ t in
-                            RBSpotifySong.init(track: t, album: album, artist: artist)
+                            RBSpotifyTrack.init(track: t, album: album, artist: artist)
                         }
                         // append the new table rows to the full array
                         self.searchResults.append(contentsOf: newTableRows)
@@ -728,10 +729,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 },
                 receiveValue: { [self] searchResultsReturn in
                     for result in searchResultsReturn.tracks?.items ?? [] {
-                        searchResults.append(RBSpotifySong(track: result))
+                        searchResults.append(RBSpotifyTrack(track: result))
                     }
                     logger.info("[query \(i)] Received \(self.searchResults.count) tracks")
-                    searchResultsArrayController.sortDescriptors = RBSpotifySong.trackSortDescriptors
+                    searchResultsArrayController.sortDescriptors = RBSpotifyTrack.trackSortDescriptors
                     searchResultsArrayController.rearrangeObjects()
                     searchTableView.selectRow(row: 0)
                 }
@@ -761,22 +762,22 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func endOfTrack() {
-        guard let previousSong = self.currentSong else {
-            logger.error("AppDelegate.endOfTrack called but self.currentSong == nil!")
+        guard let previousTrack = self.currentTrack else {
+            logger.error("AppDelegate.endOfTrack called but self.currentTrack == nil!")
             return
         }
-        RBGuileBridge.player_endoftrack_hook(song: previousSong)
+        RBGuileBridge.player_endoftrack_hook(track: previousTrack)
     }
 
     func playNextQueuedTrack() -> Bool {
         guard let nextTrack = queue.first else {
             return false
         }
-        self.currentSong = nextTrack
-        spotiqueue_play_track(self.currentSong!.spotify_uri)
-        RBGuileBridge.player_playing_hook(song: self.currentSong!)
+        self.currentTrack = nextTrack
+        spotiqueue_play_track(self.currentTrack!.spotify_uri)
+        RBGuileBridge.player_playing_hook(track: self.currentTrack!)
         self.albumTitleLabel.cell?.title = nextTrack.album
-        self.songTitleLabel.cell?.title = nextTrack.prettyArtistDashTitle()
+        self.trackTitleLabel.cell?.title = nextTrack.prettyArtistDashTitle()
 
         // ehm awkward, attempting to get second largest image.
         if let image = nextTrack.album_image {

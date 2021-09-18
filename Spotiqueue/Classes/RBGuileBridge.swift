@@ -9,19 +9,19 @@
 import Foundation
 
 @objc class RBGuileBridge: NSObject {
-    private static func song_to_scm_record(song: RBSpotifySong) -> SCM {
-        // Beware, _make-song is the generated record creator thing, but it's a syntax transformer which can't be called directly, so we have a wrapper function called make-song.
-        return scm_call_5(scm_variable_ref(scm_c_lookup("make-song")),
-                          scm_from_utf8_string(song.spotify_uri), // uri
-                          scm_from_utf8_string(song.title), // title
-                          scm_from_utf8_string(song.artist), // artist
-                          scm_from_utf8_string(song.album), // album
-                          scm_from_int32(Int32(song.durationSeconds))) // duration in seconds
+    private static func track_to_scm_record(track: RBSpotifyTrack) -> SCM {
+        // Beware, _make-track is the generated record creator thing, but it's a syntax transformer which can't be called directly, so we have a wrapper function called make-track.
+        return scm_call_5(scm_variable_ref(scm_c_lookup("make-track")),
+                          scm_from_utf8_string(track.spotify_uri), // uri
+                          scm_from_utf8_string(track.title), // title
+                          scm_from_utf8_string(track.artist), // artist
+                          scm_from_utf8_string(track.album), // album
+                          scm_from_int32(Int32(track.durationSeconds))) // duration in seconds
     }
 
-    private static func hook_with_song(hook_name: String, song: RBSpotifySong) {
-        let song_record = song_to_scm_record(song: song)
-        hook_1(hook_name: hook_name, arg1: song_record)
+    private static func hook_with_track(hook_name: String, track: RBSpotifyTrack) {
+        let track_record = track_to_scm_record(track: track)
+        hook_1(hook_name: hook_name, arg1: track_record)
     }
 
     private static func hook_1(hook_name: String, arg1: SCM) {
@@ -59,12 +59,12 @@ import Foundation
         hook_1(hook_name: "selection-copied-hook", arg1: args)
     }
 
-    static func player_playing_hook(song: RBSpotifySong) {
-        hook_with_song(hook_name: "player-started-hook", song: song)
+    static func player_playing_hook(track: RBSpotifyTrack) {
+        hook_with_track(hook_name: "player-started-hook", track: track)
     }
 
-    static func player_endoftrack_hook(song: RBSpotifySong) {
-        hook_with_song(hook_name: "player-endoftrack-hook", song: song)
+    static func player_endoftrack_hook(track: RBSpotifyTrack) {
+        hook_with_track(hook_name: "player-endoftrack-hook", track: track)
     }
 
     static func player_paused_hook() {
@@ -82,7 +82,7 @@ import Foundation
         }
     }
 
-    @objc static func next_song() -> SCM {
+    @objc static func next_track() -> SCM {
         block_on_main {
             let success = AppDelegate.appDelegate().playNextQueuedTrack()
             return _scm_to_bool(success)
@@ -96,13 +96,13 @@ import Foundation
         }
     }
 
-    @objc static func get_current_song() -> SCM {
+    @objc static func get_current_track() -> SCM {
         // We're liable to be calling this from a background thread.
         block_on_main {
-            let song: RBSpotifySong? = AppDelegate.appDelegate().currentSong
+            let track: RBSpotifyTrack? = AppDelegate.appDelegate().currentTrack
 
-            if let song = song {
-                return song_to_scm_record(song: song)
+            if let track = track {
+                return track_to_scm_record(track: track)
             } else {
                 return _scm_false()
             }

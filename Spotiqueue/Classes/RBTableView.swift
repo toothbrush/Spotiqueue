@@ -29,8 +29,8 @@ class RBTableView: NSTableView {
             NSSound.beep()
             return
         }
-        if let songRow: RBSpotifySong = self.associatedArrayController().selectedObjects.first as? RBSpotifySong {
-            AppDelegate.appDelegate().browseDetails(for: songRow)
+        if let trackRow: RBSpotifyTrack = self.associatedArrayController().selectedObjects.first as? RBSpotifyTrack {
+            AppDelegate.appDelegate().browseDetails(for: trackRow)
         }
     }
     
@@ -54,7 +54,7 @@ class RBTableView: NSTableView {
             }
         }
         var copiedItems: [String] = []
-        for obj in self.associatedArrayController().selectedObjects as? [RBSpotifySong] ?? [] {
+        for obj in self.associatedArrayController().selectedObjects as? [RBSpotifyTrack] ?? [] {
             let copyText = copyTrackInsteadOfAlbum ?
                 obj.copyTextTrack() :
                 obj.copyTextAlbum()

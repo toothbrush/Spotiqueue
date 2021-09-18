@@ -40,18 +40,18 @@ class RBQueueTableView: RBTableView {
         }
 
         if incoming_uris.allSatisfy({ $0.uri.hasPrefix("spotify:track:") }) {
-            // we can use the fancy batching-fetch-songs mechanism.
-            var stub_songs: [RBSpotifySong] = []
+            // we can use the fancy batching-fetch-tracks mechanism.
+            var stub_tracks: [RBSpotifyTrack] = []
             for s in incoming_uris {
-                logger.info("Hydrating song \(s)")
-                stub_songs.append(
-                    RBSpotifySong(spotify_uri: s.uri)
+                logger.info("Hydrating track \(s)")
+                stub_tracks.append(
+                    RBSpotifyTrack(spotify_uri: s.uri)
                 )
             }
-            AppDelegate.appDelegate().queueArrayController.add(contentsOf: stub_songs)
+            AppDelegate.appDelegate().queueArrayController.add(contentsOf: stub_tracks)
 
-            AppDelegate.appDelegate().runningTasks = Int((Double(stub_songs.count) / 50.0).rounded(.up))
-            for chunk in stub_songs.chunked(size: 50) {
+            AppDelegate.appDelegate().runningTasks = Int((Double(stub_tracks.count) / 50.0).rounded(.up))
+            for chunk in stub_tracks.chunked(size: 50) {
                 AppDelegate.appDelegate().spotify.api.tracks(chunk.map({ $0.spotify_uri }))
                     .receive(on: RunLoop.main)
                     .sink(
@@ -83,7 +83,7 @@ class RBQueueTableView: RBTableView {
                 },
                 receiveValue: { tracks in
                     AppDelegate.appDelegate()
-                        .insertTracks(newRows: tracks.joined().map({ RBSpotifySong(track: $0)}),
+                        .insertTracks(newRows: tracks.joined().map({ RBSpotifyTrack(track: $0)}),
                                       in: .Queue,
                                       at_the_top: false,
                                       and_then_advance: false)
@@ -122,8 +122,8 @@ class RBQueueTableView: RBTableView {
             return
         }
 
-        if let songRow: RBSpotifySong = self.associatedArrayController().selectedObjects.first as? RBSpotifySong {
-            AppDelegate.appDelegate().browseDetails(for: songRow, consideringHistory: false)
+        if let trackRow: RBSpotifyTrack = self.associatedArrayController().selectedObjects.first as? RBSpotifyTrack {
+            AppDelegate.appDelegate().browseDetails(for: trackRow, consideringHistory: false)
         }
     }
 
@@ -155,8 +155,8 @@ class RBQueueTableView: RBTableView {
             return
         }
         let itemsToAddToPlaylist: [SpotifyURIConvertible] =
-            AppDelegate.appDelegate().queue.map { song in
-                song.spotify_uri
+            AppDelegate.appDelegate().queue.map { track in
+                track.spotify_uri
             }
         let suggestedName: String = String(format: "%@ – %@",
                                            AppDelegate.appDelegate().queue.first!.artist,

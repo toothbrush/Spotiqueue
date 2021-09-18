@@ -23,7 +23,7 @@ dragging doesn't work.  Read on for instructions!
 * `/` allows you to filter the search results further, with a regex (this happens locally)
 * Space bar pauses and unpauses (unless search field has focus).
 * Pressing ⏎ (Return) on a single item plays it immediately.
-* Pressing ⏎ with multiple songs selected adds them to the top of the queue and starts playing them.
+* Pressing ⏎ with multiple tracks selected adds them to the top of the queue and starts playing them.
 * `⌘←` enqueues, `⌘⇧←` enqueues at the top of the queue.
 * `⌘N` skips to the next track. Also useful for starting playback.
 
