@@ -34,7 +34,9 @@ public func player_update_hook(hook: StatusUpdate, position_ms: UInt32, duration
                 AppDelegate.appDelegate().position = 0
                 AppDelegate.appDelegate().duration = 0
                 AppDelegate.appDelegate().endOfTrack() // Fire off Guile hook.
-                _ = AppDelegate.appDelegate().playNextQueuedTrack()
+                if AppDelegate.appDelegate().shouldAutoAdvance() {
+                    _ = AppDelegate.appDelegate().playNextQueuedTrack()
+                }
             }
         case Paused:
             DispatchQueue.main.async{
@@ -103,7 +105,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet weak var albumTitleLabel: NSTextField!
     @IBOutlet weak var songTitleLabel: NSTextField!
     @IBOutlet weak var durationLabel: NSTextField!
-    @IBOutlet weak var saveSongButton: NSButton!
+    @IBOutlet weak var autoAdvanceButton: NSButton!
     @IBOutlet weak var searchSpinner: NSProgressIndicator!
     @IBOutlet weak var progressBar: NSProgressIndicator!
     @IBOutlet weak var filterResultsField: RBFilterField!
@@ -148,6 +150,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 logger.info("Finished 'isSearching' spinner...")
             }
         }
+    }
+
+    func shouldAutoAdvance() -> Bool {
+        let but = AppDelegate.appDelegate().autoAdvanceButton
+        return but?.state == .on
     }
 
     var position: TimeInterval = 0
@@ -333,13 +340,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {
         if self.queue.isEmpty {
             UserDefaults.standard.removeObject(forKey: "queuedTracks")
-            UserDefaults.standard.synchronize()
         } else {
             let queuedTracks: String = self.queue.map { $0.copyTextTrack() }.joined(separator: "\n")
             UserDefaults.standard.set(queuedTracks, forKey: "queuedTracks")
-            UserDefaults.standard.synchronize()
             logger.info("Saved queued tracks.")
         }
+        UserDefaults.standard.synchronize()
         return .terminateNow
     }
 

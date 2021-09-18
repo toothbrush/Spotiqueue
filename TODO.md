@@ -4,8 +4,6 @@
 
 * Show queue count in title tile, like search results.
 
-* checkbox or something, indicating whether to auto-advance.
-
 * Add all features to app menus for discoverability.
 
 * Allow filtering search results through a hook.  E.g., never listen to Coldplay.
