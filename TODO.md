@@ -6,8 +6,6 @@
 
 * checkbox or something, indicating whether to auto-advance.
 
-* Save to playlist from either search or queue.
-
 * Add all features to app menus for discoverability.
 
 * Allow filtering search results through a hook.  E.g., never listen to Coldplay.

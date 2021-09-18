@@ -7,19 +7,23 @@
 //
 
 import Cocoa
+import Combine
+import SpotifyWebAPI
 
 class RBTableView: NSTableView {
+    var cancellables: Set<AnyCancellable> = []
+    
     func associatedArrayController() -> NSArrayController {
         preconditionFailure("This method must be overridden")
     }
-
+    
     func selectRow(row: Int) {
         let row_ = row.clamped(fromInclusive: 0, toInclusive: self.numberOfRows - 1)
         self.scrollRowToVisible(row_)
         self.selectRowIndexes(IndexSet(integer: row_),
                               byExtendingSelection: false)
     }
-
+    
     func browseDetailsOnRow() {
         guard selectedRowIndexes.count == 1 else {
             NSSound.beep()
@@ -29,17 +33,17 @@ class RBTableView: NSTableView {
             AppDelegate.appDelegate().browseDetails(for: songRow)
         }
     }
-
+    
     func focusQueue() {
         let queueTableView = AppDelegate.appDelegate().queueTableView
         NSApplication.shared.windows.first?.makeFirstResponder(queueTableView)
     }
-
+    
     func focusSearchResults() {
         let searchTableView = AppDelegate.appDelegate().searchTableView
         NSApplication.shared.windows.first?.makeFirstResponder(searchTableView)
     }
-
+    
     @objc func copy(_ sender: AnyObject?) {
         // https://bluelemonbits.com/2016/08/02/copy-one-or-multiple-nstableview-rows-swift/
         var copyTrackInsteadOfAlbum = true
@@ -155,17 +159,112 @@ class RBTableView: NSTableView {
         // minus 1, because of header row
         return Int(superview!.frame.size.height / rowHeight) - 1
     }
-
+    
     override func resignFirstResponder() -> Bool {
         self.backgroundColor = NSColor.white
         return super.resignFirstResponder()
     }
-
+    
     override func becomeFirstResponder() -> Bool {
         self.backgroundColor = NSColor(srgbRed: 187.0/255.0,
                                        green: 202.0/255.0,
                                        blue: 1.0,
                                        alpha: 0.4)
         return super.becomeFirstResponder()
+    }
+    
+    private let ADD_TO_PLAYLIST_CHUNKSIZE: Int = 100 // The maximum supported by the Spotify API.
+    /*
+     It's not beautiful, but i had immense trouble with a) chunking a bunch of tracks and adding them one after the other to a playlist.  Using MergeMany still resulted in jumbled playlists, perhaps because the Spotify API doesn't like being hit that quickly in succession.  Anyway this "tail recursive" approach is a bit of an abomination (special callout for the 2s delay) but at least it's reliable.
+     */
+    func continueAddingItemsToNewPlaylist(spotify: RBSpotifyAPI,
+                                          playlist_uri: String,
+                                          items: [SpotifyURIConvertible],
+                                          step: Int = 0) {
+        // beware, this will be called in a background thread, so no UI.
+        guard !items.isEmpty else {
+            return
+        }
+        let chunk: [SpotifyURIConvertible] = Array(items.prefix(ADD_TO_PLAYLIST_CHUNKSIZE))
+        let rest:  [SpotifyURIConvertible] = Array(items.dropFirst(ADD_TO_PLAYLIST_CHUNKSIZE))
+        spotify.api.addToPlaylist(playlist_uri, uris: chunk)
+            .delay(for: 2, scheduler: RunLoop.main)
+            .sink { completion in
+                switch completion {
+                    case .failure(let error):
+                        DispatchQueue.main.async {
+                            logger.error("Couldn't add batch to playlist: \(error.localizedDescription)")
+                        }
+                    case .finished:
+                        DispatchQueue.main.async {
+                            logger.info("[step \(step)] Done adding chunks to playlist \(playlist_uri).")
+                        }
+                        self.continueAddingItemsToNewPlaylist(spotify: spotify,
+                                                              playlist_uri: playlist_uri,
+                                                              items: rest,
+                                                              step: step + 1)
+                }
+            } receiveValue: { snapshotIds in
+                DispatchQueue.main.async {
+                    logger.info("[step \(step)] Updated playlist, snapshot id: \(snapshotIds)")
+                }
+            }
+            .store(in: &cancellables)
+    }
+    
+    func createNewPlaylist(name: String, withItems itemsToAddToPlaylist: [SpotifyURIConvertible]) {
+        guard !itemsToAddToPlaylist.isEmpty else {
+            // saving an empty playlist makes no sense.
+            logger.error("Not saving empty playlist <\(name)>!")
+            return
+        }
+        
+        let spotify = AppDelegate.appDelegate().spotify
+        let details = PlaylistDetails(name: name,
+                                      isPublic: false,
+                                      isCollaborative: false,
+                                      description:
+                                        String(format: "%@ created by Spotiqueue", Date().string(format: "yyyy-MM-dd")))
+        var createdPlaylistURI = ""
+        spotify.api.createPlaylist(for: spotify.currentUser!.uri, details)
+            .sink { completion in
+                switch completion {
+                    case .failure(let error):
+                        logger.error("Couldn't create playlist: \(error.localizedDescription)")
+                    case .finished:
+                        logger.info("Done with playlist creation: \(createdPlaylistURI).")
+                        self.continueAddingItemsToNewPlaylist(spotify: spotify,
+                                                              playlist_uri: createdPlaylistURI,
+                                                              items: itemsToAddToPlaylist)
+                }
+            } receiveValue: { playlist in
+                createdPlaylistURI = playlist.uri
+                logger.info("Created playlist, uri: \(createdPlaylistURI)")
+            }
+            .store(in: &self.cancellables)
+    }
+
+    func saveAsPlaylistWithConfirmation(suggestedName: String, messageText: String, itemsToAddToPlaylist: [SpotifyURIConvertible]) {
+        guard !itemsToAddToPlaylist.isEmpty else {
+            // saving an empty list makes no sense.
+            return
+        }
+        let alert = NSAlert()
+        alert.messageText = messageText
+        alert.informativeText = "Name for new playlist:"
+        alert.alertStyle = NSAlert.Style.informational
+        let playlistNameField = NSTextField(frame: NSRect(x: 0, y: 0, width: 300, height: 24))
+        playlistNameField.stringValue = suggestedName
+        alert.accessoryView = playlistNameField
+        alert.addButton(withTitle: "OK")
+        alert.addButton(withTitle: "Cancel")
+        alert.window.initialFirstResponder = playlistNameField
+        alert.beginSheetModal(for: AppDelegate.appDelegate().window) { result in
+            if result == .alertFirstButtonReturn {
+                // OK button
+                let playlistName = playlistNameField.stringValue.strip()
+                self.createNewPlaylist(name: playlistName, withItems: itemsToAddToPlaylist)
+            }
+        }
     }
 }

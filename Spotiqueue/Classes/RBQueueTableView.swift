@@ -11,8 +11,6 @@ import Combine
 import SpotifyWebAPI
 
 class RBQueueTableView: RBTableView {
-    var cancellables: Set<AnyCancellable> = []
-
     override func associatedArrayController() -> NSArrayController {
         AppDelegate.appDelegate().queueArrayController
     }
@@ -151,100 +149,20 @@ class RBQueueTableView: RBTableView {
         }
     }
 
-    let ADD_TO_PLAYLIST_CHUNKSIZE: Int = 100 // The maximum supported by the Spotify API.
-    /*
-     It's not beautiful, but i had immense trouble with a) chunking a bunch of tracks and adding them one after the other to a playlist.  Using MergeMany still resulted in jumbled playlists, perhaps because the Spotify API doesn't like being hit that quickly in succession.  Anyway this "tail recursive" approach is a bit of an abomination (special callout for the 2s delay) but at least it's reliable.
-     */
-    private func addItemsToPlaylist(spotify: RBSpotifyAPI,
-                                    playlist_uri: String,
-                                    items: [SpotifyURIConvertible],
-                                    step: Int = 0) {
-        // beware, this will be called in a background thread, so no UI.
-        guard !items.isEmpty else {
-            return
-        }
-        let chunk: [SpotifyURIConvertible] = Array(items.prefix(ADD_TO_PLAYLIST_CHUNKSIZE))
-        let rest:  [SpotifyURIConvertible] = Array(items.dropFirst(ADD_TO_PLAYLIST_CHUNKSIZE))
-        spotify.api.addToPlaylist(playlist_uri, uris: chunk)
-            .delay(for: 2, scheduler: RunLoop.main)
-            .sink { completion in
-                switch completion {
-                    case .failure(let error):
-                        DispatchQueue.main.async {
-                            logger.error("Couldn't add batch to playlist: \(error.localizedDescription)")
-                        }
-                    case .finished:
-                        DispatchQueue.main.async {
-                            logger.info("[step \(step)] Done adding chunks to playlist \(playlist_uri).")
-                        }
-                        self.addItemsToPlaylist(spotify: spotify,
-                                                playlist_uri: playlist_uri,
-                                                items: rest,
-                                                step: step + 1)
-                }
-            } receiveValue: { snapshotIds in
-                DispatchQueue.main.async {
-                    logger.info("[step \(step)] Updated playlist, snapshot id: \(snapshotIds)")
-                }
-            }
-            .store(in: &cancellables)
-    }
-
     func saveCurrentQueueAsPlaylist() {
         guard !AppDelegate.appDelegate().queue.isEmpty else {
             // saving an empty queue makes no sense.
             return
         }
-        let alert = NSAlert()
-        alert.messageText = "Create Playlist"
-        alert.informativeText = "Name for new playlist:"
-        alert.alertStyle = NSAlert.Style.informational
-        let playlistNameField = NSTextField(frame: NSRect(x: 0, y: 0, width: 300, height: 24))
-        playlistNameField.stringValue = String(format: "%@ – %@",
-                                               AppDelegate.appDelegate().queue.first!.artist,
-                                               AppDelegate.appDelegate().queue.first!.album)
-        alert.accessoryView = playlistNameField
-        alert.addButton(withTitle: "OK")
-        alert.addButton(withTitle: "Cancel")
-        alert.window.initialFirstResponder = playlistNameField
-        alert.beginSheetModal(for: AppDelegate.appDelegate().window) { result in
-            if result == .alertFirstButtonReturn {
-                // OK button
-                let spotify = AppDelegate.appDelegate().spotify
-                logger.info(playlistNameField.stringValue.strip())
-                logger.info(String(format: "%@ created by Spotiqueue", Date().string(format: "yyyy-MM-dd")))
-                let details = PlaylistDetails(name: playlistNameField.stringValue.strip(),
-                                              isPublic: false,
-                                              isCollaborative: false,
-                                              description:
-                                                String(format: "%@ created by Spotiqueue", Date().string(format: "yyyy-MM-dd")))
-                var createdPlaylistURI = ""
-                let itemsToAddToPlaylist: [SpotifyURIConvertible] =
-                    AppDelegate.appDelegate().queue.map { song in
-                        song.spotify_uri
-                    }
-
-                spotify.api.createPlaylist(for: spotify.currentUser!.uri, details)
-                    .sink { completion in
-                        switch completion {
-                            case .failure(let error):
-                                logger.error("Couldn't create playlist: \(error.localizedDescription)")
-                            case .finished:
-                                logger.info("Done with playlist creation: \(createdPlaylistURI).")
-                                self.addItemsToPlaylist(spotify: spotify,
-                                                        playlist_uri: createdPlaylistURI,
-                                                        items: itemsToAddToPlaylist)
-                        }
-                    } receiveValue: { playlist in
-                        createdPlaylistURI = playlist.uri
-                        logger.info("Created playlist, uri: \(createdPlaylistURI)")
-                    }
-                    .store(in: &self.cancellables)
-            } else {
-                // cancel button
-                logger.info("else button")
+        let itemsToAddToPlaylist: [SpotifyURIConvertible] =
+            AppDelegate.appDelegate().queue.map { song in
+                song.spotify_uri
             }
-        }
+        let suggestedName: String = String(format: "%@ – %@",
+                                           AppDelegate.appDelegate().queue.first!.artist,
+                                           AppDelegate.appDelegate().queue.first!.album)
+
+        saveAsPlaylistWithConfirmation(suggestedName: suggestedName, messageText: "Save Queue as Playlist", itemsToAddToPlaylist: itemsToAddToPlaylist)
     }
 
     override func keyDown(with event: NSEvent) {
@@ -269,6 +187,9 @@ class RBQueueTableView: RBTableView {
         } else if event.keyCode == kVK_UpArrow       // up arrow
                     && flags == [.command] {
             moveSelectedTracksUp()
+        } else if event.characters == "s"       // cmd-s = save current queue as playlist
+                    && flags == [.command] {
+            saveCurrentQueueAsPlaylist()
         } else {
             super.keyDown(with: event)
         }

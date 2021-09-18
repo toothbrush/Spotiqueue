@@ -11,7 +11,6 @@ import Combine
 import SpotifyWebAPI
 
 class RBSearchTableView: RBTableView {
-    var cancellables: Set<AnyCancellable> = []
 
     override func associatedArrayController() -> NSArrayController {
         AppDelegate.appDelegate().searchResultsArrayController
@@ -92,6 +91,9 @@ class RBSearchTableView: RBTableView {
                    kVK_ANSI_D].contains(Int(event.keyCode))
                     && flags.isEmpty {
             attemptDeletePlaylist()
+        } else if event.characters == "s"       // cmd-s = save current queue as playlist
+                    && flags == [.command] {
+            saveCurrentSearchResultsAsPlaylist()
         } else {
             super.keyDown(with: event)
         }
@@ -151,6 +153,23 @@ class RBSearchTableView: RBTableView {
             }
         }
     }
+
+    func saveCurrentSearchResultsAsPlaylist() {
+        guard !AppDelegate.appDelegate().searchResults.isEmpty else {
+            // saving an empty queue makes no sense.
+            return
+        }
+        let itemsToAddToPlaylist: [SpotifyURIConvertible] =
+            AppDelegate.appDelegate().searchResults.map { song in
+                song.spotify_uri
+            }
+        let suggestedName: String = String(format: "%@ – %@",
+                                           AppDelegate.appDelegate().searchResults.first!.artist,
+                                           AppDelegate.appDelegate().searchResults.first!.album)
+
+        saveAsPlaylistWithConfirmation(suggestedName: suggestedName, messageText: "Save Search as Playlist", itemsToAddToPlaylist: itemsToAddToPlaylist)
+    }
+
 
     func selectedSearchTracks() -> [RBSpotifySong] {
         return AppDelegate
