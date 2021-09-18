@@ -157,6 +157,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		DA2F7CF826F5854A00FE1A5F /* spotiqueue */ = {
+			isa = PBXGroup;
+			children = (
+				DAE88E2F26E8AAA300125A3F /* init.scm */,
+				DA2E89FA26EC8929003BF91C /* key-constants.scm */,
+				DA2E89F226EC6741003BF91C /* keybindings.scm */,
+				DA2E89D326EC3ADF003BF91C /* records.scm */,
+			);
+			path = spotiqueue;
+			sourceTree = "<group>";
+		};
 		DA593BBB26B502000039DB72 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -213,7 +224,7 @@
 		DAE1F17526534D660013704F = {
 			isa = PBXGroup;
 			children = (
-				DAE88E2E26E8AA8C00125A3F /* spotiqueue-guile */,
+				DAE88E2E26E8AA8C00125A3F /* guile */,
 				DA593BBA26B502000039DB72 /* spotiqueue_worker.xcodeproj */,
 				DAE1F18026534D660013704F /* Spotiqueue */,
 				DAE1F17F26534D660013704F /* Products */,
@@ -248,15 +259,12 @@
 			path = Spotiqueue;
 			sourceTree = "<group>";
 		};
-		DAE88E2E26E8AA8C00125A3F /* spotiqueue-guile */ = {
+		DAE88E2E26E8AA8C00125A3F /* guile */ = {
 			isa = PBXGroup;
 			children = (
-				DAE88E2F26E8AAA300125A3F /* init.scm */,
-				DA2E89FA26EC8929003BF91C /* key-constants.scm */,
-				DA2E89F226EC6741003BF91C /* keybindings.scm */,
-				DA2E89D326EC3ADF003BF91C /* records.scm */,
+				DA2F7CF826F5854A00FE1A5F /* spotiqueue */,
 			);
-			path = "spotiqueue-guile";
+			path = guile;
 			sourceTree = "<group>";
 		};
 		EC90ED33267B446F003C3C0D /* Tables */ = {
@@ -554,7 +562,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 969;
+				CURRENT_PROJECT_VERSION = 970;
 				DEVELOPMENT_TEAM = QG72S9L5L3;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -594,7 +602,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 969;
+				CURRENT_PROJECT_VERSION = 970;
 				DEVELOPMENT_TEAM = QG72S9L5L3;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
