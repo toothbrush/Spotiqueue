@@ -8,6 +8,16 @@
 
 import Foundation
 
+func block_on_main(closure: () -> SCM) -> SCM {
+    if Thread.isMainThread {
+        return closure()
+    } else {
+        return DispatchQueue.main.sync {
+            closure()
+        }
+    }
+}
+
 @objc class RBGuileBridge: NSObject {
     private static func track_to_scm_record(track: RBSpotifyItem) -> SCM {
         // Beware, _make-track is the generated record creator thing, but it's a syntax transformer which can't be called directly, so we have a wrapper function called make-track.
@@ -118,16 +128,6 @@ import Foundation
                     return scm_from_utf8_symbol("playing")
                 case .Stopped:
                     return scm_from_utf8_symbol("stopped")
-            }
-        }
-    }
-
-    static func block_on_main(closure: () -> SCM) -> SCM {
-        if Thread.isMainThread {
-            return closure()
-        } else {
-            return DispatchQueue.main.sync {
-                closure()
             }
         }
     }
