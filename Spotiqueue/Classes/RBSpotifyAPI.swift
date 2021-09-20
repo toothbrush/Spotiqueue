@@ -6,10 +6,10 @@
 //  Copyright © 2021 Rustling Broccoli. All rights reserved.
 //
 
-import Foundation
 import Combine
-import SwiftUI
+import Foundation
 import SpotifyWebAPI
+import SwiftUI
 
 /**
  A helper class that wraps around an instance of `SpotifyAPI`
@@ -19,26 +19,27 @@ import SpotifyWebAPI
  information and save them to persistent storage in the keychain.
  */
 final class RBSpotifyAPI: ObservableObject {
-
     static func sanitiseIncomingURIBlob(pasted_blob: String) -> [SpotifyURIConvertible] {
         pasted_blob
             .split(whereSeparator: \.isNewline)
-            .compactMap({ $0
+            .compactMap { $0
                 .trimmingCharacters(in: .whitespaces)
                 .split(whereSeparator: \.isWhitespace)
                 .first
-            })
-            .compactMap({ sanitiseIncomingURI(value: String($0)) })
+            }
+            .compactMap { sanitiseIncomingURI(value: String($0)) }
     }
-    
+
     static func sanitiseIncomingURI(value: String) -> String? {
         if value.hasPrefix("spotify:track:")
             || value.hasPrefix("spotify:playlist:")
-            || value.hasPrefix("spotify:album:") {
+            || value.hasPrefix("spotify:album:")
+        {
             return value
         } else if value.hasPrefix("https://open.spotify.com/track/")
-                    || value.hasPrefix("https://open.spotify.com/playlist/")
-                    || value.hasPrefix("https://open.spotify.com/album/") {
+            || value.hasPrefix("https://open.spotify.com/playlist/")
+            || value.hasPrefix("https://open.spotify.com/album/")
+        {
             if let url = URL(string: value) {
                 let my_uri = "spotify" + url.path.replacingOccurrences(of: "/", with: ":")
                 logger.info("Converted open.spotify.com URL to \(my_uri)")
@@ -48,7 +49,7 @@ final class RBSpotifyAPI: ObservableObject {
         logger.warning("Ignoring invalid Spotify URI: \(value)")
         return nil
     }
-    
+
     private static let clientId: String = "f925f1b4e9164425be3d9ec9bf4be1c5"
 
     /// The URL that Spotify will redirect to after the user either
@@ -104,30 +105,31 @@ final class RBSpotifyAPI: ObservableObject {
     // MARK: - Methods -
 
     init() {
-
         // Configure the loggers.
         self.api.apiRequestLogger.logLevel = .trace
         // self.api.logger.logLevel = .trace
 
         // MARK: Important: Subscribe to `authorizationManagerDidChange` BEFORE
+
         // MARK: retrieving `authorizationManager` from persistent storage
+
         self.api.authorizationManagerDidChange
             // We must receive on the main thread because we are
             // updating the @Published `isAuthorized` property.
             .receive(on: RunLoop.main)
-            .sink(receiveValue: handleChangesToAuthorizationManager)
-            .store(in: &cancellables)
+            .sink(receiveValue: self.handleChangesToAuthorizationManager)
+            .store(in: &self.cancellables)
 
         self.api.authorizationManagerDidDeauthorize
             .receive(on: RunLoop.main)
-            .sink(receiveValue: authorizationManagerDidDeauthorize)
-            .store(in: &cancellables)
-
+            .sink(receiveValue: self.authorizationManagerDidDeauthorize)
+            .store(in: &self.cancellables)
 
         // MARK: Check to see if the authorization information is saved in
-        // MARK: the keychain.
-        if let authManagerData = RBSecrets.getSecret(s: .authorizationManager) {
 
+        // MARK: the keychain.
+
+        if let authManagerData = RBSecrets.getSecret(s: .authorizationManager) {
             do {
                 // Try to decode the data.
                 let authorizationManager = try JSONDecoder().decode(
@@ -155,12 +157,9 @@ final class RBSpotifyAPI: ObservableObject {
             } catch {
                 logger.error("could not decode authorizationManager from data:\n\(error)")
             }
-        }
-        else {
+        } else {
             logger.info("did NOT find authorization information in keychain")
         }
-
-
     }
 
     /**
@@ -174,8 +173,7 @@ final class RBSpotifyAPI: ObservableObject {
      in `LoginView`.
      */
     func authorize() {
-
-        let url = api.authorizationManager.makeAuthorizationURL(
+        let url = self.api.authorizationManager.makeAuthorizationURL(
             redirectURI: Self.loginCallbackURL,
             codeChallenge: RBSpotifyAPI.codeChallenge,
             // This same value **MUST** be provided for the state parameter of
@@ -215,7 +213,6 @@ final class RBSpotifyAPI: ObservableObject {
      [1]: https://peter-schorn.github.io/SpotifyAPI/Classes/SpotifyAPI.html#/s:13SpotifyWebAPI0aC0C29authorizationManagerDidChange7Combine18PassthroughSubjectCyyts5NeverOGvp
      */
     func handleChangesToAuthorizationManager() {
-
 //        withAnimation(LoginView.animation) {
 //            // Update the @Published `isAuthorized` property.
 //            // When set to `true`, `LoginView` is dismissed, allowing the
@@ -228,7 +225,6 @@ final class RBSpotifyAPI: ObservableObject {
         logger.info(
             "Spotify.handleChangesToAuthorizationManager: isAuthorized: \(self.isAuthorized)"
         )
-
 
         self.retrieveCurrentUser()
 
@@ -246,7 +242,6 @@ final class RBSpotifyAPI: ObservableObject {
                     "in keychain:\n\(error)"
             )
         }
-
     }
 
     /**
@@ -257,22 +252,21 @@ final class RBSpotifyAPI: ObservableObject {
      called.
      */
     func authorizationManagerDidDeauthorize() {
-
 //        withAnimation(LoginView.animation) {
 //            self.isAuthorized = false
 //        }
 
         self.currentUser = nil
 
-            /*
-             Remove the authorization information from the keychain.
+        /*
+         Remove the authorization information from the keychain.
 
-             If you don't do this, then the authorization information
-             that you just removed from memory by calling
-             `SpotifyAPI.authorizationManager.deauthorize()` will be
-             retrieved again from persistent storage after this app is
-             quit and relaunched.
-             */
+         If you don't do this, then the authorization information
+         that you just removed from memory by calling
+         `SpotifyAPI.authorizationManager.deauthorize()` will be
+         retrieved again from persistent storage after this app is
+         quit and relaunched.
+         */
         RBSecrets.deleteSecret(s: .authorizationManager)
         logger.info("did remove authorization manager from keychain")
     }
@@ -284,8 +278,7 @@ final class RBSpotifyAPI: ObservableObject {
      is `nil`.
      */
     func retrieveCurrentUser(onlyIfNil: Bool = true) {
-
-        if onlyIfNil && self.currentUser != nil {
+        if onlyIfNil, self.currentUser != nil {
             return
         }
 
@@ -303,8 +296,6 @@ final class RBSpotifyAPI: ObservableObject {
                     self.currentUser = user
                 }
             )
-            .store(in: &cancellables)
-
+            .store(in: &self.cancellables)
     }
-
 }

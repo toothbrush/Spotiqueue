@@ -15,6 +15,7 @@ class RBSecrets: NSObject {
         case password = "spotiqueue_password"
         case authorizationManager = "spotiqueue_authorization_manager_v2"
     }
+
     static let keychain = KeychainSwift()
 
     // let's use this to collect some secrets
@@ -29,8 +30,7 @@ class RBSecrets: NSObject {
                 let contentFromFile = try String(contentsOfFile: fileURL.path,
                                                  encoding: .utf8)
                 return contentFromFile
-            }
-            catch let error {
+            } catch {
                 logger.error("Error reading file: \(error)")
             }
         }
@@ -40,7 +40,7 @@ class RBSecrets: NSObject {
         }
         #endif
         logger.critical("Failure to read <\(s.rawValue)> from Keychain!")
-        logger.debug("Keychain.lastResultCode = \(keychain.lastResultCode)")
+        logger.debug("Keychain.lastResultCode = \(self.keychain.lastResultCode)")
         return nil
     }
 
@@ -54,23 +54,22 @@ class RBSecrets: NSObject {
             try String(decoding: v, as: UTF8.self).write(toFile: fileURL.path,
                                                          atomically: true,
                                                          encoding: .utf8)
-        }
-        catch let error {
+        } catch {
             logger.error("Error writing file: \(error)")
         }
         #else
         // Fine, only touch the Keychain proper if we're in real-life mode.
-        if !keychain.set(v, forKey: s.rawValue, withAccess: .accessibleAfterFirstUnlock) {
+        if !self.keychain.set(v, forKey: s.rawValue, withAccess: .accessibleAfterFirstUnlock) {
             logger.critical("Failure to save <\(s.rawValue)> to keychain")
-            logger.debug("Keychain.lastResultCode = \(keychain.lastResultCode)")
+            logger.debug("Keychain.lastResultCode = \(self.keychain.lastResultCode)")
         }
         #endif
     }
 
     static func deleteSecret(s: Secret) {
-        if !keychain.delete(s.rawValue) {
+        if !self.keychain.delete(s.rawValue) {
             logger.critical("Failure to remove <\(s.rawValue)> from keychain")
-            logger.debug("Keychain.lastResultCode = \(keychain.lastResultCode)")
+            logger.debug("Keychain.lastResultCode = \(self.keychain.lastResultCode)")
         }
     }
 }

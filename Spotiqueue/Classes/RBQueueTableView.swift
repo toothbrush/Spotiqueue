@@ -18,7 +18,7 @@ class RBQueueTableView: RBTableView {
     @objc func paste(_ sender: AnyObject?) {
         AppDelegate.appDelegate().isSearching = true
         guard let contents = NSPasteboard.general.pasteboardItems?.first?.string(forType: .string) else { return }
-        addTracksToQueue(from: contents)
+        self.addTracksToQueue(from: contents)
     }
 
     /// This function is hopefully useful for calling from Guile land. e.g.
@@ -28,7 +28,7 @@ class RBQueueTableView: RBTableView {
     /// ```
     ///
     func addTracksToQueue(from manyUris: [String]) {
-        addTracksToQueue(from: manyUris.joined(separator: "\n"))
+        self.addTracksToQueue(from: manyUris.joined(separator: "\n"))
     }
 
     func addTracksToQueue(from contents: String) {
@@ -50,9 +50,9 @@ class RBQueueTableView: RBTableView {
             }
             AppDelegate.appDelegate().queueArrayController.add(contentsOf: stub_tracks)
 
-            AppDelegate.appDelegate().runningTasks = Int((Double(stub_tracks.count) / 50.0).rounded(.up))
+            AppDelegate.appDelegate().runningTasks = Int((Double(stub_tracks.count)/50.0).rounded(.up))
             for chunk in stub_tracks.chunked(size: 50) {
-                AppDelegate.appDelegate().spotify.api.tracks(chunk.map({ $0.spotify_uri }))
+                AppDelegate.appDelegate().spotify.api.tracks(chunk.map(\.spotify_uri))
                     .receive(on: RunLoop.main)
                     .sink(
                         receiveCompletion: { completion in
@@ -78,16 +78,16 @@ class RBQueueTableView: RBTableView {
                                                  mapTransform: { AppDelegate.appDelegate().spotify.api.dealWithUnknownSpotifyURI($0) })
                 .receive(on: RunLoop.main)
                 .sink(receiveCompletion: { completion in
-                    AppDelegate.appDelegate().isSearching = false
-                    logger.info("completion: \(completion)")
-                },
-                receiveValue: { tracks in
-                    AppDelegate.appDelegate()
-                        .insertTracks(newRows: tracks.joined().map({ RBSpotifyItem(track: $0)}),
-                                      in: .Queue,
-                                      at_the_top: false,
-                                      and_then_advance: false)
-                })
+                          AppDelegate.appDelegate().isSearching = false
+                          logger.info("completion: \(completion)")
+                      },
+                      receiveValue: { tracks in
+                          AppDelegate.appDelegate()
+                              .insertTracks(newRows: tracks.joined().map { RBSpotifyItem(track: $0) },
+                                            in: .Queue,
+                                            at_the_top: false,
+                                            and_then_advance: false)
+                      })
                 .store(in: &cancellables)
         }
     }
@@ -143,7 +143,7 @@ class RBQueueTableView: RBTableView {
             NSSound.beep()
             return
         }
-        if let last = self.selectedRowIndexes.last, last + 1 < self.numberOfRows  {
+        if let last = self.selectedRowIndexes.last, last + 1 < self.numberOfRows {
             AppDelegate.appDelegate().queue.move(fromOffsets: self.selectedRowIndexes, toOffset: last + 2)
             self.scrollRowToVisible((last + 2).clamped(fromInclusive: 0, toInclusive: self.numberOfRows - 1))
         }
@@ -158,9 +158,9 @@ class RBQueueTableView: RBTableView {
             AppDelegate.appDelegate().queue.map { track in
                 track.spotify_uri
             }
-        let suggestedName: String = String(format: "%@ – %@",
-                                           AppDelegate.appDelegate().queue.first!.artist,
-                                           AppDelegate.appDelegate().queue.first!.album)
+        let suggestedName = String(format: "%@ – %@",
+                                   AppDelegate.appDelegate().queue.first!.artist,
+                                   AppDelegate.appDelegate().queue.first!.album)
 
         saveAsPlaylistWithConfirmation(suggestedName: suggestedName, messageText: "Save Queue as Playlist", itemsToAddToPlaylist: itemsToAddToPlaylist)
     }
@@ -173,23 +173,28 @@ class RBQueueTableView: RBTableView {
                                           control: flags.contains(.control),
                                           command: flags.contains(.command),
                                           alt: flags.contains(.option),
-                                          shift: flags.contains(.shift)) {
+                                          shift: flags.contains(.shift))
+        {
             // If a key is bound in a Guile script, that takes precedence, so we want to bail out here.  Otherwise, continue and execute the default "hard-coded" keybindings.
             return
         }
 
-        if event.keyCode == kVK_Return
-            && flags.isEmpty { // Enter/Return key
-            enter()
-        } else if event.keyCode == kVK_DownArrow       // down arrow
-                    && flags == [.command] {
-            moveSelectedTracksDown()
-        } else if event.keyCode == kVK_UpArrow       // up arrow
-                    && flags == [.command] {
-            moveSelectedTracksUp()
-        } else if event.characters == "s"       // cmd-s = save current queue as playlist
-                    && flags == [.command] {
-            saveCurrentQueueAsPlaylist()
+        if event.keyCode == kVK_Return,
+           flags.isEmpty
+        { // Enter/Return key
+            self.enter()
+        } else if event.keyCode == kVK_DownArrow, // down arrow
+                  flags == [.command]
+        {
+            self.moveSelectedTracksDown()
+        } else if event.keyCode == kVK_UpArrow, // up arrow
+                  flags == [.command]
+        {
+            self.moveSelectedTracksUp()
+        } else if event.characters == "s", // cmd-s = save current queue as playlist
+                  flags == [.command]
+        {
+            self.saveCurrentQueueAsPlaylist()
         } else {
             super.keyDown(with: event)
         }

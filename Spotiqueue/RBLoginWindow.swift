@@ -9,71 +9,71 @@
 import Cocoa
 
 class RBLoginWindow: NSWindowController {
+    @IBOutlet var usernameField: NSTextField!
+    @IBOutlet var passwordField: NSSecureTextField!
+    @IBOutlet var loginButton: NSButton!
+    @IBOutlet var quitButton: NSButton!
+    @IBOutlet var loginSpinner: NSProgressIndicator!
 
-    @IBOutlet weak var usernameField: NSTextField!
-    @IBOutlet weak var passwordField: NSSecureTextField!
-    @IBOutlet weak var loginButton: NSButton!
-    @IBOutlet weak var quitButton: NSButton!
-    @IBOutlet weak var loginSpinner: NSProgressIndicator!
-    
     override func windowDidLoad() {
         super.windowDidLoad()
-        startSpinning()
+        self.startSpinning()
     }
-    
-    func startLoginRoutine(){
-        startSpinning()
+
+    func startLoginRoutine() {
+        self.startSpinning()
         // try to grab user/pass from keychain:
         if let username = RBSecrets.getSecret(s: .username),
-           let password = RBSecrets.getSecret(s: .password) {
-            usernameField.isEnabled = true
-            passwordField.isEnabled = true
-            usernameField.stringValue = username
-            passwordField.stringValue = password
-            usernameField.isEnabled = false
-            passwordField.isEnabled = false
+           let password = RBSecrets.getSecret(s: .password)
+        {
+            self.usernameField.isEnabled = true
+            self.passwordField.isEnabled = true
+            self.usernameField.stringValue = username
+            self.passwordField.stringValue = password
+            self.usernameField.isEnabled = false
+            self.passwordField.isEnabled = false
 
             let worker_initialized = spotiqueue_initialize_worker(username, password)
             if !worker_initialized {
                 fatalError("Unable to launch spotiqueue-worker!")
             }
-            
+
             self.window?.sheetParent?.endSheet(self.window!, returnCode: .OK)
         } else {
             logger.info("Eek, couldn't retrieve username or password from Keychain! Let's ask the user.")
         }
-        endSpinning()
+        self.endSpinning()
     }
-    
+
     @IBAction func loginPressed(_ sender: Any) {
-        RBSecrets.setSecret(s: .username, v: usernameField.stringValue.data(using: .utf8)!)
-        RBSecrets.setSecret(s: .password, v: passwordField.stringValue.data(using: .utf8)!)
+        RBSecrets.setSecret(s: .username, v: self.usernameField.stringValue.data(using: .utf8)!)
+        RBSecrets.setSecret(s: .password, v: self.passwordField.stringValue.data(using: .utf8)!)
         self.startLoginRoutine()
     }
-    
+
     @IBAction func quitButton(_ sender: Any) {
         for window in NSApp.windows {
             window.close()
         }
         NSApp.terminate(self)
     }
-    
+
     func startSpinning() {
-        usernameField.isEnabled = false
-        passwordField.isEnabled = false
-        quitButton.isEnabled = false
-        loginButton.isEnabled = false
+        self.usernameField.isEnabled = false
+        self.passwordField.isEnabled = false
+        self.quitButton.isEnabled = false
+        self.loginButton.isEnabled = false
         self.loginSpinner.isHidden = false
         self.loginSpinner.startAnimation(self)
     }
-    
+
     func endSpinning() {
         self.loginSpinner.isHidden = true
         self.loginSpinner.stopAnimation(self)
-        usernameField.isEnabled = true
-        passwordField.isEnabled = true
-        quitButton.isEnabled = true
-        loginButton.isEnabled = true
+        self.usernameField.isEnabled = true
+        self.passwordField.isEnabled = true
+        self.quitButton.isEnabled = true
+        self.loginButton.isEnabled = true
         self.window?.makeFirstResponder(self.usernameField)
     }
 }

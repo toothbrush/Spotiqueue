@@ -15,7 +15,7 @@ extension Track {
             return "<no artist>"
         }
 
-        let names = self.artists!.map { (artist) -> String in
+        let names = self.artists!.map { artist -> String in
             artist.name
         }
 

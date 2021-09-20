@@ -21,7 +21,7 @@ func block_on_main(closure: () -> SCM) -> SCM {
 @_cdecl("auto_advance")
 public func auto_advance() -> SCM {
     block_on_main {
-        return _scm_to_bool(AppDelegate.appDelegate().shouldAutoAdvance())
+        _scm_to_bool(AppDelegate.appDelegate().shouldAutoAdvance())
     }
 }
 
@@ -36,17 +36,17 @@ public func set_auto_advance(data: SCM) -> SCM {
 @objc class RBGuileBridge: NSObject {
     private static func track_to_scm_record(track: RBSpotifyItem) -> SCM {
         // Beware, _make-track is the generated record creator thing, but it's a syntax transformer which can't be called directly, so we have a wrapper function called make-track.
-        return scm_call_5(scm_variable_ref(scm_c_lookup("make-track")),
-                          scm_from_utf8_string(track.spotify_uri), // uri
-                          scm_from_utf8_string(track.title), // title
-                          scm_from_utf8_string(track.artist), // artist
-                          scm_from_utf8_string(track.album), // album
-                          scm_from_int32(Int32(track.durationSeconds))) // duration in seconds
+        scm_call_5(scm_variable_ref(scm_c_lookup("make-track")),
+                   scm_from_utf8_string(track.spotify_uri), // uri
+                   scm_from_utf8_string(track.title), // title
+                   scm_from_utf8_string(track.artist), // artist
+                   scm_from_utf8_string(track.album), // album
+                   scm_from_int32(Int32(track.durationSeconds))) // duration in seconds
     }
 
     private static func hook_with_track(hook_name: String, track: RBSpotifyItem) {
-        let track_record = track_to_scm_record(track: track)
-        hook_1(hook_name: hook_name, arg1: track_record)
+        let track_record = self.track_to_scm_record(track: track)
+        self.hook_1(hook_name: hook_name, arg1: track_record)
     }
 
     private static func hook_1(hook_name: String, arg1: SCM) {
@@ -85,19 +85,19 @@ public func set_auto_advance(data: SCM) -> SCM {
     }
 
     static func player_playing_hook(track: RBSpotifyItem) {
-        hook_with_track(hook_name: "player-started-hook", track: track)
+        self.hook_with_track(hook_name: "player-started-hook", track: track)
     }
 
     static func player_endoftrack_hook(track: RBSpotifyItem) {
-        hook_with_track(hook_name: "player-endoftrack-hook", track: track)
+        self.hook_with_track(hook_name: "player-endoftrack-hook", track: track)
     }
 
     static func player_paused_hook() {
-        hook_0(hook_name: "player-paused-hook")
+        self.hook_0(hook_name: "player-paused-hook")
     }
 
     static func player_unpaused_hook() {
-        hook_0(hook_name: "player-unpaused-hook")
+        self.hook_0(hook_name: "player-unpaused-hook")
     }
 
     @objc static func pause_or_unpause() -> SCM {
@@ -167,7 +167,7 @@ public func set_auto_advance(data: SCM) -> SCM {
                                        guile_key,
                                        _scm_false())
 
-        if(!_scm_is_true(action)) {
+        if !_scm_is_true(action) {
             scm_simple_format(_scm_true(),
                               scm_from_utf8_string("~a not bound by user.~%"),
                               scm_list_1(guile_key))

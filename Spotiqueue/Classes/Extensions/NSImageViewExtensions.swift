@@ -6,12 +6,12 @@
 //  Copyright © 2021 Rustling Broccoli. All rights reserved.
 //
 
-import Foundation
 import Cocoa
+import Foundation
 
 extension NSImageView {
     // ooooh icky https://stackoverflow.com/questions/44674549/extensions-may-not-contain-stored-properties-unless-your-are-apple-what-am-i
-    private struct uglyImageState {
+    private enum uglyImageState {
         static var imageCache = NSCache<NSString, NSImage>()
     }
 
@@ -38,7 +38,7 @@ extension NSImageView {
         }
 
         if let url = URL(string: imageServerUrl) {
-            URLSession.shared.dataTask(with: url, completionHandler: { (data, response, error) in
+            URLSession.shared.dataTask(with: url, completionHandler: { data, _, error in
                 if error != nil {
                     logger.error("Error loading image from URL: \(String(describing: error?.localizedDescription))")
                     DispatchQueue.main.async {

@@ -9,7 +9,6 @@
 import Cocoa
 
 class RBFilterField: NSTextField {
-
     enum FilterState {
         case Filtering
         case NoFilter
@@ -26,12 +25,12 @@ class RBFilterField: NSTextField {
     func buildFilter(filterString: String) -> NSPredicate? {
         // If the filter field is blanked, we want to display all items.
         guard !filterString.isEmpty else {
-            filterState = .NoFilter
+            self.filterState = .NoFilter
             return nil
         }
-        var filter: NSPredicate? = nil
+        var filter: NSPredicate?
 
-        filterState = .Filtering
+        self.filterState = .Filtering
         // We want to do substring matching, unless the user really doesn't want us to.
         var massagedFilterString = filterString
         if massagedFilterString.first != "^" {
@@ -49,10 +48,9 @@ class RBFilterField: NSTextField {
             // "[cd]" specifies case and diacritic insensitivity
             filter = NSPredicate(format: "SELF.title MATCHES [cd] %@ || SELF.artist MATCHES [cd] %@ || SELF.album MATCHES [cd] %@",
                                  argumentArray: [massagedFilterString, massagedFilterString, massagedFilterString])
-        }
-        catch {
+        } catch {
             logger.warning("Filter string '\(massagedFilterString)' isn't a valid regex.")
-            filterState = .BadFilter
+            self.filterState = .BadFilter
         }
 
         return filter
@@ -62,7 +60,7 @@ class RBFilterField: NSTextField {
         // We don't directly build the predicate from the filter string because it's.. subtle.
         // also, this "if" is important, because we want to maintain the most recent _non-broken_ filter.
         if self.stringValue.isEmpty {
-            filterState = .NoFilter
+            self.filterState = .NoFilter
             AppDelegate.appDelegate().searchResultsArrayController.filterPredicate = nil
         }
 
@@ -71,7 +69,7 @@ class RBFilterField: NSTextField {
         }
 
         self.drawsBackground = true
-        switch filterState {
+        switch self.filterState {
             case .NoFilter:
                 // Reset default appearance
                 self.backgroundColor = NSColor.textBackgroundColor
@@ -83,7 +81,7 @@ class RBFilterField: NSTextField {
     }
 
     override func textDidChange(_ notification: Notification) {
-        updateFilter()
+        self.updateFilter()
         super.textDidChange(notification)
     }
 }

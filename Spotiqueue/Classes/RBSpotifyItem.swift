@@ -14,7 +14,7 @@ final class RBSpotifyItem: NSObject {
         case Playlist
         case Track
     }
-    
+
     @objc dynamic var title: String
     @objc dynamic var artist: String
     @objc dynamic var album: String!
@@ -25,15 +25,16 @@ final class RBSpotifyItem: NSObject {
     @objc dynamic var length: String = ""
 
     var itemType: ItemType = .Track
-    
+
     var spotify_uri: String
     var spotify_album: Album?
     var spotify_artist: Artist?
     var durationSeconds: TimeInterval {
         didSet {
-            length = durationSeconds.positionalTime
+            self.length = self.durationSeconds.positionalTime
         }
     }
+
     var album_image: SpotifyImage?
 
     convenience init(track: Track) {
@@ -52,7 +53,7 @@ final class RBSpotifyItem: NSObject {
         // now, hydrate it.
         self.hydrate(with: track, album: album, artist: artist)
     }
-    
+
     convenience init(playlist: Playlist<PlaylistItemsReference>) {
         self.init(spotify_uri: playlist.uri)
         self.title = playlist.name
@@ -60,7 +61,7 @@ final class RBSpotifyItem: NSObject {
         self.track_number = playlist.items.total
         self.itemType = .Playlist
     }
-    
+
     init(spotify_uri: String) {
         // This is to create a placeholder/stub track object, to be hydrated later
         self.spotify_uri = spotify_uri
@@ -78,7 +79,7 @@ final class RBSpotifyItem: NSObject {
         self.disc_number = 0
         self.durationSeconds = 0
     }
-    
+
     func hydrate(with fullTrack: Track) {
         guard let album = fullTrack.album else {
             fatalError("Trying to hydrate \(Self.className()) with simplified Track.")
@@ -86,9 +87,9 @@ final class RBSpotifyItem: NSObject {
         guard let artist = fullTrack.artists?.first else {
             fatalError("Trying to hydrate \(Self.className()) with simplified Track.")
         }
-        hydrate(with: fullTrack, album: album, artist: artist)
+        self.hydrate(with: fullTrack, album: album, artist: artist)
     }
-    
+
     private func hydrate(with partialTrack: Track, album: Album, artist: Artist) {
         self.spotify_album = album
         self.spotify_artist = artist
@@ -110,16 +111,16 @@ final class RBSpotifyItem: NSObject {
         self.track_number = partialTrack.trackNumber!
         self.disc_number = partialTrack.discNumber!
 
-        self.durationSeconds = Double(partialTrack.durationMS! / 1000)
+        self.durationSeconds = Double(partialTrack.durationMS!/1000)
     }
-    
+
     // This is what we want it to look like if copied to pasteboard.
     func copyTextTrack() -> String {
         if self.itemType == .Playlist {
             return String(format: "%@ (%@)", self.spotify_open_link_track(), self.title)
         }
 
-        if !self.artist.isEmpty && !self.title.isEmpty {
+        if !self.artist.isEmpty, !self.title.isEmpty {
             return String(format: "%@ (%@ – %@)", self.spotify_open_link_track(), self.artist, self.title)
         } else {
             return self.spotify_open_link_track()
@@ -127,7 +128,7 @@ final class RBSpotifyItem: NSObject {
     }
 
     func copyTextAlbum() -> String {
-        if !self.artist.isEmpty && !self.album.isEmpty {
+        if !self.artist.isEmpty, !self.album.isEmpty {
             return String(format: "%@ (%@ – %@)", self.spotify_open_link_album(), self.artist, self.album)
         } else {
             return self.spotify_open_link_album()
@@ -156,9 +157,9 @@ final class RBSpotifyItem: NSObject {
             return self.spotify_album?.uri ?? ""
         }
     }
-    
+
     func prettyArtistDashTitle() -> String {
-        if artist.isEmpty {
+        if self.artist.isEmpty {
             return self.title
         } else {
             return String(format: "%@ — %@", self.artist, self.title)
@@ -166,9 +167,9 @@ final class RBSpotifyItem: NSObject {
     }
 
     static let trackSortDescriptors: [NSSortDescriptor] = [
-            NSSortDescriptor(key: "year", ascending: true),
-            NSSortDescriptor(key: "disc_number", ascending: true),
-            NSSortDescriptor(key: "album_uri", ascending: true),
-            NSSortDescriptor(key: "track_number", ascending: true),
-        ]
+        NSSortDescriptor(key: "year", ascending: true),
+        NSSortDescriptor(key: "disc_number", ascending: true),
+        NSSortDescriptor(key: "album_uri", ascending: true),
+        NSSortDescriptor(key: "track_number", ascending: true),
+    ]
 }

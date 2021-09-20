@@ -11,17 +11,16 @@ import Combine
 import SpotifyWebAPI
 
 class RBSearchTableView: RBTableView {
-
     override func associatedArrayController() -> NSArrayController {
         AppDelegate.appDelegate().searchResultsArrayController
     }
 
     func enter() {
-        guard !selectedSearchTracks().isEmpty else {
+        guard !self.selectedSearchTracks().isEmpty else {
             NSSound.beep()
             return
         }
-        enqueueSelection(at_the_top: true, and_then_advance: true)
+        self.enqueueSelection(at_the_top: true, and_then_advance: true)
     }
 
     func focusFilterField() {
@@ -30,22 +29,22 @@ class RBSearchTableView: RBTableView {
     }
 
     func enqueueSelection(at_the_top: Bool = false, and_then_advance: Bool = false) {
-        guard !selectedSearchTracks().isEmpty else {
+        guard !self.selectedSearchTracks().isEmpty else {
             NSSound.beep()
             return
         }
 
-        if selectedSearchTracks().allSatisfy({ $0.itemType == .Playlist }) {
+        if self.selectedSearchTracks().allSatisfy({ $0.itemType == .Playlist }) {
             // let's say we can only enqueue one playlist at a time. it's a mess otherwise (among other issues, the fact that top-enqueueing batches of tracks is weird, and that this is an async call so the shortest playlist is added first).
-            guard selectedSearchTracks().count == 1 else {
+            guard self.selectedSearchTracks().count == 1 else {
                 NSSound.beep()
                 return
             }
-            AppDelegate.appDelegate().loadPlaylistTracksInto(for: selectedSearchTracks().first!.spotify_uri,
+            AppDelegate.appDelegate().loadPlaylistTracksInto(for: self.selectedSearchTracks().first!.spotify_uri,
                                                              in: .Queue,
                                                              at_the_top: at_the_top,
                                                              and_then_advance: and_then_advance)
-        } else if selectedSearchTracks().allSatisfy({ $0.itemType == .Track }) {
+        } else if self.selectedSearchTracks().allSatisfy({ $0.itemType == .Track }) {
             AppDelegate.appDelegate().insertTracks(newRows: self.selectedSearchTracks(),
                                                    in: .Queue,
                                                    at_the_top: at_the_top,
@@ -62,38 +61,47 @@ class RBSearchTableView: RBTableView {
                                           control: flags.contains(.control),
                                           command: flags.contains(.command),
                                           alt: flags.contains(.option),
-                                          shift: flags.contains(.shift)) {
+                                          shift: flags.contains(.shift))
+        {
             // If a key is bound in a Guile script, that takes precedence, so we want to bail out here.  Otherwise, continue and execute the default "hard-coded" keybindings.
             return
         }
 
-        if event.keyCode == kVK_Return
-            && flags.isEmpty { // Enter/Return key
-            enter()
-        } else if event.keyCode == kVK_LeftArrow // cmd-shift-left arrow
-                    && flags == [.command, .shift] {
-            enqueueSelection(at_the_top: true)
-        } else if event.characters == "h" // cmd-shift-"h" key
-                    && flags == [.command, .shift] {
-            enqueueSelection(at_the_top: true)
-        } else if event.keyCode == kVK_LeftArrow // cmd-left arrow
-                    && flags == .command {
-            enqueueSelection()
-        } else if event.characters == "h" // cmd-"h" key
-                    && flags == .command {
-            enqueueSelection()
-        } else if event.characters == "/"
-                    && flags.isEmpty {
-            focusFilterField()
+        if event.keyCode == kVK_Return,
+           flags.isEmpty
+        { // Enter/Return key
+            self.enter()
+        } else if event.keyCode == kVK_LeftArrow, // cmd-shift-left arrow
+                  flags == [.command, .shift]
+        {
+            self.enqueueSelection(at_the_top: true)
+        } else if event.characters == "h", // cmd-shift-"h" key
+                  flags == [.command, .shift]
+        {
+            self.enqueueSelection(at_the_top: true)
+        } else if event.keyCode == kVK_LeftArrow, // cmd-left arrow
+                  flags == .command
+        {
+            self.enqueueSelection()
+        } else if event.characters == "h", // cmd-"h" key
+                  flags == .command
+        {
+            self.enqueueSelection()
+        } else if event.characters == "/",
+                  flags.isEmpty
+        {
+            self.focusFilterField()
         } else if [kVK_Delete,
                    kVK_ForwardDelete,
                    kVK_ANSI_X,
-                   kVK_ANSI_D].contains(Int(event.keyCode))
-                    && flags.isEmpty {
-            attemptDeletePlaylist()
-        } else if event.characters == "s"       // cmd-s = save current queue as playlist
-                    && flags == [.command] {
-            saveCurrentSearchResultsAsPlaylist()
+                   kVK_ANSI_D].contains(Int(event.keyCode)),
+            flags.isEmpty
+        {
+            self.attemptDeletePlaylist()
+        } else if event.characters == "s", // cmd-s = save current queue as playlist
+                  flags == [.command]
+        {
+            self.saveCurrentSearchResultsAsPlaylist()
         } else {
             super.keyDown(with: event)
         }
@@ -107,8 +115,9 @@ class RBSearchTableView: RBTableView {
         switch lastSearch {
             case .AllPlaylists:
                 if self.selectedSearchTracks().count == 1,
-                   let pl = self.selectedSearchTracks().first {
-                    deletePlaylistWithConfirmation(playlist: pl)
+                   let pl = self.selectedSearchTracks().first
+                {
+                    self.deletePlaylistWithConfirmation(playlist: pl)
                 }
             default:
                 return
@@ -123,8 +132,8 @@ class RBSearchTableView: RBTableView {
         let font = NSFont.systemFont(ofSize: 20, weight: .bold)
         let attributes = [NSAttributedString.Key.font: font]
         let playlistNameField = NSTextField(labelWithAttributedString:
-                                                NSAttributedString(string: playlist.title,
-                                                                   attributes: attributes))
+            NSAttributedString(string: playlist.title,
+                               attributes: attributes))
         alert.accessoryView = playlistNameField
         alert.addButton(withTitle: "OK")
         alert.addButton(withTitle: "Cancel")
@@ -163,16 +172,15 @@ class RBSearchTableView: RBTableView {
             AppDelegate.appDelegate().searchResults.map { track in
                 track.spotify_uri
             }
-        let suggestedName: String = String(format: "%@ – %@",
-                                           AppDelegate.appDelegate().searchResults.first!.artist,
-                                           AppDelegate.appDelegate().searchResults.first!.album)
+        let suggestedName = String(format: "%@ – %@",
+                                   AppDelegate.appDelegate().searchResults.first!.artist,
+                                   AppDelegate.appDelegate().searchResults.first!.album)
 
         saveAsPlaylistWithConfirmation(suggestedName: suggestedName, messageText: "Save Search as Playlist", itemsToAddToPlaylist: itemsToAddToPlaylist)
     }
 
-
     func selectedSearchTracks() -> [RBSpotifyItem] {
-        return AppDelegate
+        AppDelegate
             .appDelegate()
             .searchResultsArrayController
             .selectedObjects as? [RBSpotifyItem] ?? []

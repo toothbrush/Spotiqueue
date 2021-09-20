@@ -11,7 +11,7 @@ import Foundation
 // stolen from https://stackoverflow.com/questions/36110620/standard-way-to-clamp-a-number-between-two-values-in-swift
 
 extension Comparable {
-    func clamped(fromInclusive f: Self, toInclusive t: Self)  ->  Self {
+    func clamped(fromInclusive f: Self, toInclusive t: Self) -> Self {
         var v = self
         if v < f { v = f }
         if v > t { v = t }

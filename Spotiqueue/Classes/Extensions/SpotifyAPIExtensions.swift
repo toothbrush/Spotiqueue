@@ -6,11 +6,10 @@
 //  Copyright © 2021 Rustling Broccoli. All rights reserved.
 //
 
-import SpotifyWebAPI
 import Combine
+import SpotifyWebAPI
 
 extension SpotifyAPI {
-
     /**
      Retrieves the *full* versions of all the albums of a given artist.
 
@@ -28,42 +27,41 @@ extension SpotifyAPI {
     func artistFullAlbums(
         _ artist: SpotifyURIConvertible
     ) -> AnyPublisher<[Album], Error> {
-
         self.artistAlbums(
             artist,
-            limit: 20)
-            .extendPages(self)
-            // extract the URIs of the albums from each page
-            .map { albumsPage in
-                albumsPage.items.compactMap(\.uri)
-            }
-            .flatMap { albumURIs -> AnyPublisher<[Album?], Error> in
-                return self.albums(albumURIs)
-            }
-            // remove the `nil` items from the array of albums
-            .map { $0.compactMap { $0 } }
-            .eraseToAnyPublisher()
+            limit: 20
+        )
+        .extendPages(self)
+        // extract the URIs of the albums from each page
+        .map { albumsPage in
+            albumsPage.items.compactMap(\.uri)
+        }
+        .flatMap { albumURIs -> AnyPublisher<[Album?], Error> in
+            self.albums(albumURIs)
+        }
+        // remove the `nil` items from the array of albums
+        .map { $0.compactMap { $0 } }
+        .eraseToAnyPublisher()
     }
-    
+
     func playlistFullTracks(
         _ playlist: SpotifyURIConvertible
     ) -> AnyPublisher<[Track], Error> {
-
         self.playlistItems(playlist)
             .extendPagesConcurrently(self)
             .collectAndSortByOffset()
-            .compactMap({ playlistItems in
-                var tracks: Array<Track> = []
+            .compactMap { playlistItems in
+                var tracks: [Track] = []
                 for playlistItemContainer in playlistItems {
                     if case .track(let track) = playlistItemContainer.item {
                         tracks.append(track)
                     }
                 }
                 return tracks
-            })
+            }
             .eraseToAnyPublisher()
     }
-    
+
     func albumFullTracks(
         _ album: SpotifyURIConvertible
     ) -> AnyPublisher<[Track], Error> {
@@ -74,14 +72,13 @@ extension SpotifyAPI {
                 tracksPage.items.compactMap(\.uri)
             }
             .flatMap { trackURIs -> AnyPublisher<[Track?], Error> in
-                return self.tracks(trackURIs)
+                self.tracks(trackURIs)
             }
             // remove the `nil` items from the array of albums
             .map { $0.compactMap { $0 } }
             .eraseToAnyPublisher()
-
     }
-    
+
     func dealWithUnknownSpotifyURI(
         _ uri: SpotifyURIConvertible
     ) -> AnyPublisher<[Track], Error> {

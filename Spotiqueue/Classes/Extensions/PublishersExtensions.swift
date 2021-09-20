@@ -10,7 +10,6 @@ import Combine
 
 // This was after a whole adventure.  Finally found an answer at https://stackoverflow.com/questions/56782078/swift-combine-how-to-create-a-single-publisher-from-a-list-of-publishers
 extension Publishers {
-
     private struct EnumeratedElement<T> {
         let index: Int
         let element: T
@@ -21,8 +20,8 @@ extension Publishers {
         }
 
         init(_ enumeratedSequence: EnumeratedSequence<[T]>.Iterator.Element) {
-            index = enumeratedSequence.offset
-            element = enumeratedSequence.element
+            self.index = enumeratedSequence.offset
+            self.element = enumeratedSequence.element
         }
     }
 
@@ -30,12 +29,11 @@ extension Publishers {
         _ inputArray: [InputType],
         mapTransform: (InputType) -> AnyPublisher<OutputType, Error>
     ) -> AnyPublisher<[OutputType], Error> {
-
         let enumeratedInputArray = inputArray.enumerated().map(EnumeratedElement.init)
 
         let enumeratedMapTransform: (EnumeratedElement<InputType>) -> AnyPublisher<EnumeratedElement<OutputType>, Error> = { enumeratedInput in
             mapTransform(enumeratedInput.element)
-                .map { EnumeratedElement(index: enumeratedInput.index, element: $0)}
+                .map { EnumeratedElement(index: enumeratedInput.index, element: $0) }
                 .eraseToAnyPublisher()
         }
 
@@ -44,7 +42,7 @@ extension Publishers {
         }
 
         let transformToNonEnumeratedArray: ([EnumeratedElement<OutputType>]) -> [OutputType] = {
-            $0.map { $0.element }
+            $0.map(\.element)
         }
 
         return Publishers.MergeMany(enumeratedInputArray.map(enumeratedMapTransform))
