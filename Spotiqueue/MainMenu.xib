@@ -709,6 +709,9 @@
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
+                        <connections>
+                            <binding destination="Voe-Tx-rLC" name="value" keyPath="self.autoAdvanceTrack" id="2Hs-zB-JKt"/>
+                        </connections>
                     </button>
                     <box autoresizesSubviews="NO" focusRingType="none" verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="DHR-Fg-IYC">
                         <rect key="frame" x="12" y="126" width="1236" height="5"/>

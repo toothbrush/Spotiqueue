@@ -83,6 +83,8 @@ enum SearchCommand {
 
 class AppDelegate: NSObject, NSApplicationDelegate {
 
+    @objc dynamic var autoAdvanceTrack: Bool = true
+
     @IBAction func checkForUpdates(_ sender: Any) {
         sparkle.checkForUpdates(sender)
     }
@@ -153,15 +155,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func shouldAutoAdvance() -> Bool {
-        return autoAdvanceButton?.state == .on
+        return autoAdvanceTrack
     }
 
     func setAutoAdvance(newValue: Bool) {
-        if newValue {
-            autoAdvanceButton.state = .on
-        } else {
-            autoAdvanceButton.state = .off
-        }
+        autoAdvanceTrack = newValue
     }
 
     var position: TimeInterval = 0
