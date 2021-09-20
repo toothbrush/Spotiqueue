@@ -53,22 +53,4 @@
 
 ;; (define-key queue-panel-map (kbd 'ANSI_K #:cmd #t) 'queue:move-selected-tracks-up)
 
-;; Find and load a user's config, in ~/.config/spotiqueue/init.scm, if it exists.  Finding $HOME in
-;; Guile-proper is a bit annoying, because we need to rely on it managing to work out who we're
-;; running as, and fishing the info out of /etc/passwd (!).  This works well when running Guile in a
-;; terminal, but fails in a graphical app.  Likely $UID isn't set?  It appears that at least when
-;; running a Debug build in Xcode $HOME is correctly set.
-(let* ((homedir (getenv "HOME"))
-       (user-config-file (string-append homedir "/.config/spotiqueue/init.scm")))
-  (begin
-    (format #t "Looking for user config in: ~a... " user-config-file)
-    (if (stat user-config-file #f)
-        (begin
-          (format #t "found!~%")
-          (load user-config-file))
-        (begin
-          (format #t "FAIL!~%")
-          (display "User-config file doesn't exist, skipping.")
-          (newline)))))
-
 ;;; END init.scm

@@ -217,6 +217,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         set_callback(player_update_hook(hook: position_ms: duration_ms:))
         NSEvent.addLocalMonitorForEvents(matching: [.keyDown /*, .systemDefined */], handler: localKeyShortcuts(event:))
 
+        // Now that the UI is ready, find and load a user's config
+        RBGuileBridge.load_user_initscm_if_present()
+
         queueArrayController.selectsInsertedObjects = false
         searchResultsArrayController.selectsInsertedObjects = false
 

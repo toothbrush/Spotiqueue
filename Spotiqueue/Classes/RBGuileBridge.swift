@@ -177,4 +177,21 @@ public func set_auto_advance(data: SCM) -> SCM {
         scm_call_0(scm_eval(action, scm_current_module()))
         return true
     }
+
+    public static func load_user_initscm_if_present() {
+        // Now that the UI is ready, find and load a user's config in ~/.config/spotiqueue/init.scm, if it exists.
+        let home = NSHomeDirectory()
+        let url = NSURL(fileURLWithPath: home)
+        if let pathComponent = url.appendingPathComponent(".config/spotiqueue/init.scm") {
+            let filePath = pathComponent.path
+            logger.info("Looking for user config in: \(filePath)...")
+            let fileManager = FileManager.default
+            if fileManager.fileExists(atPath: filePath) {
+                logger.info("User-config init.scm found.")
+                scm_c_primitive_load(filePath.cString(using: .utf8)!)
+            } else {
+                logger.info("User-config file doesn't exist, skipping.")
+            }
+        }
+    }
 }
