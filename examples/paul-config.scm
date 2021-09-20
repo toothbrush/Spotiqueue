@@ -52,6 +52,8 @@
       (error "eek, not a track!"))
   (begin
     (format #t "hey, a track has started: ~s\n" track)
+    (player:set-auto-advance #t) ; Reset auto-advance in case it was previously used to "stop after
+                                 ; current".
     (write-text
      (string-append my-homedir "/spotiqueue-played.txt")
      (format #f "~a ~a\n" (paul:formatted-time) track)
