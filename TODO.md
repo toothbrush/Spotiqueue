@@ -10,8 +10,6 @@
 
 * Little Credits or Help screen
 
-* Documentation for Guile interface.
-
 * Idea: backspace in search window takes you "up" a detail level if you've done a detail browse. AKA
   "show previous search results".  One approach could be to store the list of tracks returned by
   various searches, up to e.g. 10 ago.
@@ -36,3 +34,7 @@
 * Last.fm scrobbling with Guile.
 
 * Get current queue or search results contents as a list.
+
+* Enable/disable auto-advance.
+
+* Can i remove a layer of boilerplate by using the @c_externdecl or whatever directly in Swift?
