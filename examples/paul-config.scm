@@ -132,4 +132,7 @@
 
 (format #t "Yay, unicode works 😊 📼 ~%")
 
+;; Want to set preferences on startup?  Here's one example:
+;; (player:set-auto-advance #f)
+
 ;;; END paul-config.scm
