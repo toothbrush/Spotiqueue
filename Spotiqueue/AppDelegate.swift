@@ -156,6 +156,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         return autoAdvanceButton?.state == .on
     }
 
+    func setAutoAdvance(newValue: Bool) {
+        if newValue {
+            autoAdvanceButton.state = .on
+        } else {
+            autoAdvanceButton.state = .off
+        }
+    }
+
     var position: TimeInterval = 0
     var duration: TimeInterval = 0
 

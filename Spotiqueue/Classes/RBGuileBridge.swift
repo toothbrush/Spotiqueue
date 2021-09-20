@@ -18,6 +18,21 @@ func block_on_main(closure: () -> SCM) -> SCM {
     }
 }
 
+@_cdecl("auto_advance")
+public func auto_advance() -> SCM {
+    block_on_main {
+        return _scm_to_bool(AppDelegate.appDelegate().shouldAutoAdvance())
+    }
+}
+
+@_cdecl("set_auto_advance")
+public func set_auto_advance(data: SCM) -> SCM {
+    block_on_main {
+        AppDelegate.appDelegate().setAutoAdvance(newValue: scm_to_bool(data) == 1)
+        return _scm_true()
+    }
+}
+
 @objc class RBGuileBridge: NSObject {
     private static func track_to_scm_record(track: RBSpotifyItem) -> SCM {
         // Beware, _make-track is the generated record creator thing, but it's a syntax transformer which can't be called directly, so we have a wrapper function called make-track.

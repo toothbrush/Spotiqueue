@@ -35,6 +35,4 @@
 
 * Get current queue or search results contents as a list.
 
-* Enable/disable auto-advance.
-
 * Can i remove a layer of boilerplate by using the @c_externdecl or whatever directly in Swift?
