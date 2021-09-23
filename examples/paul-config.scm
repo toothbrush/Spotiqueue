@@ -48,8 +48,6 @@
 ;; I want to keep a log of tracks played.  This function will write each track to a file.  Later, we
 ;; use (add-hook! ..) to have Spotiqueue call it every time a new track starts.
 (define (paul:player-started track)
-  (if (not (track? track))
-      (error "eek, not a track!"))
   (begin
     (format #t "hey, a track has started: ~s\n" track)
     (player:set-auto-advance #t) ; Reset auto-advance in case it was previously used to "stop after
