@@ -104,11 +104,13 @@ it'll automatically get loaded next time Spotiqueue starts up:
 For more details, check out [the example `init.scm` file](./examples/paul-config.scm), which i use
 myself.  You'll probably also want to look at [the Scheme internals of Spotiqueue](./guile/spotiqueue/).
 
-## Download
+## Download and install
 
 If you don't like hassling about with Xcode (quite rightly so), you can find compiled versions
-[here](https://github.com/toothbrush/Spotiqueue/releases).  Unfortunately, for now you need at least
+[on the Github releases page](https://github.com/toothbrush/Spotiqueue/releases).  Unfortunately, for now you need at least
 macOS 10.15, because the app makes heavy use of the Combine framework.
+
+You will need Guile, too – `brew install guile`.
 
 ## Development
 
