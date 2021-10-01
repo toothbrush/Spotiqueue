@@ -23,6 +23,7 @@
   spotiqueue_worker session is invalid and client shuts down.
   https://github.com/librespot-org/librespot/issues/276,
   https://github.com/librespot-org/librespot/discussions/609
+  Is this fixed in https://github.com/librespot-org/librespot/pull/783?
 
 * Automatically switch audio output sink when using Sound.prefpane.
   https://github.com/RustAudio/rodio/issues/327
