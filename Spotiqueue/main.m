@@ -31,9 +31,6 @@ int main(int argc, const char * argv[]) {
         setenv("GUILE_LOAD_COMPILED_PATH", [guileCcachePath UTF8String], 1);
 
         scm_init_guile();
-        // For this weird guy, see https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Recognize-Coding and https://www.gnu.org/software/guile/manual/html_node/Locales.html
-        scm_setlocale(scm_from_int(LC_ALL), scm_from_utf8_string(""));
-        scm_c_define_module("spotiqueue internal", &register_functions, NULL);
 
         /* This deserves some explanation.  We really don't want Spotiqueue to rely on users doing
          * `brew install guile` -- that would exclude half the world that doesn't like terminals.  So,
@@ -49,6 +46,10 @@ int main(int argc, const char * argv[]) {
          */
         scm_c_eval_string([[NSString stringWithFormat:@"(set! %%load-path '(\"%@\" \"%@\"))", guileLibPath, spotiqueueLibPath] UTF8String]);
         scm_c_eval_string([[NSString stringWithFormat:@"(set! %%load-compiled-path '(\"%@\"))", guileCcachePath] UTF8String]);
+
+        // For this weird guy, see https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Recognize-Coding and https://www.gnu.org/software/guile/manual/html_node/Locales.html
+        scm_setlocale(scm_from_int(LC_ALL), scm_from_utf8_string(""));
+        scm_c_define_module("spotiqueue internal", &register_functions, NULL);
 
         // Note that there are DRAGONS here.  We use a separate "Copy Files" Xcode build phase to put Scheme files into a "spotiqueue" subfolder inside the App bundle's Resources folder.  We do this so that the module names match up.  However, there doesn't seem to be an obvious way to get a direct pointer to the Resources folder, so we use this hack.
         scm_c_primitive_load_path("spotiqueue/init");
