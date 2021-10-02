@@ -213,6 +213,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         } else {
             // Mind you, this will be nil if AppMover moves the executable away before we have had a chance to load the NIB.  Which is still a file...
             logger.critical("Something very weird - modal.window is nil!")
+            return
         }
         set_callback(player_update_hook(hook: position_ms: duration_ms:))
         NSEvent.addLocalMonitorForEvents(matching: [.keyDown /* , .systemDefined */ ], handler: self.localKeyShortcuts(event:))
