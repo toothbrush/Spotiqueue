@@ -19,6 +19,9 @@ int main(int argc, const char * argv[]) {
     // The million-dollar question is why the ; locale: .. hint at the top of the file is ignored.
     setenv("LANG", "en_US.UTF-8", 1);
 
+    // Hack: Assume Homebrew has installed Guile libs in the usual spot, so that it doesn't matter what version folks have installed (e.g. Catalina, Big Sur, 3.0.*).  Still requires folks to `brew install guile` before Spotiqueue can work, but mitigates the pain somewhat.
+    setenv("GUILE_LOAD_PATH", "/usr/local/share/guile/3.0", 1);
+
     scm_init_guile();
     // For this weird guy, see https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Recognize-Coding and https://www.gnu.org/software/guile/manual/html_node/Locales.html
     scm_setlocale(scm_from_int(LC_ALL), scm_from_utf8_string(""));

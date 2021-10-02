@@ -8,6 +8,9 @@
 ;; Dragons, continued: we grab our file location, but go up one level before adding to load-path.
 ;; The reason for this is that we want to call this module (spotiqueue init), so it has to live in a
 ;; spotiqueue folder with its siblings.
+
+(format #t "%load-path = ~s\n" %load-path)
+
 (add-to-load-path (canonicalize-path (string-append (dirname (current-filename)) file-name-separator-string "..")))
 
 ;; TODO find out a way we can make this module sensibly loadable from `guile' in the shell without
