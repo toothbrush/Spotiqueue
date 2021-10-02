@@ -35,5 +35,17 @@
             <sparkle:minimumSystemVersion>10.15</sparkle:minimumSystemVersion>
             <enclosure url="https://github.com/toothbrush/Spotiqueue/releases/download/v2.3.1/Spotiqueue-v2.3.1.zip" sparkle:version="759" sparkle:shortVersionString="2.3.1" length="9489555" type="application/octet-stream" sparkle:edSignature="jOcU0yZiVGitXDmr+O49OdQZZpEO2ppp3kDkDmrPm7xRTdwvX04Drpc9tG7Q9wqzzinBVmcz9+zVrkrmUqonCQ=="/>
         </item>
+        <item>
+            <title>2.4.2</title>
+            <pubDate>Sat, 02 Oct 2021 15:12:44 +1000</pubDate>
+            <description><![CDATA[
+            <h2>Updates</h2>
+            <ul>
+            <li>Fixed major issue with Guile integration.</li>
+            </ul>
+            ]]></description>
+            <sparkle:minimumSystemVersion>10.15</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/toothbrush/Spotiqueue/releases/download/v2.4.2/Spotiqueue-v2.4.2.zip" sparkle:version="1036" sparkle:shortVersionString="2.4.2" length="20723534" type="application/octet-stream" sparkle:edSignature="xytqxuCUQNBq7x7cBxGEFBnx/0qAnvPnY6DADTZdD+T/di9vwVQSLt/fYjh0vkF/vz62bfsG5hb32RJQNuXcDQ=="/>
+        </item>
     </channel>
 </rss>
