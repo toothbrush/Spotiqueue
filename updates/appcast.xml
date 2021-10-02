@@ -35,22 +35,5 @@
             <sparkle:minimumSystemVersion>10.15</sparkle:minimumSystemVersion>
             <enclosure url="https://github.com/toothbrush/Spotiqueue/releases/download/v2.3.1/Spotiqueue-v2.3.1.zip" sparkle:version="759" sparkle:shortVersionString="2.3.1" length="9489555" type="application/octet-stream" sparkle:edSignature="jOcU0yZiVGitXDmr+O49OdQZZpEO2ppp3kDkDmrPm7xRTdwvX04Drpc9tG7Q9wqzzinBVmcz9+zVrkrmUqonCQ=="/>
         </item>
-        <item>
-            <title>2.4</title>
-            <pubDate>Sat, 18 Sep 2021 16:36:30 +1000</pubDate>
-            <description><![CDATA[
-            <h2>Updates</h2>
-            <ul>
-            <li>Basic Guile/Scheme support! Pause, next, get current song, as well as the ability to bind keys to arbitrary Scheme code. See the <a href="https://github.com/toothbrush/Spotiqueue/blob/main/README.md">README</a> for more information.</li>
-            <li>Create playlists from search results or the current queue.</li>
-            <li>Delete playlists from user library.</li>
-            <li><tt>/</tt> filter is a bit smarter regarding your selection in search results. For example, narrow results with / then Esc leaves the filtered result selected.</li>
-            <li>Toggle button to disable auto-advancing on end-of-track event. Useful for "stop after currently-playing track".</li>
-            <li><tt>?</tt> will surface the album of the currently-playing track, and highlight the current track.</li>
-            </ul>
-            ]]></description>
-            <sparkle:minimumSystemVersion>10.15</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/toothbrush/Spotiqueue/releases/download/v2.4/Spotiqueue-v2.4.zip" sparkle:version="984" sparkle:shortVersionString="2.4" length="10527554" type="application/octet-stream" sparkle:edSignature="k+isTCOmtq7YYDoEit0O0V/BdmXAtSVtY0wN7e42qBVWY2RsovkYPPhBBLjrfZQ09zmrsXW+frc3Yr1mJMFIBA=="/>
-        </item>
     </channel>
 </rss>
