@@ -290,6 +290,8 @@ final class RBSpotifyAPI: ObservableObject {
                 receiveCompletion: { completion in
                     if case .failure(let error) = completion {
                         logger.error("couldn't retrieve current user: \(error)")
+                        self.api.authorizationManager.deauthorize()
+                        self.authorize()
                     }
                 },
                 receiveValue: { user in
