@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -294,6 +294,7 @@
 			buildConfigurationList = DAE1F18C26534D670013704F /* Build configuration list for PBXNativeTarget "Spotiqueue" */;
 			buildPhases = (
 				DAE1F17A26534D660013704F /* Sources */,
+				DA67F756270728490002B96A /* Vendor in Guile stdlib */,
 				DAE1F17B26534D660013704F /* Frameworks */,
 				DAE1F17C26534D660013704F /* Resources */,
 				DAD7D73826775A6A00A5510E /* Embed Frameworks */,
@@ -383,6 +384,28 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		DA67F756270728490002B96A /* Vendor in Guile stdlib */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Vendor in Guile stdlib";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -eux\n\nguile_stdlib_target=\"${CODESIGNING_FOLDER_PATH}/Contents/Resources/guile-stdlib\"\nguile_stdlib_source=\"/usr/local/Cellar/guile/3.0.7/share/guile/3.0\"\nguile_ccache_target=\"${CODESIGNING_FOLDER_PATH}/Contents/Resources/guile-ccache\"\nguile_ccache_source=\"/usr/local/Cellar/guile/3.0.7/lib/guile/3.0/ccache\"\n\n# Clean from previous invocations\nif [ -d \"$guile_ccache_target\" ] ; then\n    rm -rf \"$guile_ccache_target\"\nfi\n\nmkdir -p \"$guile_stdlib_target\"\nmkdir -p \"$guile_ccache_target\"\n\ncp -rv \"$guile_stdlib_source\"/* \"$guile_stdlib_target/\"\ncp -rv \"$guile_ccache_source\"/* \"$guile_ccache_target/\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		DAE1F17A26534D660013704F /* Sources */ = {
@@ -562,7 +585,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 999;
+				CURRENT_PROJECT_VERSION = 1036;
 				DEVELOPMENT_TEAM = QG72S9L5L3;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -602,7 +625,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 999;
+				CURRENT_PROJECT_VERSION = 1036;
 				DEVELOPMENT_TEAM = QG72S9L5L3;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
