@@ -16,7 +16,9 @@
 ;; TODO find out a way we can make this module sensibly loadable from `guile' in the shell without
 ;; having Spotiqueue running...  Is that even useful?
 
-;; If i want to use this module naming scheme i should have the source files in a folder called `spotiqueue'.  Grr, there are already so many of those i'll just nest them in guile/spotiqueue i guess.
+;; If i want to use this module naming scheme i should have the source files in a folder called
+;; `spotiqueue'.  Grr, there are already so many of those i'll just nest the Scheme files in
+;; guile/spotiqueue i guess.  The Copy Files phase in Xcode can sort that out.
 
 (define-module (spotiqueue init)
   #:use-module (ice-9 format)
