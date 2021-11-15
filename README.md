@@ -104,6 +104,12 @@ it'll automatically get loaded next time Spotiqueue starts up:
 For more details, check out [the example `init.scm` file](./examples/paul-config.scm), which i use
 myself.  You'll probably also want to look at [the Scheme internals of Spotiqueue](./guile/spotiqueue/).
 
+```bash
+# To adopt the example config file:
+mkdir -p ~/.config/spotiqueue
+(cd ~/.config/spotiqueue; ln -sv ~/src/Spotiqueue/examples/paul-config.scm init.scm)
+```
+
 ## Download and install
 
 If you don't like hassling about with Xcode (quite rightly so), you can find compiled versions
