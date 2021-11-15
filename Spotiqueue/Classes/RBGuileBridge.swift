@@ -190,7 +190,7 @@ public func set_auto_advance(data: SCM) -> SCM {
                 logger.info("User-config init.scm found.")
                 scm_c_primitive_load(filePath.cString(using: .utf8)!)
             } else {
-                logger.info("User-config file doesn't exist, skipping.")
+                logger.warning("User-config file doesn't exist, skipping.")
             }
         }
     }
