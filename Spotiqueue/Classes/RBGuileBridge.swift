@@ -156,6 +156,12 @@ public func track_to_scm_record(track: RBSpotifyItem) -> SCM {
         }
     }
 
+    @objc static func queue_get_tracks() -> [RBSpotifyItem] {
+        block_on_main {
+            AppDelegate.appDelegate().queue
+        }
+    }
+
     enum KeyMap: String {
         case queue = "queue-panel-map"
         case search = "search-panel-map"
