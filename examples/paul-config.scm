@@ -117,6 +117,23 @@
 
 ;; TODO (window:maximise) ; to fill screen
 
+;; This is stolen from https://www.programming-idioms.org/idiom/10/shuffle-a-list/2021/scheme, i wasn't feeling creative.
+(define (paul:shuffle-list list)
+  (cond ((and (list? list)
+              (positive? (length list)))
+         (let ((item (list-ref list (random (length list)))))
+           (cons item (paul:shuffle-list (delete item list)))))
+        (else list)))
+
+(define (paul:shuffle-current-queue)
+  (let* ((tracks (queue:get-tracks))
+         (shuffled (paul:shuffle-list tracks))
+         ;; Don't forget to pick out only the track URIs:
+         (track-uris (map track-uri shuffled)))
+    (queue:set-tracks track-uris)))
+
+(define-key global-map (kbd 'ANSI_S #:ctrl #t #:alt #t) 'paul:shuffle-current-queue)
+
 ;; Here's an example of something cool you can do with Guile: the full library is available to you.
 ;; If you want to be able to have remote clients connect to this Guile instance, you can do
 ;; something like the following.  I use it to make my media keys work, Hammerspoon does the equivalent of:

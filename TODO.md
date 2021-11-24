@@ -1,5 +1,8 @@
 # TODO list
 
+* Ensure that focus is always something sensible (read: search bar) on app startup.  With and
+  without displaying login flow.
+
 * We really need proper auth-failure handling.  Especially an invalid refresh token just makes the
   app crash 👎
 
@@ -10,6 +13,10 @@
 * When moving tracks in queue consider scrolling such that there's a
   3-4 track "buffer" of not-selected tracks between the selected block
   and the edge of the view.
+
+* Get Xcode to build my dependencies from source so we can once and for all squash the warnings
+  about `MACOS_DEPLOYMENT_TARGET`, etc., as well as the unmitigated disaster which is the
+  libraries-from-Homebrew hassle.
 
 * Little Credits or Help screen
 

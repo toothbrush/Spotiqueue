@@ -8,7 +8,7 @@
 
 import Foundation
 
-func block_on_main(closure: () -> SCM) -> SCM {
+func block_on_main<A>(closure: () -> A) -> A {
     if Thread.isMainThread {
         return closure()
     } else {
@@ -33,19 +33,20 @@ public func set_auto_advance(data: SCM) -> SCM {
     }
 }
 
-@objc class RBGuileBridge: NSObject {
-    private static func track_to_scm_record(track: RBSpotifyItem) -> SCM {
-        // Beware, _make-track is the generated record creator thing, but it's a syntax transformer which can't be called directly, so we have a wrapper function called make-track.
-        scm_call_5(scm_variable_ref(scm_c_lookup("make-track")),
-                   scm_from_utf8_string(track.spotify_uri), // uri
-                   scm_from_utf8_string(track.title), // title
-                   scm_from_utf8_string(track.artist), // artist
-                   scm_from_utf8_string(track.album), // album
-                   scm_from_int32(Int32(track.durationSeconds))) // duration in seconds
-    }
+@_cdecl("track_to_scm_record")
+public func track_to_scm_record(track: RBSpotifyItem) -> SCM {
+    // Beware, _make-track is the generated record creator thing, but it's a syntax transformer which can't be called directly, so we have a wrapper function called make-track.
+    scm_call_5(scm_variable_ref(scm_c_lookup("make-track")),
+               scm_from_utf8_string(track.spotify_uri), // uri
+               scm_from_utf8_string(track.title), // title
+               scm_from_utf8_string(track.artist), // artist
+               scm_from_utf8_string(track.album), // album
+               scm_from_int32(Int32(track.durationSeconds))) // duration in seconds
+}
 
+@objc class RBGuileBridge: NSObject {
     private static func hook_with_track(hook_name: String, track: RBSpotifyItem) {
-        let track_record = self.track_to_scm_record(track: track)
+        let track_record = track_to_scm_record(track: track)
         self.hook_1(hook_name: hook_name, arg1: track_record)
     }
 
@@ -155,6 +156,19 @@ public func set_auto_advance(data: SCM) -> SCM {
         }
     }
 
+    @objc static func queue_get_tracks() -> [RBSpotifyItem] {
+        block_on_main {
+            AppDelegate.appDelegate().queue
+        }
+    }
+
+    @objc static func queue_set_tracks(tracks: [String]) {
+        block_on_main {
+            AppDelegate.appDelegate().queue = []
+            AppDelegate.appDelegate().queueTableView.addTracksToQueue(from: tracks)
+        }
+    }
+
     enum KeyMap: String {
         case queue = "queue-panel-map"
         case search = "search-panel-map"
@@ -169,8 +183,10 @@ public func set_auto_advance(data: SCM) -> SCM {
 
         if !_scm_is_true(action) {
             scm_simple_format(_scm_true(),
-                              scm_from_utf8_string("~a not bound by user.~%"),
-                              scm_list_1(guile_key))
+                              scm_from_utf8_string("[keymap=~a] ~a not bound by user.~%"),
+                              scm_list_2(
+                                scm_from_utf8_string(map.rawValue.cString(using: .utf8)),
+                                guile_key))
             return false
         }
 
@@ -190,7 +206,7 @@ public func set_auto_advance(data: SCM) -> SCM {
                 logger.info("User-config init.scm found.")
                 scm_c_primitive_load(filePath.cString(using: .utf8)!)
             } else {
-                logger.info("User-config file doesn't exist, skipping.")
+                logger.warning("User-config file doesn't exist, skipping.")
             }
         }
     }

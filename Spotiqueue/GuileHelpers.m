@@ -83,6 +83,52 @@ SCM queue_delete_selected(void) {
     return [RBGuileBridge queue_delete_selected_tracks];
 }
 
+SCM queue_get_tracks(void) {
+    NSArray* realTracks = [RBGuileBridge queue_get_tracks];
+
+    // https://developer.apple.com/documentation/swift/int
+    // On 32-bit platforms, Int is the same size as Int32, and on 64-bit platforms, Int is the same size as Int64.
+    SCM tracks = scm_make_list(scm_from_int64([realTracks count]),
+                               SCM_UNDEFINED);
+    int32_t pos = 0;
+    for (RBSpotifyItem* t in realTracks) {
+        scm_list_set_x(tracks, scm_from_int32(pos), track_to_scm_record(t));
+        pos++;
+    }
+
+    return tracks;
+}
+
+// Eh, okay, for convenience let's say we expect this to be a list of strings with Spotify IDs.
+SCM queue_set_tracks(SCM track_list) {
+    if (!scm_is_true(scm_list_p(track_list))) {
+        return _scm_false();
+    }
+    uint64_t len, i;
+
+    NSMutableArray* objc_tracks = [[NSMutableArray alloc] init];
+
+    // This loop logic is inspired by the code snippet in https://www.gnu.org/software/guile/manual/guile.html#Multi_002dThreading
+    len = scm_to_uint64(scm_length(track_list));
+    i = 0;
+    while (i < len && scm_is_pair(track_list))
+    {
+        // do some work for the element
+        SCM elt = scm_car(track_list);
+        if (scm_is_true(scm_string_p(elt))) {
+            NSString* track = [[NSString alloc] initWithUTF8String: scm_to_utf8_string(elt)];
+            [objc_tracks addObject: track];
+        }
+
+        // dequeue and advance
+        track_list = scm_cdr(track_list);
+        i++;
+    }
+
+    [RBGuileBridge queue_set_tracksWithTracks: objc_tracks];
+    return _scm_true();
+}
+
 void register_funcs_objc(void) {
     scm_c_define_gsubr("player:homedir", 0, 0, 0, &get_homedir);
     scm_c_define_gsubr("player:current-track", 0, 0, 0, &current_track);
@@ -92,6 +138,8 @@ void register_funcs_objc(void) {
     scm_c_define_gsubr("player:auto-advance", 0, 0, 0, &auto_advance);
     scm_c_define_gsubr("player:set-auto-advance", 1, 0, 0, &set_auto_advance);
     scm_c_define_gsubr("queue:delete-selected-tracks", 0, 0, 0, &queue_delete_selected);
+    scm_c_define_gsubr("queue:get-tracks", 0, 0, 0, &queue_get_tracks);
+    scm_c_define_gsubr("queue:set-tracks", 1, 0, 0, &queue_set_tracks);
     scm_c_define_gsubr("window:focus-search-box", 0, 0, 0, &focus_search_box);
     scm_c_export("player:homedir",
                  "player:current-track",
@@ -101,6 +149,8 @@ void register_funcs_objc(void) {
                  "player:auto-advance",
                  "player:set-auto-advance",
                  "queue:delete-selected-tracks",
+                 "queue:get-tracks",
+                 "queue:set-tracks",
                  "window:focus-search-box",
                  NULL);
     scm_simple_format(scm_current_output_port(), scm_from_utf8_string("guile ~a: Successfully booted.~%"), scm_list_1(scm_c_eval_string("(module-name (current-module))")));

@@ -365,9 +365,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     // from https://stackoverflow.com/questions/1991072/how-to-handle-with-a-default-url-scheme
     func applicationWillFinishLaunching(_ notification: Notification) {
-        #if !DEBUG
+#if !DEBUG
         AppMover.moveIfNecessary()
-        #endif
+#else
+        self.window.title = "Spotiqueue [debug]"
+#endif
         self.searchHistory = [] // empty history.  side-effect: update search label... :/
         NSAppleEventManager
             .shared()
