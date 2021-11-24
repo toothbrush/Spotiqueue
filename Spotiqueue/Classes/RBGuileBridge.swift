@@ -33,19 +33,20 @@ public func set_auto_advance(data: SCM) -> SCM {
     }
 }
 
-@objc class RBGuileBridge: NSObject {
-    private static func track_to_scm_record(track: RBSpotifyItem) -> SCM {
-        // Beware, _make-track is the generated record creator thing, but it's a syntax transformer which can't be called directly, so we have a wrapper function called make-track.
-        scm_call_5(scm_variable_ref(scm_c_lookup("make-track")),
-                   scm_from_utf8_string(track.spotify_uri), // uri
-                   scm_from_utf8_string(track.title), // title
-                   scm_from_utf8_string(track.artist), // artist
-                   scm_from_utf8_string(track.album), // album
-                   scm_from_int32(Int32(track.durationSeconds))) // duration in seconds
-    }
+@_cdecl("track_to_scm_record")
+public func track_to_scm_record(track: RBSpotifyItem) -> SCM {
+    // Beware, _make-track is the generated record creator thing, but it's a syntax transformer which can't be called directly, so we have a wrapper function called make-track.
+    scm_call_5(scm_variable_ref(scm_c_lookup("make-track")),
+               scm_from_utf8_string(track.spotify_uri), // uri
+               scm_from_utf8_string(track.title), // title
+               scm_from_utf8_string(track.artist), // artist
+               scm_from_utf8_string(track.album), // album
+               scm_from_int32(Int32(track.durationSeconds))) // duration in seconds
+}
 
+@objc class RBGuileBridge: NSObject {
     private static func hook_with_track(hook_name: String, track: RBSpotifyItem) {
-        let track_record = self.track_to_scm_record(track: track)
+        let track_record = track_to_scm_record(track: track)
         self.hook_1(hook_name: hook_name, arg1: track_record)
     }
 
