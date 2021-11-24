@@ -72,9 +72,11 @@ The basic Vim and Emacs movement keys are supported instead of using arrow keys.
 | `⌘C`                            | search or queue | Place highlighted items on clipboard                                         |
 | `⌘⇧C`                           | search or queue | Place highlighted items' album link on clipboard                             |
 | `⌘V`                            | queue           | Paste items on clipboard into the queue                                      |
+| `^⌥s`                           | global          | Shuffle the contents of the queue                                            |
 
 Note:
 * `^` is Control
+* `⌥` is Alt
 * `⌘` is Command
 * `⇧` is Shift
 
