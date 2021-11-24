@@ -8,7 +8,7 @@
 
 import Foundation
 
-func block_on_main(closure: () -> SCM) -> SCM {
+func block_on_main<A>(closure: () -> A) -> A {
     if Thread.isMainThread {
         return closure()
     } else {
