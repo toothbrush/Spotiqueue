@@ -176,8 +176,10 @@ public func track_to_scm_record(track: RBSpotifyItem) -> SCM {
 
         if !_scm_is_true(action) {
             scm_simple_format(_scm_true(),
-                              scm_from_utf8_string("~a not bound by user.~%"),
-                              scm_list_1(guile_key))
+                              scm_from_utf8_string("[keymap=~a] ~a not bound by user.~%"),
+                              scm_list_2(
+                                scm_from_utf8_string(map.rawValue.cString(using: .utf8)),
+                                guile_key))
             return false
         }
 
