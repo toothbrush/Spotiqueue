@@ -1,7 +1,11 @@
 # TODO list
 
+* Figure out how to build for `arm64` & `x86_64`, which means.. figuring that out for `libguile` and
+  `spotiqueue_worker`, too. :(
+
 * Ensure that focus is always something sensible (read: search bar) on app startup.  With and
-  without displaying login flow.
+  without displaying login flow. Might be complex:
+  http://www.extelligentcocoa.org/the-strange-case-of-initialfirstresponder/
 
 * We really need proper auth-failure handling.  Especially an invalid refresh token just makes the
   app crash 👎
