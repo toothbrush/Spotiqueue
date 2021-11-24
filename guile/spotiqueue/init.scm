@@ -47,6 +47,23 @@
 (define-key queue-panel-map (kbd 'Delete)        'queue:delete-selected-tracks)
 (define-key queue-panel-map (kbd 'ForwardDelete) 'queue:delete-selected-tracks)
 
+;; This is stolen from https://www.programming-idioms.org/idiom/10/shuffle-a-list/2021/scheme, i wasn't feeling creative.
+(define (shuffle-list list)
+  (cond ((and (list? list)
+              (positive? (length list)))
+         (let ((item (list-ref list (random (length list)))))
+           (cons item (shuffle-list (delete item list)))))
+        (else list)))
+
+(define (queue:shuffle)
+  (let* ((tracks (queue:get-tracks))
+         (shuffled (shuffle-list tracks))
+         ;; Don't forget to pick out only the track URIs:
+         (track-uris (map track-uri shuffled)))
+    (queue:set-tracks track-uris)))
+
+(define-key global-map (kbd 'ANSI_S #:ctrl #t #:alt #t) 'queue:shuffle)
+
 ;; (define-key queue-panel-map (kbd 'ANSI_K #:cmd #t) 'queue:move-selected-tracks-up)
 
 ;;; END init.scm
