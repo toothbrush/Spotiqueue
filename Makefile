@@ -78,7 +78,7 @@ make-zip: VERSION = $(shell /usr/libexec/PlistBuddy -c "Print CFBundleShortVersi
 make-zip: sign
 	ditto -c -k --keepParent $(APP_PATH) $(ZIP_PATH)
 	cp -v $(ZIP_PATH) updates/Spotiqueue-v$(VERSION).zip
-	~/Downloads/Sparkle-1.26.0/bin/generate_appcast updates/
+	~/Downloads/Sparkle-1.27.1/bin/generate_appcast updates/
 
 .PHONY: prepare-dmg
 prepare-dmg:
