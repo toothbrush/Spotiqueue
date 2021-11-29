@@ -23,7 +23,7 @@ archive: clean
 
 	xcodebuild \
 		-scheme $(APP) \
-		-destination 'platform=OS X,arch=x86_64' \
+		-destination 'generic/platform=OS X' \
 		-configuration Release archive \
 		-archivePath $(BUILD_PATH)/$(APP).xcarchive
 
