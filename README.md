@@ -6,9 +6,9 @@ which is a shame.  The old Spotiqueue is [archived for
 posterity](https://github.com/toothbrush/spotiqueue-old); this version does pretty much exactly the
 same as the old one did, and more, although i'd like to think it's a bit more refined.
 
-Spotiqueue now also has the [GNU Guile](https://www.gnu.org/software/guile/) extension language
-built in: this means you can extend its behaviour with arbitrary Scheme!  More details below.
-Beware of rough edges. Scratches my itch, no other guarantees granted.
+Spotiqueue now also has support for the [GNU Guile](https://www.gnu.org/software/guile/) extension
+language built in: this means you can extend its behaviour with arbitrary Scheme!  More details
+below.  Beware of rough edges. Scratches my itch, no other guarantees granted.
 
 ![Obligatory screenshot to give an idea what the app does.](img/screenshot.png)
 
@@ -92,7 +92,7 @@ results, diving deeper will return all the tracks of the playlist.
 What it currently supports:
 
 * Setting arbitrary keybindings — if you don't like my choices, change them!
-* Hooks — get a callback when the track ends, when items are copied, etc.
+* Hooks — get a callback when the track ends, when items are copied to the clipboard, etc.
 * Remote control — easily hook up media keys, network access, whatever you want.  The sky's the
   limit.
 
