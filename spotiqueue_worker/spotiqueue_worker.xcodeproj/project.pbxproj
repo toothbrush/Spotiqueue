@@ -137,7 +137,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "ln -f \"${CARGO_XCODE_PRODUCTS_DIR}/libspotiqueue_worker.a\" \"${BUILT_PRODUCTS_DIR}/\"";
+			shellScript = "lipo \\\n    -create \\\n    \"${CARGO_TARGET_DIR}\"/aarch64-apple-darwin/$(echo \"$CONFIGURATION\" | tr '[:upper:]' '[:lower:]')/libspotiqueue_worker.a \\\n    \"${CARGO_TARGET_DIR}\"/x86_64-apple-darwin/$(echo \"$CONFIGURATION\" | tr '[:upper:]' '[:lower:]')/libspotiqueue_worker.a \\\n    -output \\\n    \"${BUILT_PRODUCTS_DIR}/libspotiqueue_worker.a\"\n";
 		};
 		CA60B9AD396E93ECDE66909C /* Cargo build */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -156,7 +156,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
-			shellScript = "set -e; export PATH=$PATH:~/.cargo/bin:/usr/local/bin;\nif [ \"$ACTION\" = \"clean\" ]; then\n\tcargo clean;\nelse\n\tcargo build $CARGO_FLAGS;\nfi\n";
+			shellScript = "set -e; export PATH=$PATH:~/.cargo/bin:/usr/local/bin;\nif [ \"$ACTION\" = \"clean\" ]; then\n\tcargo clean;\nelse\n\tcargo build --target aarch64-apple-darwin $CARGO_FLAGS;\n    cargo build --target x86_64-apple-darwin $CARGO_FLAGS;   \nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -214,7 +214,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				ARCHS = "$(ARCHS_STANDARD)";
 				CARGO_FLAGS = "--release";
 				CARGO_TARGET_DIR = "$(BUILD_DIR)/cargo-target";
 				CARGO_XCODE_PRODUCTS_DIR = "$(BUILD_DIR)/cargo-target/release";

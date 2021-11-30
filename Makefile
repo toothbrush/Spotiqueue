@@ -23,7 +23,7 @@ archive: clean
 
 	xcodebuild \
 		-scheme $(APP) \
-		-destination 'platform=OS X,arch=x86_64' \
+		-destination 'generic/platform=OS X' \
 		-configuration Release archive \
 		-archivePath $(BUILD_PATH)/$(APP).xcarchive
 
@@ -79,26 +79,6 @@ make-zip: sign
 	ditto -c -k --keepParent $(APP_PATH) $(ZIP_PATH)
 	cp -v $(ZIP_PATH) updates/Spotiqueue-v$(VERSION).zip
 	~/Downloads/Sparkle-1.27.1/bin/generate_appcast updates/
-
-.PHONY: prepare-dmg
-prepare-dmg:
-	if [ ! -d $(PWD)/create-dmg ]; then \
-	    git clone https://github.com/create-dmg/create-dmg; \
-	fi
-
-	./create-dmg/create-dmg \
-	    --volname $(APP) \
-	    --window-pos 200 120 \
-	    --window-size 500 320 \
-	    --icon-size 80 \
-	    --icon "Spotiqueue.app" 125 175 \
-	    --hide-extension "Spotiqueue.app" \
-	    --app-drop-link 375 175 \
-	    --no-internet-enable \
-	    $(PWD)/$(APP).dmg \
-	    $(APP_PATH)
-
-	rm -rf ./create-dmg
 
 .PHONY: prepare-dSYM
 prepare-dSYM:

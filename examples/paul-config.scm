@@ -101,6 +101,7 @@
 
 ;; Slightly more involved example, where i am telling Hammerspoon (the `hs` command) to pop up a
 ;; message when i've copied some items.
+;; TODO /usr/local/bin/hs isn't going to work on Apple M1.
 (add-hook! selection-copied-hook
            (lambda (itms)
              (begin

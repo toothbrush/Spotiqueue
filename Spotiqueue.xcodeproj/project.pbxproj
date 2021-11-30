@@ -403,7 +403,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "set -eux\n\nguile_stdlib_target=\"${CODESIGNING_FOLDER_PATH}/Contents/Resources/guile-stdlib\"\nguile_stdlib_source=\"/opt/homebrew/Cellar/guile/3.0.7_2/share/guile/3.0\"\nguile_ccache_target=\"${CODESIGNING_FOLDER_PATH}/Contents/Resources/guile-ccache\"\nguile_ccache_source=\"/opt/homebrew/Cellar/guile/3.0.7_2/lib/guile/3.0/ccache\"\n\n# Clean from previous invocations\nif [ -d \"$guile_ccache_target\" ] ; then\n    rm -rf \"$guile_ccache_target\"\nfi\n\nmkdir -p \"$guile_stdlib_target\"\nmkdir -p \"$guile_ccache_target\"\n\ncp -rv \"$guile_stdlib_source\"/* \"$guile_stdlib_target/\"\ncp -rv \"$guile_ccache_source\"/* \"$guile_ccache_target/\"\n";
+			shellScript = "set -eux\n\nguile_stdlib_target=\"${CODESIGNING_FOLDER_PATH}/Contents/Resources/guile-stdlib\"\nguile_stdlib_source=\"${SRCROOT}/vendor/big_sur/guile/3.0.7_2/share/guile/3.0\"\nguile_ccache_target=\"${CODESIGNING_FOLDER_PATH}/Contents/Resources/guile-ccache\"\nguile_ccache_source=\"${SRCROOT}/vendor/big_sur/guile/3.0.7_2/lib/guile/3.0/ccache\"\n\n# Clean from previous invocations\nif [ -d \"$guile_ccache_target\" ] ; then\n    rm -rf \"$guile_ccache_target\"\nfi\n\nmkdir -p \"$guile_stdlib_target\"\nmkdir -p \"$guile_ccache_target\"\n\ncp -rv \"$guile_stdlib_source\"/* \"$guile_stdlib_target/\"\ncp -rv \"$guile_ccache_source\"/* \"$guile_ccache_target/\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -491,14 +491,6 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = (
-					"$SRCROOT/spotiqueue-worker/**",
-					/opt/homebrew/Cellar/guile/3.0.7_2/include/guile/3.0,
-					"/opt/homebrew/opt/bdw-gc/include",
-					/opt/homebrew/opt/readline/include,
-					/opt/homebrew/opt/gmp/include,
-					/opt/homebrew/opt/gmp,
-				);
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -556,14 +548,6 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = (
-					"$SRCROOT/spotiqueue-worker/**",
-					/opt/homebrew/Cellar/guile/3.0.7_2/include/guile/3.0,
-					"/opt/homebrew/opt/bdw-gc/include",
-					/opt/homebrew/opt/readline/include,
-					/opt/homebrew/opt/gmp/include,
-					/opt/homebrew/opt/gmp,
-				);
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -585,7 +569,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1073;
+				CURRENT_PROJECT_VERSION = 1080;
 				DEVELOPMENT_TEAM = QG72S9L5L3;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -593,6 +577,10 @@
 					"$(PROJECT_DIR)/Spotiqueue",
 				);
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/spotiqueue-worker",
+					"$(SRCROOT)/vendor/include",
+				);
 				INFOPLIST_FILE = Spotiqueue/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -602,10 +590,10 @@
 				MARKETING_VERSION = 2.2.1;
 				OTHER_CFLAGS = "-D_THREAD_SAFE";
 				OTHER_LDFLAGS = (
-					/opt/homebrew/lib/libgc.a,
-					/opt/homebrew/Cellar/gmp/6.2.1_1/lib/libgmp.a,
-					"/opt/homebrew/Cellar/guile/3.0.7_2/lib/libguile-3.0.a",
-					/opt/homebrew/lib/libunistring.a,
+					"$(SRCROOT)/vendor/lib/libgc.a",
+					"$(SRCROOT)/vendor/lib/libgmp.a",
+					"$(SRCROOT)/vendor/lib/libguile-3.0.a",
+					"$(SRCROOT)/vendor/lib/libunistring.a",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.rustlingbroccoli.Spotiqueue;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -625,7 +613,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1073;
+				CURRENT_PROJECT_VERSION = 1080;
 				DEVELOPMENT_TEAM = QG72S9L5L3;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -633,6 +621,10 @@
 					"$(PROJECT_DIR)/Spotiqueue",
 				);
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/spotiqueue-worker",
+					"$(SRCROOT)/vendor/include",
+				);
 				INFOPLIST_FILE = Spotiqueue/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -642,10 +634,10 @@
 				MARKETING_VERSION = 2.2.1;
 				OTHER_CFLAGS = "-D_THREAD_SAFE";
 				OTHER_LDFLAGS = (
-					/opt/homebrew/lib/libgc.a,
-					/opt/homebrew/Cellar/gmp/6.2.1_1/lib/libgmp.a,
-					"/opt/homebrew/Cellar/guile/3.0.7_2/lib/libguile-3.0.a",
-					/opt/homebrew/lib/libunistring.a,
+					"$(SRCROOT)/vendor/lib/libgc.a",
+					"$(SRCROOT)/vendor/lib/libgmp.a",
+					"$(SRCROOT)/vendor/lib/libguile-3.0.a",
+					"$(SRCROOT)/vendor/lib/libunistring.a",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.rustlingbroccoli.Spotiqueue;
 				PRODUCT_NAME = "$(TARGET_NAME)";
