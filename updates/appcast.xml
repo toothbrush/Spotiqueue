@@ -47,5 +47,19 @@
             <sparkle:minimumSystemVersion>10.15</sparkle:minimumSystemVersion>
             <enclosure url="https://github.com/toothbrush/Spotiqueue/releases/download/v2.4.2/Spotiqueue-v2.4.2.zip" sparkle:version="1036" sparkle:shortVersionString="2.4.2" length="20723534" type="application/octet-stream" sparkle:edSignature="xytqxuCUQNBq7x7cBxGEFBnx/0qAnvPnY6DADTZdD+T/di9vwVQSLt/fYjh0vkF/vz62bfsG5hb32RJQNuXcDQ=="/>
         </item>
+        <item>
+            <title>2.5.1</title>
+            <pubDate>Tue, 30 Nov 2021 18:19:13 +1100</pubDate>
+            <description><![CDATA[
+            <h2>Updates:</h2>
+            <ul>
+            <li>Universal binary &mdash;&nbsp;works on all recent Macs!</li>
+            <li>Shuffle support: hit ctrl-alt-s to shuffle the queue!  Sorry Adele 😬</li>
+            <li>For the developers: you can modify the queue from Guile!</li>
+            </ul>
+            ]]></description>
+            <sparkle:minimumSystemVersion>10.15</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/toothbrush/Spotiqueue/releases/download/v2.5.1/Spotiqueue-v2.5.1.zip" sparkle:version="1080" sparkle:shortVersionString="2.5.1" length="26483816" type="application/octet-stream" sparkle:edSignature="X1Peh/8t0MarnqRv7JzSurvI8w1PBGX/S1nLqCDER/xjnwkwmEs9GzjPGWscOPFkTzCsqmSlCAcpFttV+V0CBg=="/>
+        </item>
     </channel>
 </rss>
