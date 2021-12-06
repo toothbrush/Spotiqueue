@@ -5,7 +5,7 @@ use std::thread;
 
 use librespot::core::authentication::Credentials;
 use librespot::core::config::SessionConfig;
-use librespot::core::session::Session;
+use librespot::core::session::{Session, SessionError};
 use librespot::core::spotify_id::SpotifyId;
 use librespot::playback::audio_backend;
 use librespot::playback::config::{AudioFormat, PlayerConfig};
@@ -212,11 +212,35 @@ fn internal_login_worker(username: String, password: String) -> InitializationRe
 
     info!("Authorizing...");
 
-    let session: Session = RUNTIME.get().unwrap().block_on(async {
-        Session::connect(session_config, credentials, None)
-            .await
-            .unwrap()
-    });
+    let session = RUNTIME
+        .get()
+        .unwrap()
+        .block_on(async { Session::connect(session_config, credentials, None).await });
+
+    /*
+    thread '<unnamed>' panicked at 'called `Result::unwrap()` on an `Err` value: AuthenticationError(LoginFailed(BadCredentials))', src/lib.rs:216:14
+    */
+
+    let session = match session {
+        Ok(sess) => sess,
+        Err(err) => match err {
+            SessionError::AuthenticationError(err) => {
+                let e: &str =
+                    &format!("spotiqueue_worker: Authentication error: {}", err).to_owned();
+                error!("{}", e);
+                return InitializationResult::InitProblem {
+                    description: string_from_rust(e),
+                };
+            }
+            _ => {
+                let e = "spotiqueue_worker: Unknown error in Session::connect().";
+                error!("{}\n{}", e, err);
+                return InitializationResult::InitProblem {
+                    description: string_from_rust(e),
+                };
+            }
+        },
+    };
 
     let (player, _) = Player::new(player_config, session.clone(), None, move || {
         backend(None, audio_format)
