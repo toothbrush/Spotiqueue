@@ -1,4 +1,4 @@
-use std::ffi::CStr;
+use std::ffi::{CStr, CString};
 use std::os::raw::c_char;
 use std::sync::mpsc::{sync_channel, SyncSender};
 use std::thread;
@@ -136,6 +136,23 @@ pub enum StatusUpdate {
     TimeToPreloadNextTrack,
 }
 
+#[repr(C)]
+#[derive(Debug)]
+pub enum InitializationResult {
+    InitOkay,
+    InitBadCredentials,
+    InitNotPremium,
+    InitProblem(*const c_char),
+}
+
+// https://thefullsnack.com/en/string-ffi-rust.html
+fn string_from_rust(string: &str) -> *const c_char {
+    let s = CString::new(string).unwrap();
+    let p = s.as_ptr();
+    std::mem::forget(s);
+    p
+}
+
 #[derive(Debug)]
 pub struct WorkerCallback {
     pub callback: extern "C" fn(status: StatusUpdate, position_ms: u32, duration_ms: u32),
@@ -158,10 +175,10 @@ fn use_stored_callback(status: StatusUpdate, position_ms: u32, duration_ms: u32)
 pub extern "C" fn spotiqueue_initialize_worker(
     username_raw: *const c_char,
     password_raw: *const c_char,
-) -> bool {
+) -> InitializationResult {
     if username_raw.is_null() || password_raw.is_null() {
-        error!("Username or password not provided correctly.");
-        return false;
+        let e = "Username or password not provided correctly.";
+        return InitializationResult::InitProblem(string_from_rust(e));
     }
 
     let username = c_str_to_rust_string(username_raw);
@@ -170,7 +187,7 @@ pub extern "C" fn spotiqueue_initialize_worker(
     internal_initialize_worker(username, password)
 }
 
-fn internal_initialize_worker(username: String, password: String) -> bool {
+fn internal_initialize_worker(username: String, password: String) -> InitializationResult {
     Builder::new().filter_level(LevelFilter::Debug).init();
     if cfg!(debug_assertions) {
         println!("I am a DEBUG build.");
@@ -203,7 +220,7 @@ fn internal_initialize_worker(username: String, password: String) -> bool {
 
     info!("Authorized.");
 
-    return true;
+    return InitializationResult::InitOkay;
 }
 
 #[no_mangle]
