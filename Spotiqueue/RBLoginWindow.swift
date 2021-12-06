@@ -36,13 +36,11 @@ class RBLoginWindow: NSWindowController {
             let worker_initialized = spotiqueue_initialize_worker(username, password)
             switch worker_initialized.tag {
             case InitOkay:
-                break
-                // do nothing, all is fine.
+                // It went fine, let's open the main view.
+                self.window?.sheetParent?.endSheet(self.window!, returnCode: .OK)
             default:
                 fatalError("Unable to launch spotiqueue-worker!")
             }
-
-            self.window?.sheetParent?.endSheet(self.window!, returnCode: .OK)
         } else {
             logger.info("Eek, couldn't retrieve username or password from Keychain! Let's ask the user.")
         }
