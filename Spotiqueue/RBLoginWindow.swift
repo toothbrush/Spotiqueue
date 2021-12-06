@@ -43,7 +43,8 @@ class RBLoginWindow: NSWindowController {
             case InitNotPremium:
                 showLoginError(message: "Unfortunately, Spotify requires you to have a Spotify Premium account to use 3rd-party clients.")
             case InitProblem:
-                showLoginError(message: "something else!")
+                let problem = String.init(cString: worker_initialized.init_problem.description)
+                showLoginError(message: problem)
             default:
                 fatalError("Unable to launch spotiqueue-worker!")
             }
