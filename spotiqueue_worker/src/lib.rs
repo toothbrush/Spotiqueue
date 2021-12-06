@@ -142,6 +142,7 @@ pub enum InitializationResult {
     InitOkay,
     InitBadCredentials,
     InitNotPremium,
+    // A catch-all "other" error with space for a string to explain:
     InitProblem { description: *const c_char },
 }
 
@@ -247,8 +248,12 @@ fn internal_login_worker(username: String, password: String) -> InitializationRe
                 }
             }
             _ => {
-                let e = "spotiqueue_worker: Unknown error in Session::connect().";
-                error!("{}\n{}", e, err);
+                let e: &str = &format!(
+                    "spotiqueue_worker: Unknown error in Session::connect(). {}",
+                    err
+                )
+                .to_owned();
+                error!("{}", e);
                 return InitializationResult::InitProblem {
                     description: string_from_rust(e),
                 };
