@@ -8,6 +8,7 @@
 #import <Cocoa/Cocoa.h>
 #import <libguile.h>
 #import "GuileHelpers.h"
+#import "spotiqueue_worker_bindings.h"
 
 static void register_functions (void* data)
 {
@@ -53,6 +54,9 @@ int main(int argc, const char * argv[]) {
 
         // Note that there are DRAGONS here.  We use a separate "Copy Files" Xcode build phase to put Scheme files into a "spotiqueue" subfolder inside the App bundle's Resources folder.  We do this so that the module names match up.  However, there doesn't seem to be an obvious way to get a direct pointer to the Resources folder, so we use this hack.
         scm_c_primitive_load_path("spotiqueue/init");
+
+        // This just sets up logging and stuff in the Rust library:
+        spotiqueue_initialize_worker();
     }
 
     return NSApplicationMain(argc, argv);

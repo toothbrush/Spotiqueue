@@ -34,8 +34,10 @@ typedef struct InitializationResult {
 
 void set_callback(void (*callback)(enum StatusUpdate status, uint32_t position_ms, uint32_t duration_ms));
 
-struct InitializationResult spotiqueue_initialize_worker(const char *username_raw,
-                                                         const char *password_raw);
+void spotiqueue_initialize_worker(void);
+
+struct InitializationResult spotiqueue_login_worker(const char *username_raw,
+                                                    const char *password_raw);
 
 bool spotiqueue_pause_playback(void);
 

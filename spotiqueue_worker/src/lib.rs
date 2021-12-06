@@ -172,7 +172,19 @@ fn use_stored_callback(status: StatusUpdate, position_ms: u32, duration_ms: u32)
 }
 
 #[no_mangle]
-pub extern "C" fn spotiqueue_initialize_worker(
+pub extern "C" fn spotiqueue_initialize_worker() {
+    Builder::new().filter_level(LevelFilter::Debug).init();
+    if cfg!(debug_assertions) {
+        println!("I am a DEBUG build.");
+    } else {
+        println!("I am a RELEASE build.");
+    }
+
+    RUNTIME.set(Runtime::new().unwrap()).unwrap();
+}
+
+#[no_mangle]
+pub extern "C" fn spotiqueue_login_worker(
     username_raw: *const c_char,
     password_raw: *const c_char,
 ) -> InitializationResult {
@@ -184,19 +196,10 @@ pub extern "C" fn spotiqueue_initialize_worker(
     let username = c_str_to_rust_string(username_raw);
     let password = c_str_to_rust_string(password_raw);
 
-    internal_initialize_worker(username, password)
+    internal_login_worker(username, password)
 }
 
-fn internal_initialize_worker(username: String, password: String) -> InitializationResult {
-    Builder::new().filter_level(LevelFilter::Debug).init();
-    if cfg!(debug_assertions) {
-        println!("I am a DEBUG build.");
-    } else {
-        println!("I am a RELEASE build.");
-    }
-
-    RUNTIME.set(Runtime::new().unwrap()).unwrap();
-
+fn internal_login_worker(username: String, password: String) -> InitializationResult {
     let session_config = SessionConfig::default();
     let player_config = PlayerConfig::default();
     let audio_format = AudioFormat::default();
