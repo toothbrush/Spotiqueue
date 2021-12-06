@@ -217,10 +217,6 @@ fn internal_login_worker(username: String, password: String) -> InitializationRe
         .unwrap()
         .block_on(async { Session::connect(session_config, credentials, None).await });
 
-    /*
-    thread '<unnamed>' panicked at 'called `Result::unwrap()` on an `Err` value: AuthenticationError(LoginFailed(BadCredentials))', src/lib.rs:216:14
-    */
-
     let session = match session {
         Ok(sess) => sess,
         Err(err) => match err {
@@ -228,9 +224,27 @@ fn internal_login_worker(username: String, password: String) -> InitializationRe
                 let e: &str =
                     &format!("spotiqueue_worker: Authentication error: {}", err).to_owned();
                 error!("{}", e);
-                return InitializationResult::InitProblem {
-                    description: string_from_rust(e),
-                };
+
+                // Righto, this is fairly horrific.  The librespot library doesn't let us directly
+                // import the enum contained in AuthenticationError, LoginFailed.  They only seem to
+                // let use their prefab error strings, see
+                // https://github.com/librespot-org/librespot/blob/041f084d7f5f3e0731b712064f61105b509e5154/core/src/connection/mod.rs#L24-L39.
+                //
+                // Anyway, this is good enough, for now - we just want to be able to give the user a
+                // reasonable error message if it turns out they try to use a free account.  I need
+                // to go take a shower.  It might well be that i just don't understand Rust well
+                // enough to actually be able to get ahold of the true error codes, but oh well!
+
+                let the_error: String = format!("{:?}", err);
+                if the_error.contains("BadCredentials") {
+                    return InitializationResult::InitBadCredentials;
+                } else if the_error.contains("PremiumAccountRequired") {
+                    return InitializationResult::InitNotPremium;
+                } else {
+                    return InitializationResult::InitProblem {
+                        description: string_from_rust(e),
+                    };
+                }
             }
             _ => {
                 let e = "spotiqueue_worker: Unknown error in Session::connect().";
