@@ -33,11 +33,14 @@ class RBLoginWindow: NSWindowController {
             self.usernameField.isEnabled = false
             self.passwordField.isEnabled = false
 
-            let worker_initialized = spotiqueue_initialize_worker(username, password)
+            let worker_initialized = spotiqueue_login_worker(username, password)
             switch worker_initialized.tag {
             case InitOkay:
                 // It went fine, let's open the main view.
                 self.window?.sheetParent?.endSheet(self.window!, returnCode: .OK)
+            case InitBadCredentials:
+                // show alert
+                showLoginError(message: "Your credentials are incorrect.")
             default:
                 fatalError("Unable to launch spotiqueue-worker!")
             }
@@ -51,6 +54,17 @@ class RBLoginWindow: NSWindowController {
         RBSecrets.setSecret(s: .username, v: self.usernameField.stringValue.data(using: .utf8)!)
         RBSecrets.setSecret(s: .password, v: self.passwordField.stringValue.data(using: .utf8)!)
         self.startLoginRoutine()
+    }
+
+    func showLoginError(message: String) {
+        let alert = NSAlert()
+        alert.messageText = "Login error"
+        alert.informativeText = message
+        alert.alertStyle = .critical
+        alert.addButton(withTitle: "OK")
+        alert.beginSheetModal(for: self.window!) { result in
+
+        }
     }
 
     @IBAction func quitButton(_ sender: Any) {
