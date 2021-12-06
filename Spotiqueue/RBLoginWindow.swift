@@ -34,7 +34,11 @@ class RBLoginWindow: NSWindowController {
             self.passwordField.isEnabled = false
 
             let worker_initialized = spotiqueue_initialize_worker(username, password)
-            if !worker_initialized {
+            switch worker_initialized.tag {
+            case InitOkay:
+                break
+                // do nothing, all is fine.
+            default:
                 fatalError("Unable to launch spotiqueue-worker!")
             }
 
