@@ -16,9 +16,26 @@ typedef enum StatusUpdate {
   TimeToPreloadNextTrack,
 } StatusUpdate;
 
+typedef enum InitializationResult_Tag {
+  InitOkay,
+  InitBadCredentials,
+  InitNotPremium,
+  InitProblem,
+} InitializationResult_Tag;
+
+typedef struct InitializationResult {
+  InitializationResult_Tag tag;
+  union {
+    struct {
+      const char *init_problem;
+    };
+  };
+} InitializationResult;
+
 void set_callback(void (*callback)(enum StatusUpdate status, uint32_t position_ms, uint32_t duration_ms));
 
-bool spotiqueue_initialize_worker(const char *username_raw, const char *password_raw);
+struct InitializationResult spotiqueue_initialize_worker(const char *username_raw,
+                                                         const char *password_raw);
 
 bool spotiqueue_pause_playback(void);
 
