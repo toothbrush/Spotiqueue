@@ -33,12 +33,21 @@ class RBLoginWindow: NSWindowController {
             self.usernameField.isEnabled = false
             self.passwordField.isEnabled = false
 
-            let worker_initialized = spotiqueue_initialize_worker(username, password)
-            if !worker_initialized {
+            let worker_initialized = spotiqueue_login_worker(username, password)
+            switch worker_initialized.tag {
+            case InitOkay:
+                // It went fine, let's open the main view.
+                self.window?.sheetParent?.endSheet(self.window!, returnCode: .OK)
+            case InitBadCredentials:
+                showLoginError(message: "Your credentials are incorrect.")
+            case InitNotPremium:
+                showLoginError(message: "Unfortunately, Spotify requires you to have a Spotify Premium account to use 3rd-party clients.")
+            case InitProblem:
+                let problem = String.init(cString: worker_initialized.init_problem.description)
+                showLoginError(message: problem)
+            default:
                 fatalError("Unable to launch spotiqueue-worker!")
             }
-
-            self.window?.sheetParent?.endSheet(self.window!, returnCode: .OK)
         } else {
             logger.info("Eek, couldn't retrieve username or password from Keychain! Let's ask the user.")
         }
@@ -49,6 +58,17 @@ class RBLoginWindow: NSWindowController {
         RBSecrets.setSecret(s: .username, v: self.usernameField.stringValue.data(using: .utf8)!)
         RBSecrets.setSecret(s: .password, v: self.passwordField.stringValue.data(using: .utf8)!)
         self.startLoginRoutine()
+    }
+
+    func showLoginError(message: String) {
+        let alert = NSAlert()
+        alert.messageText = "Login error"
+        alert.informativeText = message
+        alert.alertStyle = .critical
+        alert.addButton(withTitle: "OK")
+        alert.beginSheetModal(for: self.window!) { result in
+
+        }
     }
 
     @IBAction func quitButton(_ sender: Any) {

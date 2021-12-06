@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 48;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXAggregateTarget section */
@@ -121,6 +121,7 @@
 /* Begin PBXShellScriptBuildPhase section */
 		CA601F9EC8CCD3DD47A172EA /* Copy files (libspotiqueue_worker.a) */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
@@ -141,6 +142,7 @@
 		};
 		CA60B9AD396E93ECDE66909C /* Cargo build */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);

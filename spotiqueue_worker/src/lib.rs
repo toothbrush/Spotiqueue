@@ -1,11 +1,11 @@
-use std::ffi::CStr;
+use std::ffi::{CStr, CString};
 use std::os::raw::c_char;
 use std::sync::mpsc::{sync_channel, SyncSender};
 use std::thread;
 
 use librespot::core::authentication::Credentials;
 use librespot::core::config::SessionConfig;
-use librespot::core::session::Session;
+use librespot::core::session::{Session, SessionError};
 use librespot::core::spotify_id::SpotifyId;
 use librespot::playback::audio_backend;
 use librespot::playback::config::{AudioFormat, PlayerConfig};
@@ -136,6 +136,24 @@ pub enum StatusUpdate {
     TimeToPreloadNextTrack,
 }
 
+#[repr(C)]
+#[derive(Debug)]
+pub enum InitializationResult {
+    InitOkay,
+    InitBadCredentials,
+    InitNotPremium,
+    // A catch-all "other" error with space for a string to explain:
+    InitProblem { description: *const c_char },
+}
+
+// https://thefullsnack.com/en/string-ffi-rust.html
+fn string_from_rust(string: &str) -> *const c_char {
+    let s = CString::new(string).unwrap();
+    let p = s.as_ptr();
+    std::mem::forget(s);
+    p
+}
+
 #[derive(Debug)]
 pub struct WorkerCallback {
     pub callback: extern "C" fn(status: StatusUpdate, position_ms: u32, duration_ms: u32),
@@ -155,22 +173,7 @@ fn use_stored_callback(status: StatusUpdate, position_ms: u32, duration_ms: u32)
 }
 
 #[no_mangle]
-pub extern "C" fn spotiqueue_initialize_worker(
-    username_raw: *const c_char,
-    password_raw: *const c_char,
-) -> bool {
-    if username_raw.is_null() || password_raw.is_null() {
-        error!("Username or password not provided correctly.");
-        return false;
-    }
-
-    let username = c_str_to_rust_string(username_raw);
-    let password = c_str_to_rust_string(password_raw);
-
-    internal_initialize_worker(username, password)
-}
-
-fn internal_initialize_worker(username: String, password: String) -> bool {
+pub extern "C" fn spotiqueue_initialize_worker() {
     Builder::new().filter_level(LevelFilter::Debug).init();
     if cfg!(debug_assertions) {
         println!("I am a DEBUG build.");
@@ -179,7 +182,27 @@ fn internal_initialize_worker(username: String, password: String) -> bool {
     }
 
     RUNTIME.set(Runtime::new().unwrap()).unwrap();
+}
 
+#[no_mangle]
+pub extern "C" fn spotiqueue_login_worker(
+    username_raw: *const c_char,
+    password_raw: *const c_char,
+) -> InitializationResult {
+    if username_raw.is_null() || password_raw.is_null() {
+        let e = "Username or password not provided correctly.";
+        return InitializationResult::InitProblem {
+            description: string_from_rust(e),
+        };
+    }
+
+    let username = c_str_to_rust_string(username_raw);
+    let password = c_str_to_rust_string(password_raw);
+
+    internal_login_worker(username, password)
+}
+
+fn internal_login_worker(username: String, password: String) -> InitializationResult {
     let session_config = SessionConfig::default();
     let player_config = PlayerConfig::default();
     let audio_format = AudioFormat::default();
@@ -190,11 +213,53 @@ fn internal_initialize_worker(username: String, password: String) -> bool {
 
     info!("Authorizing...");
 
-    let session: Session = RUNTIME.get().unwrap().block_on(async {
-        Session::connect(session_config, credentials, None)
-            .await
-            .unwrap()
-    });
+    let session = RUNTIME
+        .get()
+        .unwrap()
+        .block_on(async { Session::connect(session_config, credentials, None).await });
+
+    let session = match session {
+        Ok(sess) => sess,
+        Err(err) => match err {
+            SessionError::AuthenticationError(err) => {
+                let e: &str =
+                    &format!("spotiqueue_worker: Authentication error: {}", err).to_owned();
+                error!("{}", e);
+
+                // Righto, this is fairly horrific.  The librespot library doesn't let us directly
+                // import the enum contained in AuthenticationError, LoginFailed.  They only seem to
+                // let use their prefab error strings, see
+                // https://github.com/librespot-org/librespot/blob/041f084d7f5f3e0731b712064f61105b509e5154/core/src/connection/mod.rs#L24-L39.
+                //
+                // Anyway, this is good enough, for now - we just want to be able to give the user a
+                // reasonable error message if it turns out they try to use a free account.  I need
+                // to go take a shower.  It might well be that i just don't understand Rust well
+                // enough to actually be able to get ahold of the true error codes, but oh well!
+
+                let the_error: String = format!("{:?}", err);
+                if the_error.contains("BadCredentials") {
+                    return InitializationResult::InitBadCredentials;
+                } else if the_error.contains("PremiumAccountRequired") {
+                    return InitializationResult::InitNotPremium;
+                } else {
+                    return InitializationResult::InitProblem {
+                        description: string_from_rust(e),
+                    };
+                }
+            }
+            _ => {
+                let e: &str = &format!(
+                    "spotiqueue_worker: Unknown error in Session::connect(). {}",
+                    err
+                )
+                .to_owned();
+                error!("{}", e);
+                return InitializationResult::InitProblem {
+                    description: string_from_rust(e),
+                };
+            }
+        },
+    };
 
     let (player, _) = Player::new(player_config, session.clone(), None, move || {
         backend(None, audio_format)
@@ -203,7 +268,7 @@ fn internal_initialize_worker(username: String, password: String) -> bool {
 
     info!("Authorized.");
 
-    return true;
+    return InitializationResult::InitOkay;
 }
 
 #[no_mangle]
