@@ -61,5 +61,18 @@
             <sparkle:minimumSystemVersion>10.15</sparkle:minimumSystemVersion>
             <enclosure url="https://github.com/toothbrush/Spotiqueue/releases/download/v2.5.1/Spotiqueue-v2.5.1.zip" sparkle:version="1080" sparkle:shortVersionString="2.5.1" length="26483816" type="application/octet-stream" sparkle:edSignature="X1Peh/8t0MarnqRv7JzSurvI8w1PBGX/S1nLqCDER/xjnwkwmEs9GzjPGWscOPFkTzCsqmSlCAcpFttV+V0CBg=="/>
         </item>
+        <item>
+            <title>2.5.2</title>
+            <pubDate>Mon, 06 Dec 2021 23:08:49 +1100</pubDate>
+            <description><![CDATA[
+            <h2>Updates:</h2>
+            <ul>
+            <li>Give a useful error message if login fails!</li>
+            <li>Minor dependencies update.  No change expected.</li>
+            </ul>
+            ]]></description>
+            <sparkle:minimumSystemVersion>10.15</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/toothbrush/Spotiqueue/releases/download/v2.5.2/Spotiqueue-v2.5.2.zip" sparkle:version="1099" sparkle:shortVersionString="2.5.2" length="26699279" type="application/octet-stream" sparkle:edSignature="oYvVPKkQUTf+cCJkByq/VM/381lwX1+iLDVTQR13uurRg1L9b0FxHS+QX7zhRC1cFpOVLgPP2LHGtD5CFvisDg=="/>
+        </item>
     </channel>
 </rss>
