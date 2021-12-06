@@ -142,7 +142,7 @@ pub enum InitializationResult {
     InitOkay,
     InitBadCredentials,
     InitNotPremium,
-    InitProblem(*const c_char),
+    InitProblem { description: *const c_char },
 }
 
 // https://thefullsnack.com/en/string-ffi-rust.html
@@ -190,7 +190,9 @@ pub extern "C" fn spotiqueue_login_worker(
 ) -> InitializationResult {
     if username_raw.is_null() || password_raw.is_null() {
         let e = "Username or password not provided correctly.";
-        return InitializationResult::InitProblem(string_from_rust(e));
+        return InitializationResult::InitProblem {
+            description: string_from_rust(e),
+        };
     }
 
     let username = c_str_to_rust_string(username_raw);

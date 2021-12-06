@@ -23,12 +23,14 @@ typedef enum InitializationResult_Tag {
   InitProblem,
 } InitializationResult_Tag;
 
+typedef struct InitProblem_Body {
+  const char *description;
+} InitProblem_Body;
+
 typedef struct InitializationResult {
   InitializationResult_Tag tag;
   union {
-    struct {
-      const char *init_problem;
-    };
+    InitProblem_Body init_problem;
   };
 } InitializationResult;
 
