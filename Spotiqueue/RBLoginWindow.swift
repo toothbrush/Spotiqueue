@@ -39,8 +39,11 @@ class RBLoginWindow: NSWindowController {
                 // It went fine, let's open the main view.
                 self.window?.sheetParent?.endSheet(self.window!, returnCode: .OK)
             case InitBadCredentials:
-                // show alert
                 showLoginError(message: "Your credentials are incorrect.")
+            case InitNotPremium:
+                showLoginError(message: "Unfortunately, Spotify requires you to have a Spotify Premium account to use 3rd-party clients.")
+            case InitProblem:
+                showLoginError(message: "something else!")
             default:
                 fatalError("Unable to launch spotiqueue-worker!")
             }
