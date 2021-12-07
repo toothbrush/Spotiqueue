@@ -244,6 +244,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         self.queueTableView.nextKeyView = self.searchField
         self.window.makeFirstResponder(self.searchField)
 
+        self.albumTitleLabel.isSelectable = true
+        self.trackTitleLabel.isSelectable = true
+
         // I choose to check whether we're authorised here, because if we aren't pasting will result in a bunch of ugly URI entries in the queue.  They work, but meh.  The way around this would be to observe the auth-state of self.spotify, and only try loading the queue from UserDefaults at that point, but honestly having a queue saved but not being authorised is a bit of an edge-case.  Queue isn't valuable, you can rebuild it or save it in a playlist if you really care to.
         if self.spotify.isAuthorized,
            let savedQueuedTracks = UserDefaults.standard.string(forKey: "queuedTracks")
