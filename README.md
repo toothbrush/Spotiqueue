@@ -118,6 +118,12 @@ If you don't like hassling about with Xcode (quite rightly so), you can find com
 [on the Github releases page](https://github.com/toothbrush/Spotiqueue/releases).  Unfortunately, for now you need at least
 macOS 10.15, because the app makes heavy use of the Combine framework.
 
+If you use [Homebrew](https://brew.sh/), you can simply run:
+
+```sh
+brew install --cask toothbrush/toothbrush/spotiqueue
+```
+
 ## Development
 
 Have a look at [HACKING.md](./HACKING.md) for a run-through of the development tools required.
