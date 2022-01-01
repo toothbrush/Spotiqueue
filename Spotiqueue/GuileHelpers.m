@@ -130,7 +130,15 @@ SCM queue_set_tracks(SCM track_list) {
     return _scm_true();
 }
 
+SCM alert_popup(SCM title, SCM message) {
+    NSString* objc_title = [[NSString alloc] initWithUTF8String: scm_to_utf8_string(title)];
+    NSString* objc_message = [[NSString alloc] initWithUTF8String: scm_to_utf8_string(message)];
+    [RBGuileBridge alert_popupWithTitle:objc_title message:objc_message];
+    return _scm_true();
+}
+
 void register_funcs_objc(void) {
+    scm_c_define_gsubr("player:alert", 2, 0, 0, &alert_popup);
     scm_c_define_gsubr("player:auto-advance", 0, 0, 0, &auto_advance);
     scm_c_define_gsubr("player:current-track", 0, 0, 0, &current_track);
     scm_c_define_gsubr("player:homedir", 0, 0, 0, &get_homedir);
@@ -143,6 +151,7 @@ void register_funcs_objc(void) {
     scm_c_define_gsubr("queue:_set-tracks", 1, 0, 0, &queue_set_tracks);
     scm_c_define_gsubr("window:focus-search-box", 0, 0, 0, &focus_search_box);
     scm_c_export(
+                 "player:alert",
                  "player:auto-advance",
                  "player:current-track",
                  "player:homedir",

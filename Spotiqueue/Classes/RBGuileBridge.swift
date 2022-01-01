@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import AppKit
 
 func block_on_main<A>(closure: () -> A) -> A {
     if Thread.isMainThread {
@@ -167,6 +168,14 @@ public func track_to_scm_record(track: RBSpotifyItem) -> SCM {
             AppDelegate.appDelegate().queue = []
             AppDelegate.appDelegate().queueTableView.addTracksToQueue(from: tracks)
         }
+    }
+
+    @objc static func alert_popup(title: String, message: String) {
+        let alert = NSAlert()
+        alert.messageText = title
+        alert.informativeText = message
+        alert.addButton(withTitle: "OK")
+        alert.runModal()
     }
 
     enum KeyMap: String {
