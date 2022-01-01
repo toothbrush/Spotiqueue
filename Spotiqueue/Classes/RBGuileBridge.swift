@@ -157,6 +157,12 @@ public func playlist_to_scm_record(track: RBSpotifyItem) -> SCM {
         }
     }
 
+    @objc static func search_get_selection() -> [RBSpotifyItem] {
+        block_on_main {
+            AppDelegate.appDelegate().searchTableView.selectedSearchTracks()
+        }
+    }
+
     @objc static func queue_set_tracks(tracks: [String]) {
         block_on_main {
             AppDelegate.appDelegate().queue = []
