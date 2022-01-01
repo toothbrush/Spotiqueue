@@ -20,50 +20,21 @@
   #:declarative? #f)
 (module-export-all! (current-module))
 
-;; Syntax transformer to re-export all public defines from a given module from this module.  Grabbed
-;; from https://www.mail-archive.com/bug-guile@gnu.org/msg10321.html
-;;
 ;; What i want is, whenever someone imports (spotiqueue init), they should get whatever has been
 ;; defined in (spotiqueue functions), too.  The latter is the "phantom module" created in Swift-land
 ;; when Spotiqueue boots, exporting a few functions which are needed to sensibly be able to interact
 ;; with the music player.
-(define-syntax re-export-public-interface
-  (syntax-rules ()
-    "Re-export the public interface of a module or modules. Invoked as
-@code{(re-export-public-interface (mod1) (mod2) ...)}."
-    ((_ (m0 m0* ...) (mn mn* ...) ...)
-     (let ((iface (module-public-interface (current-module))))
-       (define (r-e-p-i module)
-         (cond-expand
-          (guile-3
-           (module-for-each
-            (lambda (sym val)
-              (hashq-set! (module-replacements iface) sym #t)
-              (module-add! iface sym val))
-            (resolve-interface module)))
-          (else
-           (module-use! iface (resolve-interface module)))))
-       (r-e-p-i '(m0 m0* ...))
-       (r-e-p-i '(mn mn* ...))
-       ...))
-    ((_)
-     (syntax-error "must provide one or more module names"))
-    ((_ m m* ...)
-     (syntax-error "module names must look like lists"))))
-
-(re-export-public-interface (spotiqueue functions))
-
-;; The re-export thing should presumably be achievable with this snippet, from
-;; https://debbugs.gnu.org/cgi/bugreport.cgi?bug=47084, and it does seem to work, except that i feel
-;; like i can't really get my head around it.  Notably i don't understand the docstring of
-;; `module-use!`, which simply states, "Add interface [the second arg] to the front of the use-list
-;; of module [the first arg]. Both arguments should be module objects, and interface should very
-;; likely be a module returned by resolve-interface."  Also, (current-module) always resolves to
-;; (spotiqueue init), and not whatever is importing it...
 ;;
-;;     (eval-when (expand load eval)
-;;       (module-use! (module-public-interface (current-module))
-;;                    (resolve-interface '(spotiqueue functions))))
+;; This snippet is from https://debbugs.gnu.org/cgi/bugreport.cgi?bug=47084, and it does seem to
+;; work, except that i feel like i can't really get my head around it.  Notably i don't understand
+;; the docstring of `module-use!`, which simply states, "Add interface [the second arg] to the front
+;; of the use-list of module [the first arg]. Both arguments should be module objects, and interface
+;; should very likely be a module returned by resolve-interface."  Also, (current-module) always
+;; resolves to (spotiqueue init), and not whatever is importing it...
+
+(eval-when (expand load eval)
+  (module-use! (module-public-interface (current-module))
+               (resolve-interface '(spotiqueue functions))))
 
 (format #t "guile ~s: Loading Spotiqueue bootstrap config...~%" (module-name (current-module)))
 
