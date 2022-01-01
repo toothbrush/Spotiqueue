@@ -77,6 +77,7 @@
 (reset-hook! player-paused-hook)
 (reset-hook! player-started-hook)
 (reset-hook! player-unpaused-hook)
+(reset-hook! selection-copied-hook)
 (add-hook! player-endoftrack-hook paul:player-endoftrack)
 (add-hook! player-paused-hook paul:paused)
 (add-hook! player-started-hook paul:player-started)
