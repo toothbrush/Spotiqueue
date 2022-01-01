@@ -7,7 +7,7 @@
 (define-module (spotiqueue exceptions)
   #:use-module (ice-9 exceptions)
   #:use-module (ice-9 optargs)
-  #:use-module (spotiqueue internal))
+  #:use-module (spotiqueue functions))
 (module-export-all! (current-module))
 
 (define (spot:with-exn-handler thunk)
