@@ -47,11 +47,6 @@ public func track_to_scm_record(track: RBSpotifyItem) -> SCM {
 }
 
 @objc class RBGuileBridge: NSObject {
-    private static func hook_with_track(hook_name: String, track: RBSpotifyItem) {
-        let track_record = track_to_scm_record(track: track)
-        self.call_hook(hook_name: hook_name, args_list: scm_list_1(track_record))
-    }
-
     private static func call_hook(hook_name: String, args_list: SCM) {
         assert(Thread.isMainThread)
 
@@ -76,11 +71,13 @@ public func track_to_scm_record(track: RBSpotifyItem) -> SCM {
     }
 
     static func player_playing_hook(track: RBSpotifyItem) {
-        self.hook_with_track(hook_name: "player-started-hook", track: track)
+        self.call_hook(hook_name: "player-started-hook",
+                       args_list: scm_list_1(track_to_scm_record(track: track)))
     }
 
     static func player_endoftrack_hook(track: RBSpotifyItem) {
-        self.hook_with_track(hook_name: "player-endoftrack-hook", track: track)
+        self.call_hook(hook_name: "player-endoftrack-hook",
+                       args_list: scm_list_1(track_to_scm_record(track: track)))
     }
 
     static func player_paused_hook() {
