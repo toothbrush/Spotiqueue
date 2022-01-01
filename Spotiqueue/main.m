@@ -53,7 +53,7 @@ int main(int argc, const char * argv[]) {
         scm_c_define_module("spotiqueue functions", &register_functions, NULL);
 
         // Note that there are DRAGONS here.  We use a separate "Copy Files" Xcode build phase to put Scheme files into a "spotiqueue" subfolder inside the App bundle's Resources folder.  We do this so that the module names match up.  However, there doesn't seem to be an obvious way to get a direct pointer to the Resources folder, so we use this hack.
-        scm_c_primitive_load_path("spotiqueue/init");
+        scm_c_primitive_load_path("spotiqueue/base");
 
         // This just sets up logging and stuff in the Rust library:
         spotiqueue_initialize_worker();

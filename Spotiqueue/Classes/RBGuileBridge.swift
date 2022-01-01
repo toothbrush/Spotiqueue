@@ -52,7 +52,7 @@ public func track_to_scm_record(track: RBSpotifyItem) -> SCM {
 
         // HMMM big TODO here.  We actually shouldn't run user hooks on the Main thread, because the user may sleep(4), but we can't simply use DispatchQueue.global(qos: .userInitiated).async {}, either, since even after scm_init_guile() we aren't able to do the scm_c_lookup.  Unsure how to share state!
 
-        let hook = scm_c_public_ref("spotiqueue init", hook_name)
+        let hook = scm_c_public_ref("spotiqueue base", hook_name)
 
         if _scm_is_true(scm_hook_p(hook)) {
             scm_call_2(scm_c_public_ref("spotiqueue exceptions", "spot:safe-run-hook"),
@@ -172,7 +172,7 @@ public func track_to_scm_record(track: RBSpotifyItem) -> SCM {
 
     static func guile_handle_key(map: KeyMap, keycode: UInt16, control: Bool, command: Bool, alt: Bool, shift: Bool) -> Bool {
         let guile_key = key_to_guile_struct(keycode, control, command, alt, shift)
-        let action: SCM = scm_hash_ref(scm_c_public_ref("spotiqueue init", map.rawValue),
+        let action: SCM = scm_hash_ref(scm_c_public_ref("spotiqueue base", map.rawValue),
                                        guile_key,
                                        _scm_false())
 

@@ -1,4 +1,4 @@
-;;; BEGIN init.scm
+;;; BEGIN base.scm
 ;;;
 ;;; Copyright © 2021 paul at denknerd dot org
 ;;;
@@ -11,7 +11,7 @@
 ;; `spotiqueue'.  Grr, there are already so many of those i'll just nest the Scheme files in
 ;; guile/spotiqueue i guess.  The Copy Files phase in Xcode can sort that out.
 
-(define-module (spotiqueue init)
+(define-module (spotiqueue base)
   #:use-module (ice-9 format)
   #:use-module (spotiqueue exceptions)
   #:use-module (spotiqueue functions)
@@ -20,7 +20,7 @@
   #:declarative? #f)
 (module-export-all! (current-module))
 
-;; What i want is, whenever someone imports (spotiqueue init), they should get whatever has been
+;; What i want is, whenever someone imports (spotiqueue base), they should get whatever has been
 ;; defined in (spotiqueue functions), too.  The latter is the "phantom module" created in Swift-land
 ;; when Spotiqueue boots, exporting a few functions which are needed to sensibly be able to interact
 ;; with the music player.
@@ -30,7 +30,7 @@
 ;; the docstring of `module-use!`, which simply states, "Add interface [the second arg] to the front
 ;; of the use-list of module [the first arg]. Both arguments should be module objects, and interface
 ;; should very likely be a module returned by resolve-interface."  Also, (current-module) always
-;; resolves to (spotiqueue init), and not whatever is importing it...
+;; resolves to (spotiqueue base), and not whatever is importing it...
 
 (eval-when (expand load eval)
   (module-use! (module-public-interface (current-module))
@@ -95,4 +95,4 @@
 
 (define-key global-map (kbd 'ANSI_S #:ctrl #t #:alt #t) queue:shuffle)
 
-;;; END init.scm
+;;; END base.scm

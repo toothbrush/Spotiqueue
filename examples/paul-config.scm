@@ -15,7 +15,7 @@
   #:use-module (ice-9 format)
   #:use-module (ice-9 popen)
   #:use-module (ice-9 receive)
-  #:use-module (spotiqueue init)
+  #:use-module (spotiqueue base)
   #:use-module (spotiqueue keybindings)
   #:use-module (spotiqueue records)
   #:use-module (srfi srfi-9 gnu)
