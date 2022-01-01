@@ -71,16 +71,17 @@
 (define-key queue-panel-map (kbd 'Delete)        queue:delete-selected-tracks)
 (define-key queue-panel-map (kbd 'ForwardDelete) queue:delete-selected-tracks)
 
-(define (flatten-track track)
-  (cond ((track? track) (track-uri track))
-        ((string? track) track)
+(define (just-the-uri-please item)
+  (cond ((track?    item) (track-uri item))
+        ((string?   item)  item)
         (else #nil)))
 
 ;; It's easier to ensure we're dealing with URIs only in Guile land.
 (define (queue:set-tracks tracks)
-  (queue:_set-tracks (map flatten-track tracks)))
+  (queue:_set-tracks (map just-the-uri-please tracks)))
 
-;; This is stolen from https://www.programming-idioms.org/idiom/10/shuffle-a-list/2021/scheme, i wasn't feeling creative.
+;; This is stolen from https://www.programming-idioms.org/idiom/10/shuffle-a-list/2021/scheme, i
+;; wasn't feeling creative.
 (define (shuffle-list list)
   (cond ((and (list? list)
               (positive? (length list)))
