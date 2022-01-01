@@ -9,6 +9,8 @@ You will need:
 
 ```sh
 # Get rustup, to install cargo and Rust compiler toolchain:
+brew install rustup-init && rustup-init
+# or
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
 # Enable cross-compilation of Rust library:
