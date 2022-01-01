@@ -10,8 +10,6 @@
 * We really need proper auth-failure handling.  Especially an invalid refresh token just makes the
   app crash 👎
 
-* Guile exception handling.
-
 * Add all features to app menus for discoverability.
 
 * When moving tracks in queue consider scrolling such that there's a
