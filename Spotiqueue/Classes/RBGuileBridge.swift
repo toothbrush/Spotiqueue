@@ -37,6 +37,7 @@ public func set_auto_advance(data: SCM) -> SCM {
 @_cdecl("track_to_scm_record")
 public func track_to_scm_record(track: RBSpotifyItem) -> SCM {
     // Beware, _make-track is the generated record creator thing, but it's a syntax transformer which can't be called directly, so we have a wrapper function called make-track.
+    // We choose not to do exception handling here because it involves only "our" code.
     scm_call_5(scm_variable_ref(scm_c_lookup("make-track")),
                scm_from_utf8_string(track.spotify_uri), // uri
                scm_from_utf8_string(track.title), // title
