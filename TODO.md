@@ -1,5 +1,7 @@
 # TODO list
 
+* Instead of "top enqueue", i'd like a "enqueue after currently-playing album".
+
 * Figure out how to build for `arm64` & `x86_64`, which means.. figuring that out for `libguile` and
   `spotiqueue_worker`, too. :(
 
