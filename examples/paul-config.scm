@@ -114,7 +114,7 @@
                                        (length itms)))
                       ;; Okay it's not great but i'm escaping quotes so that it remains valid Lua code...
                       (hs-alert (format #f "hs.alert.show(\"~a\")" (escape-special-chars message #\" #\\)))
-                      (commands `(("/usr/local/bin/hs" "-c" ,hs-alert))))
+                      (commands `(("/opt/homebrew/bin/hs" "-c" ,hs-alert))))
                  (format #t "~a~%" message)
                  (receive (from to pids) (pipeline commands)
                    (close to)
