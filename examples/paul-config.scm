@@ -10,13 +10,17 @@
 ;;; I hope to use this file to collect a few neat ideas of things you can customise using the Guile
 ;;; bindings provided by Spotiqueue.
 
-(use-modules (ice-9 textual-ports)
-             (ice-9 format)
-             (ice-9 popen)
-             (ice-9 receive)
-             (spotiqueue records)
-             (srfi srfi-9 gnu)
-             (texinfo string-utils))
+(define-module (spotiqueue paul-config)
+  #:use-module (ice-9 textual-ports)
+  #:use-module (ice-9 format)
+  #:use-module (ice-9 popen)
+  #:use-module (ice-9 receive)
+  #:use-module (spotiqueue init)
+  #:use-module (spotiqueue internal)
+  #:use-module (spotiqueue keybindings)
+  #:use-module (spotiqueue records)
+  #:use-module (srfi srfi-9 gnu)
+  #:use-module (texinfo string-utils))
 
 ;; Just some debug output when starting up, to make sure my file is loaded.  This ends up in stdout.
 (format #t "guile ~s: Loading paul's config.~%" (module-name (current-module)))
