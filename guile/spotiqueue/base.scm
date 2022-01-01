@@ -73,6 +73,7 @@
 
 (define (just-the-uri-please item)
   (cond ((track?    item) (track-uri item))
+        ((playlist? item) (playlist-uri item))
         ((string?   item)  item)
         (else #nil)))
 

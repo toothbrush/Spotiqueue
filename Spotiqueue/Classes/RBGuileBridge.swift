@@ -46,6 +46,14 @@ public func track_to_scm_record(track: RBSpotifyItem) -> SCM {
                scm_from_int32(Int32(track.durationSeconds))) // duration in seconds
 }
 
+@_cdecl("playlist_to_scm_record")
+public func playlist_to_scm_record(track: RBSpotifyItem) -> SCM {
+    // Same caveats apply as with `track_to_scm_record`.
+    scm_call_2(scm_c_public_ref("spotiqueue records", "make-playlist"),
+               scm_from_utf8_string(track.spotify_uri), // uri
+               scm_from_utf8_string(track.title)) // title
+}
+
 @objc class RBGuileBridge: NSObject {
     private static func call_hook(hook_name: String, args_list: SCM) {
         assert(Thread.isMainThread)

@@ -32,4 +32,19 @@
 (define (track-album track) (_track-album track))
 (define (track-duration track) (_track-duration track))
 
+;; A fledgling record type for playlists, so that we can support retrieving the contents of the
+;; search pane, too.
+(define-record-type <playlist>
+  (_make-playlist uri title)
+  _playlist?
+  (uri   _playlist-uri)
+  (title _playlist-title))
+
+(define (make-playlist uri title)
+  (_make-playlist uri title))
+
+(define (playlist? playlist) (_playlist? playlist))
+(define (playlist-uri playlist) (_playlist-uri playlist))
+(define (playlist-title playlist) (_playlist-title playlist))
+
 ;;; END records.scm

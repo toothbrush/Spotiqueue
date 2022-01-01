@@ -90,7 +90,11 @@ SCM get_tracks_from(NSArray* realTracks) {
                                SCM_UNDEFINED);
     int32_t pos = 0;
     for (RBSpotifyItem* t in realTracks) {
-        scm_list_set_x(tracks, scm_from_int32(pos), track_to_scm_record(t));
+        if ([t itemType] == ItemTypePlaylist) {
+            scm_list_set_x(tracks, scm_from_int32(pos), playlist_to_scm_record(t));
+        } else {
+            scm_list_set_x(tracks, scm_from_int32(pos), track_to_scm_record(t));
+        }
         pos++;
     }
 
