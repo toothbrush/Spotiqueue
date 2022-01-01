@@ -18,6 +18,7 @@
   #:use-module (spotiqueue records)
   #:use-module (spotiqueue keybindings)
   #:declarative? #f)
+(module-export-all! (current-module))
 
 (format #t "guile ~s: Loading Spotiqueue bootstrap config...~%" (module-name (current-module)))
 

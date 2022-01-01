@@ -38,7 +38,7 @@ public func set_auto_advance(data: SCM) -> SCM {
 public func track_to_scm_record(track: RBSpotifyItem) -> SCM {
     // Beware, _make-track is the generated record creator thing, but it's a syntax transformer which can't be called directly, so we have a wrapper function called make-track.
     // We choose not to do exception handling here because it involves only "our" code.
-    scm_call_5(scm_variable_ref(scm_c_lookup("make-track")),
+    scm_call_5(scm_c_public_ref("spotiqueue records", "make-track"),
                scm_from_utf8_string(track.spotify_uri), // uri
                scm_from_utf8_string(track.title), // title
                scm_from_utf8_string(track.artist), // artist
@@ -52,10 +52,10 @@ public func track_to_scm_record(track: RBSpotifyItem) -> SCM {
 
         // HMMM big TODO here.  We actually shouldn't run user hooks on the Main thread, because the user may sleep(4), but we can't simply use DispatchQueue.global(qos: .userInitiated).async {}, either, since even after scm_init_guile() we aren't able to do the scm_c_lookup.  Unsure how to share state!
 
-        let hook = scm_variable_ref(scm_c_lookup(hook_name))
+        let hook = scm_c_public_ref("spotiqueue init", hook_name)
 
         if _scm_is_true(scm_hook_p(hook)) {
-            scm_call_2(scm_variable_ref(scm_c_lookup("spot:safe-run-hook")),
+            scm_call_2(scm_c_public_ref("spotiqueue exceptions", "spot:safe-run-hook"),
                        hook,
                        args_list)
         } else {
@@ -172,7 +172,7 @@ public func track_to_scm_record(track: RBSpotifyItem) -> SCM {
 
     static func guile_handle_key(map: KeyMap, keycode: UInt16, control: Bool, command: Bool, alt: Bool, shift: Bool) -> Bool {
         let guile_key = key_to_guile_struct(keycode, control, command, alt, shift)
-        let action: SCM = scm_hash_ref(scm_variable_ref(scm_c_lookup(map.rawValue)),
+        let action: SCM = scm_hash_ref(scm_c_public_ref("spotiqueue init", map.rawValue),
                                        guile_key,
                                        _scm_false())
 
@@ -188,7 +188,7 @@ public func track_to_scm_record(track: RBSpotifyItem) -> SCM {
         }
 
         // We are handling exceptions in user-bound keys.
-        scm_call_1(scm_variable_ref(scm_c_lookup("spot:with-exn-handler")),
+        scm_call_1(scm_c_public_ref("spotiqueue exceptions", "spot:with-exn-handler"),
                    scm_eval(action, scm_current_module()))
         return true
     }
@@ -203,7 +203,7 @@ public func track_to_scm_record(track: RBSpotifyItem) -> SCM {
             let fileManager = FileManager.default
             if fileManager.fileExists(atPath: filePath) {
                 logger.info("User-config init.scm found.")
-                scm_call_1(scm_variable_ref(scm_c_lookup("spot:safe-primitive-load")),
+                scm_call_1(scm_c_public_ref("spotiqueue exceptions", "spot:safe-primitive-load"),
                            scm_from_utf8_string(filePath.cString(using: .utf8)!))
             } else {
                 logger.warning("User-config file doesn't exist, skipping.")

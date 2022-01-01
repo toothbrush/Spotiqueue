@@ -68,7 +68,7 @@ SCM focus_search_box(void) {
 }
 
 SCM key_to_guile_struct(UInt16 keycode, bool ctrl, bool command, bool alt, bool shift) {
-    SCM vtable = scm_variable_ref(scm_c_lookup("<kbd>"));
+    SCM vtable = scm_c_public_ref("spotiqueue keybindings", "<kbd>");
     return scm_make_struct_no_tail(vtable,
                                    scm_list_5(scm_from_unsigned_integer(keycode),
                                               scm_from_bool(ctrl),
