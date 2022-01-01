@@ -83,9 +83,7 @@ SCM queue_delete_selected(void) {
     return [RBGuileBridge queue_delete_selected_tracks];
 }
 
-SCM queue_get_tracks(void) {
-    NSArray* realTracks = [RBGuileBridge queue_get_tracks];
-
+SCM get_tracks_from(NSArray* realTracks) {
     // https://developer.apple.com/documentation/swift/int
     // On 32-bit platforms, Int is the same size as Int32, and on 64-bit platforms, Int is the same size as Int64.
     SCM tracks = scm_make_list(scm_from_int64([realTracks count]),
@@ -99,6 +97,9 @@ SCM queue_get_tracks(void) {
     return tracks;
 }
 
+SCM queue_get_tracks(void) {
+    return get_tracks_from([RBGuileBridge queue_get_tracks]);
+}
 // Eh, okay, for convenience let's say we expect this to be a list of strings with Spotify IDs.
 // Over in Guile land we have the wrapper `queue:set-tracks` which ensures we pass strings to `queue:_set-tracks`, this function here.
 SCM queue_set_tracks(SCM track_list) {
