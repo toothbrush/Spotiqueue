@@ -36,9 +36,11 @@
 ;; represented as string a (just as they'll end up on the pasteboard).
 (define selection-copied-hook (make-hook 1))
 
-;; TODO Check that arguments to define-key are reasonable.
 (define (define-key map key action)
-  (hash-set! map key action))
+  (if (and (kbd? key)
+           (hash-table? map))
+      (hash-set! map key action)
+      (raise-exception 'invalid-define-key)))
 
 (define-key global-map (kbd 'ANSI_F #:cmd #t) 'window:focus-search-box)
 (define-key global-map (kbd 'ANSI_L #:cmd #t) 'window:focus-search-box)
