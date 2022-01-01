@@ -38,18 +38,22 @@
 (define selection-copied-hook (make-hook 1))
 
 (define (define-key map key action)
-  (if (and (kbd? key)
-           (hash-table? map))
-      (hash-set! map key action)
-      (raise-exception 'invalid-define-key)))
+  (cond ((not (kbd? key))
+         (raise-exception (format #f "~a is not a valid key symbol" key)))
+        ((not (hash-table? map))
+         (raise-exception (format #f "~a is not a hash-table" map)))
+        ((not (or (procedure? action) (nil? action)))
+         (raise-exception (format #f "~a is not a procedure" action)))
+        (else
+         (hash-set! map key action))))
 
-(define-key global-map (kbd 'ANSI_F #:cmd #t) 'window:focus-search-box)
-(define-key global-map (kbd 'ANSI_L #:cmd #t) 'window:focus-search-box)
+(define-key global-map (kbd 'ANSI_F #:cmd #t)    window:focus-search-box)
+(define-key global-map (kbd 'ANSI_L #:cmd #t)    window:focus-search-box)
 
-(define-key queue-panel-map (kbd 'ANSI_X)        'queue:delete-selected-tracks)
-(define-key queue-panel-map (kbd 'ANSI_D)        'queue:delete-selected-tracks)
-(define-key queue-panel-map (kbd 'Delete)        'queue:delete-selected-tracks)
-(define-key queue-panel-map (kbd 'ForwardDelete) 'queue:delete-selected-tracks)
+(define-key queue-panel-map (kbd 'ANSI_X)        queue:delete-selected-tracks)
+(define-key queue-panel-map (kbd 'ANSI_D)        queue:delete-selected-tracks)
+(define-key queue-panel-map (kbd 'Delete)        queue:delete-selected-tracks)
+(define-key queue-panel-map (kbd 'ForwardDelete) queue:delete-selected-tracks)
 
 (define (flatten-track track)
   (cond ((track? track) (track-uri track))
@@ -73,8 +77,6 @@
          (shuffled (shuffle-list tracks)))
     (queue:set-tracks shuffled)))
 
-(define-key global-map (kbd 'ANSI_S #:ctrl #t #:alt #t) 'queue:shuffle)
-
-;; (define-key queue-panel-map (kbd 'ANSI_K #:cmd #t) 'queue:move-selected-tracks-up)
+(define-key global-map (kbd 'ANSI_S #:ctrl #t #:alt #t) queue:shuffle)
 
 ;;; END init.scm
