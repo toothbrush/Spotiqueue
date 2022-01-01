@@ -6,9 +6,8 @@
 ;;; subscribe to hooks, some of them will pass you a <track> object.
 
 (define-module (spotiqueue records)
-               #:use-module (srfi srfi-9)
-               #:export
-                 (<track> make-track track? track-uri track-title track-artist track-album track-duration))
+               #:use-module (srfi srfi-9))
+(module-export-all! (current-module))
 
 (format #t "guile ~s: Loading Spotiqueue record definitions...~%" (module-name (current-module)))
 
