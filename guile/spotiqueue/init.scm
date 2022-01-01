@@ -47,6 +47,15 @@
 (define-key queue-panel-map (kbd 'Delete)        'queue:delete-selected-tracks)
 (define-key queue-panel-map (kbd 'ForwardDelete) 'queue:delete-selected-tracks)
 
+(define (flatten-track track)
+  (cond ((track? track) (track-uri track))
+        ((string? track) track)
+        (else #nil)))
+
+;; It's easier to ensure we're dealing with URIs only in Guile land.
+(define (queue:set-tracks tracks)
+  (queue:_set-tracks (map flatten-track tracks)))
+
 ;; This is stolen from https://www.programming-idioms.org/idiom/10/shuffle-a-list/2021/scheme, i wasn't feeling creative.
 (define (shuffle-list list)
   (cond ((and (list? list)
@@ -57,10 +66,8 @@
 
 (define (queue:shuffle)
   (let* ((tracks (queue:get-tracks))
-         (shuffled (shuffle-list tracks))
-         ;; Don't forget to pick out only the track URIs:
-         (track-uris (map track-uri shuffled)))
-    (queue:set-tracks track-uris)))
+         (shuffled (shuffle-list tracks)))
+    (queue:set-tracks shuffled)))
 
 (define-key global-map (kbd 'ANSI_S #:ctrl #t #:alt #t) 'queue:shuffle)
 

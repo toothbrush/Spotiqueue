@@ -100,6 +100,7 @@ SCM queue_get_tracks(void) {
 }
 
 // Eh, okay, for convenience let's say we expect this to be a list of strings with Spotify IDs.
+// Over in Guile land we have the wrapper `queue:set-tracks` which ensures we pass strings to `queue:_set-tracks`, this function here.
 SCM queue_set_tracks(SCM track_list) {
     if (!scm_is_true(scm_list_p(track_list))) {
         return _scm_false();
@@ -139,7 +140,7 @@ void register_funcs_objc(void) {
     scm_c_define_gsubr("player:set-auto-advance", 1, 0, 0, &set_auto_advance);
     scm_c_define_gsubr("queue:delete-selected-tracks", 0, 0, 0, &queue_delete_selected);
     scm_c_define_gsubr("queue:get-tracks", 0, 0, 0, &queue_get_tracks);
-    scm_c_define_gsubr("queue:set-tracks", 1, 0, 0, &queue_set_tracks);
+    scm_c_define_gsubr("queue:_set-tracks", 1, 0, 0, &queue_set_tracks);
     scm_c_define_gsubr("window:focus-search-box", 0, 0, 0, &focus_search_box);
     scm_c_export("player:homedir",
                  "player:current-track",
@@ -150,7 +151,7 @@ void register_funcs_objc(void) {
                  "player:set-auto-advance",
                  "queue:delete-selected-tracks",
                  "queue:get-tracks",
-                 "queue:set-tracks",
+                 "queue:_set-tracks",
                  "window:focus-search-box",
                  NULL);
     scm_simple_format(scm_current_output_port(), scm_from_utf8_string("guile ~a: Successfully booted.~%"), scm_list_1(scm_c_eval_string("(module-name (current-module))")));
