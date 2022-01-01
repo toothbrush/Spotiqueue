@@ -49,24 +49,10 @@ public func track_to_scm_record(track: RBSpotifyItem) -> SCM {
 @objc class RBGuileBridge: NSObject {
     private static func hook_with_track(hook_name: String, track: RBSpotifyItem) {
         let track_record = track_to_scm_record(track: track)
-        self.hook_1(hook_name: hook_name, arg1: track_record)
+        self.call_hook(hook_name: hook_name, args_list: scm_list_1(track_record))
     }
 
-    private static func hook_1(hook_name: String, arg1: SCM) {
-        assert(Thread.isMainThread)
-
-        let hook = scm_variable_ref(scm_c_lookup(hook_name))
-
-        if _scm_is_true(scm_hook_p(hook)) {
-            scm_run_hook(hook, scm_list_1(arg1))
-        } else {
-            logger.error("Expected a hook, found instead: ")
-            scm_display(hook, scm_current_output_port())
-            scm_newline(scm_current_output_port())
-        }
-    }
-
-    private static func hook_0(hook_name: String) {
+    private static func call_hook(hook_name: String, args_list: SCM) {
         assert(Thread.isMainThread)
 
         // HMMM big TODO here.  We actually shouldn't run user hooks on the Main thread, because the user may sleep(4), but we can't simply use DispatchQueue.global(qos: .userInitiated).async {}, either, since even after scm_init_guile() we aren't able to do the scm_c_lookup.  Unsure how to share state!
@@ -74,7 +60,9 @@ public func track_to_scm_record(track: RBSpotifyItem) -> SCM {
         let hook = scm_variable_ref(scm_c_lookup(hook_name))
 
         if _scm_is_true(scm_hook_p(hook)) {
-            scm_run_hook(hook, _scm_empty_list())
+            scm_call_2(scm_variable_ref(scm_c_lookup("spot:safe-run-hook")),
+                       hook,
+                       args_list)
         } else {
             logger.error("Expected a hook, found instead: ")
             scm_display(hook, scm_current_output_port())
@@ -84,7 +72,7 @@ public func track_to_scm_record(track: RBSpotifyItem) -> SCM {
 
     static func selection_copied_hook(copied: [String]) {
         let args: SCM = _scm_list_of_strings(copied)
-        hook_1(hook_name: "selection-copied-hook", arg1: args)
+        self.call_hook(hook_name: "selection-copied-hook", args_list: scm_list_1(args))
     }
 
     static func player_playing_hook(track: RBSpotifyItem) {
@@ -96,11 +84,11 @@ public func track_to_scm_record(track: RBSpotifyItem) -> SCM {
     }
 
     static func player_paused_hook() {
-        self.hook_0(hook_name: "player-paused-hook")
+        self.call_hook(hook_name: "player-paused-hook", args_list: _scm_empty_list())
     }
 
     static func player_unpaused_hook() {
-        self.hook_0(hook_name: "player-unpaused-hook")
+        self.call_hook(hook_name: "player-unpaused-hook", args_list: _scm_empty_list())
     }
 
     @objc static func pause_or_unpause() -> SCM {
