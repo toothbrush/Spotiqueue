@@ -10,7 +10,7 @@ import Cocoa
 import SpotifyWebAPI
 
 final public class RBSpotifyItem: NSObject {
-    enum ItemType {
+    @objc public enum ItemType: Int, RawRepresentable {
         case Playlist
         case Track
     }
@@ -24,7 +24,7 @@ final public class RBSpotifyItem: NSObject {
     @objc dynamic var year: Int
     @objc dynamic var length: String = ""
 
-    var itemType: ItemType = .Track
+    @objc var itemType: ItemType = .Track
 
     var spotify_uri: String
     var spotify_album: Album?
