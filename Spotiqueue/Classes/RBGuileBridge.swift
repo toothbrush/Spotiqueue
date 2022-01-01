@@ -200,7 +200,9 @@ public func track_to_scm_record(track: RBSpotifyItem) -> SCM {
             return false
         }
 
-        scm_call_0(scm_eval(action, scm_current_module()))
+        // We are handling exceptions in user-bound keys.
+        scm_call_1(scm_variable_ref(scm_c_lookup("spot:with-exn-handler")),
+                   scm_eval(action, scm_current_module()))
         return true
     }
 
