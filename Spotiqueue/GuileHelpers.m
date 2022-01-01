@@ -131,24 +131,25 @@ SCM queue_set_tracks(SCM track_list) {
 }
 
 void register_funcs_objc(void) {
-    scm_c_define_gsubr("player:homedir", 0, 0, 0, &get_homedir);
-    scm_c_define_gsubr("player:current-track", 0, 0, 0, &current_track);
-    scm_c_define_gsubr("player:toggle-pause", 0, 0, 0, &pause_or_unpause);
-    scm_c_define_gsubr("player:next", 0, 0, 0, &next_track);
-    scm_c_define_gsubr("player:state", 0, 0, 0, &player_state);
     scm_c_define_gsubr("player:auto-advance", 0, 0, 0, &auto_advance);
+    scm_c_define_gsubr("player:current-track", 0, 0, 0, &current_track);
+    scm_c_define_gsubr("player:homedir", 0, 0, 0, &get_homedir);
+    scm_c_define_gsubr("player:next", 0, 0, 0, &next_track);
     scm_c_define_gsubr("player:set-auto-advance", 1, 0, 0, &set_auto_advance);
+    scm_c_define_gsubr("player:state", 0, 0, 0, &player_state);
+    scm_c_define_gsubr("player:toggle-pause", 0, 0, 0, &pause_or_unpause);
     scm_c_define_gsubr("queue:delete-selected-tracks", 0, 0, 0, &queue_delete_selected);
     scm_c_define_gsubr("queue:get-tracks", 0, 0, 0, &queue_get_tracks);
     scm_c_define_gsubr("queue:_set-tracks", 1, 0, 0, &queue_set_tracks);
     scm_c_define_gsubr("window:focus-search-box", 0, 0, 0, &focus_search_box);
-    scm_c_export("player:homedir",
-                 "player:current-track",
-                 "player:toggle-pause",
-                 "player:next",
-                 "player:state",
+    scm_c_export(
                  "player:auto-advance",
+                 "player:current-track",
+                 "player:homedir",
+                 "player:next",
                  "player:set-auto-advance",
+                 "player:state",
+                 "player:toggle-pause",
                  "queue:delete-selected-tracks",
                  "queue:get-tracks",
                  "queue:_set-tracks",
