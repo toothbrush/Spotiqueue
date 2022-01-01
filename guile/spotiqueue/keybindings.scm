@@ -36,6 +36,10 @@
                 (kbd-shift kbd)
                 (hash-ref keycode->keysym (kbd-keycode kbd))))))
 
+(define (kbd? x)
+  (and (struct? x)
+       (eq? (struct-vtable x) <kbd>)))
+
 (define (kbd-keycode kbd)
   (struct-ref kbd 0))
 (define (kbd-ctrl kbd)
