@@ -42,6 +42,7 @@
 		DAFAB407265D1BE90096810C /* NSImageViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAFAB406265D1BE90096810C /* NSImageViewExtensions.swift */; };
 		EC34C8A32664D92300786C78 /* OptionSetExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC34C8A22664D92300786C78 /* OptionSetExtensions.swift */; };
 		EC34C8B82665C17C00786C78 /* ComparableExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC34C8B72665C17C00786C78 /* ComparableExtensions.swift */; };
+		EC67297A277BDE8F003CF0AC /* exceptions.scm in CopyFiles */ = {isa = PBXBuildFile; fileRef = EC672973277BDE17003CF0AC /* exceptions.scm */; };
 		EC97CFB02679E29000A0361C /* AppMover in Frameworks */ = {isa = PBXBuildFile; productRef = EC97CFAF2679E29000A0361C /* AppMover */; };
 		EC97CFB5267AFFA400A0361C /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EC97CFB3267AFF7700A0361C /* Sparkle.framework */; };
 		EC97CFB6267AFFA400A0361C /* Sparkle.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = EC97CFB3267AFF7700A0361C /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -69,6 +70,7 @@
 			dstSubfolderSpec = 7;
 			files = (
 				DA2E8A1C26ED9578003BF91C /* init.scm in CopyFiles */,
+				EC67297A277BDE8F003CF0AC /* exceptions.scm in CopyFiles */,
 				DA2E8A1F26ED9580003BF91C /* key-constants.scm in CopyFiles */,
 				DA2E8A1E26ED957D003BF91C /* keybindings.scm in CopyFiles */,
 				DA2E8A1D26ED957A003BF91C /* records.scm in CopyFiles */,
@@ -127,6 +129,7 @@
 		DAFAB406265D1BE90096810C /* NSImageViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSImageViewExtensions.swift; sourceTree = "<group>"; };
 		EC34C8A22664D92300786C78 /* OptionSetExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionSetExtensions.swift; sourceTree = "<group>"; };
 		EC34C8B72665C17C00786C78 /* ComparableExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComparableExtensions.swift; sourceTree = "<group>"; };
+		EC672973277BDE17003CF0AC /* exceptions.scm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = exceptions.scm; sourceTree = "<group>"; };
 		EC97CFB3267AFF7700A0361C /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sparkle.framework; path = Spotiqueue/Sparkle.framework; sourceTree = "<group>"; };
 		EC9B31A62677048000E5C44B /* RBLoginWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RBLoginWindow.swift; sourceTree = "<group>"; };
 		EC9B31A72677048000E5C44B /* RBLoginWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RBLoginWindow.xib; sourceTree = "<group>"; };
@@ -160,6 +163,7 @@
 		DA2F7CF826F5854A00FE1A5F /* spotiqueue */ = {
 			isa = PBXGroup;
 			children = (
+				EC672973277BDE17003CF0AC /* exceptions.scm */,
 				DAE88E2F26E8AAA300125A3F /* init.scm */,
 				DA2E89FA26EC8929003BF91C /* key-constants.scm */,
 				DA2E89F226EC6741003BF91C /* keybindings.scm */,

@@ -13,6 +13,7 @@
 
 (define-module (spotiqueue init)
   #:use-module (ice-9 format)
+  #:use-module (spotiqueue exceptions)
   #:use-module (spotiqueue internal)
   #:use-module (spotiqueue records)
   #:use-module (spotiqueue keybindings)
