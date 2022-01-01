@@ -218,7 +218,8 @@ public func track_to_scm_record(track: RBSpotifyItem) -> SCM {
             let fileManager = FileManager.default
             if fileManager.fileExists(atPath: filePath) {
                 logger.info("User-config init.scm found.")
-                scm_c_primitive_load(filePath.cString(using: .utf8)!)
+                scm_call_1(scm_variable_ref(scm_c_lookup("spot:safe-primitive-load")),
+                           scm_from_utf8_string(filePath.cString(using: .utf8)!))
             } else {
                 logger.warning("User-config file doesn't exist, skipping.")
             }
