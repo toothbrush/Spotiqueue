@@ -166,7 +166,7 @@ public func playlist_to_scm_record(track: RBSpotifyItem) -> SCM {
     @objc static func queue_set_tracks(tracks: [String]) {
         block_on_main {
             AppDelegate.appDelegate().queue = []
-            AppDelegate.appDelegate().queueTableView.appendURIsToQueue(tracks)
+            AppDelegate.appDelegate().queueTableView.insertURIsInQueue(tracks.joined(separator: "\n"), at: 0)
         }
     }
 
