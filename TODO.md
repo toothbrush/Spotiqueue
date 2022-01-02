@@ -1,7 +1,5 @@
 # TODO list
 
-* Instead of "top enqueue", i'd like a "enqueue after currently-playing album".
-
 * Figure out how to build for `arm64` & `x86_64`, which means.. figuring that out for `libguile` and
   `spotiqueue_worker`, too. :(
 
@@ -48,6 +46,7 @@
 
 * Last.fm scrobbling with Guile.
 
-* Get current queue or search results contents as a list.
+* Get search results as a list.
 
-* Can i remove a layer of boilerplate by using the @c_externdecl or whatever directly in Swift?
+* Can i remove a layer of boilerplate by using the `@_cdecl("foo")` directly in Swift?
+  Yes, you can.
