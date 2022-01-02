@@ -35,18 +35,18 @@ class RBLoginWindow: NSWindowController {
 
             let worker_initialized = spotiqueue_login_worker(username, password)
             switch worker_initialized.tag {
-            case InitOkay:
-                // It went fine, let's open the main view.
-                self.window?.sheetParent?.endSheet(self.window!, returnCode: .OK)
-            case InitBadCredentials:
-                showLoginError(message: "Your credentials are incorrect.")
-            case InitNotPremium:
-                showLoginError(message: "Unfortunately, Spotify requires you to have a Spotify Premium account to use 3rd-party clients.")
-            case InitProblem:
-                let problem = String.init(cString: worker_initialized.init_problem.description)
-                showLoginError(message: problem)
-            default:
-                fatalError("Unable to launch spotiqueue-worker!")
+                case InitOkay:
+                    // It went fine, let's open the main view.
+                    self.window?.sheetParent?.endSheet(self.window!, returnCode: .OK)
+                case InitBadCredentials:
+                    self.showLoginError(message: "Your credentials are incorrect.")
+                case InitNotPremium:
+                    self.showLoginError(message: "Unfortunately, Spotify requires you to have a Spotify Premium account to use 3rd-party clients.")
+                case InitProblem:
+                    let problem = String(cString: worker_initialized.init_problem.description)
+                    self.showLoginError(message: problem)
+                default:
+                    fatalError("Unable to launch spotiqueue-worker!")
             }
         } else {
             logger.info("Eek, couldn't retrieve username or password from Keychain! Let's ask the user.")
