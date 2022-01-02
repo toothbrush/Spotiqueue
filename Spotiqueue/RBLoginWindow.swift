@@ -66,8 +66,7 @@ class RBLoginWindow: NSWindowController {
         alert.informativeText = message
         alert.alertStyle = .critical
         alert.addButton(withTitle: "OK")
-        alert.beginSheetModal(for: self.window!) { result in
-
+        alert.beginSheetModal(for: self.window!) { _ in
         }
     }
 

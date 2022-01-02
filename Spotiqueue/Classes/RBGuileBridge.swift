@@ -6,8 +6,8 @@
 //  Copyright © 2021 Rustling Broccoli. All rights reserved.
 //
 
-import Foundation
 import AppKit
+import Foundation
 
 func block_on_main<A>(closure: () -> A) -> A {
     if Thread.isMainThread {
@@ -66,15 +66,15 @@ public func queue_insert_tracks(tracks: SCM, at: SCM) -> SCM {
         logger.error("`at` was not an integer.")
         return _scm_false()
     }
-    let at: Int = Int(scm_to_int64(at)).clamped(fromInclusive: 0,
-                                                toInclusive: AppDelegate.appDelegate().queue.endIndex)
+    let at = Int(scm_to_int64(at)).clamped(fromInclusive: 0,
+                                           toInclusive: AppDelegate.appDelegate().queue.endIndex)
 
-    let len: Int = Int(scm_to_int64(scm_length(tracks)))
+    let len = Int(scm_to_int64(scm_length(tracks)))
     var i = 0
     var swift_tracks: [String] = []
     var tracks_rest: SCM = tracks
 
-    while i < len && scm_is_pair(tracks_rest) != 0 {
+    while i < len, scm_is_pair(tracks_rest) != 0 {
         let elt: SCM = scm_car(tracks_rest)
         if _scm_is_true(scm_string_p(elt)) {
             if let str = String(utf8String: scm_to_utf8_string(elt)) {
@@ -237,8 +237,9 @@ public func queue_set_tracks(tracks: SCM) -> SCM {
             scm_simple_format(_scm_true(),
                               scm_from_utf8_string("[keymap=~a] ~a not bound by user.~%"),
                               scm_list_2(
-                                scm_from_utf8_string(map.rawValue.cString(using: .utf8)),
-                                guile_key))
+                                  scm_from_utf8_string(map.rawValue.cString(using: .utf8)),
+                                  guile_key
+                              ))
 #endif
             return false
         }

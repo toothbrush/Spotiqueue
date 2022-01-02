@@ -20,7 +20,7 @@ class RBSecrets: NSObject {
 
     // let's use this to collect some secrets
     static func getSecret(s: Secret) -> String? {
-        #if DEBUG
+#if DEBUG
         let appSupportDir = FileManager.default.urls(for: .applicationSupportDirectory,
                                                      in: .userDomainMask).first!
         let fileURL = appSupportDir.appendingPathComponent("\(s.rawValue).txt")
@@ -34,18 +34,18 @@ class RBSecrets: NSObject {
                 logger.error("Error reading file: \(error)")
             }
         }
-        #else
+#else
         if let key = keychain.get(s.rawValue) {
             return key
         }
-        #endif
+#endif
         logger.critical("Failure to read <\(s.rawValue)> from Keychain!")
         logger.debug("Keychain.lastResultCode = \(self.keychain.lastResultCode)")
         return nil
     }
 
     static func setSecret(s: Secret, v: Data) {
-        #if DEBUG
+#if DEBUG
         let appSupportDir = FileManager.default.urls(for: .applicationSupportDirectory,
                                                      in: .userDomainMask).first!
         let fileURL = appSupportDir.appendingPathComponent("\(s.rawValue).txt")
@@ -57,13 +57,13 @@ class RBSecrets: NSObject {
         } catch {
             logger.error("Error writing file: \(error)")
         }
-        #else
+#else
         // Fine, only touch the Keychain proper if we're in real-life mode.
         if !self.keychain.set(v, forKey: s.rawValue, withAccess: .accessibleAfterFirstUnlock) {
             logger.critical("Failure to save <\(s.rawValue)> to keychain")
             logger.debug("Keychain.lastResultCode = \(self.keychain.lastResultCode)")
         }
-        #endif
+#endif
     }
 
     static func deleteSecret(s: Secret) {
