@@ -17,7 +17,12 @@ class RBQueueTableView: RBTableView {
 
     @objc func paste(_ sender: AnyObject?) {
         AppDelegate.appDelegate().isSearching = true
-        guard let contents = NSPasteboard.general.pasteboardItems?.first?.string(forType: .string) else { return }
+        guard let contents: String = NSPasteboard.general.pasteboardItems?.first?.string(forType: .string) else {
+            NSSound.beep()
+            logger.error("Paste only works with strings.")
+            AppDelegate.appDelegate().isSearching = false
+            return
+        }
         self.addTracksToQueue(from: contents)
     }
 
