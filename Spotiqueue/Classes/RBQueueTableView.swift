@@ -39,6 +39,7 @@ class RBQueueTableView: RBTableView {
             return
         }
 
+        let old_queue_size = AppDelegate.appDelegate().queue.count
         if incoming_uris.allSatisfy({ $0.uri.hasPrefix("spotify:track:") }) {
             // we can use the fancy batching-fetch-tracks mechanism.
             var stub_tracks: [RBSpotifyItem] = []
@@ -49,6 +50,7 @@ class RBQueueTableView: RBTableView {
                 )
             }
             AppDelegate.appDelegate().queueArrayController.add(contentsOf: stub_tracks)
+            self.selectRow(row: old_queue_size)
 
             AppDelegate.appDelegate().runningTasks = Int((Double(stub_tracks.count)/50.0).rounded(.up))
             for chunk in stub_tracks.chunked(size: 50) {
@@ -87,6 +89,7 @@ class RBQueueTableView: RBTableView {
                                       in: .Queue,
                                       at_the_top: false,
                                       and_then_advance: false)
+                    self.selectRow(row: old_queue_size)
                 })
                 .store(in: &cancellables)
         }
