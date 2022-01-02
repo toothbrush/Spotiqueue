@@ -78,16 +78,16 @@ class RBQueueTableView: RBTableView {
                                                  mapTransform: { AppDelegate.appDelegate().spotify.api.dealWithUnknownSpotifyURI($0) })
                 .receive(on: RunLoop.main)
                 .sink(receiveCompletion: { completion in
-                          AppDelegate.appDelegate().isSearching = false
-                          logger.info("completion: \(completion)")
-                      },
+                    AppDelegate.appDelegate().isSearching = false
+                    logger.info("completion: \(completion)")
+                },
                       receiveValue: { tracks in
-                          AppDelegate.appDelegate()
-                              .insertTracks(newRows: tracks.joined().map { RBSpotifyItem(track: $0) },
-                                            in: .Queue,
-                                            at_the_top: false,
-                                            and_then_advance: false)
-                      })
+                    AppDelegate.appDelegate()
+                        .insertTracks(newRows: tracks.joined().map { RBSpotifyItem(track: $0) },
+                                      in: .Queue,
+                                      at_the_top: false,
+                                      and_then_advance: false)
+                })
                 .store(in: &cancellables)
         }
     }
