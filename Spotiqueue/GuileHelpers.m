@@ -109,37 +109,6 @@ SCM search_get_selection(void) {
     return get_tracks_from([RBGuileBridge search_get_selection]);
 }
 
-// Eh, okay, for convenience let's say we expect this to be a list of strings with Spotify IDs.
-// Over in Guile land we have the wrapper `queue:set-tracks` which ensures we pass strings to `queue:_set-tracks`, this function here.
-SCM queue_set_tracks(SCM track_list) {
-    if (!scm_is_true(scm_list_p(track_list))) {
-        return _scm_false();
-    }
-    uint64_t len, i;
-
-    NSMutableArray* objc_tracks = [[NSMutableArray alloc] init];
-
-    // This loop logic is inspired by the code snippet in https://www.gnu.org/software/guile/manual/guile.html#Multi_002dThreading
-    len = scm_to_uint64(scm_length(track_list));
-    i = 0;
-    while (i < len && scm_is_pair(track_list))
-    {
-        // do some work for the element
-        SCM elt = scm_car(track_list);
-        if (scm_is_true(scm_string_p(elt))) {
-            NSString* track = [[NSString alloc] initWithUTF8String: scm_to_utf8_string(elt)];
-            [objc_tracks addObject: track];
-        }
-
-        // dequeue and advance
-        track_list = scm_cdr(track_list);
-        i++;
-    }
-
-    [RBGuileBridge queue_set_tracksWithTracks: objc_tracks];
-    return _scm_true();
-}
-
 SCM alert_popup(SCM title, SCM message) {
     NSString* objc_title = [[NSString alloc] initWithUTF8String: scm_to_utf8_string(title)];
     NSString* objc_message = [[NSString alloc] initWithUTF8String: scm_to_utf8_string(message)];

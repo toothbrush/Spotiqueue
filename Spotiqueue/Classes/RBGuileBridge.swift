@@ -54,6 +54,59 @@ public func playlist_to_scm_record(track: RBSpotifyItem) -> SCM {
                scm_from_utf8_string(track.title)) // title
 }
 
+// Eh, okay, for convenience let's say we expect this to be a list of strings with Spotify IDs.
+// Over in Guile land we have the wrapper `queue:set-tracks` which ensures we pass strings to `queue:_set-tracks`, this function here.
+@_cdecl("queue_insert_tracks")
+public func queue_insert_tracks(tracks: SCM, at: SCM) -> SCM {
+    guard _scm_is_true(scm_list_p(tracks)) else {
+        logger.error("`tracks` was not a list.")
+        return _scm_false()
+    }
+    guard _scm_is_true(scm_integer_p(at)) else {
+        logger.error("`at` was not an integer.")
+        return _scm_false()
+    }
+    let at: Int = Int(scm_to_int64(at))
+
+    guard (0...AppDelegate.appDelegate().queue.endIndex).contains(at) else {
+        logger.error("Invalid insertion index \(at) provided.")
+        return _scm_false()
+    }
+
+    let len: Int = Int(scm_to_int64(scm_length(tracks)))
+    var i = 0
+    var swift_tracks: [String] = []
+    var tracks_rest: SCM = tracks
+
+    while i < len && scm_is_pair(tracks_rest) != 0 {
+        let elt: SCM = scm_car(tracks_rest)
+        if _scm_is_true(scm_string_p(elt)) {
+            if let str = String(utf8String: scm_to_utf8_string(elt)) {
+                swift_tracks.append(str)
+            }
+        }
+        tracks_rest = scm_cdr(tracks_rest)
+        i += 1
+    }
+
+    block_on_main {
+        AppDelegate.appDelegate().queueTableView.insertURIsInQueue(swift_tracks.joined(separator: "\n"), at: at)
+    }
+    return _scm_true()
+}
+
+@_cdecl("queue_set_tracks")
+public func queue_set_tracks(tracks: SCM) -> SCM {
+    guard _scm_is_true(scm_list_p(tracks)) else {
+        logger.error("`tracks` was not a list.")
+        return _scm_false()
+    }
+    return block_on_main {
+        AppDelegate.appDelegate().queue = []
+        return queue_insert_tracks(tracks: tracks, at: scm_from_int64(0))
+    }
+}
+
 @objc class RBGuileBridge: NSObject {
     private static func call_hook(hook_name: String, args_list: SCM) {
         assert(Thread.isMainThread)
@@ -160,13 +213,6 @@ public func playlist_to_scm_record(track: RBSpotifyItem) -> SCM {
     @objc static func search_get_selection() -> [RBSpotifyItem] {
         block_on_main {
             AppDelegate.appDelegate().searchTableView.selectedSearchTracks()
-        }
-    }
-
-    @objc static func queue_set_tracks(tracks: [String]) {
-        block_on_main {
-            AppDelegate.appDelegate().queue = []
-            AppDelegate.appDelegate().queueTableView.insertURIsInQueue(tracks.joined(separator: "\n"), at: 0)
         }
     }
 
