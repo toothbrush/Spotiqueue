@@ -74,5 +74,23 @@
             <sparkle:minimumSystemVersion>10.15</sparkle:minimumSystemVersion>
             <enclosure url="https://github.com/toothbrush/Spotiqueue/releases/download/v2.5.2/Spotiqueue-v2.5.2.zip" sparkle:version="1099" sparkle:shortVersionString="2.5.2" length="26699279" type="application/octet-stream" sparkle:edSignature="oYvVPKkQUTf+cCJkByq/VM/381lwX1+iLDVTQR13uurRg1L9b0FxHS+QX7zhRC1cFpOVLgPP2LHGtD5CFvisDg=="/>
         </item>
+        <item>
+            <title>2.7</title>
+            <pubDate>Sun, 02 Jan 2022 16:19:26 +1100</pubDate>
+            <description><![CDATA[
+            <p>This is a fairly chunky update with some nice new features.  See <a href="https://github.com/toothbrush/Spotiqueue/releases/tag/v2.7">https://github.com/toothbrush/Spotiqueue/releases/tag/v2.7</a> for full details.</p>
+            <h2>Updates:</h2>
+            <ul>
+            <li>Exception handling: making a mistake in your Guile code won't terminate the entire player! You'll just get an alert popup. This makes developing and reloading your code interactively (e.g., in Emacs with Geiser connected to Spotiqueue) much more convenient.</li>
+            <li><strong>queue:set-tracks</strong> now supports both &lt;track&gt; records as well as strings with Spotify URIs like <tt>spotify:track:f00bar</tt>.</li>
+            <li><strong>search:get-selection</strong> exposes search selection to Guile.</li>
+            <li><strong>queue:insert-tracks</strong> allows one to insert new queued tracks at any position. Useful if you want a custom top-enqueue function that takes into account the currently-playing album!</li>
+            <li><strong>paul:enqueue-after-current-album</strong> demonstrates a smarter top-enqueue.</li>
+            <li>GUI: you can copy from the track/album/title display labels.</li>
+            </ul>
+            ]]></description>
+            <sparkle:minimumSystemVersion>10.15</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/toothbrush/Spotiqueue/releases/download/v2.7/Spotiqueue-v2.7.zip" sparkle:version="1220" sparkle:shortVersionString="2.7" length="26705744" type="application/octet-stream" sparkle:edSignature="5am2N4osV/jqEpWDlOhZPwzTrM0ic6xWPJu4rBsC9wx8bXKJtNINdht5N5U57h03hJEgFhfZl1ec4Fk69cNyCA=="/>
+        </item>
     </channel>
 </rss>
