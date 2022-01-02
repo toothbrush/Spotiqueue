@@ -66,12 +66,8 @@ public func queue_insert_tracks(tracks: SCM, at: SCM) -> SCM {
         logger.error("`at` was not an integer.")
         return _scm_false()
     }
-    let at: Int = Int(scm_to_int64(at))
-
-    guard (0...AppDelegate.appDelegate().queue.endIndex).contains(at) else {
-        logger.error("Invalid insertion index \(at) provided.")
-        return _scm_false()
-    }
+    let at: Int = Int(scm_to_int64(at)).clamped(fromInclusive: 0,
+                                                toInclusive: AppDelegate.appDelegate().queue.endIndex)
 
     let len: Int = Int(scm_to_int64(scm_length(tracks)))
     var i = 0
