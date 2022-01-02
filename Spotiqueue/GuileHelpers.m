@@ -127,6 +127,7 @@ void register_funcs_objc(void) {
     scm_c_define_gsubr("player:toggle-pause", 0, 0, 0, &pause_or_unpause);
     scm_c_define_gsubr("queue:delete-selected-tracks", 0, 0, 0, &queue_delete_selected);
     scm_c_define_gsubr("queue:get-tracks", 0, 0, 0, &queue_get_tracks);
+    scm_c_define_gsubr("queue:_insert-tracks", 2, 0, 0, &queue_insert_tracks);
     scm_c_define_gsubr("queue:_set-tracks", 1, 0, 0, &queue_set_tracks);
     scm_c_define_gsubr("search:get-selection", 0, 0, 0, &search_get_selection);
     scm_c_define_gsubr("window:focus-search-box", 0, 0, 0, &focus_search_box);
@@ -141,6 +142,7 @@ void register_funcs_objc(void) {
                  "player:toggle-pause",
                  "queue:delete-selected-tracks",
                  "queue:get-tracks",
+                 "queue:_insert-tracks",
                  "queue:_set-tracks",
                  "search:get-selection",
                  "window:focus-search-box",

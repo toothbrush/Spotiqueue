@@ -78,6 +78,8 @@
         (else #nil)))
 
 ;; It's easier to ensure we're dealing with URIs only in Guile land.
+(define (queue:insert-tracks tracks position)
+  (queue:_insert-tracks (map just-the-uri-please tracks) position))
 (define (queue:set-tracks tracks)
   (queue:_set-tracks (map just-the-uri-please tracks)))
 
