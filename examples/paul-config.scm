@@ -18,6 +18,7 @@
   #:use-module (spotiqueue base)
   #:use-module (spotiqueue keybindings)
   #:use-module (spotiqueue records)
+  #:use-module (srfi srfi-1)
   #:use-module (srfi srfi-9 gnu)
   #:use-module (texinfo string-utils))
 
@@ -133,6 +134,35 @@
   (lambda ()
     (spawn-server (make-tcp-server-socket))) ; loopback:37146 by default
   #:unwind? #t)
+
+;; This procedure finds the first queue position with a track with a different album name to the
+;; currently-playing one.  NOTE there is a gotcha: if you forget to import SRFI-1, `list-index`
+;; exists but.. doesn't do the right thing.
+(define (paul:enqueue-after-current-album)
+  (let ((search-selection   (search:get-selection))
+        (current-track      (player:current-track)) ; may be #f
+        (current-queue      (queue:get-tracks)))
+    (format #t "Attempting top-insert after currently-playing album.~%")
+    (cond
+     ;; If there is nothing playing, just top-enqueue:
+     ((not current-track)   (queue:insert-tracks search-selection 0))
+     ;; We need to do work now, to find the first index for which album != current.
+     (else
+      (let* ((current-album (track-album current-track))
+             (index         (list-index (lambda (x)
+                                          (not
+                                           (equal?
+                                            (track-album x)
+                                            current-album)))
+                                        current-queue)))
+        ;; If list-index returned #f, it means all queue items are of the same album.  In that case,
+        ;; add search-selection to the very bottom of the queue.
+        (if index
+            (queue:insert-tracks search-selection index)
+            (queue:insert-tracks search-selection (length current-queue))))))))
+
+;; Shadow Cmd-Shift-H with our own top-enqueue, which is careful about currently-playing album:
+(define-key search-panel-map (kbd 'ANSI_H #:cmd #t #:shift #t) paul:enqueue-after-current-album)
 
 (format #t "Yay, unicode works 😊 📼 ~%")
 
