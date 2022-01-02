@@ -47,7 +47,7 @@ class RBSearchTableView: RBTableView {
         } else if self.selectedSearchTracks().allSatisfy({ $0.itemType == .Track }) {
             AppDelegate.appDelegate().insertTracks(newRows: self.selectedSearchTracks(),
                                                    in: .Queue,
-                                                   at_the_top: at_the_top,
+                                                   at: at_the_top ? 0 : AppDelegate.appDelegate().queue.endIndex,
                                                    and_then_advance: and_then_advance)
         }
     }

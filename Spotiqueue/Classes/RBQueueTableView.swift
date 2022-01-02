@@ -23,7 +23,7 @@ class RBQueueTableView: RBTableView {
             AppDelegate.appDelegate().isSearching = false
             return
         }
-        self.addTracksToQueue(from: contents)
+        self.insertURIsInQueue(contents, at: AppDelegate.appDelegate().queue.endIndex)
     }
 
     /// This function is hopefully useful for calling from Guile land. e.g.
@@ -32,11 +32,11 @@ class RBQueueTableView: RBTableView {
     /// (enqueue "spotify:album:asdf" "spotify:track:1234")
     /// ```
     ///
-    func addTracksToQueue(from manyUris: [String]) {
-        self.addTracksToQueue(from: manyUris.joined(separator: "\n"))
+    func appendURIsToQueue(_ manyUris: [String]) {
+        self.insertURIsInQueue(manyUris.joined(separator: "\n"), at: AppDelegate.appDelegate().queue.endIndex)
     }
 
-    func addTracksToQueue(from contents: String) {
+    func insertURIsInQueue(_ contents: String, at: Int) {
         AppDelegate.appDelegate().isSearching = true
         let incoming_uris = RBSpotifyAPI.sanitiseIncomingURIBlob(pasted_blob: contents)
         guard !incoming_uris.isEmpty else {
@@ -44,7 +44,6 @@ class RBQueueTableView: RBTableView {
             return
         }
 
-        let old_queue_size = AppDelegate.appDelegate().queue.count
         if incoming_uris.allSatisfy({ $0.uri.hasPrefix("spotify:track:") }) {
             // we can use the fancy batching-fetch-tracks mechanism.
             var stub_tracks: [RBSpotifyItem] = []
@@ -54,8 +53,8 @@ class RBQueueTableView: RBTableView {
                     RBSpotifyItem(spotify_uri: s.uri)
                 )
             }
-            AppDelegate.appDelegate().queueArrayController.add(contentsOf: stub_tracks)
-            self.selectRow(row: old_queue_size)
+            AppDelegate.appDelegate().queue.insert(contentsOf: stub_tracks, at: at)
+            self.selectRow(row: at)
 
             AppDelegate.appDelegate().runningTasks = Int((Double(stub_tracks.count)/50.0).rounded(.up))
             for chunk in stub_tracks.chunked(size: 50) {
@@ -81,6 +80,7 @@ class RBQueueTableView: RBTableView {
             }
         } else {
             // deal with pasted items one-by-one
+            var currentPasteOffsetIdx = 0
             Publishers.mergeMappedRetainingOrder(incoming_uris,
                                                  mapTransform: { AppDelegate.appDelegate().spotify.api.dealWithUnknownSpotifyURI($0) })
                 .receive(on: RunLoop.main)
@@ -92,9 +92,10 @@ class RBQueueTableView: RBTableView {
                     AppDelegate.appDelegate()
                         .insertTracks(newRows: tracks.joined().map { RBSpotifyItem(track: $0) },
                                       in: .Queue,
-                                      at_the_top: false,
+                                      at: at + currentPasteOffsetIdx,
                                       and_then_advance: false)
-                    self.selectRow(row: old_queue_size)
+                    currentPasteOffsetIdx += tracks.joined().count
+                    self.selectRow(row: at)
                 })
                 .store(in: &cancellables)
         }

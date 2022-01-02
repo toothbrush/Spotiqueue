@@ -251,7 +251,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         if self.spotify.isAuthorized,
            let savedQueuedTracks = UserDefaults.standard.string(forKey: "queuedTracks")
         {
-            self.queueTableView.addTracksToQueue(from: savedQueuedTracks)
+            self.queueTableView.insertURIsInQueue(savedQueuedTracks, at: 0)
         }
     }
 
@@ -573,9 +573,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                               newRows.append(RBSpotifyItem(track: track))
                           }
                       }
+                      let endIndex = target == .Queue ? self.queue.endIndex : self.searchResults.endIndex
                       self.insertTracks(newRows: newRows,
                                         in: target,
-                                        at_the_top: at_the_top,
+                                        at: at_the_top ? 0 : endIndex,
                                         and_then_advance: and_then_advance)
                   })
             .store(in: &self.cancellables)
@@ -583,18 +584,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func insertTracks(newRows: [RBSpotifyItem],
                       in target: TrackList,
-                      at_the_top: Bool = false,
+                      at: Int,
                       and_then_advance: Bool = false)
     {
         switch target {
             case .Queue:
-                let position = at_the_top ? 0 : self.queue.count
-                self.queue.insert(contentsOf: newRows, at: position)
-                self.queueTableView.selectRow(row: position)
+                self.queue.insert(contentsOf: newRows, at: at)
+                self.queueTableView.selectRow(row: at)
             case .Search:
-                let position = at_the_top ? 0 : self.searchResults.count
-                self.searchResults.insert(contentsOf: newRows, at: position)
-                self.searchTableView.selectRow(row: position)
+                self.searchResults.insert(contentsOf: newRows, at: at)
+                self.searchTableView.selectRow(row: at)
         }
 
         if and_then_advance {
