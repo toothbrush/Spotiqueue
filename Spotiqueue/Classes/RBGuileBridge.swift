@@ -34,6 +34,17 @@ public func set_auto_advance(data: SCM) -> SCM {
     }
 }
 
+@_cdecl("set_restore_playback")
+public func set_restore_playback(data: SCM) -> SCM {
+    block_on_main {
+        // Note, we're flipping the logic here.  If the user says "yes, restore playback", we store it as "no, do not skip restoring".
+        // The reason for this inversion is that we want to default to the "restoring" behaviour.
+        UserDefaults.standard.set(scm_to_bool(data) != 1, forKey: "skip_restore_playback")
+        UserDefaults.standard.synchronize()
+        return _scm_true()
+    }
+}
+
 @_cdecl("track_to_scm_record")
 public func track_to_scm_record(track: RBSpotifyItem) -> SCM {
     // Beware, _make-track is the generated record creator thing, but it's a syntax transformer which can't be called directly, so we have a wrapper function called make-track.

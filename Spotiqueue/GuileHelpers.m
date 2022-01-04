@@ -123,6 +123,7 @@ void register_funcs_objc(void) {
     scm_c_define_gsubr("player:homedir", 0, 0, 0, &get_homedir);
     scm_c_define_gsubr("player:next", 0, 0, 0, &next_track);
     scm_c_define_gsubr("player:set-auto-advance", 1, 0, 0, &set_auto_advance);
+    scm_c_define_gsubr("player:set-restore-playback", 1, 0, 0, &set_restore_playback);
     scm_c_define_gsubr("player:state", 0, 0, 0, &player_state);
     scm_c_define_gsubr("player:toggle-pause", 0, 0, 0, &pause_or_unpause);
     scm_c_define_gsubr("queue:delete-selected-tracks", 0, 0, 0, &queue_delete_selected);
@@ -138,6 +139,7 @@ void register_funcs_objc(void) {
                  "player:homedir",
                  "player:next",
                  "player:set-auto-advance",
+                 "player:set-restore-playback",
                  "player:state",
                  "player:toggle-pause",
                  "queue:delete-selected-tracks",
