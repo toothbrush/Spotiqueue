@@ -92,5 +92,17 @@
             <sparkle:minimumSystemVersion>10.15</sparkle:minimumSystemVersion>
             <enclosure url="https://github.com/toothbrush/Spotiqueue/releases/download/v2.7/Spotiqueue-v2.7.zip" sparkle:version="1220" sparkle:shortVersionString="2.7" length="26705744" type="application/octet-stream" sparkle:edSignature="5am2N4osV/jqEpWDlOhZPwzTrM0ic6xWPJu4rBsC9wx8bXKJtNINdht5N5U57h03hJEgFhfZl1ec4Fk69cNyCA=="/>
         </item>
+        <item>
+            <title>2.7.1</title>
+            <pubDate>Tue, 04 Jan 2022 13:01:42 +1100</pubDate>
+            <description><![CDATA[
+            <h2>Updates:</h2>
+            <ul>
+            <li>Your previously-playing track and position is now automatically restored.  This behaviour can be turned off, see the <a href="https://github.com/toothbrush/Spotiqueue/releases/tag/v2.7.1">release notes</a>.</li>
+            </ul>
+            ]]></description>
+            <sparkle:minimumSystemVersion>10.15</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/toothbrush/Spotiqueue/releases/download/v2.7.1/Spotiqueue-v2.7.1.zip" sparkle:version="1232" sparkle:shortVersionString="2.7.1" length="26711205" type="application/octet-stream" sparkle:edSignature="pwnaXOVokt3FGh1jkNVEPTqN4kLdyZSkhMeOOewFVZN50MhGXBzXzgJkgsdKLXIwZPIUB6JAf1RdK8DLtXNBBg=="/>
+        </item>
     </channel>
 </rss>
