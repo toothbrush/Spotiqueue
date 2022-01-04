@@ -164,6 +164,12 @@
 ;; Shadow Cmd-Shift-H with our own top-enqueue, which is careful about currently-playing album:
 (define-key search-panel-map (kbd 'ANSI_H #:cmd #t #:shift #t) paul:enqueue-after-current-album)
 
+;; If you'd like to start from a clean slate, that is, don't restore previous track & playback
+;; position on startup:
+;;
+;;    (if (defined? 'player:set-restore-playback)
+;;        (player:set-restore-playback #f))
+
 (format #t "Yay, unicode works 😊 📼 ~%")
 
 ;; Want to set preferences on startup?  Here's one example:
