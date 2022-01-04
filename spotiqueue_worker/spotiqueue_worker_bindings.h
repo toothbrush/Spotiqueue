@@ -47,6 +47,6 @@ void spotiqueue_unpause_playback(void);
 
 bool spotiqueue_preload_track(const char *spotify_uri_raw);
 
-bool spotiqueue_play_track(const char *spotify_uri_raw);
+bool spotiqueue_play_track(const char *spotify_uri_raw, bool start, uint32_t position_ms);
 
 #endif /* spotiqueue_worker_h */

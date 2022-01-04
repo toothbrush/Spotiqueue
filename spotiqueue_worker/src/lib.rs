@@ -40,8 +40,14 @@ struct State {
 #[derive(Debug)]
 enum Command {
     Pause,
-    Play { track: SpotifyId },
-    Preload { track: SpotifyId },
+    Play {
+        track: SpotifyId,
+        start: bool,
+        position_ms: u32,
+    },
+    Preload {
+        track: SpotifyId,
+    },
     Unpause,
 }
 
@@ -55,9 +61,13 @@ impl New for State {
             debug!("Command: {:?}", cmd);
             match cmd {
                 Command::Pause => player.pause(),
-                Command::Play { track } => {
+                Command::Play {
+                    track,
+                    start,
+                    position_ms,
+                } => {
                     player.stop();
-                    player.load(track, true, 0);
+                    player.load(track, start, position_ms);
                 }
                 Command::Preload { track } => player.preload(track),
                 Command::Unpause => {
@@ -305,18 +315,26 @@ fn internal_preload_track(spotify_uri: String) -> bool {
 }
 
 #[no_mangle]
-pub extern "C" fn spotiqueue_play_track(spotify_uri_raw: *const c_char) -> bool {
+pub extern "C" fn spotiqueue_play_track(
+    spotify_uri_raw: *const c_char,
+    start: bool,
+    position_ms: u32,
+) -> bool {
     let spotify_uri = c_str_to_rust_string(spotify_uri_raw);
-    internal_play_track(spotify_uri)
+    internal_play_track(spotify_uri, start, position_ms)
 }
 
-fn internal_play_track(spotify_uri: String) -> bool {
+fn internal_play_track(spotify_uri: String, start: bool, position_ms: u32) -> bool {
     info!("Trying to play {}...", spotify_uri);
 
     match track_id_from_spotify_uri(&spotify_uri) {
         Some(track) => {
             let state = STATE.get().unwrap();
-            state.send_command(Command::Play { track: track });
+            state.send_command(Command::Play {
+                track: track,
+                start: start,
+                position_ms: position_ms,
+            });
         }
         None => {
             error!("Looks like that isn't a Spotify track URI!");
