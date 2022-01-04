@@ -154,7 +154,7 @@ public func queue_set_tracks(tracks: SCM) -> SCM {
 
     @objc static func next_track() -> SCM {
         block_on_main {
-            let success = AppDelegate.appDelegate().playNextQueuedTrack()
+            let success = AppDelegate.appDelegate().playNextQueuedTrack(autoplay: true, position_ms: .zero)
             return _scm_to_bool(success)
         }
     }

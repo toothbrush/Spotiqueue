@@ -98,7 +98,7 @@ class RBQueueTableView: RBTableView {
             return
         }
         AppDelegate.appDelegate().queue.removeFirst(self.selectedRow)
-        _ = AppDelegate.appDelegate().playNextQueuedTrack()
+        _ = AppDelegate.appDelegate().playNextQueuedTrack(autoplay: true, position_ms: .zero)
         selectRow(row: 0)
     }
 

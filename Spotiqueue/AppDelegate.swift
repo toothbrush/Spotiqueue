@@ -35,7 +35,8 @@ public func player_update_hook(hook: StatusUpdate, position_ms: UInt32, duration
                 AppDelegate.appDelegate().duration = 0
                 AppDelegate.appDelegate().endOfTrack() // Fire off Guile hook.
                 if AppDelegate.appDelegate().shouldAutoAdvance() {
-                    _ = AppDelegate.appDelegate().playNextQueuedTrack()
+                    _ = AppDelegate.appDelegate().playNextQueuedTrack(autoplay: true,
+                                                                      position_ms: .zero)
                 }
             }
         case Paused:
@@ -178,7 +179,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     // MARK: Button action bindings
 
     @IBAction func nextTrackButtonPressed(_ sender: Any) {
-        _ = self.playNextQueuedTrack()
+        _ = self.playNextQueuedTrack(autoplay: true, position_ms: .zero)
     }
 
     @IBAction func filterFieldAction(_ sender: Any) {
@@ -597,7 +598,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
 
         if and_then_advance {
-            _ = self.playNextQueuedTrack()
+            _ = self.playNextQueuedTrack(autoplay: true, position_ms: .zero)
         }
     }
 
@@ -790,12 +791,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         RBGuileBridge.player_endoftrack_hook(track: previousTrack)
     }
 
-    func playNextQueuedTrack() -> Bool {
+    func playNextQueuedTrack(autoplay: Bool, position_ms: UInt32) -> Bool {
         guard let nextTrack = queue.first else {
             return false
         }
         self.currentTrack = nextTrack
-        spotiqueue_play_track(self.currentTrack!.spotify_uri)
+        spotiqueue_play_track(self.currentTrack!.spotify_uri, autoplay, position_ms)
         RBGuileBridge.player_playing_hook(track: self.currentTrack!)
         self.albumTitleLabel.cell?.title = nextTrack.album
         self.trackTitleLabel.cell?.title = nextTrack.prettyArtistDashTitle()
