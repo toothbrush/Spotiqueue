@@ -795,18 +795,22 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         guard let nextTrack = queue.first else {
             return false
         }
-        self.currentTrack = nextTrack
-        spotiqueue_play_track(self.currentTrack!.spotify_uri, autoplay, position_ms)
-        RBGuileBridge.player_playing_hook(track: self.currentTrack!)
-        self.albumTitleLabel.cell?.title = nextTrack.album
-        self.trackTitleLabel.cell?.title = nextTrack.prettyArtistDashTitle()
-
-        // ehm awkward, attempting to get second largest image.
-        if let image = nextTrack.album_image {
-            self.albumImage.imageFromServerURL(image.url.absoluteString, placeHolder: nil)
-        }
+        playTrack(spotify_item: nextTrack, autoplay: autoplay, position_ms: position_ms)
         self.queue.remove(at: 0)
         return true
+    }
+
+    func playTrack(spotify_item: RBSpotifyItem, autoplay: Bool, position_ms: UInt32) {
+        self.currentTrack = spotify_item
+        spotiqueue_play_track(self.currentTrack!.spotify_uri, autoplay, position_ms)
+        RBGuileBridge.player_playing_hook(track: self.currentTrack!)
+        self.albumTitleLabel.cell?.title = spotify_item.album
+        self.trackTitleLabel.cell?.title = spotify_item.prettyArtistDashTitle()
+
+        // ehm awkward, attempting to get second largest image.
+        if let image = spotify_item.album_image {
+            self.albumImage.imageFromServerURL(image.url.absoluteString, placeHolder: nil)
+        }
     }
 
     func preloadNextQueuedTrack() {
