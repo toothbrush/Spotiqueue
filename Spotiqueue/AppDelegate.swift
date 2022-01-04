@@ -254,11 +254,24 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         {
             self.queueTableView.insertURIsInQueue(savedQueuedTracks, at: 0)
         }
+
+        // if the user has a previous track to restore, let's go.
+        restore_previous_track_and_position()
     }
 
     func restore_previous_track_and_position() {
-        let previous_track = "spotify:track:3J8gFENARV6R17cb428Dy9"
-        let previous_position_ms: UInt32 = 50000
+        // Default to restore playback, unless user has specifically told us not to.
+        guard !UserDefaults.standard.bool(forKey: "skip_restore_playback") else {
+            return
+        }
+        let previous_position_ms = UInt32(UserDefaults.standard.integer(forKey: "restore_playback_position_ms"))
+        guard previous_position_ms > 1 else {
+            return
+        }
+        guard let previous_track = UserDefaults.standard.string(forKey: "restore_playback_uri") else {
+            return
+        }
+
         let stub_item = RBSpotifyItem(spotify_uri: previous_track)
 
         AppDelegate.appDelegate().runningTasks += 1
@@ -392,6 +405,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             let queuedTracks: String = self.queue.map { $0.copyTextTrack() }.joined(separator: "\n")
             UserDefaults.standard.set(queuedTracks, forKey: "queuedTracks")
             logger.info("Saved queued tracks.")
+        }
+        if let current_uri = self.currentTrack?.spotify_uri {
+            UserDefaults.standard.set(current_uri, forKey: "restore_playback_uri")
+            UserDefaults.standard.set(Int(self.position * 1000), forKey: "restore_playback_position_ms")
+        } else {
+            UserDefaults.standard.removeObject(forKey: "restore_playback_uri")
+            UserDefaults.standard.removeObject(forKey: "restore_playback_position_ms")
         }
         UserDefaults.standard.synchronize()
         return .terminateNow
