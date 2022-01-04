@@ -256,6 +256,36 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
+    func restore_previous_track_and_position() {
+        let previous_track = "spotify:track:3J8gFENARV6R17cb428Dy9"
+        let previous_position_ms: UInt32 = 50000
+        let stub_item = RBSpotifyItem(spotify_uri: previous_track)
+
+        AppDelegate.appDelegate().runningTasks += 1
+        self.spotify.api.tracks([previous_track])
+            .receive(on: RunLoop.main)
+            .sink(
+                receiveCompletion: { completion in
+                    AppDelegate.appDelegate().runningTasks -= 1
+                    self.playTrack(spotify_item: stub_item, autoplay: false, position_ms: previous_position_ms)
+                    self.duration = stub_item.durationSeconds
+                    self.position = Double(previous_position_ms / 1000)
+                    self.updateDurationDisplay()
+                },
+                receiveValue: { tracks in
+                    for (index, track) in tracks.enumerated() {
+                        logger.info("result[\(index)]: \(track?.name ?? "")")
+                        if let track = track {
+                            stub_item.hydrate(with: track)
+                        } else {
+                            // we got a nil from the API, remove from queue.
+                        }
+                    }
+                }
+            )
+            .store(in: &cancellables)
+    }
+
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
         guard let keyPath = keyPath else { return }
 
