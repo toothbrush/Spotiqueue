@@ -59,6 +59,10 @@ SCM next_track(void) {
     return [RBGuileBridge next_track];
 }
 
+SCM restart_track(void) {
+    return [RBGuileBridge restart_track];
+}
+
 SCM player_state(void) {
     return [RBGuileBridge get_player_state];
 }
@@ -122,6 +126,7 @@ void register_funcs_objc(void) {
     scm_c_define_gsubr("player:current-track", 0, 0, 0, &current_track);
     scm_c_define_gsubr("player:homedir", 0, 0, 0, &get_homedir);
     scm_c_define_gsubr("player:next", 0, 0, 0, &next_track);
+    scm_c_define_gsubr("player:restart-track", 0, 0, 0, &restart_track);
     scm_c_define_gsubr("player:set-auto-advance", 1, 0, 0, &set_auto_advance);
     scm_c_define_gsubr("player:set-restore-playback", 1, 0, 0, &set_restore_playback);
     scm_c_define_gsubr("player:state", 0, 0, 0, &player_state);
@@ -138,6 +143,7 @@ void register_funcs_objc(void) {
                  "player:current-track",
                  "player:homedir",
                  "player:next",
+                 "player:restart-track",
                  "player:set-auto-advance",
                  "player:set-restore-playback",
                  "player:state",

@@ -170,6 +170,13 @@ public func queue_set_tracks(tracks: SCM) -> SCM {
         }
     }
 
+    @objc static func restart_track() -> SCM {
+        block_on_main {
+            let success = AppDelegate.appDelegate().restartTrack()
+            return _scm_to_bool(success)
+        }
+    }
+
     @objc static func focus_search_box() -> SCM {
         block_on_main {
             AppDelegate.appDelegate().focusSearchBox()

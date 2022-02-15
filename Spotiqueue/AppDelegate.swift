@@ -182,6 +182,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         _ = self.playNextQueuedTrack(autoplay: true, position_ms: .zero)
     }
 
+    @IBAction func restartTrackButtonPressed(_ sender: Any) {
+        _ = self.restartTrack()
+    }
+
     @IBAction func filterFieldAction(_ sender: Any) {
         self.window.makeFirstResponder(self.searchTableView)
         if self.searchTableView.selectedRowIndexes.isEmpty {
@@ -848,6 +852,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         playTrack(spotify_item: nextTrack, autoplay: autoplay, position_ms: position_ms)
         self.queue.remove(at: 0)
         return true
+    }
+
+    func restartTrack() -> Bool {
+        guard let currentTrack = self.currentTrack else {
+            logger.error("AppDelegate.restartTrack called but self.currentTrack == nil!")
+            return false
+        }
+        playTrack(spotify_item: currentTrack, autoplay: true, position_ms: .zero)
+         return true
     }
 
     func playTrack(spotify_item: RBSpotifyItem, autoplay: Bool, position_ms: UInt32) {
