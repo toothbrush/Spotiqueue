@@ -79,6 +79,7 @@ enum SearchCommand {
     case Album(Album)
     case Artist(Artist)
     case AllPlaylists
+    case AllSavedTracks
     case Playlist(String, SpotifyURIConvertible)
 }
 
@@ -126,6 +127,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                         self.searchLabel.stringValue = "Artist: “\(artist.name)”"
                     case .AllPlaylists:
                         self.searchLabel.stringValue = "User Playlists"
+                    case .AllSavedTracks:
+                        self.searchLabel.stringValue = "User Saved Tracks"
                     case .Playlist(let title, _):
                         self.searchLabel.stringValue = "Playlist: “\(title)”"
                 }
@@ -372,6 +375,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                   event.characters == "o"
         {
             self.retrieveAllPlaylists()
+        } else if flags == .command,
+                  event.characters == "p"
+        {
+            self.retrieveAllSavedTracks()
         } else if flags.isEmpty,
                   event.keyCode == kVK_Escape,
                   self.window.sheets.isEmpty // we don't want Esc eaten up if a modal is displayed
@@ -516,6 +523,38 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
+    func retrieveAllSavedTracks () {
+        guard !self.isSearching else {
+            return
+        }
+        self.isSearching = true
+
+        self.searchResults = []
+        self.filterResultsField.clearFilter()
+        self.searchResultsArrayController.sortDescriptors = []
+        self.searchHistory.append(.AllSavedTracks)
+
+        self.spotify.api.currentUserSavedTracks()
+            .extendPagesConcurrently(self.spotify.api)
+            .collectAndSortByOffset()
+            .receive(on: RunLoop.main)
+            .sink(receiveCompletion: { completion in
+                      self.isSearching = false
+                      if case .failure(let error) = completion {
+                          logger.error("couldn't retrieve saved tracks: \(error.localizedDescription)")
+                      }
+                  },
+                  receiveValue: { tracks in
+                      for t in tracks {
+                          self.searchResults.append(RBSpotifyItem(savedTrack: t))
+                      }
+                      self.searchTableView.selectRow(row: 0)
+                  })
+            .store(in: &self.cancellables)
+
+        self.window.makeFirstResponder(self.searchTableView)
+    }
+
     func retrieveAllPlaylists() {
         guard !self.isSearching else {
             return
@@ -568,6 +607,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 case .AllPlaylists:
                     self.searchPlaylistTracks(for: row.spotify_uri, withTitle: row.title)
                 case .Playlist:
+                    self.albumTracks(for: row.spotify_album)
+                case .AllSavedTracks:
                     self.albumTracks(for: row.spotify_album)
             }
         } else {
