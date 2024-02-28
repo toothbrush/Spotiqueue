@@ -7,6 +7,8 @@ use librespot::core::authentication::Credentials;
 use librespot::core::config::SessionConfig;
 use librespot::core::session::{Session, SessionError};
 use librespot::core::spotify_id::SpotifyId;
+use librespot::core::version::{BUILD_DATE, SEMVER, VERSION_STRING};
+
 use librespot::playback::audio_backend;
 use librespot::playback::config::{AudioFormat, PlayerConfig};
 use librespot::playback::player::{Player, PlayerEvent};
@@ -185,10 +187,11 @@ fn use_stored_callback(status: StatusUpdate, position_ms: u32, duration_ms: u32)
 #[no_mangle]
 pub extern "C" fn spotiqueue_initialize_worker() {
     Builder::new().filter_level(LevelFilter::Debug).init();
+    info!("This is {} ({}, {})", VERSION_STRING, SEMVER, BUILD_DATE);
     if cfg!(debug_assertions) {
-        println!("I am a DEBUG build.");
+        info!("I am a DEBUG build.");
     } else {
-        println!("I am a RELEASE build.");
+        info!("I am a RELEASE build.");
     }
 
     RUNTIME.set(Runtime::new().unwrap()).unwrap();
