@@ -227,10 +227,11 @@ fn internal_login_worker(username: String, password: String) -> InitializationRe
 
     info!("Authorizing...");
 
+    let session_obj = Session::new(session_config, None);
     let session = RUNTIME
         .get()
         .unwrap()
-        .block_on(async { Session::connect(session_config, credentials, None).await });
+        .block_on(async { session_obj.connect(credentials, false).await });
 
     let session = match session {
         Ok(sess) => sess,
