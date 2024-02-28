@@ -11,6 +11,7 @@ use librespot::core::version::{BUILD_DATE, SEMVER, VERSION_STRING};
 
 use librespot::playback::audio_backend;
 use librespot::playback::config::{AudioFormat, PlayerConfig};
+use librespot::playback::mixer::NoOpVolume;
 use librespot::playback::player::{Player, PlayerEvent};
 
 use once_cell::sync::OnceCell;
@@ -274,9 +275,12 @@ fn internal_login_worker(username: String, password: String) -> InitializationRe
         },
     };
 
-    let (player, _) = Player::new(player_config, session.clone(), None, move || {
-        backend(None, audio_format)
-    });
+    let (player, _) = Player::new(
+        player_config,
+        session.clone(),
+        Box::new(NoOpVolume),
+        move || backend(None, audio_format),
+    );
     STATE.set(State::new(player, session)).unwrap();
 
     info!("Authorized.");
