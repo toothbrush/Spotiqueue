@@ -114,7 +114,7 @@ impl New for State {
                 PlayerEvent::VolumeSet { .. } => {}
             }
         });
-        return state;
+        state
     }
 }
 
@@ -133,7 +133,7 @@ fn c_str_to_rust_string(s_raw: *const c_char) -> String {
     let buf: &[u8] = c_str.to_bytes();
     let str_slice: &str = std::str::from_utf8(buf).unwrap();
     let str_buf: String = str_slice.to_owned();
-    return str_buf;
+    str_buf
 }
 
 #[repr(C)]
@@ -249,13 +249,13 @@ fn internal_login_worker(username: String, password: String) -> InitializationRe
                 let the_error: String = format!("{:?}", err);
                 if the_error.contains("BadCredentials") {
                     return InitializationResult::InitBadCredentials;
-                } else if the_error.contains("PremiumAccountRequired") {
-                    return InitializationResult::InitNotPremium;
-                } else {
-                    return InitializationResult::InitProblem {
-                        description: string_from_rust(e),
-                    };
                 }
+                if the_error.contains("PremiumAccountRequired") {
+                    return InitializationResult::InitNotPremium;
+                }
+                return InitializationResult::InitProblem {
+                    description: string_from_rust(e),
+                };
             }
             _ => {
                 let e: &str = &format!(
@@ -278,14 +278,14 @@ fn internal_login_worker(username: String, password: String) -> InitializationRe
 
     info!("Authorized.");
 
-    return InitializationResult::InitOkay;
+    InitializationResult::InitOkay
 }
 
 #[no_mangle]
 pub extern "C" fn spotiqueue_pause_playback() -> bool {
     let state = STATE.get().unwrap();
     state.send_command(Command::Pause);
-    return true;
+    true
 }
 
 #[no_mangle]
@@ -304,14 +304,14 @@ fn internal_preload_track(spotify_uri: String) -> bool {
     match track_id_from_spotify_uri(&spotify_uri) {
         Some(track) => {
             let state = STATE.get().unwrap();
-            state.send_command(Command::Preload { track: track });
+            state.send_command(Command::Preload { track });
         }
         None => {
             error!("Looks like that isn't a Spotify track URI!");
             return false;
         }
     }
-    return true;
+    true
 }
 
 #[no_mangle]
@@ -331,9 +331,9 @@ fn internal_play_track(spotify_uri: String, start: bool, position_ms: u32) -> bo
         Some(track) => {
             let state = STATE.get().unwrap();
             state.send_command(Command::Play {
-                track: track,
-                start: start,
-                position_ms: position_ms,
+                track,
+                start,
+                position_ms,
             });
         }
         None => {
@@ -341,7 +341,7 @@ fn internal_play_track(spotify_uri: String, start: bool, position_ms: u32) -> bo
             return false;
         }
     }
-    return true;
+    true
 }
 
 fn track_id_from_spotify_uri(uri: &str) -> Option<SpotifyId> {
@@ -355,5 +355,5 @@ fn track_id_from_spotify_uri(uri: &str) -> Option<SpotifyId> {
         }
     }
 
-    return None;
+    None
 }
