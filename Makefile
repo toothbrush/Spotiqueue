@@ -42,30 +42,17 @@ archive: clean
 notarize:
 	@echo "Submitting app for notarization..."
 
-	xcrun altool --notarize-app \
-	  --primary-bundle-id $(BUNDLE_ID) \
+	xcrun notarytool submit \
 	  --team-id $(TEAM_ID) \
-	  -u $(AC_USERNAME) \
-	  -p @env:AC_PASSWORD \
-	  --file $(ZIP_PATH)
+	  --apple-id $(AC_USERNAME) \
+	  --password "$$AC_PASSWORD" \
+	  --wait \
+	  $(ZIP_PATH)
 
-	@echo "Application sent to the notarization center"
-
-	sleep 30s
+	@echo "Done. Application submitted to the notarization center"
 
 .PHONY: sign
 sign:
-	@echo "Checking if package is approved by Apple..."
-
-	@while true; do \
-		if [[ "$$(xcrun altool --notarization-history 0 --team-id ${TEAM_ID} -u $(AC_USERNAME) -p @env:AC_PASSWORD | sed -n '6p')" == *"success"* ]]; then \
-			echo "OK" ;\
-			break ;\
-		fi ;\
-		echo "Package was not approved by Apple, recheck in 10s..."; \
-		sleep 10s ;\
-	done
-
 	@echo "Going to staple an application..."
 
 	xcrun stapler staple $(APP_PATH)
@@ -104,7 +91,7 @@ next-version:
 
 .PHONY: history
 history:
-	xcrun altool --notarization-history 0 \
+	xcrun notarytool history \
 		--team-id ${TEAM_ID} \
-		-u $(AC_USERNAME) \
-		-p @env:AC_PASSWORD
+		--apple-id $(AC_USERNAME) \
+		--password "$$AC_PASSWORD"
