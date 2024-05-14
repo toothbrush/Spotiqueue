@@ -1,79 +1,75 @@
 {
-  "object": {
-    "pins": [
-      {
-        "package": "AppMover",
-        "repositoryURL": "https://github.com/toothbrush/AppMover.git",
-        "state": {
-          "branch": "master",
-          "revision": "25b7ddd962dcab70e15a2daceb2bfee5b62ecb76",
-          "version": null
-        }
-      },
-      {
-        "package": "KeychainSwift",
-        "repositoryURL": "https://github.com/evgenyneu/keychain-swift.git",
-        "state": {
-          "branch": null,
-          "revision": "96fb84f45a96630e7583903bd7e08cf095c7a7ef",
-          "version": "19.0.0"
-        }
-      },
-      {
-        "package": "OpenCombine",
-        "repositoryURL": "https://github.com/OpenCombine/OpenCombine.git",
-        "state": {
-          "branch": null,
-          "revision": "28993ae57de5a4ea7e164787636cafad442d568c",
-          "version": "0.12.0"
-        }
-      },
-      {
-        "package": "RegularExpressions",
-        "repositoryURL": "https://github.com/Peter-Schorn/RegularExpressions.git",
-        "state": {
-          "branch": null,
-          "revision": "b27140d0bd3a9a1e61f2324f644219be98eb3311",
-          "version": "2.2.0"
-        }
-      },
-      {
-        "package": "SpotifyAPI",
-        "repositoryURL": "https://github.com/Peter-Schorn/SpotifyAPI.git",
-        "state": {
-          "branch": null,
-          "revision": "4faf212e0a3b756b18be31a24c3dc9d573dea925",
-          "version": "2.0.0"
-        }
-      },
-      {
-        "package": "Stenographer",
-        "repositoryURL": "https://github.com/t9mike/stenographer.git",
-        "state": {
-          "branch": null,
-          "revision": "839b227132ae606a0fcd46ceac9b5236b4318774",
-          "version": null
-        }
-      },
-      {
-        "package": "swift-crypto",
-        "repositoryURL": "https://github.com/apple/swift-crypto.git",
-        "state": {
-          "branch": null,
-          "revision": "3bea268b223651c4ab7b7b9ad62ef9b2d4143eb6",
-          "version": "1.1.6"
-        }
-      },
-      {
-        "package": "swift-log",
-        "repositoryURL": "https://github.com/apple/swift-log.git",
-        "state": {
-          "branch": null,
-          "revision": "5d66f7ba25daf4f94100e7022febf3c75e37a6c7",
-          "version": "1.4.2"
-        }
+  "pins" : [
+    {
+      "identity" : "appmover",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/toothbrush/AppMover.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "25b7ddd962dcab70e15a2daceb2bfee5b62ecb76"
       }
-    ]
-  },
-  "version": 1
+    },
+    {
+      "identity" : "keychain-swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/evgenyneu/keychain-swift.git",
+      "state" : {
+        "revision" : "96fb84f45a96630e7583903bd7e08cf095c7a7ef",
+        "version" : "19.0.0"
+      }
+    },
+    {
+      "identity" : "opencombine",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/OpenCombine/OpenCombine.git",
+      "state" : {
+        "revision" : "8576f0d579b27020beccbccc3ea6844f3ddfc2c2",
+        "version" : "0.14.0"
+      }
+    },
+    {
+      "identity" : "regularexpressions",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Peter-Schorn/RegularExpressions.git",
+      "state" : {
+        "revision" : "b27140d0bd3a9a1e61f2324f644219be98eb3311",
+        "version" : "2.2.0"
+      }
+    },
+    {
+      "identity" : "spotifyapi",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Peter-Schorn/SpotifyAPI.git",
+      "state" : {
+        "revision" : "e814a98f7d292ca7a05b52d524607fde1d1072c6"
+      }
+    },
+    {
+      "identity" : "stenographer",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/t9mike/stenographer.git",
+      "state" : {
+        "revision" : "839b227132ae606a0fcd46ceac9b5236b4318774"
+      }
+    },
+    {
+      "identity" : "swift-crypto",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-crypto.git",
+      "state" : {
+        "revision" : "ddb07e896a2a8af79512543b1c7eb9797f8898a5",
+        "version" : "1.1.7"
+      }
+    },
+    {
+      "identity" : "swift-log",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-log.git",
+      "state" : {
+        "revision" : "e97a6fcb1ab07462881ac165fdbb37f067e205d5",
+        "version" : "1.5.4"
+      }
+    }
+  ],
+  "version" : 2
 }
