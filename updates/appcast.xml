@@ -107,6 +107,12 @@
         <item>
             <title>2.8.0</title>
             <pubDate>Tue, 14 May 2024 23:41:01 +1000</pubDate>
+            <description><![CDATA[
+            <h2>Updates:</h2>
+            <ul>
+            <li>Spotify changed their API a little, so playlist retrieval was broken.  Updated dependencies so things work again.</li>
+            </ul>
+            ]]></description>
             <sparkle:minimumSystemVersion>10.15</sparkle:minimumSystemVersion>
             <enclosure url="https://github.com/toothbrush/Spotiqueue/releases/download/v2.8.0/Spotiqueue-v2.8.0.zip" sparkle:version="1235" sparkle:shortVersionString="2.8.0" length="24100887" type="application/octet-stream" sparkle:edSignature="g7NspwsTimoF+NAfga7PDQgQw1DjXPLeqMvQBGGYbm8jU6BoPjhg0ddb+4Yqnisc7oKBuBWZAmNWLygCL2MfCw=="/>
         </item>

@@ -16,4 +16,4 @@ I'm a forgetful guy.  Let's see if i can work it out.
 
 1. You'll see a Zip file in `updates/Spotiqueue-v*.zip` and an update to `appcast.xml`.  Create a
    release on Github with a tag `vX.Y.Z` pointing at `main` somewhere, and upload the Zip file.
-   Ensure `appcast.xml` is appropriately updated too (beware the download URL!).
+   Ensure `appcast.xml` is appropriately updated too (beware the download URL! and add a DESCRIPTION!).
