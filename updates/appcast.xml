@@ -116,5 +116,19 @@
             <sparkle:minimumSystemVersion>10.15</sparkle:minimumSystemVersion>
             <enclosure url="https://github.com/toothbrush/Spotiqueue/releases/download/v2.8.0/Spotiqueue-v2.8.0.zip" sparkle:version="1235" sparkle:shortVersionString="2.8.0" length="24100887" type="application/octet-stream" sparkle:edSignature="g7NspwsTimoF+NAfga7PDQgQw1DjXPLeqMvQBGGYbm8jU6BoPjhg0ddb+4Yqnisc7oKBuBWZAmNWLygCL2MfCw=="/>
         </item>
+        <item>
+            <title>2.9.0</title>
+            <pubDate>Wed, 15 May 2024 21:38:31 +1000</pubDate>
+            <description><![CDATA[
+            <h2>Updates:</h2>
+            <ul>
+            <li>Add support (finally) for loading starred tracks with <tt>cmd-p</tt> - thanks <a href="https://github.com/faaarmer">Daniel Farmer</a>!</li>
+            <li>Fix visual glitch around album art &amp; titles when pasting Spotify URIs.</li>
+            <li>Add example SCM code for your own "repeat track" function.</li>
+            </ul>
+            ]]></description>
+            <sparkle:minimumSystemVersion>10.15</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/toothbrush/Spotiqueue/releases/download/v2.9.0/Spotiqueue-v2.9.0.zip" sparkle:version="1247" sparkle:shortVersionString="2.9.0" length="24107383" type="application/octet-stream" sparkle:edSignature="VV4ihQd3Dsx2gNqHogs28puyx82w3yxBn2E9iHwkQmLZJn6gIOPxTkztHges1ekUEytn4Rhkkcet+EdvIWTTDw=="/>
+        </item>
     </channel>
 </rss>
