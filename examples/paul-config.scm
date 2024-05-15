@@ -164,6 +164,16 @@
 ;; Shadow Cmd-Shift-H with our own top-enqueue, which is careful about currently-playing album:
 (define-key search-panel-map (kbd 'ANSI_H #:cmd #t #:shift #t) paul:enqueue-after-current-album)
 
+;; Cmd-R should restart the currently-playing track, if any.  Inspired by
+;; https://github.com/toothbrush/Spotiqueue/pull/11, thanks @faaarmer!
+(define (paul:restart-track)
+  (format #t "Restarting current track.~%")
+  (let ((current-track (player:current-track))) ;; `current-track' may be #f
+    (when current-track ;; Only do things if we found a `current-track'.
+      (queue:insert-tracks (list (track-uri current-track)) 0)
+      (player:next))))
+(define-key global-map (kbd 'ANSI_R #:cmd #t) paul:restart-track)
+
 ;; If you'd like to start from a clean slate, that is, don't restore previous track & playback
 ;; position on startup:
 ;;
