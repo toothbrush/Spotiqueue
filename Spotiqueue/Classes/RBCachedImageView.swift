@@ -1,5 +1,5 @@
 //
-//  NSImageViewExtensions.swift
+//  RBCachedImageView.swift
 //  Spotiqueue
 //
 //  Created by Paul on 25/5/21.
@@ -9,31 +9,23 @@
 import Cocoa
 import Foundation
 
-extension NSImageView {
-    // ooooh icky https://stackoverflow.com/questions/44674549/extensions-may-not-contain-stored-properties-unless-your-are-apple-what-am-i
-    private enum uglyImageState {
-        static var imageCache = NSCache<NSString, NSImage>()
-    }
+class RBCachedImageView: NSImageView {
+    static var imageCache = NSCache<NSString, NSImage>()
 
-    var imageCache: NSCache<NSString, NSImage> {
-        get {
-            guard let theName = objc_getAssociatedObject(self, &uglyImageState.imageCache) as? NSCache<NSString, NSImage> else {
-                return NSCache<NSString, NSImage>()
-            }
-            return theName
-        }
-        set {
-            objc_setAssociatedObject(self, &uglyImageState.imageCache, newValue, .OBJC_ASSOCIATION_RETAIN)
-        }
-    }
+    var currentURL: String?
 
     // https://stackoverflow.com/questions/37018916/swift-async-load-image
     func imageFromServerURL(_ URLString: String, placeHolder: NSImage?) {
-        self.image = nil
-        // If imageurl's imagename has space then this line going to work for this
+        guard currentURL ?? "" != URLString else {
+            return
+        }
+        currentURL = URLString
+
+        image = nil
+        // In case URLString has a space:
         let imageServerUrl = URLString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
-        if let cachedImage = imageCache.object(forKey: NSString(string: imageServerUrl)) {
-            self.image = cachedImage
+        if let cachedImage = RBCachedImageView.imageCache.object(forKey: NSString(string: imageServerUrl)) {
+            image = cachedImage
             return
         }
 
@@ -49,7 +41,7 @@ extension NSImageView {
                 DispatchQueue.main.async { [self] in
                     if let data = data {
                         if let downloadedImage = NSImage(data: data) {
-                            imageCache.setObject(downloadedImage, forKey: NSString(string: imageServerUrl))
+                            RBCachedImageView.imageCache.setObject(downloadedImage, forKey: NSString(string: imageServerUrl))
                             self.image = downloadedImage
                         }
                     }

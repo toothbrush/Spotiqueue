@@ -105,7 +105,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     // MARK: View element bindings
 
     @IBOutlet var queueHeaderLabel: NSTextField!
-    @IBOutlet var albumImage: NSImageView!
+    @IBOutlet var albumImage: RBCachedImageView!
     @IBOutlet var albumTitleLabel: NSTextField!
     @IBOutlet var trackTitleLabel: NSTextField!
     @IBOutlet var durationLabel: NSTextField!

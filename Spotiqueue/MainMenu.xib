@@ -651,7 +651,7 @@
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <imageView focusRingType="none" translatesAutoresizingMaskIntoConstraints="NO" id="BMX-yB-dah">
+                    <imageView focusRingType="none" translatesAutoresizingMaskIntoConstraints="NO" id="BMX-yB-dah" customClass="RBCachedImageView" customModule="Spotiqueue" customModuleProvider="target">
                         <rect key="frame" x="17" y="17" width="106" height="106"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="100" id="apu-ut-i5V"/>
