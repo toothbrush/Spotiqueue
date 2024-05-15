@@ -13,6 +13,7 @@ public final class RBSpotifyItem: NSObject {
     @objc public enum ItemType: Int, RawRepresentable {
         case Playlist
         case Track
+        case SavedTrack
     }
 
     @objc dynamic var title: String
@@ -60,6 +61,10 @@ public final class RBSpotifyItem: NSObject {
         self.artist = playlist.owner?.displayName ?? ""
         self.track_number = playlist.items.total
         self.itemType = .Playlist
+    }
+
+    convenience init(savedTrack: SavedTrack) {
+        self.init(track: savedTrack.item)
     }
 
     init(spotify_uri: String) {

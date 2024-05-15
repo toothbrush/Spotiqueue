@@ -58,6 +58,7 @@ The basic Vim and Emacs movement keys are supported instead of using arrow keys.
 | `⌘F` or `⌘L`                    | global          | Focus the search bar                                                         |
 | `⌘Q`                            | global          | Quit Spotiqueue                                                              |
 | `⌘O`                            | global          | List all of your saved playlists                                             |
+| `⌘P`                            | global          | List all of your saved tracks                                                |
 | `⌘N`                            | global          | Play next track from queue                                                   |
 | `⌘;` or  `⌘→`                   | search or queue | Browse details of selected item (see description below)                      |
 | `⌘h` or  `⌘←`                   | search          | Enqueue selection at the bottom of the queue                                 |
