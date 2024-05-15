@@ -177,6 +177,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                                                 round(self.duration).positionalTime)
         self.progressBar.isHidden = self.duration == 0
         self.progressBar.doubleValue = 100 * self.position/self.duration
+
+        // If you're surprised to see us also repeatedly setting the titles and so on, this is because if you're super quick (i.e., you're a Scheme function) and you enqueue something by Spotify URI and hit "play" on it before the "hydrate" call had a chance to populate all the track's details, you'd end up with a status display showing only the Spotify URI, no image, etc.  That's crap.  So here's a cheap (and fast enough) hack to keep that stuff up-to-date.
+        if let currentTrack {
+            self.albumTitleLabel.cell?.title = currentTrack.album
+            self.trackTitleLabel.cell?.title = currentTrack.prettyArtistDashTitle()
+
+            if let image = currentTrack.album_image {
+                // it's fine if we do this heaps, there's a cache
+                self.albumImage.imageFromServerURL(image.url.absoluteString, placeHolder: nil)
+            }
+        }
     }
 
     // MARK: Button action bindings
