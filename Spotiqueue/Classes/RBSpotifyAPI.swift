@@ -27,7 +27,7 @@ final class RBSpotifyAPI: ObservableObject {
                 .split(whereSeparator: \.isWhitespace)
                 .first
             }
-            .compactMap { sanitiseIncomingURI(value: String($0)) }
+            .compactMap { self.sanitiseIncomingURI(value: String($0)) }
     }
 
     static func sanitiseIncomingURI(value: String) -> String? {

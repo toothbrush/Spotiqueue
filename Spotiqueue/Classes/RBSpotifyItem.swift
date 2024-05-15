@@ -116,7 +116,7 @@ public final class RBSpotifyItem: NSObject {
         self.track_number = partialTrack.trackNumber!
         self.disc_number = partialTrack.discNumber!
 
-        self.durationSeconds = Double(partialTrack.durationMS!/1000)
+        self.durationSeconds = Double(partialTrack.durationMS! / 1000)
     }
 
     // This is what we want it to look like if copied to pasteboard.

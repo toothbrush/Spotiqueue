@@ -270,7 +270,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
 
         // if the user has a previous track to restore, let's go.
-        restore_previous_track_and_position()
+        self.restore_previous_track_and_position()
     }
 
     func restore_previous_track_and_position() {
@@ -292,11 +292,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         self.spotify.api.tracks([previous_track])
             .receive(on: RunLoop.main)
             .sink(
-                receiveCompletion: { completion in
+                receiveCompletion: { _ in
                     AppDelegate.appDelegate().runningTasks -= 1
                     self.playTrack(spotify_item: stub_item, autoplay: false, position_ms: previous_position_ms)
                     self.duration = stub_item.durationSeconds
-                    self.position = Double(previous_position_ms / 1000)
+                    self.position = Double(previous_position_ms/1000)
                     self.updateDurationDisplay()
                 },
                 receiveValue: { tracks in
@@ -310,7 +310,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                     }
                 }
             )
-            .store(in: &cancellables)
+            .store(in: &self.cancellables)
     }
 
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
@@ -331,7 +331,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 logger.info("\(keyPath): \(String(describing: change))")
             }
         } else if keyPath == "searchResultsArrayController.arrangedObjects" {
-            var nrResultsAppendix: String = ""
+            var nrResultsAppendix = ""
             if self.searchResults.count > 0 {
                 if !self.filterResultsField.stringValue.isEmpty,
                    let filtered = self.searchResultsArrayController.arrangedObjects as? [RBSpotifyItem]
@@ -534,7 +534,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
-    func retrieveAllSavedTracks () {
+    func retrieveAllSavedTracks() {
         guard !self.isSearching else {
             return
         }
@@ -793,7 +793,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                     .extendPagesConcurrently(self.spotify.api)
                     .receive(on: RunLoop.main)
                     .sink(receiveCompletion: { [self] completion in
-                              runningTasks -= 1
+                              self.runningTasks -= 1
                               switch completion {
                                   case .finished:
                                       logger.info("finished loading tracks for album \(album.name)")
@@ -845,7 +845,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             .receive(on: RunLoop.main)
             .sink(
                 receiveCompletion: { [self] completion in
-                    runningTasks -= 1
+                    self.runningTasks -= 1
                     if case .failure(let error) = completion {
                         logger.error("Couldn't perform search:")
                         logger.error(error.localizedDescription)
@@ -853,12 +853,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 },
                 receiveValue: { [self] searchResultsReturn in
                     for result in searchResultsReturn.tracks?.items ?? [] {
-                        searchResults.append(RBSpotifyItem(track: result))
+                        self.searchResults.append(RBSpotifyItem(track: result))
                     }
                     logger.info("[query \(i)] Received \(self.searchResults.count) tracks")
-                    searchResultsArrayController.sortDescriptors = RBSpotifyItem.trackSortDescriptors
-                    searchResultsArrayController.rearrangeObjects()
-                    searchTableView.selectRow(row: 0)
+                    self.searchResultsArrayController.sortDescriptors = RBSpotifyItem.trackSortDescriptors
+                    self.searchResultsArrayController.rearrangeObjects()
+                    self.searchTableView.selectRow(row: 0)
                 }
             )
             .store(in: &self.cancellables)
@@ -897,7 +897,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         guard let nextTrack = queue.first else {
             return false
         }
-        playTrack(spotify_item: nextTrack, autoplay: autoplay, position_ms: position_ms)
+        self.playTrack(spotify_item: nextTrack, autoplay: autoplay, position_ms: position_ms)
         self.queue.remove(at: 0)
         return true
     }

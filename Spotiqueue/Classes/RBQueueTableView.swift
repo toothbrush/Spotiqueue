@@ -46,7 +46,7 @@ class RBQueueTableView: RBTableView {
             AppDelegate.appDelegate().queue.insert(contentsOf: stub_tracks, at: at)
             self.selectRow(row: at)
 
-            AppDelegate.appDelegate().runningTasks = Int((Double(stub_tracks.count)/50.0).rounded(.up))
+            AppDelegate.appDelegate().runningTasks = Int((Double(stub_tracks.count) / 50.0).rounded(.up))
             for chunk in stub_tracks.chunked(size: 50) {
                 AppDelegate.appDelegate().spotify.api.tracks(chunk.map(\.spotify_uri))
                     .receive(on: RunLoop.main)
