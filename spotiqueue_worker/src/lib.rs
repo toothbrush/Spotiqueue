@@ -1,12 +1,14 @@
 use std::ffi::{CStr, CString};
 use std::os::raw::c_char;
 use std::sync::mpsc::{sync_channel, SyncSender};
+use std::sync::Arc;
 use std::thread;
 
 use librespot::core::authentication::Credentials;
 use librespot::core::config::SessionConfig;
 use librespot::core::error::Error;
 use librespot::core::session::Session;
+use librespot::core::session::SessionError;
 use librespot::core::spotify_id::SpotifyId;
 use librespot::playback::audio_backend;
 use librespot::playback::config::{AudioFormat, PlayerConfig};
@@ -27,7 +29,7 @@ static STATE: OnceCell<State> = OnceCell::new();
 static CALLBACK: OnceCell<WorkerCallback> = OnceCell::new();
 
 trait New {
-    fn new(player: Player, session: Session) -> Self;
+    fn new(player: Arc<Player>, session: Session) -> Self;
 }
 
 trait SendCommand {
@@ -54,7 +56,7 @@ enum Command {
 }
 
 impl New for State {
-    fn new(player: Player, _session: Session) -> State {
+    fn new(player: Arc<Player>, _session: Session) -> State {
         let (tx, rx) = sync_channel(0);
         let state = State { send_channel: tx };
         let mut player_event_channel = player.get_player_event_channel();
@@ -230,51 +232,12 @@ fn internal_login_worker(username: String, password: String) -> InitializationRe
 
     let session = RUNTIME.get().unwrap().block_on(async {
         let inner_session = Session::new(session_config, None);
-        inner_session.connect(credentials, false).await
+        if let Err(e) = inner_session.connect(credentials, false).await {
+            // error connecting! handle it.
+        }
+        // otherwise, fine!
+        return inner_session;
     });
-
-    let session = match session {
-        Ok(sess) => sess,
-        Err(err) => match err {
-            SessionError::AuthenticationError(err) => {
-                let e: &str =
-                    &format!("spotiqueue_worker: Authentication error: {}", err).to_owned();
-                error!("{}", e);
-
-                // Righto, this is fairly horrific.  The librespot library doesn't let us directly
-                // import the enum contained in AuthenticationError, LoginFailed.  They only seem to
-                // let use their prefab error strings, see
-                // https://github.com/librespot-org/librespot/blob/041f084d7f5f3e0731b712064f61105b509e5154/core/src/connection/mod.rs#L24-L39.
-                //
-                // Anyway, this is good enough, for now - we just want to be able to give the user a
-                // reasonable error message if it turns out they try to use a free account.  I need
-                // to go take a shower.  It might well be that i just don't understand Rust well
-                // enough to actually be able to get ahold of the true error codes, but oh well!
-
-                let the_error: String = format!("{:?}", err);
-                if the_error.contains("BadCredentials") {
-                    return InitializationResult::InitBadCredentials;
-                } else if the_error.contains("PremiumAccountRequired") {
-                    return InitializationResult::InitNotPremium;
-                } else {
-                    return InitializationResult::InitProblem {
-                        description: string_from_rust(e),
-                    };
-                }
-            }
-            _ => {
-                let e: &str = &format!(
-                    "spotiqueue_worker: Unknown error in Session::connect(). {}",
-                    err
-                )
-                .to_owned();
-                error!("{}", e);
-                return InitializationResult::InitProblem {
-                    description: string_from_rust(e),
-                };
-            }
-        },
-    };
 
     let player = Player::new(
         player_config,
