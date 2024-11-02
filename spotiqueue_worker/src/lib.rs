@@ -242,62 +242,72 @@ fn internal_login_worker(username: String, password: String) -> InitializationRe
     let session = match session {
         Ok(sess) => sess,
         Err(err) => match err {
-            Error { kind, error: _ } => match kind {
-                ErrorKind::Aborted => return InitializationResult::InitBadCredentials,
-                ErrorKind::AlreadyExists => return InitializationResult::InitBadCredentials,
-                ErrorKind::Cancelled => return InitializationResult::InitBadCredentials,
-                ErrorKind::DataLoss => return InitializationResult::InitBadCredentials,
-                ErrorKind::DeadlineExceeded => return InitializationResult::InitBadCredentials,
-                ErrorKind::DoNotUse => return InitializationResult::InitBadCredentials,
-                ErrorKind::FailedPrecondition => return InitializationResult::InitBadCredentials,
-                ErrorKind::Internal => return InitializationResult::InitBadCredentials,
-                ErrorKind::InvalidArgument => return InitializationResult::InitBadCredentials,
-                ErrorKind::NotFound => return InitializationResult::InitBadCredentials,
-                ErrorKind::OutOfRange => return InitializationResult::InitBadCredentials,
-                ErrorKind::PermissionDenied => return InitializationResult::InitBadCredentials,
-                ErrorKind::ResourceExhausted => return InitializationResult::InitBadCredentials,
-                ErrorKind::Unauthenticated => return InitializationResult::InitBadCredentials,
-                ErrorKind::Unavailable => return InitializationResult::InitBadCredentials,
-                ErrorKind::Unimplemented => return InitializationResult::InitBadCredentials,
-                ErrorKind::Unknown => return InitializationResult::InitBadCredentials,
-            },
-            // SessionError::AuthenticationError(err) => {
-            //     let e: &str =
-            //         &format!("spotiqueue_worker: Authentication error: {}", err).to_owned();
-            //     error!("{}", e);
+            Error { kind, error } => {
+                info!("Dang we hit an error!");
 
-            //     // Righto, this is fairly horrific.  The librespot library doesn't let us directly
-            //     // import the enum contained in AuthenticationError, LoginFailed.  They only seem to
-            //     // let use their prefab error strings, see
-            //     // https://github.com/librespot-org/librespot/blob/041f084d7f5f3e0731b712064f61105b509e5154/core/src/connection/mod.rs#L24-L39.
-            //     //
-            //     // Anyway, this is good enough, for now - we just want to be able to give the user a
-            //     // reasonable error message if it turns out they try to use a free account.  I need
-            //     // to go take a shower.  It might well be that i just don't understand Rust well
-            //     // enough to actually be able to get ahold of the true error codes, but oh well!
+                let e: &str = &format!("spotiqueue_worker: Misc error: {}", error).to_owned();
+                error!("{}", e);
 
-            //     let the_error: String = format!("{:?}", err);
-            //     if the_error.contains("BadCredentials") {
-            //         return InitializationResult::InitBadCredentials;
-            //     } else if the_error.contains("PremiumAccountRequired") {
-            //         return InitializationResult::InitNotPremium;
-            //     } else {
-            //         return InitializationResult::InitProblem {
-            //             description: string_from_rust(e),
-            //         };
-            //     }
-            // }
-            // _ => {
-            //     let e: &str = &format!(
-            //         "spotiqueue_worker: Unknown error in Session::connect(). {}",
-            //         err
-            //     )
-            //     .to_owned();
-            //     error!("{}", e);
-            //     return InitializationResult::InitProblem {
-            //         description: string_from_rust(e),
-            //     };
-            // }
+                match kind {
+                    ErrorKind::Aborted => return InitializationResult::InitBadCredentials,
+                    ErrorKind::AlreadyExists => return InitializationResult::InitBadCredentials,
+                    ErrorKind::Cancelled => return InitializationResult::InitBadCredentials,
+                    ErrorKind::DataLoss => return InitializationResult::InitBadCredentials,
+                    ErrorKind::DeadlineExceeded => return InitializationResult::InitBadCredentials,
+                    ErrorKind::DoNotUse => return InitializationResult::InitBadCredentials,
+                    ErrorKind::FailedPrecondition => {
+                        return InitializationResult::InitBadCredentials
+                    }
+                    ErrorKind::Internal => return InitializationResult::InitBadCredentials,
+                    ErrorKind::InvalidArgument => return InitializationResult::InitBadCredentials,
+                    ErrorKind::NotFound => return InitializationResult::InitBadCredentials,
+                    ErrorKind::OutOfRange => return InitializationResult::InitBadCredentials,
+                    ErrorKind::PermissionDenied => return InitializationResult::InitBadCredentials,
+                    ErrorKind::ResourceExhausted => {
+                        return InitializationResult::InitBadCredentials
+                    }
+                    ErrorKind::Unauthenticated => return InitializationResult::InitBadCredentials,
+                    ErrorKind::Unavailable => return InitializationResult::InitBadCredentials,
+                    ErrorKind::Unimplemented => return InitializationResult::InitBadCredentials,
+                    ErrorKind::Unknown => return InitializationResult::InitBadCredentials,
+                }
+            } // SessionError::AuthenticationError(err) => {
+              //     let e: &str =
+              //         &format!("spotiqueue_worker: Authentication error: {}", err).to_owned();
+              //     error!("{}", e);
+
+              //     // Righto, this is fairly horrific.  The librespot library doesn't let us directly
+              //     // import the enum contained in AuthenticationError, LoginFailed.  They only seem to
+              //     // let use their prefab error strings, see
+              //     // https://github.com/librespot-org/librespot/blob/041f084d7f5f3e0731b712064f61105b509e5154/core/src/connection/mod.rs#L24-L39.
+              //     //
+              //     // Anyway, this is good enough, for now - we just want to be able to give the user a
+              //     // reasonable error message if it turns out they try to use a free account.  I need
+              //     // to go take a shower.  It might well be that i just don't understand Rust well
+              //     // enough to actually be able to get ahold of the true error codes, but oh well!
+
+              //     let the_error: String = format!("{:?}", err);
+              //     if the_error.contains("BadCredentials") {
+              //         return InitializationResult::InitBadCredentials;
+              //     } else if the_error.contains("PremiumAccountRequired") {
+              //         return InitializationResult::InitNotPremium;
+              //     } else {
+              //         return InitializationResult::InitProblem {
+              //             description: string_from_rust(e),
+              //         };
+              //     }
+              // }
+              // _ => {
+              //     let e: &str = &format!(
+              //         "spotiqueue_worker: Unknown error in Session::connect(). {}",
+              //         err
+              //     )
+              //     .to_owned();
+              //     error!("{}", e);
+              //     return InitializationResult::InitProblem {
+              //         description: string_from_rust(e),
+              //     };
+              // }
         },
     };
 
