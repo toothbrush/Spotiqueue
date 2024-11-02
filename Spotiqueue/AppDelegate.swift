@@ -24,7 +24,7 @@ let logger = SXLogger(endpoints: [
 ])
 
 @_cdecl("player_update_hook")
-public func player_update_hook(hook: StatusUpdate, position_ms: UInt32, duration_ms: UInt32) {
+public func player_update_hook(hook: StatusUpdate, position_ms: Int64, duration_ms: Int64) {
     logger.info("Hook spotiqueue-worker hook ==> \(hook.rawValue)")
     switch hook {
         case EndOfTrack:
@@ -42,6 +42,7 @@ public func player_update_hook(hook: StatusUpdate, position_ms: UInt32, duration
         case Paused:
             DispatchQueue.main.async {
                 AppDelegate.appDelegate().playerState = .Paused
+                // todo only do this if >= 0, because -1 means "i don't know"
                 AppDelegate.appDelegate().position = Double(position_ms/1000)
                 AppDelegate.appDelegate().duration = Double(duration_ms/1000)
             }
