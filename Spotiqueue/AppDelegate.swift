@@ -218,6 +218,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     // I also had to follow advice here https://stackoverflow.com/questions/46756535/xcode-cannot-resolve-the-entered-path-when-binding-control-in-xib-file because apparently in newer Swift, @objc dynamic isn't implied.
     // Here is another extensive howto around table views and such https://www.raywenderlich.com/921-cocoa-bindings-on-macos
 
+    // See https://developer.apple.com/documentation/appkit/nsapplicationdelegate/3762521-applicationsupportssecurerestora and https://stackoverflow.com/questions/77283578/sonoma-and-nsapplicationdelegate-applicationsupportssecurerestorablestate, this should be harmless, and will suppress a warning.
+    func applicationSupportsSecureRestorableState(_ app: NSApplication) -> Bool {
+        return true;
+    }
+
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         self.loginWindow = RBLoginWindow(windowNibName: "RBLoginWindow")
         if let window = loginWindow?.window {
