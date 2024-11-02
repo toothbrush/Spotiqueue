@@ -37,6 +37,7 @@ class RBLoginWindow: NSWindowController {
             switch worker_initialized.tag {
                 case InitOkay:
                     // It went fine, let's open the main view.
+                // TODO somehow signal that we successfully logged in.
                     self.window?.sheetParent?.endSheet(self.window!, returnCode: .OK)
                 case InitBadCredentials:
                     self.showLoginError(message: "Your credentials are incorrect.")
@@ -49,6 +50,7 @@ class RBLoginWindow: NSWindowController {
                     fatalError("Unable to launch spotiqueue-worker!")
             }
         } else {
+            // signal that login faailed, so that we don't bother trying to restore previous playlist on auth error.  causes a crash.
             logger.info("Eek, couldn't retrieve username or password from Keychain! Let's ask the user.")
         }
         self.endSpinning()
