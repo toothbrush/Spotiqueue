@@ -29,7 +29,7 @@ typedef struct InitializationResult {
   };
 } InitializationResult;
 
-void set_callback(void (*callback)(enum StatusUpdate status, uint32_t position_ms, uint32_t duration_ms));
+void set_callback(void (*callback)(enum StatusUpdate status, int64_t position_ms, int64_t duration_ms));
 
 void spotiqueue_initialize_worker(void);
 

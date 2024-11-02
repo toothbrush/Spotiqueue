@@ -5,10 +5,12 @@ use std::thread;
 
 use librespot::core::authentication::Credentials;
 use librespot::core::config::SessionConfig;
-use librespot::core::session::{Session, SessionError};
+use librespot::core::error::Error;
+use librespot::core::session::Session;
 use librespot::core::spotify_id::SpotifyId;
 use librespot::playback::audio_backend;
 use librespot::playback::config::{AudioFormat, PlayerConfig};
+use librespot::playback::mixer::NoOpVolume;
 use librespot::playback::player::{Player, PlayerEvent};
 
 use once_cell::sync::OnceCell;
@@ -52,7 +54,7 @@ enum Command {
 }
 
 impl New for State {
-    fn new(mut player: Player, _session: Session) -> State {
+    fn new(player: Player, _session: Session) -> State {
         let (tx, rx) = sync_channel(0);
         let state = State { send_channel: tx };
         let mut player_event_channel = player.get_player_event_channel();
@@ -86,19 +88,11 @@ impl New for State {
                 PlayerEvent::EndOfTrack { .. } => {
                     use_stored_callback(StatusUpdate::EndOfTrack, 0, 0);
                 }
-                PlayerEvent::Paused {
-                    position_ms,
-                    duration_ms,
-                    ..
-                } => {
-                    use_stored_callback(StatusUpdate::Paused, position_ms, duration_ms);
+                PlayerEvent::Paused { position_ms, .. } => {
+                    use_stored_callback(StatusUpdate::Paused, position_ms.into(), -1);
                 }
-                PlayerEvent::Playing {
-                    position_ms,
-                    duration_ms,
-                    ..
-                } => {
-                    use_stored_callback(StatusUpdate::Playing, position_ms, duration_ms);
+                PlayerEvent::Playing { position_ms, .. } => {
+                    use_stored_callback(StatusUpdate::Playing, position_ms.into(), -1);
                 }
                 PlayerEvent::Stopped { .. } => {
                     use_stored_callback(StatusUpdate::Stopped, 0, 0);
@@ -106,12 +100,23 @@ impl New for State {
                 PlayerEvent::TimeToPreloadNextTrack { .. } => {
                     use_stored_callback(StatusUpdate::TimeToPreloadNextTrack, 0, 0);
                 }
-                PlayerEvent::Changed { .. } => {}
+                PlayerEvent::AutoPlayChanged { .. } => {}
+                PlayerEvent::FilterExplicitContentChanged { .. } => {}
                 PlayerEvent::Loading { .. } => {}
+                PlayerEvent::PlayRequestIdChanged { .. } => {}
+                PlayerEvent::PositionCorrection { .. } => {}
                 PlayerEvent::Preloading { .. } => {}
-                PlayerEvent::Started { .. } => {}
+                PlayerEvent::RepeatChanged { .. } => {}
+                PlayerEvent::Seeked { .. } => {}
+                PlayerEvent::SessionClientChanged { .. } => {}
+                PlayerEvent::SessionConnected { .. } => {}
+                PlayerEvent::SessionDisconnected { .. } => {}
+                PlayerEvent::ShuffleChanged { .. } => {}
+                PlayerEvent::TrackChanged { audio_item, .. } => {
+                    use_stored_callback(StatusUpdate::Playing, -1, audio_item.duration_ms.into());
+                }
                 PlayerEvent::Unavailable { .. } => {}
-                PlayerEvent::VolumeSet { .. } => {}
+                PlayerEvent::VolumeChanged { .. } => {}
             }
         });
         return state;
@@ -166,18 +171,18 @@ fn string_from_rust(string: &str) -> *const c_char {
 
 #[derive(Debug)]
 pub struct WorkerCallback {
-    pub callback: extern "C" fn(status: StatusUpdate, position_ms: u32, duration_ms: u32),
+    pub callback: extern "C" fn(status: StatusUpdate, position_ms: i64, duration_ms: i64),
 }
 
 // https://stackoverflow.com/questions/50188710/rust-function-that-allocates-memory-and-calls-a-c-callback-crashes
 #[no_mangle]
 pub extern "C" fn set_callback(
-    callback: extern "C" fn(status: StatusUpdate, position_ms: u32, duration_ms: u32),
+    callback: extern "C" fn(status: StatusUpdate, position_ms: i64, duration_ms: i64),
 ) {
     CALLBACK.set(WorkerCallback { callback }).unwrap();
 }
 
-fn use_stored_callback(status: StatusUpdate, position_ms: u32, duration_ms: u32) {
+fn use_stored_callback(status: StatusUpdate, position_ms: i64, duration_ms: i64) {
     let cb = CALLBACK.get().unwrap();
     (cb.callback)(status, position_ms, duration_ms);
 }
@@ -223,10 +228,10 @@ fn internal_login_worker(username: String, password: String) -> InitializationRe
 
     info!("Authorizing...");
 
-    let session = RUNTIME
-        .get()
-        .unwrap()
-        .block_on(async { Session::connect(session_config, credentials, None).await });
+    let session = RUNTIME.get().unwrap().block_on(async {
+        let inner_session = Session::new(session_config, None);
+        inner_session.connect(credentials, false).await
+    });
 
     let session = match session {
         Ok(sess) => sess,
@@ -271,9 +276,12 @@ fn internal_login_worker(username: String, password: String) -> InitializationRe
         },
     };
 
-    let (player, _) = Player::new(player_config, session.clone(), None, move || {
-        backend(None, audio_format)
-    });
+    let player = Player::new(
+        player_config,
+        session.clone(),
+        Box::new(NoOpVolume),
+        move || backend(None, audio_format),
+    );
     STATE.set(State::new(player, session)).unwrap();
 
     info!("Authorized.");
