@@ -224,17 +224,19 @@ fn internal_login_worker(access_token: String) -> InitializationResult {
 
     info!("Authorizing with OAuth token...");
 
-    // Create session first, then connect
-    let session = Session::new(session_config, None);
+    // Session::new and connect must both be called within the Tokio runtime context
+    let connect_result = RUNTIME.get().unwrap().block_on(async {
+        let session = Session::new(session_config, None);
+        match session.connect(credentials, false).await {
+            Ok(()) => Ok(session),
+            Err(e) => Err(e),
+        }
+    });
 
-    let connect_result = RUNTIME
-        .get()
-        .unwrap()
-        .block_on(async { session.connect(credentials, false).await });
-
-    match connect_result {
-        Ok(()) => {
+    let session = match connect_result {
+        Ok(session) => {
             info!("Session connected successfully.");
+            session
         }
         Err(err) => {
             return handle_connection_error(err);
