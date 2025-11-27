@@ -158,7 +158,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
-			shellScript = "set -e; export PATH=$PATH:~/.cargo/bin:/usr/local/bin;\nif [ \"$ACTION\" = \"clean\" ]; then\n\tcargo clean;\nelse\n\tcargo build --target aarch64-apple-darwin $CARGO_FLAGS;\n    cargo build --target x86_64-apple-darwin $CARGO_FLAGS;   \nfi\n";
+			shellScript = "set -e; export PATH=$PATH:/opt/homebrew/bin:~/.cargo/bin:/usr/local/bin;\nif [ \"$ACTION\" = \"clean\" ]; then\n\tcargo clean;\nelse\n\tcargo build --target aarch64-apple-darwin $CARGO_FLAGS;\n    cargo build --target x86_64-apple-darwin $CARGO_FLAGS;   \nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
