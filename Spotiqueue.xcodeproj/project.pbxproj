@@ -687,8 +687,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Peter-Schorn/SpotifyAPI.git";
 			requirement = {
-				kind = revision;
-				revision = e814a98f7d292ca7a05b52d524607fde1d1072c6;
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.0.0;
 			};
 		};
 		DABEC9102653799100CA3F67 /* XCRemoteSwiftPackageReference "keychain-swift" */ = {
