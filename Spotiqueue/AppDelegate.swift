@@ -138,7 +138,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
-    var loginWindow: RBLoginWindow?
+    var workerInitialized: Bool = false
 
     let sparkle = SUUpdater(for: Bundle.main)
 
@@ -218,19 +218,27 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     // Here is another extensive howto around table views and such https://www.raywenderlich.com/921-cocoa-bindings-on-macos
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
-        self.loginWindow = RBLoginWindow(windowNibName: "RBLoginWindow")
-        if let window = loginWindow?.window {
-            self.window?.beginSheet(window, completionHandler: { [self] _ in
-                self.initialiseSpotifyWebAPI()
-                self.loginWindow = nil
-            })
-            self.loginWindow?.startLoginRoutine()
-        } else {
-            // Mind you, this will be nil if AppMover moves the executable away before we have had a chance to load the NIB.  Which is still a file...
-            logger.critical("Something very weird - modal.window is nil!")
-            return
-        }
+        // Initialize the Rust worker runtime
+        spotiqueue_initialize_worker()
         set_callback(player_update_hook(hook: position_ms: duration_ms:))
+
+        // Subscribe to authorization changes to initialize the worker when OAuth completes
+        self.spotify.$isAuthorized
+            .receive(on: RunLoop.main)
+            .sink { [weak self] isAuthorized in
+                if isAuthorized {
+                    self?.initializeWorkerWithOAuth()
+                }
+            }
+            .store(in: &self.cancellables)
+
+        // Check if already authorized, otherwise trigger OAuth
+        if self.spotify.isAuthorized {
+            self.initializeWorkerWithOAuth()
+        } else {
+            // Trigger OAuth flow - opens browser
+            self.spotify.authorize()
+        }
         NSEvent.addLocalMonitorForEvents(matching: [.keyDown /* , .systemDefined */ ], handler: self.localKeyShortcuts(event:))
 
         // Now that the UI is ready, find and load a user's config
@@ -866,10 +874,61 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         self.window.makeFirstResponder(self.searchTableView)
     }
 
-    func initialiseSpotifyWebAPI() {
-        if !self.spotify.isAuthorized {
-            self.spotify.authorize()
+    /// Initialize the Rust worker with OAuth access token from SpotifyWebAPI
+    func initializeWorkerWithOAuth() {
+        // Avoid re-initialization
+        guard !self.workerInitialized else {
+            logger.info("Worker already initialized, skipping")
+            return
         }
+
+        guard let accessToken = self.spotify.getAccessToken() else {
+            logger.error("No access token available from SpotifyWebAPI")
+            let alert = NSAlert()
+            alert.messageText = "Authentication Error"
+            alert.informativeText = "Could not get access token. Please try authorizing again."
+            alert.alertStyle = .critical
+            alert.addButton(withTitle: "Retry")
+            alert.addButton(withTitle: "Quit")
+            let response = alert.runModal()
+            if response == .alertFirstButtonReturn {
+                self.spotify.authorize()
+            } else {
+                NSApp.terminate(self)
+            }
+            return
+        }
+
+        logger.info("Initializing worker with OAuth token...")
+
+        let result = spotiqueue_login_worker(accessToken)
+        switch result.tag {
+        case InitOkay:
+            logger.info("Worker initialized successfully with OAuth")
+            self.workerInitialized = true
+        case InitBadCredentials:
+            logger.error("Bad credentials - token may be invalid or expired")
+            self.showWorkerError(message: "Authentication failed. The access token may be invalid or expired. Try logging out and back in.")
+        case InitNotPremium:
+            logger.error("Premium account required")
+            self.showWorkerError(message: "Spotify Premium is required to use Spotiqueue.")
+        case InitProblem:
+            let problem = String(cString: result.init_problem.description)
+            logger.error("Worker init problem: \(problem)")
+            self.showWorkerError(message: problem)
+        default:
+            logger.error("Unknown worker initialization result")
+            self.showWorkerError(message: "Unknown error initializing playback worker.")
+        }
+    }
+
+    func showWorkerError(message: String) {
+        let alert = NSAlert()
+        alert.messageText = "Playback Error"
+        alert.informativeText = message
+        alert.alertStyle = .critical
+        alert.addButton(withTitle: "OK")
+        alert.runModal()
     }
 
     @IBAction func playOrPause(_ sender: Any) {
