@@ -5,9 +5,6 @@
 //  Created by paul david on 14/6/21.
 //  Copyright © 2021 Rustling Broccoli. All rights reserved.
 //
-//  NOTE: This file is deprecated and no longer used.
-//  OAuth authentication is now handled via SpotifyWebAPI.
-//  Keeping this file for reference only.
 
 import Cocoa
 
@@ -18,6 +15,14 @@ class RBLoginWindow: NSWindowController {
 
     override func windowDidLoad() {
         super.windowDidLoad()
+        self.window?.title = "Login to Spotify"
+    }
+
+    @IBAction func loginPressed(_ sender: Any) {
+        self.loginButton.isEnabled = false
+        self.loginSpinner.isHidden = false
+        self.loginSpinner.startAnimation(self)
+        AppDelegate.appDelegate().spotify.authorize()
     }
 
     @IBAction func quitButton(_ sender: Any) {

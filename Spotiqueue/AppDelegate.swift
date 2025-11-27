@@ -139,6 +139,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     var workerInitialized: Bool = false
+    var loginWindowController: RBLoginWindow?
 
     let sparkle = SUUpdater(for: Bundle.main)
 
@@ -232,12 +233,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             }
             .store(in: &self.cancellables)
 
-        // Check if already authorized, otherwise trigger OAuth
+        // Check if already authorized, otherwise show login window
         if self.spotify.isAuthorized {
             self.initializeWorkerWithOAuth()
         } else {
-            // Trigger OAuth flow - opens browser
-            self.spotify.authorize()
+            // Show login window instead of directly opening browser
+            self.showLoginWindow()
         }
         NSEvent.addLocalMonitorForEvents(matching: [.keyDown /* , .systemDefined */ ], handler: self.localKeyShortcuts(event:))
 
@@ -518,6 +519,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                             }
                         case .finished:
                             logger.info("Successfully received tokens from Spotify.")
+                            self.dismissLoginWindow()
                             let alert = NSAlert()
                             alert.messageText = "Authorised"
                             alert.informativeText = "Successfully authorised with Spotify.  You can safely close the web browser window."
@@ -892,7 +894,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             alert.addButton(withTitle: "Quit")
             let response = alert.runModal()
             if response == .alertFirstButtonReturn {
-                self.spotify.authorize()
+                self.showLoginWindow()
             } else {
                 NSApp.terminate(self)
             }
@@ -906,6 +908,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         case InitOkay:
             logger.info("Worker initialized successfully with OAuth")
             self.workerInitialized = true
+            // Now that worker is ready, try to restore previous playback
+            self.restore_previous_track_and_position()
         case InitBadCredentials:
             logger.error("Bad credentials - token may be invalid or expired")
             self.showWorkerError(message: "Authentication failed. The access token may be invalid or expired. Try logging out and back in.")
@@ -929,6 +933,20 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         alert.alertStyle = .critical
         alert.addButton(withTitle: "OK")
         alert.runModal()
+    }
+
+    func showLoginWindow() {
+        if self.loginWindowController == nil {
+            self.loginWindowController = RBLoginWindow(windowNibName: "RBLoginWindow")
+        }
+        self.loginWindowController?.showWindow(self)
+        self.loginWindowController?.window?.center()
+        self.loginWindowController?.window?.makeKeyAndOrderFront(self)
+    }
+
+    func dismissLoginWindow() {
+        self.loginWindowController?.window?.close()
+        self.loginWindowController = nil
     }
 
     @IBAction func playOrPause(_ sender: Any) {
