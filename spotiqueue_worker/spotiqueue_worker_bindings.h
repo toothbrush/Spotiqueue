@@ -40,8 +40,10 @@ void set_callback(void (*callback)(enum StatusUpdate status,
 
 void spotiqueue_initialize_worker(void);
 
-struct InitializationResult spotiqueue_login_worker(const char *username_raw,
-                                                    const char *password_raw);
+/**
+ * Login with OAuth access token (new API for librespot 0.8+)
+ */
+struct InitializationResult spotiqueue_login_worker(const char *access_token_raw);
 
 bool spotiqueue_pause_playback(void);
 
