@@ -184,14 +184,16 @@ fn use_stored_callback(status: StatusUpdate, position_ms: u32, duration_ms: u32)
 
 #[no_mangle]
 pub extern "C" fn spotiqueue_initialize_worker() {
-    Builder::new().filter_level(LevelFilter::Debug).init();
+    // Use try_init to avoid panic if logger already initialized
+    let _ = Builder::new().filter_level(LevelFilter::Debug).try_init();
     if cfg!(debug_assertions) {
         println!("I am a DEBUG build.");
     } else {
         println!("I am a RELEASE build.");
     }
 
-    RUNTIME.set(Runtime::new().unwrap()).unwrap();
+    // Use get_or_init to avoid panic if runtime already set
+    let _ = RUNTIME.set(Runtime::new().unwrap());
 }
 
 /// Login with OAuth access token (new API for librespot 0.8+)
