@@ -34,7 +34,9 @@ typedef struct InitializationResult {
   };
 } InitializationResult;
 
-void set_callback(void (*callback)(enum StatusUpdate status, uint32_t position_ms, uint32_t duration_ms));
+void set_callback(void (*callback)(enum StatusUpdate status,
+                                   uint32_t position_ms,
+                                   uint32_t duration_ms));
 
 void spotiqueue_initialize_worker(void);
 
@@ -49,4 +51,4 @@ bool spotiqueue_preload_track(const char *spotify_uri_raw);
 
 bool spotiqueue_play_track(const char *spotify_uri_raw, bool start, uint32_t position_ms);
 
-#endif /* spotiqueue_worker_h */
+#endif  /* spotiqueue_worker_h */
