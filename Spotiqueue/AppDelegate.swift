@@ -283,6 +283,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func restore_previous_track_and_position() {
+        // Don't try to restore if we're not authorized or worker isn't initialized
+        guard self.spotify.isAuthorized, self.workerInitialized else {
+            logger.info("Skipping playback restore: not authorized or worker not initialized")
+            return
+        }
         // Default to restore playback, unless user has specifically told us not to.
         guard !UserDefaults.standard.bool(forKey: "skip_restore_playback") else {
             return
