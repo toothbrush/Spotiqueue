@@ -30,6 +30,7 @@
 		DA5AFB2F265A89BD00C6C468 /* RBQueueTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5AFB2E265A89BD00C6C468 /* RBQueueTableView.swift */; };
 		DA5AFB31265BB59900C6C468 /* CalendarExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5AFB30265BB59900C6C468 /* CalendarExtensions.swift */; };
 		DA95643326746A9F001BEDCA /* libresolv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = DA95643226746A9F001BEDCA /* libresolv.tbd */; };
+		DAA685572ED8895800196EBB /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAA685542ED8895800196EBB /* SystemConfiguration.framework */; };
 		DAAE2F012653EA1F00FF0344 /* SpotifyAPI in Frameworks */ = {isa = PBXBuildFile; productRef = DAAE2F002653EA1F00FF0344 /* SpotifyAPI */; };
 		DABEC90D2653534300CA3F67 /* RBSpotifyItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABEC90C2653534300CA3F67 /* RBSpotifyItem.swift */; };
 		DABEC90F26536F5800CA3F67 /* RBSecrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABEC90E26536F5800CA3F67 /* RBSecrets.swift */; };
@@ -115,6 +116,7 @@
 		DA5AFB30265BB59900C6C468 /* CalendarExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarExtensions.swift; sourceTree = "<group>"; };
 		DA95643226746A9F001BEDCA /* libresolv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libresolv.tbd; path = usr/lib/libresolv.tbd; sourceTree = SDKROOT; };
 		DA9564442674816D001BEDCA /* spotiqueue_worker_bindings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = spotiqueue_worker_bindings.h; path = spotiqueue_worker/spotiqueue_worker_bindings.h; sourceTree = "<group>"; };
+		DAA685542ED8895800196EBB /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		DABEC90C2653534300CA3F67 /* RBSpotifyItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RBSpotifyItem.swift; sourceTree = "<group>"; };
 		DABEC90E26536F5800CA3F67 /* RBSecrets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RBSecrets.swift; sourceTree = "<group>"; };
 		DACA708D268EA0D5009714DC /* RBFilterField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RBFilterField.swift; sourceTree = "<group>"; };
@@ -147,6 +149,7 @@
 				DA593BC126B5021D0039DB72 /* libspotiqueue_worker.a in Frameworks */,
 				DA95643326746A9F001BEDCA /* libresolv.tbd in Frameworks */,
 				DA5AFB212658B7D100C6C468 /* CoreAudio.framework in Frameworks */,
+				DAA685572ED8895800196EBB /* SystemConfiguration.framework in Frameworks */,
 				DA5AFB1F2658B7C800C6C468 /* CoreFoundation.framework in Frameworks */,
 				EC97CFB02679E29000A0361C /* AppMover in Frameworks */,
 				DA5AFB1D2658B7BE00C6C468 /* AudioToolbox.framework in Frameworks */,
@@ -214,6 +217,7 @@
 		DA5AFB152658A6C500C6C468 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				DAA685542ED8895800196EBB /* SystemConfiguration.framework */,
 				DAE88E2C26E8AA6C00125A3F /* libffi.tbd */,
 				DAE88E2A26E8AA6700125A3F /* libiconv.tbd */,
 				DA95643226746A9F001BEDCA /* libresolv.tbd */,
