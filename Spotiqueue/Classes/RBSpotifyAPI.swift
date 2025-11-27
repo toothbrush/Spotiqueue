@@ -181,6 +181,7 @@ final class RBSpotifyAPI: ObservableObject {
             // Otherwise, an error will be thrown.
             state: authorizationState,
             scopes: [
+                .streaming,
                 .userReadPlaybackState,
                 .userModifyPlaybackState,
                 .playlistModifyPrivate,
@@ -269,6 +270,14 @@ final class RBSpotifyAPI: ObservableObject {
          */
         RBSecrets.deleteSecret(s: .authorizationManager)
         logger.info("did remove authorization manager from keychain")
+    }
+
+    /**
+     Returns the current OAuth access token if available.
+     This token can be used for librespot authentication.
+     */
+    func getAccessToken() -> String? {
+        return api.authorizationManager.accessToken
     }
 
     /**
