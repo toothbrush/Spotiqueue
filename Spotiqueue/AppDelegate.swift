@@ -139,7 +139,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     var workerInitialized: Bool = false
-    var loginWindowController: RBLoginWindow?
+    var loginWindow: RBLoginWindow?
 
     let sparkle = SUUpdater(for: Bundle.main)
 
@@ -941,17 +941,18 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func showLoginWindow() {
-        if self.loginWindowController == nil {
-            self.loginWindowController = RBLoginWindow(windowNibName: "RBLoginWindow")
+        self.loginWindow = RBLoginWindow(windowNibName: "RBLoginWindow")
+        if let sheet = loginWindow?.window {
+            self.window?.beginSheet(sheet, completionHandler: { [self] _ in
+                self.loginWindow = nil
+            })
         }
-        self.loginWindowController?.showWindow(self)
-        self.loginWindowController?.window?.center()
-        self.loginWindowController?.window?.makeKeyAndOrderFront(self)
     }
 
     func dismissLoginWindow() {
-        self.loginWindowController?.window?.close()
-        self.loginWindowController = nil
+        if let sheet = self.loginWindow?.window {
+            self.window?.endSheet(sheet)
+        }
     }
 
     @IBAction func playOrPause(_ sender: Any) {
