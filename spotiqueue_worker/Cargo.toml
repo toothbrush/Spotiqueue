@@ -8,7 +8,7 @@ debug = 1
 name = "spotiqueue_worker"
 version = "0.2.0"
 authors = ["paul <423357+toothbrush@users.noreply.github.com>"]
-edition = "2018"
+edition = "2021"
 
 [build-dependencies]
 cbindgen = "0.29.2"
