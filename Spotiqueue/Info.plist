@@ -32,13 +32,13 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>1257</string>
+	<string>1258</string>
 	<key>LSApplicationCategoryType</key>
 	<string>public.app-category.music</string>
 	<key>LSMinimumSystemVersion</key>
 	<string>$(MACOSX_DEPLOYMENT_TARGET)</string>
 	<key>NSHumanReadableCopyright</key>
-	<string>Copyright © 2021 Rustling Broccoli. All rights reserved.</string>
+	<string>Copyright © 2021-2025 Rustling Broccoli. All rights reserved.</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
