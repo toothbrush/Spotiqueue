@@ -47,7 +47,7 @@ struct InitializationResult spotiqueue_login_worker(const char *access_token_raw
 
 bool spotiqueue_pause_playback(void);
 
-void spotiqueue_unpause_playback(void);
+bool spotiqueue_unpause_playback(void);
 
 bool spotiqueue_preload_track(const char *spotify_uri_raw);
 

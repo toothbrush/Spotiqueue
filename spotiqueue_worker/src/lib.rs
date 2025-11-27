@@ -295,15 +295,30 @@ fn handle_connection_error(err: Error) -> InitializationResult {
 
 #[no_mangle]
 pub extern "C" fn spotiqueue_pause_playback() -> bool {
-    let state = STATE.get().unwrap();
-    state.send_command(Command::Pause);
-    return true;
+    match STATE.get() {
+        Some(state) => {
+            state.send_command(Command::Pause);
+            true
+        }
+        None => {
+            error!("Cannot pause: worker not initialized");
+            false
+        }
+    }
 }
 
 #[no_mangle]
-pub extern "C" fn spotiqueue_unpause_playback() {
-    let state = STATE.get().unwrap();
-    state.send_command(Command::Unpause);
+pub extern "C" fn spotiqueue_unpause_playback() -> bool {
+    match STATE.get() {
+        Some(state) => {
+            state.send_command(Command::Unpause);
+            true
+        }
+        None => {
+            error!("Cannot unpause: worker not initialized");
+            false
+        }
+    }
 }
 
 #[no_mangle]
@@ -313,17 +328,24 @@ pub extern "C" fn spotiqueue_preload_track(spotify_uri_raw: *const c_char) -> bo
 }
 
 fn internal_preload_track(spotify_uri: String) -> bool {
+    let state = match STATE.get() {
+        Some(s) => s,
+        None => {
+            error!("Cannot preload: worker not initialized");
+            return false;
+        }
+    };
+
     match track_uri_from_spotify_uri(&spotify_uri) {
         Some(track) => {
-            let state = STATE.get().unwrap();
             state.send_command(Command::Preload { track: track });
+            true
         }
         None => {
             error!("Looks like that isn't a Spotify track URI!");
-            return false;
+            false
         }
     }
-    return true;
 }
 
 #[no_mangle]
@@ -339,21 +361,28 @@ pub extern "C" fn spotiqueue_play_track(
 fn internal_play_track(spotify_uri: String, start: bool, position_ms: u32) -> bool {
     info!("Trying to play {}...", spotify_uri);
 
+    let state = match STATE.get() {
+        Some(s) => s,
+        None => {
+            error!("Cannot play: worker not initialized");
+            return false;
+        }
+    };
+
     match track_uri_from_spotify_uri(&spotify_uri) {
         Some(track) => {
-            let state = STATE.get().unwrap();
             state.send_command(Command::Play {
                 track: track,
                 start: start,
                 position_ms: position_ms,
             });
+            true
         }
         None => {
             error!("Looks like that isn't a Spotify track URI!");
-            return false;
+            false
         }
     }
-    return true;
 }
 
 fn track_uri_from_spotify_uri(uri: &str) -> Option<SpotifyUri> {
