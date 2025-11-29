@@ -129,8 +129,13 @@ class RBQueueTableView: RBTableView {
             return
         }
         if let first = self.selectedRowIndexes.first, first > 0 {
-            AppDelegate.appDelegate().queue.move(fromOffsets: self.selectedRowIndexes, toOffset: first - 1)
-            self.scrollRowToVisible((first - 2).clamped(fromInclusive: 0, toInclusive: self.numberOfRows - 1))
+            let count = self.selectedRowIndexes.count
+            let newFirst = first - 1
+            AppDelegate.appDelegate().queue.move(fromOffsets: self.selectedRowIndexes, toOffset: newFirst)
+            // Explicitly set selection to new positions (move() makes them contiguous)
+            let newSelection = IndexSet(integersIn: newFirst..<(newFirst + count))
+            self.selectRowIndexes(newSelection, byExtendingSelection: false)
+            self.scrollRowToVisible((newFirst - 1).clamped(fromInclusive: 0, toInclusive: self.numberOfRows - 1))
         }
     }
 
@@ -139,9 +144,17 @@ class RBQueueTableView: RBTableView {
             NSSound.beep()
             return
         }
-        if let last = self.selectedRowIndexes.last, last + 1 < self.numberOfRows {
+        if let first = self.selectedRowIndexes.first,
+           let last = self.selectedRowIndexes.last,
+           last + 1 < self.numberOfRows
+        {
+            let count = self.selectedRowIndexes.count
             AppDelegate.appDelegate().queue.move(fromOffsets: self.selectedRowIndexes, toOffset: last + 2)
-            self.scrollRowToVisible((last + 2).clamped(fromInclusive: 0, toInclusive: self.numberOfRows - 1))
+            // After move(), items are contiguous. New position: first + 1 through first + count
+            let newFirst = first + 1
+            let newSelection = IndexSet(integersIn: newFirst..<(newFirst + count))
+            self.selectRowIndexes(newSelection, byExtendingSelection: false)
+            self.scrollRowToVisible((newFirst + count).clamped(fromInclusive: 0, toInclusive: self.numberOfRows - 1))
         }
     }
 
