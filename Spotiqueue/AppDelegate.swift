@@ -24,7 +24,7 @@ let logger = SXLogger(endpoints: [
 ])
 
 @_cdecl("player_update_hook")
-public func player_update_hook(hook: StatusUpdate, position_ms: UInt32, duration_ms: UInt32) {
+public func player_update_hook(hook: StatusUpdate, position_ms: UInt32) {
     logger.info("Hook spotiqueue-worker hook ==> \(hook.rawValue)")
     switch hook {
         case EndOfTrack:
@@ -229,7 +229,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Initialize the Rust worker runtime
         spotiqueue_initialize_worker()
-        set_callback(player_update_hook(hook: position_ms: duration_ms:))
+        set_callback(player_update_hook(hook: position_ms:))
 
         // Subscribe to authorization changes to initialize the worker when OAuth completes
         self.spotify.$isAuthorized

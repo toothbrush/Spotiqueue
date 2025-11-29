@@ -88,27 +88,19 @@ impl New for State {
             info!("PlayerEvent ==> {:?}", event);
             match event {
                 PlayerEvent::EndOfTrack { .. } => {
-                    use_stored_callback(StatusUpdate::EndOfTrack, 0, 0);
+                    use_stored_callback(StatusUpdate::EndOfTrack, 0);
                 }
-                PlayerEvent::Paused {
-                    position_ms,
-                    ..
-                } => {
-                    // Note: duration_ms is no longer provided in librespot 0.8
-                    use_stored_callback(StatusUpdate::Paused, position_ms, 0);
+                PlayerEvent::Paused { position_ms, .. } => {
+                    use_stored_callback(StatusUpdate::Paused, position_ms);
                 }
-                PlayerEvent::Playing {
-                    position_ms,
-                    ..
-                } => {
-                    // Note: duration_ms is no longer provided in librespot 0.8
-                    use_stored_callback(StatusUpdate::Playing, position_ms, 0);
+                PlayerEvent::Playing { position_ms, .. } => {
+                    use_stored_callback(StatusUpdate::Playing, position_ms);
                 }
                 PlayerEvent::Stopped { .. } => {
-                    use_stored_callback(StatusUpdate::Stopped, 0, 0);
+                    use_stored_callback(StatusUpdate::Stopped, 0);
                 }
                 PlayerEvent::TimeToPreloadNextTrack { .. } => {
-                    use_stored_callback(StatusUpdate::TimeToPreloadNextTrack, 0, 0);
+                    use_stored_callback(StatusUpdate::TimeToPreloadNextTrack, 0);
                 }
                 // All other events we don't need to handle
                 _ => {}
@@ -166,20 +158,18 @@ fn string_from_rust(string: &str) -> *const c_char {
 
 #[derive(Debug)]
 pub struct WorkerCallback {
-    pub callback: extern "C" fn(status: StatusUpdate, position_ms: u32, duration_ms: u32),
+    pub callback: extern "C" fn(status: StatusUpdate, position_ms: u32),
 }
 
 // https://stackoverflow.com/questions/50188710/rust-function-that-allocates-memory-and-calls-a-c-callback-crashes
 #[no_mangle]
-pub extern "C" fn set_callback(
-    callback: extern "C" fn(status: StatusUpdate, position_ms: u32, duration_ms: u32),
-) {
+pub extern "C" fn set_callback(callback: extern "C" fn(status: StatusUpdate, position_ms: u32)) {
     CALLBACK.set(WorkerCallback { callback }).unwrap();
 }
 
-fn use_stored_callback(status: StatusUpdate, position_ms: u32, duration_ms: u32) {
+fn use_stored_callback(status: StatusUpdate, position_ms: u32) {
     let cb = CALLBACK.get().unwrap();
-    (cb.callback)(status, position_ms, duration_ms);
+    (cb.callback)(status, position_ms);
 }
 
 #[no_mangle]
@@ -198,9 +188,7 @@ pub extern "C" fn spotiqueue_initialize_worker() {
 
 /// Login with OAuth access token (new API for librespot 0.8+)
 #[no_mangle]
-pub extern "C" fn spotiqueue_login_worker(
-    access_token_raw: *const c_char,
-) -> InitializationResult {
+pub extern "C" fn spotiqueue_login_worker(access_token_raw: *const c_char) -> InitializationResult {
     if access_token_raw.is_null() {
         let e = "Access token not provided.";
         return InitializationResult::InitProblem {
