@@ -123,6 +123,9 @@ class RBQueueTableView: RBTableView {
         }
     }
 
+    // Number of rows of context to keep visible above/below selection when moving tracks
+    private let scrollBuffer = 2
+
     func moveSelectedTracksUp() {
         guard !self.selectedRowIndexes.isEmpty else {
             NSSound.beep()
@@ -130,12 +133,15 @@ class RBQueueTableView: RBTableView {
         }
         if let first = self.selectedRowIndexes.first, first > 0 {
             let count = self.selectedRowIndexes.count
+            // Moving up by 1: new position is one less than current first
             let newFirst = first - 1
             AppDelegate.appDelegate().queue.move(fromOffsets: self.selectedRowIndexes, toOffset: newFirst)
             // Explicitly set selection to new positions (move() makes them contiguous)
             let newSelection = IndexSet(integersIn: newFirst..<(newFirst + count))
             self.selectRowIndexes(newSelection, byExtendingSelection: false)
-            self.scrollRowToVisible((newFirst - 1).clamped(fromInclusive: 0, toInclusive: self.numberOfRows - 1))
+            // Scroll to show scrollBuffer rows above the selection for context.
+            // We subtract from newFirst because we're moving up, so context is above.
+            self.scrollRowToVisible((newFirst - scrollBuffer).clamped(fromInclusive: 0, toInclusive: self.numberOfRows - 1))
         }
     }
 
@@ -149,12 +155,17 @@ class RBQueueTableView: RBTableView {
            last + 1 < self.numberOfRows
         {
             let count = self.selectedRowIndexes.count
+            // move(toOffset:) inserts BEFORE the given index, so to move down by 1,
+            // we need toOffset = last + 2 (one past where the last item will land)
             AppDelegate.appDelegate().queue.move(fromOffsets: self.selectedRowIndexes, toOffset: last + 2)
-            // After move(), items are contiguous. New position: first + 1 through first + count
+            // After move(), items are contiguous starting at first + 1
             let newFirst = first + 1
+            let newLast = newFirst + count - 1
             let newSelection = IndexSet(integersIn: newFirst..<(newFirst + count))
             self.selectRowIndexes(newSelection, byExtendingSelection: false)
-            self.scrollRowToVisible((newFirst + count).clamped(fromInclusive: 0, toInclusive: self.numberOfRows - 1))
+            // Scroll to show scrollBuffer rows below the selection for context.
+            // We add to newLast because we're moving down, so context is below.
+            self.scrollRowToVisible((newLast + scrollBuffer).clamped(fromInclusive: 0, toInclusive: self.numberOfRows - 1))
         }
     }
 
