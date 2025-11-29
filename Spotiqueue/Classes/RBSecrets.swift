@@ -14,6 +14,8 @@ class RBSecrets: NSObject {
         case authorizationManager = "spotiqueue_authorization_manager_v3"
     }
 
+    //  got a "permission denied" error on startup - is that because we had a stale session token?
+    
     static let keychain = KeychainSwift()
 
     // let's use this to collect some secrets
