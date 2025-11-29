@@ -615,6 +615,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func browseDetails(for row: RBSpotifyItem, consideringHistory: Bool = true) {
         guard !self.isSearching else {
+            // TODO flash or some kind of visual feedback that your action was ignored.  Or maybe stopping any ongoing search is preferable?
             return
         }
         self.isSearching = true
