@@ -11,3 +11,4 @@
 --enable wrapMultilineStatementBraces
 --disable redundantReturn
 --disable redundantInternal
+--disable indent
