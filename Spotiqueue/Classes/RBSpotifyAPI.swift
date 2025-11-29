@@ -277,7 +277,7 @@ final class RBSpotifyAPI: ObservableObject {
      This token can be used for librespot authentication.
      */
     func getAccessToken() -> String? {
-        return api.authorizationManager.accessToken
+        return self.api.authorizationManager.accessToken
     }
 
     /**

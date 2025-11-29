@@ -42,14 +42,14 @@ public func player_update_hook(hook: StatusUpdate, position_ms: UInt32, duration
         case Paused:
             DispatchQueue.main.async {
                 AppDelegate.appDelegate().playerState = .Paused
-                AppDelegate.appDelegate().position = Double(position_ms/1000)
-                AppDelegate.appDelegate().duration = Double(duration_ms/1000)
+                AppDelegate.appDelegate().position = Double(position_ms / 1000)
+                AppDelegate.appDelegate().duration = Double(duration_ms / 1000)
             }
         case Playing:
             DispatchQueue.main.async {
                 AppDelegate.appDelegate().playerState = .Playing
-                AppDelegate.appDelegate().position = Double(position_ms/1000)
-                AppDelegate.appDelegate().duration = Double(duration_ms/1000)
+                AppDelegate.appDelegate().position = Double(position_ms / 1000)
+                AppDelegate.appDelegate().duration = Double(duration_ms / 1000)
             }
         case Stopped:
             DispatchQueue.main.async {
@@ -177,7 +177,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                                                 round(remaining).positionalTime,
                                                 round(self.duration).positionalTime)
         self.progressBar.isHidden = self.duration == 0
-        self.progressBar.doubleValue = 100 * self.position/self.duration
+        self.progressBar.doubleValue = 100 * self.position / self.duration
 
         // If you're surprised to see us also repeatedly setting the titles and so on, this is because if you're super quick (i.e., you're a Scheme function) and you enqueue something by Spotify URI and hit "play" on it before the "hydrate" call had a chance to populate all the track's details, you'd end up with a status display showing only the Spotify URI, no image, etc.  That's crap.  So here's a cheap (and fast enough) hack to keep that stuff up-to-date.
         if let currentTrack {
@@ -216,10 +216,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var searchCancellables: Set<AnyCancellable> = []
 
     func cancelOngoingSearch() {
-        searchCancellables.forEach { $0.cancel() }
-        searchCancellables.removeAll()
-        runningTasks = 0
-        isSearching = false
+        self.searchCancellables.forEach { $0.cancel() }
+        self.searchCancellables.removeAll()
+        self.runningTasks = 0
+        self.isSearching = false
     }
 
     // Hooking up the Array Controller it was helpful to read https://swiftrien.blogspot.com/2015/11/swift-example-binding-nstableview-to.html
@@ -318,7 +318,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                     AppDelegate.appDelegate().runningTasks -= 1
                     self.playTrack(spotify_item: stub_item, autoplay: false, position_ms: previous_position_ms)
                     self.duration = stub_item.durationSeconds
-                    self.position = Double(previous_position_ms/1000)
+                    self.position = Double(previous_position_ms / 1000)
                     self.updateDurationDisplay()
                 },
                 receiveValue: { tracks in
@@ -424,7 +424,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 self.searchTableView.scrollRowToVisible(self.searchTableView.selectedRow)
                 self.window.makeFirstResponder(self.searchTableView)
             } else {
-                cancelOngoingSearch()
+                self.cancelOngoingSearch()
             }
         } else if flags.isEmpty,
                   event.keyCode == kVK_Tab,
@@ -557,7 +557,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func retrieveAllSavedTracks() {
-        cancelOngoingSearch()
+        self.cancelOngoingSearch()
         self.isSearching = true
 
         self.searchResults = []
@@ -587,7 +587,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func retrieveAllPlaylists() {
-        cancelOngoingSearch()
+        self.cancelOngoingSearch()
         self.isSearching = true
 
         self.searchResults = []
@@ -617,7 +617,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func browseDetails(for row: RBSpotifyItem, consideringHistory: Bool = true) {
-        cancelOngoingSearch()
+        self.cancelOngoingSearch()
         self.isSearching = true
         self.searchResults = []
         self.searchTableView.deselectAll(nil)
@@ -728,17 +728,18 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func preservingSearchSelection(_ operation: () -> Void) {
         let selectedURI = (searchResultsArrayController.selectedObjects.first as? RBSpotifyItem)?.spotify_uri
-        let originallySelectedRow = searchTableView.selectedRow
-        
+        let originallySelectedRow = self.searchTableView.selectedRow
+
         operation()
 
         // if nothing or first row was selected, keep that.  However if the user had already scrolled around in the results, keep their selection.
         if originallySelectedRow <= 0 {
-            searchTableView.selectRow(row: 0)
+            self.searchTableView.selectRow(row: 0)
         } else if let uri = selectedURI,
-           let arranged = searchResultsArrayController.arrangedObjects as? [RBSpotifyItem],
-           let idx = arranged.firstIndex(where: { $0.spotify_uri == uri }) {
-            searchTableView.selectRow(row: idx)
+                  let arranged = searchResultsArrayController.arrangedObjects as? [RBSpotifyItem],
+                  let idx = arranged.firstIndex(where: { $0.spotify_uri == uri })
+        {
+            self.searchTableView.selectRow(row: idx)
         }
     }
 
@@ -858,7 +859,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         if searchString.isEmpty {
             return
         }
-        cancelOngoingSearch()
+        self.cancelOngoingSearch()
         self.isSearching = true
         logger.info("Searching for \"\(searchString)\"...")
 
