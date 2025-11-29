@@ -1,3 +1,14 @@
+# Newer TODOs
+
+* Fix duration_ms issue (it's gone).
+
+* Probably revert the changes to cursor position while returning search results.  Might need a
+  separate PR. (e.g., limit number of search results? Make it so the cursor stays at 0 only if it's
+  already at 0? Doing a new search/detailBrowse cancels all in-progress fetches?)
+
+* Does token refreshing work without interrupting playback?
+
+
 # TODO list
 
 * Figure out how to build for `arm64` & `x86_64`, which means.. figuring that out for `libguile` and
