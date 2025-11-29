@@ -673,7 +673,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             return
         }
 
-        self.spotify.api.playlistItems(playlist_uri)
+        let cancellable = self.spotify.api.playlistItems(playlist_uri)
             .extendPagesConcurrently(self.spotify.api)
             .collectAndSortByOffset()
             .receive(on: RunLoop.main)
@@ -699,7 +699,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                                         at: at_the_top ? 0 : endIndex,
                                         and_then_advance: and_then_advance)
                   })
-            .store(in: &self.cancellables)
+
+        if target == .Search {
+            cancellable.store(in: &self.searchCancellables)
+        } else {
+            cancellable.store(in: &self.cancellables)
+        }
     }
 
     func insertTracks(newRows: [RBSpotifyItem],
