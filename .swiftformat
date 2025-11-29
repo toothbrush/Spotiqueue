@@ -2,10 +2,12 @@
 --decimalgrouping none
 --hexgrouping none
 --ifdef outdent
---indentcase true
---nospaceoperators /
 --octalgrouping none
 --patternlet inline
 --self insert
 --semicolons never
 --stripunusedargs closure-only
+
+--enable wrapMultilineStatementBraces
+--disable redundantReturn
+--disable redundantInternal
