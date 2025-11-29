@@ -1,14 +1,10 @@
-# Newer TODOs
-
-* Fix duration_ms issue (it's gone).
-
-* Does token refreshing work without interrupting playback?
+# TODO list
 
 ----------
 
 These items are from..  long ago.  Might not be relevant any more.
 
-# TODO list
+----------
 
 * Figure out how to build for `arm64` & `x86_64`, which means.. figuring that out for `libguile` and
   `spotiqueue_worker`, too. :(
