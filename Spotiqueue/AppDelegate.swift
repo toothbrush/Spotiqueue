@@ -721,6 +721,20 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
+    func preservingSearchSelection(_ operation: () -> Void) {
+        let selectedURI = (searchResultsArrayController.selectedObjects.first as? RBSpotifyItem)?.spotify_uri
+
+        operation()
+
+        if let uri = selectedURI,
+           let arranged = searchResultsArrayController.arrangedObjects as? [RBSpotifyItem],
+           let idx = arranged.firstIndex(where: { $0.spotify_uri == uri }) {
+            searchTableView.selectRow(row: idx)
+        } else if searchTableView.selectedRow < 0 {
+            searchTableView.selectRow(row: 0)
+        }
+    }
+
     func albumTracks(for album: Album?) {
         guard let album = album else {
             logger.warning("Called with nil album!  Doing nothing.")
@@ -755,24 +769,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 }
             },
             receiveValue: { tracksPage in
-                // Remember selected item's URI before modifying results
-                let selectedURI = (self.searchResultsArrayController.selectedObjects.first as? RBSpotifyItem)?.spotify_uri
-
-                let simplifiedTracks = tracksPage.items
-                // create a new array of table rows from the page of simplified tracks
-                let newTableRows = simplifiedTracks.map { t in
-                    RBSpotifyItem(track: t, album: album, artist: t.artists!.first!)
-                }
-                // append the new table rows to the full array
-                self.searchResults.append(contentsOf: newTableRows)
-
-                // Restore selection by URI, or select row 0 if no previous selection
-                if let uri = selectedURI,
-                   let arranged = self.searchResultsArrayController.arrangedObjects as? [RBSpotifyItem],
-                   let idx = arranged.firstIndex(where: { $0.spotify_uri == uri }) {
-                    self.searchTableView.selectRow(row: idx)
-                } else if self.searchTableView.selectedRow < 0 {
-                    self.searchTableView.selectRow(row: 0)
+                self.preservingSearchSelection {
+                    let simplifiedTracks = tracksPage.items
+                    let newTableRows = simplifiedTracks.map { t in
+                        RBSpotifyItem(track: t, album: album, artist: t.artists!.first!)
+                    }
+                    self.searchResults.append(contentsOf: newTableRows)
                 }
             }
         )
@@ -831,24 +833,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                               }
                           },
                           receiveValue: { tracksPage in
-                              // Remember selected item's URI before modifying results
-                              let selectedURI = (self.searchResultsArrayController.selectedObjects.first as? RBSpotifyItem)?.spotify_uri
-
-                              let simplifiedTracks = tracksPage.items
-                              // create a new array of table rows from the page of simplified tracks
-                              let newTableRows = simplifiedTracks.map { t in
-                                  RBSpotifyItem(track: t, album: album, artist: artist)
-                              }
-                              // append the new table rows to the full array
-                              self.searchResults.append(contentsOf: newTableRows)
-
-                              // Restore selection by URI, or select row 0 if no previous selection
-                              if let uri = selectedURI,
-                                 let arranged = self.searchResultsArrayController.arrangedObjects as? [RBSpotifyItem],
-                                 let idx = arranged.firstIndex(where: { $0.spotify_uri == uri }) {
-                                  self.searchTableView.selectRow(row: idx)
-                              } else if self.searchTableView.selectedRow < 0 {
-                                  self.searchTableView.selectRow(row: 0)
+                              self.preservingSearchSelection {
+                                  let simplifiedTracks = tracksPage.items
+                                  let newTableRows = simplifiedTracks.map { t in
+                                      RBSpotifyItem(track: t, album: album, artist: artist)
+                                  }
+                                  self.searchResults.append(contentsOf: newTableRows)
                               }
                           })
                     .store(in: &self.cancellables)
@@ -892,23 +882,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                     }
                 },
                 receiveValue: { [self] searchResultsReturn in
-                    // Remember selected item's URI before modifying results
-                    let selectedURI = (self.searchResultsArrayController.selectedObjects.first as? RBSpotifyItem)?.spotify_uri
-
-                    for result in searchResultsReturn.tracks?.items ?? [] {
-                        self.searchResults.append(RBSpotifyItem(track: result))
-                    }
-                    logger.info("[query \(i)] Received \(self.searchResults.count) tracks")
-                    self.searchResultsArrayController.sortDescriptors = RBSpotifyItem.trackSortDescriptors
-                    self.searchResultsArrayController.rearrangeObjects()
-
-                    // Restore selection by URI, or select row 0 if no previous selection
-                    if let uri = selectedURI,
-                       let arranged = self.searchResultsArrayController.arrangedObjects as? [RBSpotifyItem],
-                       let idx = arranged.firstIndex(where: { $0.spotify_uri == uri }) {
-                        self.searchTableView.selectRow(row: idx)
-                    } else if self.searchTableView.selectedRow < 0 {
-                        self.searchTableView.selectRow(row: 0)
+                    self.preservingSearchSelection {
+                        for result in searchResultsReturn.tracks?.items ?? [] {
+                            self.searchResults.append(RBSpotifyItem(track: result))
+                        }
+                        logger.info("[query \(i)] Received \(self.searchResults.count) tracks")
+                        self.searchResultsArrayController.sortDescriptors = RBSpotifyItem.trackSortDescriptors
+                        self.searchResultsArrayController.rearrangeObjects()
                     }
                 }
             )
