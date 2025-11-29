@@ -4,6 +4,9 @@
 
 * Does token refreshing work without interrupting playback?
 
+----------
+
+These items are from..  long ago.  Might not be relevant any more.
 
 # TODO list
 
