@@ -43,13 +43,13 @@ public func player_update_hook(hook: StatusUpdate, position_ms: UInt32, duration
             DispatchQueue.main.async {
                 AppDelegate.appDelegate().playerState = .Paused
                 AppDelegate.appDelegate().position = Double(position_ms / 1000)
-                AppDelegate.appDelegate().duration = Double(duration_ms / 1000)
+                AppDelegate.appDelegate().duration = AppDelegate.appDelegate().currentTrack?.durationSeconds ?? 0
             }
         case Playing:
             DispatchQueue.main.async {
                 AppDelegate.appDelegate().playerState = .Playing
                 AppDelegate.appDelegate().position = Double(position_ms / 1000)
-                AppDelegate.appDelegate().duration = Double(duration_ms / 1000)
+                AppDelegate.appDelegate().duration = AppDelegate.appDelegate().currentTrack?.durationSeconds ?? 0
             }
         case Stopped:
             DispatchQueue.main.async {
