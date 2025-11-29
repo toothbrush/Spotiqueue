@@ -584,7 +584,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                       }
                       self.searchTableView.selectRow(row: 0)
                   })
-            .store(in: &self.cancellables)
+            .store(in: &self.searchCancellables)
 
         self.window.makeFirstResponder(self.searchTableView)
     }
@@ -616,7 +616,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                       }
                       self.searchTableView.selectRow(row: 0)
                   })
-            .store(in: &self.cancellables)
+            .store(in: &self.searchCancellables)
 
         self.window.makeFirstResponder(self.searchTableView)
     }
@@ -788,7 +788,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 }
             }
         )
-        .store(in: &self.cancellables)
+        .store(in: &self.searchCancellables)
     }
 
     var runningTasks: Int = 0 {
@@ -825,7 +825,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                     albumsReceived += albums
                 }
             )
-            .store(in: &self.cancellables)
+            .store(in: &self.searchCancellables)
 
         dispatchGroup.notify(queue: .main) {
             self.runningTasks = albumsReceived.count
@@ -851,7 +851,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                                   self.searchResults.append(contentsOf: newTableRows)
                               }
                           })
-                    .store(in: &self.cancellables)
+                    .store(in: &self.searchCancellables)
             }
         }
     }
@@ -902,7 +902,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                     }
                 }
             )
-            .store(in: &self.cancellables)
+            .store(in: &self.searchCancellables)
         }
         self.window.makeFirstResponder(self.searchTableView)
     }
