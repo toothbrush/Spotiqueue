@@ -252,6 +252,15 @@ fn handle_connection_error(err: Error) -> InitializationResult {
     let e: String = format!("spotiqueue_worker: Connection error: {}", err);
     error!("{}", e);
 
+    // Righto, this is fairly horrific.  The librespot library doesn't let us directly import the
+    // enum contained in AuthenticationError, LoginFailed.  They only seem to let use their prefab
+    // error strings, see
+    // https://github.com/librespot-org/librespot/blob/041f084d7f5f3e0731b712064f61105b509e5154/core/src/connection/mod.rs#L24-L39.
+    //
+    // Anyway, this is good enough, for now - we just want to be able to give the user a
+    // reasonable error message if it turns out they try to use a free account.  I need
+    // to go take a shower.  It might well be that i just don't understand Rust well
+    // enough to actually be able to get ahold of the true error codes, but oh well!
     match err.kind {
         ErrorKind::Unauthenticated => {
             // Check if it's a credentials issue
