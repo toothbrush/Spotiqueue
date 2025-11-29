@@ -113,9 +113,6 @@ class RBQueueTableView: RBTableView {
     }
 
     override func browseDetailsOnRow() {
-        guard !AppDelegate.appDelegate().isSearching else {
-            return
-        }
         guard selectedRowIndexes.count == 1 else {
             NSSound.beep()
             return

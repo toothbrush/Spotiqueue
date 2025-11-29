@@ -558,9 +558,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func retrieveAllSavedTracks() {
-        guard !self.isSearching else {
-            return
-        }
+        cancelOngoingSearch()
         self.isSearching = true
 
         self.searchResults = []
@@ -590,9 +588,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func retrieveAllPlaylists() {
-        guard !self.isSearching else {
-            return
-        }
+        cancelOngoingSearch()
         self.isSearching = true
 
         self.searchResults = []
@@ -622,10 +618,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func browseDetails(for row: RBSpotifyItem, consideringHistory: Bool = true) {
-        guard !self.isSearching else {
-            // TODO flash or some kind of visual feedback that your action was ignored.  Or maybe stopping any ongoing search is preferable?
-            return
-        }
+        cancelOngoingSearch()
         self.isSearching = true
         self.searchResults = []
         self.searchTableView.deselectAll(nil)
@@ -857,14 +850,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     @IBAction func search(_ sender: NSSearchField) {
-        guard !self.isSearching else {
-            return
-        }
-
         let searchString = self.searchFieldCell.stringValue
         if searchString.isEmpty {
             return
         }
+        cancelOngoingSearch()
         self.isSearching = true
         logger.info("Searching for \"\(searchString)\"...")
 
