@@ -534,7 +534,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                             self.dismissLoginWindow()
                             let alert = NSAlert()
                             alert.messageText = "Authorised"
-                            alert.informativeText = "Successfully authorised with Spotify.  You can safely close the web browser window."
+                            let textField = NSTextField(wrappingLabelWithString: "Successfully authorised with Spotify.\nYou can safely close the web browser window.")
+                            textField.alignment = .center
+                            alert.accessoryView = textField
                             alert.addButton(withTitle: "OK")
                             alert.runModal()
                     }
