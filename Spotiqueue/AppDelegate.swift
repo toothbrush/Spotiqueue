@@ -424,8 +424,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 self.searchTableView.scrollRowToVisible(self.searchTableView.selectedRow)
                 self.window.makeFirstResponder(self.searchTableView)
             } else {
-                self.cancellables.forEach { $0.cancel() }
-                self.isSearching = false
+                cancelOngoingSearch()
             }
         } else if flags.isEmpty,
                   event.keyCode == kVK_Tab,
