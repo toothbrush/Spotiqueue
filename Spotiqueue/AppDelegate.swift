@@ -723,15 +723,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func preservingSearchSelection(_ operation: () -> Void) {
         let selectedURI = (searchResultsArrayController.selectedObjects.first as? RBSpotifyItem)?.spotify_uri
-
+        let originallySelectedRow = searchTableView.selectedRow
+        
         operation()
 
-        if let uri = selectedURI,
+        // if nothing or first row was selected, keep that.  However if the user had already scrolled around in the results, keep their selection.
+        if originallySelectedRow <= 0 {
+            searchTableView.selectRow(row: 0)
+        } else if let uri = selectedURI,
            let arranged = searchResultsArrayController.arrangedObjects as? [RBSpotifyItem],
            let idx = arranged.firstIndex(where: { $0.spotify_uri == uri }) {
             searchTableView.selectRow(row: idx)
-        } else if searchTableView.selectedRow < 0 {
-            searchTableView.selectRow(row: 0)
         }
     }
 
