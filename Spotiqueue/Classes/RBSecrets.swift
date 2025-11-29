@@ -1,5 +1,5 @@
 //
-//  Secrets.swift
+//  RBSecrets.swift
 //  Spotiqueue
 //
 //  Created by Paul on 18/5/21.
@@ -15,7 +15,7 @@ class RBSecrets: NSObject {
     }
 
     //  got a "permission denied" error on startup - is that because we had a stale session token?
-    
+
     static let keychain = KeychainSwift()
 
     // let's use this to collect some secrets

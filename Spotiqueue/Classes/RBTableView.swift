@@ -1,5 +1,5 @@
 //
-//  RBSearchTableView.swift
+//  RBTableView.swift
 //  Spotiqueue
 //
 //  Created by Paul on 20/5/21.

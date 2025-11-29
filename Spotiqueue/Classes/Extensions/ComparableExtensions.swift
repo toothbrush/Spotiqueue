@@ -1,5 +1,5 @@
 //
-//  StrideableExtensions.swift
+//  ComparableExtensions.swift
 //  Spotiqueue
 //
 //  Created by paul david on 1/6/21.
