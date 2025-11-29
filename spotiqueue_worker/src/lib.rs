@@ -261,32 +261,20 @@ fn handle_connection_error(err: Error) -> InitializationResult {
     // reasonable error message if it turns out they try to use a free account.  I need
     // to go take a shower.  It might well be that i just don't understand Rust well
     // enough to actually be able to get ahold of the true error codes, but oh well!
+    let error_str = format!("{:?}", err);
+    if error_str.contains("BadCredentials") {
+        return InitializationResult::InitBadCredentials;
+    }
+    if error_str.contains("PremiumAccountRequired") {
+        return InitializationResult::InitNotPremium;
+    }
+
+    // Fall back based on error kind
     match err.kind {
-        ErrorKind::Unauthenticated => {
-            // Check if it's a credentials issue
-            let error_str = format!("{:?}", err);
-            if error_str.contains("BadCredentials") {
-                return InitializationResult::InitBadCredentials;
-            } else if error_str.contains("PremiumAccountRequired") {
-                return InitializationResult::InitNotPremium;
-            }
-            return InitializationResult::InitBadCredentials;
-        }
-        ErrorKind::PermissionDenied => {
-            // Likely a premium account issue
-            let error_str = format!("{:?}", err);
-            if error_str.contains("PremiumAccountRequired") {
-                return InitializationResult::InitNotPremium;
-            }
-            return InitializationResult::InitProblem {
-                description: string_from_rust(&e),
-            };
-        }
-        _ => {
-            return InitializationResult::InitProblem {
-                description: string_from_rust(&e),
-            };
-        }
+        ErrorKind::Unauthenticated => InitializationResult::InitBadCredentials,
+        _ => InitializationResult::InitProblem {
+            description: string_from_rust(&e),
+        },
     }
 }
 
