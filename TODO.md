@@ -1,10 +1,5 @@
 # TODO list
 
-* When starting up after a long period of inactivity, an expired token error is thrown by
-  spotiqueue_worker.  Of course, it should instead just refresh its token, but i guess for whatever
-  reason that's not possible.  We could worst-case just silence that error and wait for the Swift
-  app to perform the refresh?
-
 ----------
 
 These items are from..  long ago.  Might not be relevant any more.
