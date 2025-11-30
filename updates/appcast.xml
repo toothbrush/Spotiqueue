@@ -130,5 +130,19 @@
             <sparkle:minimumSystemVersion>10.15</sparkle:minimumSystemVersion>
             <enclosure url="https://github.com/toothbrush/Spotiqueue/releases/download/v2.9.0/Spotiqueue-v2.9.0.zip" sparkle:version="1247" sparkle:shortVersionString="2.9.0" length="24107383" type="application/octet-stream" sparkle:edSignature="VV4ihQd3Dsx2gNqHogs28puyx82w3yxBn2E9iHwkQmLZJn6gIOPxTkztHges1ekUEytn4Rhkkcet+EdvIWTTDw=="/>
         </item>
+        <item>
+            <title>2.10.0</title>
+            <pubDate>Sun, 30 Nov 2025 21:48:29 +0930</pubDate>
+            <description><![CDATA[
+            <h2>Updates:</h2>
+            <ul>
+            <li>Update to latest librespot, migrate to OAuth instead of username/password.</li>
+            <li>Improved multiselect behaviour, as well as smarter selection preserving in search results pane.</li>
+            <li>Immediately respond to new search command if another search is in progress.</li>
+            </ul>
+            ]]></description>
+            <sparkle:minimumSystemVersion>10.15</sparkle:minimumSystemVersion>
+            <enclosure url="https://raw.githubusercontent.com/toothbrush/Spotiqueue/main/updates/Spotiqueue-v2.10.0.zip" sparkle:version="1271" sparkle:shortVersionString="2.10.0" length="33602614" type="application/octet-stream" sparkle:edSignature="Vsy1pCguAtSP+FEh0VgUFIIMHx5IQWEUi304y4uAUYrAlrCEWkHU3QkilhU1fbu4/e4BkMICtQewMk7YkmIXDw=="/>
+        </item>
     </channel>
 </rss>
