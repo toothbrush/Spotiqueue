@@ -18,10 +18,6 @@ These items are from..  long ago.  Might not be relevant any more.
 
 * Add all features to app menus for discoverability.
 
-* When moving tracks in queue consider scrolling such that there's a
-  3-4 track "buffer" of not-selected tracks between the selected block
-  and the edge of the view.
-
 * Get Xcode to build my dependencies from source so we can once and for all squash the warnings
   about `MACOS_DEPLOYMENT_TARGET`, etc., as well as the unmitigated disaster which is the
   libraries-from-Homebrew hassle.

@@ -21,6 +21,8 @@ rustup target install aarch64-apple-darwin
 make -C vendor all
 ```
 
+Don't forget the `make all` bit in `vendor/`, which sets up our crazy libraries correctly!
+
 ## More detail
 
 ### Hand-creating `libguile` Universal binary from Homebrew

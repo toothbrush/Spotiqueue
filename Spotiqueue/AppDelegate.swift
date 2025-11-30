@@ -213,6 +213,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     private var cancellables: Set<AnyCancellable> = []
+    private var searchCancellables: Set<AnyCancellable> = []
+
+    func cancelOngoingSearch() {
+        self.searchCancellables.forEach { $0.cancel() }
+        self.searchCancellables.removeAll()
+        self.runningTasks = 0
+        self.isSearching = false
+    }
 
     // Hooking up the Array Controller it was helpful to read https://swiftrien.blogspot.com/2015/11/swift-example-binding-nstableview-to.html
     // I also had to follow advice here https://stackoverflow.com/questions/46756535/xcode-cannot-resolve-the-entered-path-when-binding-control-in-xib-file because apparently in newer Swift, @objc dynamic isn't implied.
@@ -283,6 +291,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func restore_previous_track_and_position() {
+        // Don't try to restore if we're not authorized or worker isn't initialized
+        guard self.spotify.isAuthorized, self.workerInitialized else {
+            logger.info("Skipping playback restore: not authorized or worker not initialized")
+            return
+        }
         // Default to restore playback, unless user has specifically told us not to.
         guard !UserDefaults.standard.bool(forKey: "skip_restore_playback") else {
             return
@@ -411,8 +424,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 self.searchTableView.scrollRowToVisible(self.searchTableView.selectedRow)
                 self.window.makeFirstResponder(self.searchTableView)
             } else {
-                self.cancellables.forEach { $0.cancel() }
-                self.isSearching = false
+                self.cancelOngoingSearch()
             }
         } else if flags.isEmpty,
                   event.keyCode == kVK_Tab,
@@ -547,9 +559,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func retrieveAllSavedTracks() {
-        guard !self.isSearching else {
-            return
-        }
+        self.cancelOngoingSearch()
         self.isSearching = true
 
         self.searchResults = []
@@ -573,15 +583,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                       }
                       self.searchTableView.selectRow(row: 0)
                   })
-            .store(in: &self.cancellables)
+            .store(in: &self.searchCancellables)
 
         self.window.makeFirstResponder(self.searchTableView)
     }
 
     func retrieveAllPlaylists() {
-        guard !self.isSearching else {
-            return
-        }
+        self.cancelOngoingSearch()
         self.isSearching = true
 
         self.searchResults = []
@@ -605,17 +613,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                       }
                       self.searchTableView.selectRow(row: 0)
                   })
-            .store(in: &self.cancellables)
+            .store(in: &self.searchCancellables)
 
         self.window.makeFirstResponder(self.searchTableView)
     }
 
     func browseDetails(for row: RBSpotifyItem, consideringHistory: Bool = true) {
-        guard !self.isSearching else {
-            return
-        }
+        self.cancelOngoingSearch()
         self.isSearching = true
         self.searchResults = []
+        self.searchTableView.deselectAll(nil)
         self.filterResultsField.clearFilter()
         self.window.makeFirstResponder(self.searchTableView)
 
@@ -668,7 +675,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             return
         }
 
-        self.spotify.api.playlistItems(playlist_uri)
+        let cancellable = self.spotify.api.playlistItems(playlist_uri)
             .extendPagesConcurrently(self.spotify.api)
             .collectAndSortByOffset()
             .receive(on: RunLoop.main)
@@ -694,7 +701,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                                         at: at_the_top ? 0 : endIndex,
                                         and_then_advance: and_then_advance)
                   })
-            .store(in: &self.cancellables)
+
+        if target == .Search {
+            cancellable.store(in: &self.searchCancellables)
+        } else {
+            cancellable.store(in: &self.cancellables)
+        }
     }
 
     func insertTracks(newRows: [RBSpotifyItem],
@@ -713,6 +725,23 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         if and_then_advance {
             _ = self.playNextQueuedTrack(autoplay: true, position_ms: .zero)
+        }
+    }
+
+    func preservingSearchSelection(_ operation: () -> Void) {
+        let selectedURI = (searchResultsArrayController.selectedObjects.first as? RBSpotifyItem)?.spotify_uri
+        let originallySelectedRow = self.searchTableView.selectedRow
+
+        operation()
+
+        // if nothing or first row was selected, keep that.  However if the user had already scrolled around in the results, keep their selection.
+        if originallySelectedRow <= 0 {
+            self.searchTableView.selectRow(row: 0)
+        } else if let uri = selectedURI,
+                  let arranged = searchResultsArrayController.arrangedObjects as? [RBSpotifyItem],
+                  let idx = arranged.firstIndex(where: { $0.spotify_uri == uri })
+        {
+            self.searchTableView.selectRow(row: idx)
         }
     }
 
@@ -750,16 +779,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 }
             },
             receiveValue: { tracksPage in
-                let simplifiedTracks = tracksPage.items
-                // create a new array of table rows from the page of simplified tracks
-                let newTableRows = simplifiedTracks.map { t in
-                    RBSpotifyItem(track: t, album: album, artist: t.artists!.first!)
+                self.preservingSearchSelection {
+                    let simplifiedTracks = tracksPage.items
+                    let newTableRows = simplifiedTracks.map { t in
+                        RBSpotifyItem(track: t, album: album, artist: t.artists!.first!)
+                    }
+                    self.searchResults.append(contentsOf: newTableRows)
                 }
-                // append the new table rows to the full array
-                self.searchResults.append(contentsOf: newTableRows)
             }
         )
-        .store(in: &self.cancellables)
+        .store(in: &self.searchCancellables)
     }
 
     var runningTasks: Int = 0 {
@@ -796,7 +825,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                     albumsReceived += albums
                 }
             )
-            .store(in: &self.cancellables)
+            .store(in: &self.searchCancellables)
 
         dispatchGroup.notify(queue: .main) {
             self.runningTasks = albumsReceived.count
@@ -814,34 +843,30 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                               }
                           },
                           receiveValue: { tracksPage in
-                              let simplifiedTracks = tracksPage.items
-                              // create a new array of table rows from the page of simplified tracks
-                              let newTableRows = simplifiedTracks.map { t in
-                                  RBSpotifyItem(track: t, album: album, artist: artist)
+                              self.preservingSearchSelection {
+                                  let simplifiedTracks = tracksPage.items
+                                  let newTableRows = simplifiedTracks.map { t in
+                                      RBSpotifyItem(track: t, album: album, artist: artist)
+                                  }
+                                  self.searchResults.append(contentsOf: newTableRows)
                               }
-                              // append the new table rows to the full array
-                              self.searchResults.append(contentsOf: newTableRows)
-                              // after finishing we want the cursor at the top. however, the "streaming" results means some newer albums might have showed up later, pushing your selection down.
-                              self.searchTableView.selectRow(row: 0)
                           })
-                    .store(in: &self.cancellables)
+                    .store(in: &self.searchCancellables)
             }
         }
     }
 
     @IBAction func search(_ sender: NSSearchField) {
-        guard !self.isSearching else {
-            return
-        }
-
         let searchString = self.searchFieldCell.stringValue
         if searchString.isEmpty {
             return
         }
+        self.cancelOngoingSearch()
         self.isSearching = true
         logger.info("Searching for \"\(searchString)\"...")
 
         self.searchResults = []
+        self.searchTableView.deselectAll(nil)
         self.filterResultsField.clearFilter()
         self.searchHistory.append(.Freetext(searchString))
 
@@ -864,16 +889,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                     }
                 },
                 receiveValue: { [self] searchResultsReturn in
-                    for result in searchResultsReturn.tracks?.items ?? [] {
-                        self.searchResults.append(RBSpotifyItem(track: result))
+                    self.preservingSearchSelection {
+                        for result in searchResultsReturn.tracks?.items ?? [] {
+                            self.searchResults.append(RBSpotifyItem(track: result))
+                        }
+                        logger.info("[query \(i)] Received \(self.searchResults.count) tracks")
+                        self.searchResultsArrayController.sortDescriptors = RBSpotifyItem.trackSortDescriptors
+                        self.searchResultsArrayController.rearrangeObjects()
                     }
-                    logger.info("[query \(i)] Received \(self.searchResults.count) tracks")
-                    self.searchResultsArrayController.sortDescriptors = RBSpotifyItem.trackSortDescriptors
-                    self.searchResultsArrayController.rearrangeObjects()
-                    self.searchTableView.selectRow(row: 0)
                 }
             )
-            .store(in: &self.cancellables)
+            .store(in: &self.searchCancellables)
         }
         self.window.makeFirstResponder(self.searchTableView)
     }

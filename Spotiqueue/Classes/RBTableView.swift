@@ -285,4 +285,27 @@ class RBTableView: NSTableView {
             }
         }
     }
+
+    // MARK: - Contiguous selection enforcement
+
+    override func selectRowIndexes(_ indexes: IndexSet, byExtendingSelection extend: Bool) {
+        let finalIndexes: IndexSet
+        if extend, !indexes.isEmpty, !selectedRowIndexes.isEmpty {
+            // Extending selection: make it contiguous from current to new
+            let allIndexes = selectedRowIndexes.union(indexes)
+            if let first = allIndexes.first, let last = allIndexes.last {
+                finalIndexes = IndexSet(integersIn: first...last)
+            } else {
+                finalIndexes = indexes
+            }
+        } else {
+            // Fresh selection: ensure it's contiguous
+            if let first = indexes.first, let last = indexes.last, indexes.count > 1 {
+                finalIndexes = IndexSet(integersIn: first...last)
+            } else {
+                finalIndexes = indexes
+            }
+        }
+        super.selectRowIndexes(finalIndexes, byExtendingSelection: false)
+    }
 }
