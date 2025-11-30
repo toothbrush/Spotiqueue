@@ -34,19 +34,21 @@ typedef struct InitializationResult {
   };
 } InitializationResult;
 
-void set_callback(void (*callback)(enum StatusUpdate status, uint32_t position_ms, uint32_t duration_ms));
+void set_callback(void (*callback)(enum StatusUpdate status, uint32_t position_ms));
 
 void spotiqueue_initialize_worker(void);
 
-struct InitializationResult spotiqueue_login_worker(const char *username_raw,
-                                                    const char *password_raw);
+/**
+ * Login with OAuth access token (new API for librespot 0.8+)
+ */
+struct InitializationResult spotiqueue_login_worker(const char *access_token_raw);
 
 bool spotiqueue_pause_playback(void);
 
-void spotiqueue_unpause_playback(void);
+bool spotiqueue_unpause_playback(void);
 
 bool spotiqueue_preload_track(const char *spotify_uri_raw);
 
 bool spotiqueue_play_track(const char *spotify_uri_raw, bool start, uint32_t position_ms);
 
-#endif /* spotiqueue_worker_h */
+#endif  /* spotiqueue_worker_h */

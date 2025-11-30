@@ -107,8 +107,10 @@ public final class RBSpotifyItem: NSObject {
         self.album_uri = album.uri!
         self.album_image = album.images?.suffix(2).first
 
-        if let releaseDate = album.releaseDate {
-            self.year = Calendar.iso8601.component(.year, from: releaseDate)
+        if let releaseDate = album.releaseDate,
+           let year = Int(releaseDate.prefix(4))
+        {
+            self.year = year
         } else {
             self.year = 0
         }

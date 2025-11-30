@@ -1,14 +1,17 @@
 use std::ffi::{CStr, CString};
 use std::os::raw::c_char;
 use std::sync::mpsc::{sync_channel, SyncSender};
+use std::sync::Arc;
 use std::thread;
 
 use librespot::core::authentication::Credentials;
 use librespot::core::config::SessionConfig;
-use librespot::core::session::{Session, SessionError};
-use librespot::core::spotify_id::SpotifyId;
+use librespot::core::session::Session;
+use librespot::core::spotify_uri::SpotifyUri;
+use librespot::core::Error;
 use librespot::playback::audio_backend;
 use librespot::playback::config::{AudioFormat, PlayerConfig};
+use librespot::playback::mixer::NoOpVolume;
 use librespot::playback::player::{Player, PlayerEvent};
 
 use once_cell::sync::OnceCell;
@@ -25,7 +28,7 @@ static STATE: OnceCell<State> = OnceCell::new();
 static CALLBACK: OnceCell<WorkerCallback> = OnceCell::new();
 
 trait New {
-    fn new(player: Player, session: Session) -> Self;
+    fn new(player: Arc<Player>, session: Session) -> Self;
 }
 
 trait SendCommand {
@@ -41,37 +44,38 @@ struct State {
 enum Command {
     Pause,
     Play {
-        track: SpotifyId,
+        track: SpotifyUri,
         start: bool,
         position_ms: u32,
     },
     Preload {
-        track: SpotifyId,
+        track: SpotifyUri,
     },
     Unpause,
 }
 
 impl New for State {
-    fn new(mut player: Player, _session: Session) -> State {
+    fn new(player: Arc<Player>, _session: Session) -> State {
         let (tx, rx) = sync_channel(0);
         let state = State { send_channel: tx };
         let mut player_event_channel = player.get_player_event_channel();
+        let player_clone = player.clone();
         thread::spawn(move || loop {
             let cmd = rx.recv().unwrap();
             debug!("Command: {:?}", cmd);
             match cmd {
-                Command::Pause => player.pause(),
+                Command::Pause => player_clone.pause(),
                 Command::Play {
                     track,
                     start,
                     position_ms,
                 } => {
-                    player.stop();
-                    player.load(track, start, position_ms);
+                    player_clone.stop();
+                    player_clone.load(track, start, position_ms);
                 }
-                Command::Preload { track } => player.preload(track),
+                Command::Preload { track } => player_clone.preload(track),
                 Command::Unpause => {
-                    player.play();
+                    player_clone.play();
                 }
             }
         });
@@ -84,34 +88,22 @@ impl New for State {
             info!("PlayerEvent ==> {:?}", event);
             match event {
                 PlayerEvent::EndOfTrack { .. } => {
-                    use_stored_callback(StatusUpdate::EndOfTrack, 0, 0);
+                    use_stored_callback(StatusUpdate::EndOfTrack, 0);
                 }
-                PlayerEvent::Paused {
-                    position_ms,
-                    duration_ms,
-                    ..
-                } => {
-                    use_stored_callback(StatusUpdate::Paused, position_ms, duration_ms);
+                PlayerEvent::Paused { position_ms, .. } => {
+                    use_stored_callback(StatusUpdate::Paused, position_ms);
                 }
-                PlayerEvent::Playing {
-                    position_ms,
-                    duration_ms,
-                    ..
-                } => {
-                    use_stored_callback(StatusUpdate::Playing, position_ms, duration_ms);
+                PlayerEvent::Playing { position_ms, .. } => {
+                    use_stored_callback(StatusUpdate::Playing, position_ms);
                 }
                 PlayerEvent::Stopped { .. } => {
-                    use_stored_callback(StatusUpdate::Stopped, 0, 0);
+                    use_stored_callback(StatusUpdate::Stopped, 0);
                 }
                 PlayerEvent::TimeToPreloadNextTrack { .. } => {
-                    use_stored_callback(StatusUpdate::TimeToPreloadNextTrack, 0, 0);
+                    use_stored_callback(StatusUpdate::TimeToPreloadNextTrack, 0);
                 }
-                PlayerEvent::Changed { .. } => {}
-                PlayerEvent::Loading { .. } => {}
-                PlayerEvent::Preloading { .. } => {}
-                PlayerEvent::Started { .. } => {}
-                PlayerEvent::Unavailable { .. } => {}
-                PlayerEvent::VolumeSet { .. } => {}
+                // All other events we don't need to handle
+                _ => {}
             }
         });
         return state;
@@ -166,114 +158,87 @@ fn string_from_rust(string: &str) -> *const c_char {
 
 #[derive(Debug)]
 pub struct WorkerCallback {
-    pub callback: extern "C" fn(status: StatusUpdate, position_ms: u32, duration_ms: u32),
+    pub callback: extern "C" fn(status: StatusUpdate, position_ms: u32),
 }
 
 // https://stackoverflow.com/questions/50188710/rust-function-that-allocates-memory-and-calls-a-c-callback-crashes
 #[no_mangle]
-pub extern "C" fn set_callback(
-    callback: extern "C" fn(status: StatusUpdate, position_ms: u32, duration_ms: u32),
-) {
+pub extern "C" fn set_callback(callback: extern "C" fn(status: StatusUpdate, position_ms: u32)) {
     CALLBACK.set(WorkerCallback { callback }).unwrap();
 }
 
-fn use_stored_callback(status: StatusUpdate, position_ms: u32, duration_ms: u32) {
+fn use_stored_callback(status: StatusUpdate, position_ms: u32) {
     let cb = CALLBACK.get().unwrap();
-    (cb.callback)(status, position_ms, duration_ms);
+    (cb.callback)(status, position_ms);
 }
 
 #[no_mangle]
 pub extern "C" fn spotiqueue_initialize_worker() {
-    Builder::new().filter_level(LevelFilter::Debug).init();
+    // Use try_init to avoid panic if logger already initialized
+    let _ = Builder::new().filter_level(LevelFilter::Debug).try_init();
     if cfg!(debug_assertions) {
         println!("I am a DEBUG build.");
     } else {
         println!("I am a RELEASE build.");
     }
 
-    RUNTIME.set(Runtime::new().unwrap()).unwrap();
+    // Use get_or_init to avoid panic if runtime already set
+    let _ = RUNTIME.set(Runtime::new().unwrap());
 }
 
+/// Login with OAuth access token (new API for librespot 0.8+)
 #[no_mangle]
-pub extern "C" fn spotiqueue_login_worker(
-    username_raw: *const c_char,
-    password_raw: *const c_char,
-) -> InitializationResult {
-    if username_raw.is_null() || password_raw.is_null() {
-        let e = "Username or password not provided correctly.";
+pub extern "C" fn spotiqueue_login_worker(access_token_raw: *const c_char) -> InitializationResult {
+    if access_token_raw.is_null() {
+        let e = "Access token not provided.";
         return InitializationResult::InitProblem {
             description: string_from_rust(e),
         };
     }
 
-    let username = c_str_to_rust_string(username_raw);
-    let password = c_str_to_rust_string(password_raw);
-
-    internal_login_worker(username, password)
+    let access_token = c_str_to_rust_string(access_token_raw);
+    internal_login_worker(access_token)
 }
 
-fn internal_login_worker(username: String, password: String) -> InitializationResult {
+fn internal_login_worker(access_token: String) -> InitializationResult {
     let session_config = SessionConfig::default();
     let player_config = PlayerConfig::default();
     let audio_format = AudioFormat::default();
 
-    let credentials = Credentials::with_password(username, password);
+    // Use OAuth access token for authentication
+    let credentials = Credentials::with_access_token(access_token);
 
     let backend = audio_backend::find(None).unwrap();
 
-    info!("Authorizing...");
+    info!("Authorizing with OAuth token...");
 
-    let session = RUNTIME
-        .get()
-        .unwrap()
-        .block_on(async { Session::connect(session_config, credentials, None).await });
+    // Session::new and connect must both be called within the Tokio runtime context
+    let connect_result = RUNTIME.get().unwrap().block_on(async {
+        let session = Session::new(session_config, None);
+        match session.connect(credentials, false).await {
+            Ok(()) => Ok(session),
+            Err(e) => Err(e),
+        }
+    });
 
-    let session = match session {
-        Ok(sess) => sess,
-        Err(err) => match err {
-            SessionError::AuthenticationError(err) => {
-                let e: &str =
-                    &format!("spotiqueue_worker: Authentication error: {}", err).to_owned();
-                error!("{}", e);
-
-                // Righto, this is fairly horrific.  The librespot library doesn't let us directly
-                // import the enum contained in AuthenticationError, LoginFailed.  They only seem to
-                // let use their prefab error strings, see
-                // https://github.com/librespot-org/librespot/blob/041f084d7f5f3e0731b712064f61105b509e5154/core/src/connection/mod.rs#L24-L39.
-                //
-                // Anyway, this is good enough, for now - we just want to be able to give the user a
-                // reasonable error message if it turns out they try to use a free account.  I need
-                // to go take a shower.  It might well be that i just don't understand Rust well
-                // enough to actually be able to get ahold of the true error codes, but oh well!
-
-                let the_error: String = format!("{:?}", err);
-                if the_error.contains("BadCredentials") {
-                    return InitializationResult::InitBadCredentials;
-                } else if the_error.contains("PremiumAccountRequired") {
-                    return InitializationResult::InitNotPremium;
-                } else {
-                    return InitializationResult::InitProblem {
-                        description: string_from_rust(e),
-                    };
-                }
-            }
-            _ => {
-                let e: &str = &format!(
-                    "spotiqueue_worker: Unknown error in Session::connect(). {}",
-                    err
-                )
-                .to_owned();
-                error!("{}", e);
-                return InitializationResult::InitProblem {
-                    description: string_from_rust(e),
-                };
-            }
-        },
+    let session = match connect_result {
+        Ok(session) => {
+            info!("Session connected successfully.");
+            session
+        }
+        Err(err) => {
+            return handle_connection_error(err);
+        }
     };
 
-    let (player, _) = Player::new(player_config, session.clone(), None, move || {
-        backend(None, audio_format)
-    });
+    // Create player with the new API
+    let player = Player::new(
+        player_config,
+        session.clone(),
+        Box::new(NoOpVolume),
+        move || backend(None, audio_format),
+    );
+
     STATE.set(State::new(player, session)).unwrap();
 
     info!("Authorized.");
@@ -281,17 +246,64 @@ fn internal_login_worker(username: String, password: String) -> InitializationRe
     return InitializationResult::InitOkay;
 }
 
-#[no_mangle]
-pub extern "C" fn spotiqueue_pause_playback() -> bool {
-    let state = STATE.get().unwrap();
-    state.send_command(Command::Pause);
-    return true;
+fn handle_connection_error(err: Error) -> InitializationResult {
+    use librespot::core::error::ErrorKind;
+
+    let e: String = format!("spotiqueue_worker: Connection error: {}", err);
+    error!("{}", e);
+
+    // Righto, this is fairly horrific.  The librespot library doesn't let us directly import the
+    // enum contained in AuthenticationError, LoginFailed.  They only seem to let use their prefab
+    // error strings, see
+    // https://github.com/librespot-org/librespot/blob/041f084d7f5f3e0731b712064f61105b509e5154/core/src/connection/mod.rs#L24-L39.
+    //
+    // Anyway, this is good enough, for now - we just want to be able to give the user a
+    // reasonable error message if it turns out they try to use a free account.  I need
+    // to go take a shower.  It might well be that i just don't understand Rust well
+    // enough to actually be able to get ahold of the true error codes, but oh well!
+    let error_str = format!("{:?}", err);
+    if error_str.contains("BadCredentials") {
+        return InitializationResult::InitBadCredentials;
+    }
+    if error_str.contains("PremiumAccountRequired") {
+        return InitializationResult::InitNotPremium;
+    }
+
+    // Fall back based on error kind
+    match err.kind {
+        ErrorKind::Unauthenticated => InitializationResult::InitBadCredentials,
+        _ => InitializationResult::InitProblem {
+            description: string_from_rust(&e),
+        },
+    }
 }
 
 #[no_mangle]
-pub extern "C" fn spotiqueue_unpause_playback() {
-    let state = STATE.get().unwrap();
-    state.send_command(Command::Unpause);
+pub extern "C" fn spotiqueue_pause_playback() -> bool {
+    match STATE.get() {
+        Some(state) => {
+            state.send_command(Command::Pause);
+            true
+        }
+        None => {
+            error!("Cannot pause: worker not initialized");
+            false
+        }
+    }
+}
+
+#[no_mangle]
+pub extern "C" fn spotiqueue_unpause_playback() -> bool {
+    match STATE.get() {
+        Some(state) => {
+            state.send_command(Command::Unpause);
+            true
+        }
+        None => {
+            error!("Cannot unpause: worker not initialized");
+            false
+        }
+    }
 }
 
 #[no_mangle]
@@ -301,17 +313,24 @@ pub extern "C" fn spotiqueue_preload_track(spotify_uri_raw: *const c_char) -> bo
 }
 
 fn internal_preload_track(spotify_uri: String) -> bool {
-    match track_id_from_spotify_uri(&spotify_uri) {
+    let state = match STATE.get() {
+        Some(s) => s,
+        None => {
+            error!("Cannot preload: worker not initialized");
+            return false;
+        }
+    };
+
+    match track_uri_from_spotify_uri(&spotify_uri) {
         Some(track) => {
-            let state = STATE.get().unwrap();
             state.send_command(Command::Preload { track: track });
+            true
         }
         None => {
             error!("Looks like that isn't a Spotify track URI!");
-            return false;
+            false
         }
     }
-    return true;
 }
 
 #[no_mangle]
@@ -327,33 +346,47 @@ pub extern "C" fn spotiqueue_play_track(
 fn internal_play_track(spotify_uri: String, start: bool, position_ms: u32) -> bool {
     info!("Trying to play {}...", spotify_uri);
 
-    match track_id_from_spotify_uri(&spotify_uri) {
+    let state = match STATE.get() {
+        Some(s) => s,
+        None => {
+            error!("Cannot play: worker not initialized");
+            return false;
+        }
+    };
+
+    match track_uri_from_spotify_uri(&spotify_uri) {
         Some(track) => {
-            let state = STATE.get().unwrap();
             state.send_command(Command::Play {
                 track: track,
                 start: start,
                 position_ms: position_ms,
             });
+            true
         }
         None => {
             error!("Looks like that isn't a Spotify track URI!");
-            return false;
+            false
         }
     }
-    return true;
 }
 
-fn track_id_from_spotify_uri(uri: &str) -> Option<SpotifyId> {
+fn track_uri_from_spotify_uri(uri: &str) -> Option<SpotifyUri> {
     // e.g., spotify:track:7lmeHLHBe4nmXzuXc0HDjk
-    let components: Vec<&str> = uri.split(":").collect();
-
-    if components.len() == 3 {
-        if components[1] == "track" {
-            let track_id = SpotifyId::from_base62(components[2]).unwrap();
-            return Some(track_id);
+    // Use the new SpotifyUri::from_uri parser
+    match SpotifyUri::from_uri(uri) {
+        Ok(spotify_uri) => {
+            // Only accept track URIs for playback
+            match &spotify_uri {
+                SpotifyUri::Track { .. } => Some(spotify_uri),
+                _ => {
+                    error!("URI is not a track: {}", uri);
+                    None
+                }
+            }
+        }
+        Err(e) => {
+            error!("Failed to parse Spotify URI '{}': {}", uri, e);
+            None
         }
     }
-
-    return None;
 }
