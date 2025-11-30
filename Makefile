@@ -65,7 +65,7 @@ Sparkle-1.27.1:
 
 .PHONY: make-zip
 make-zip: VERSION = $(shell /usr/libexec/PlistBuddy -c "Print CFBundleShortVersionString" "$(APP_PATH)/Contents/Info.plist")
-make-zip: sign Sparkle-1.27.1
+make-zip: Sparkle-1.27.1
 	ditto -c -k --keepParent $(APP_PATH) $(ZIP_PATH)
 	cp -v $(ZIP_PATH) updates/Spotiqueue-v$(VERSION).zip
 	./Sparkle-1.27.1/bin/generate_appcast updates/
