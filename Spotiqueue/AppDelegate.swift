@@ -929,6 +929,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             return
         }
 
+        guard !self.spotify.api.authorizationManager.accessTokenIsExpired() else {
+            logger.info("Access token expired - let's wait for SpotifyAPI to refresh for us.")
+            return
+        }
+        
         logger.info("Initializing worker with OAuth token...")
 
         let result = spotiqueue_login_worker(accessToken)

@@ -577,7 +577,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1247;
+				CURRENT_PROJECT_VERSION = 1270;
 				DEVELOPMENT_TEAM = QG72S9L5L3;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -595,7 +595,7 @@
 					"@executable_path/../Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MARKETING_VERSION = 2.9.0;
+				MARKETING_VERSION = 2.10.0;
 				OTHER_CFLAGS = "-D_THREAD_SAFE";
 				OTHER_LDFLAGS = (
 					"$(SRCROOT)/vendor/lib/libgc.a",
@@ -621,7 +621,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1247;
+				CURRENT_PROJECT_VERSION = 1270;
 				DEVELOPMENT_TEAM = QG72S9L5L3;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -639,7 +639,7 @@
 					"@executable_path/../Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MARKETING_VERSION = 2.9.0;
+				MARKETING_VERSION = 2.10.0;
 				OTHER_CFLAGS = "-D_THREAD_SAFE";
 				OTHER_LDFLAGS = (
 					"$(SRCROOT)/vendor/lib/libgc.a",
