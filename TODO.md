@@ -1,5 +1,11 @@
 # TODO list
 
+----------
+
+These items are from..  long ago.  Might not be relevant any more.
+
+----------
+
 * Figure out how to build for `arm64` & `x86_64`, which means.. figuring that out for `libguile` and
   `spotiqueue_worker`, too. :(
 

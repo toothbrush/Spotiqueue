@@ -1,3 +1,4 @@
+# You probably just want the 'all' target.
 .PHONY: all
 all: unzip verify headers
 

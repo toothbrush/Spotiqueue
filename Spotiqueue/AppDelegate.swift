@@ -24,7 +24,7 @@ let logger = SXLogger(endpoints: [
 ])
 
 @_cdecl("player_update_hook")
-public func player_update_hook(hook: StatusUpdate, position_ms: UInt32, duration_ms: UInt32) {
+public func player_update_hook(hook: StatusUpdate, position_ms: UInt32) {
     logger.info("Hook spotiqueue-worker hook ==> \(hook.rawValue)")
     switch hook {
         case EndOfTrack:
@@ -42,14 +42,14 @@ public func player_update_hook(hook: StatusUpdate, position_ms: UInt32, duration
         case Paused:
             DispatchQueue.main.async {
                 AppDelegate.appDelegate().playerState = .Paused
-                AppDelegate.appDelegate().position = Double(position_ms/1000)
-                AppDelegate.appDelegate().duration = Double(duration_ms/1000)
+                AppDelegate.appDelegate().position = Double(position_ms / 1000)
+                AppDelegate.appDelegate().duration = AppDelegate.appDelegate().currentTrack?.durationSeconds ?? 0
             }
         case Playing:
             DispatchQueue.main.async {
                 AppDelegate.appDelegate().playerState = .Playing
-                AppDelegate.appDelegate().position = Double(position_ms/1000)
-                AppDelegate.appDelegate().duration = Double(duration_ms/1000)
+                AppDelegate.appDelegate().position = Double(position_ms / 1000)
+                AppDelegate.appDelegate().duration = AppDelegate.appDelegate().currentTrack?.durationSeconds ?? 0
             }
         case Stopped:
             DispatchQueue.main.async {
@@ -138,6 +138,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
+    var workerInitialized: Bool = false
     var loginWindow: RBLoginWindow?
 
     let sparkle = SUUpdater(for: Bundle.main)
@@ -176,7 +177,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                                                 round(remaining).positionalTime,
                                                 round(self.duration).positionalTime)
         self.progressBar.isHidden = self.duration == 0
-        self.progressBar.doubleValue = 100 * self.position/self.duration
+        self.progressBar.doubleValue = 100 * self.position / self.duration
 
         // If you're surprised to see us also repeatedly setting the titles and so on, this is because if you're super quick (i.e., you're a Scheme function) and you enqueue something by Spotify URI and hit "play" on it before the "hydrate" call had a chance to populate all the track's details, you'd end up with a status display showing only the Spotify URI, no image, etc.  That's crap.  So here's a cheap (and fast enough) hack to keep that stuff up-to-date.
         if let currentTrack {
@@ -218,19 +219,27 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     // Here is another extensive howto around table views and such https://www.raywenderlich.com/921-cocoa-bindings-on-macos
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
-        self.loginWindow = RBLoginWindow(windowNibName: "RBLoginWindow")
-        if let window = loginWindow?.window {
-            self.window?.beginSheet(window, completionHandler: { [self] _ in
-                self.initialiseSpotifyWebAPI()
-                self.loginWindow = nil
-            })
-            self.loginWindow?.startLoginRoutine()
+        // Initialize the Rust worker runtime
+        spotiqueue_initialize_worker()
+        set_callback(player_update_hook(hook: position_ms:))
+
+        // Subscribe to authorization changes to initialize the worker when OAuth completes
+        self.spotify.$isAuthorized
+            .receive(on: RunLoop.main)
+            .sink { [weak self] isAuthorized in
+                if isAuthorized {
+                    self?.initializeWorkerWithOAuth()
+                }
+            }
+            .store(in: &self.cancellables)
+
+        // Check if already authorized, otherwise show login window
+        if self.spotify.isAuthorized {
+            self.initializeWorkerWithOAuth()
         } else {
-            // Mind you, this will be nil if AppMover moves the executable away before we have had a chance to load the NIB.  Which is still a file...
-            logger.critical("Something very weird - modal.window is nil!")
-            return
+            // Show login window instead of directly opening browser
+            self.showLoginWindow()
         }
-        set_callback(player_update_hook(hook: position_ms: duration_ms:))
         NSEvent.addLocalMonitorForEvents(matching: [.keyDown /* , .systemDefined */ ], handler: self.localKeyShortcuts(event:))
 
         // Now that the UI is ready, find and load a user's config
@@ -510,9 +519,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                             }
                         case .finished:
                             logger.info("Successfully received tokens from Spotify.")
+                            self.dismissLoginWindow()
                             let alert = NSAlert()
                             alert.messageText = "Authorised"
-                            alert.informativeText = "Successfully authorised with Spotify.  You can safely close the web browser window."
+                            let textField = NSTextField(wrappingLabelWithString: "Successfully authorised with Spotify.\nYou can safely close the web browser window.")
+                            textField.alignment = .center
+                            alert.accessoryView = textField
                             alert.addButton(withTitle: "OK")
                             alert.runModal()
                     }
@@ -866,9 +878,77 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         self.window.makeFirstResponder(self.searchTableView)
     }
 
-    func initialiseSpotifyWebAPI() {
-        if !self.spotify.isAuthorized {
-            self.spotify.authorize()
+    /// Initialize the Rust worker with OAuth access token from SpotifyWebAPI
+    func initializeWorkerWithOAuth() {
+        // Avoid re-initialization
+        guard !self.workerInitialized else {
+            logger.info("Worker already initialized, skipping")
+            return
+        }
+
+        guard let accessToken = self.spotify.getAccessToken() else {
+            logger.error("No access token available from SpotifyWebAPI")
+            let alert = NSAlert()
+            alert.messageText = "Authentication Error"
+            alert.informativeText = "Could not get access token. Please try authorizing again."
+            alert.alertStyle = .critical
+            alert.addButton(withTitle: "Retry")
+            alert.addButton(withTitle: "Quit")
+            let response = alert.runModal()
+            if response == .alertFirstButtonReturn {
+                self.showLoginWindow()
+            } else {
+                NSApp.terminate(self)
+            }
+            return
+        }
+
+        logger.info("Initializing worker with OAuth token...")
+
+        let result = spotiqueue_login_worker(accessToken)
+        switch result.tag {
+        case InitOkay:
+            logger.info("Worker initialized successfully with OAuth")
+            self.workerInitialized = true
+            // Now that worker is ready, try to restore previous playback
+            self.restore_previous_track_and_position()
+        case InitBadCredentials:
+            logger.error("Bad credentials - token may be invalid or expired")
+            self.showWorkerError(message: "Authentication failed. The access token may be invalid or expired. Try logging out and back in.")
+        case InitNotPremium:
+            logger.error("Premium account required")
+            self.showWorkerError(message: "Spotify Premium is required to use Spotiqueue.")
+        case InitProblem:
+            let problem = String(cString: result.init_problem.description)
+            logger.error("Worker init problem: \(problem)")
+            self.showWorkerError(message: problem)
+        default:
+            logger.error("Unknown worker initialization result")
+            self.showWorkerError(message: "Unknown error initializing playback worker.")
+        }
+    }
+
+    func showWorkerError(message: String) {
+        let alert = NSAlert()
+        alert.messageText = "Playback Error"
+        alert.informativeText = message
+        alert.alertStyle = .critical
+        alert.addButton(withTitle: "OK")
+        alert.runModal()
+    }
+
+    func showLoginWindow() {
+        self.loginWindow = RBLoginWindow(windowNibName: "RBLoginWindow")
+        if let sheet = loginWindow?.window {
+            self.window?.beginSheet(sheet, completionHandler: { [self] _ in
+                self.loginWindow = nil
+            })
+        }
+    }
+
+    func dismissLoginWindow() {
+        if let sheet = self.loginWindow?.window {
+            self.window?.endSheet(sheet)
         }
     }
 
