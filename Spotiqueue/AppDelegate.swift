@@ -318,7 +318,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                     AppDelegate.appDelegate().runningTasks -= 1
                     self.playTrack(spotify_item: stub_item, autoplay: false, position_ms: previous_position_ms)
                     self.duration = stub_item.durationSeconds
-                    self.position = Double(previous_position_ms/1000)
+                    self.position = Double(previous_position_ms / 1000)
                     self.updateDurationDisplay()
                 },
                 receiveValue: { tracks in

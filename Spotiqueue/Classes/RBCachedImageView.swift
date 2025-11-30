@@ -16,10 +16,10 @@ class RBCachedImageView: NSImageView {
 
     // https://stackoverflow.com/questions/37018916/swift-async-load-image
     func imageFromServerURL(_ URLString: String, placeHolder: NSImage?) {
-        guard currentURL ?? "" != URLString else {
+        guard self.currentURL ?? "" != URLString else {
             return
         }
-        currentURL = URLString
+        self.currentURL = URLString
 
         image = nil
         // In case URLString has a space:

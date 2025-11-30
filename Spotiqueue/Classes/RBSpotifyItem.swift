@@ -1,5 +1,5 @@
 //
-//  SpotifyTrack.swift
+//  RBSpotifyItem.swift
 //  Spotiqueue
 //
 //  Created by Paul on 18/5/21.

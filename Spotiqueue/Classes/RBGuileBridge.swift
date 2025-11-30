@@ -261,7 +261,7 @@ public func queue_set_tracks(tracks: SCM) -> SCM {
         return true
     }
 
-    public static func load_user_initscm_if_present() {
+    static func load_user_initscm_if_present() {
         // Now that the UI is ready, find and load a user's config in ~/.config/spotiqueue/init.scm, if it exists.
         let home = NSHomeDirectory()
         let url = NSURL(fileURLWithPath: home)

@@ -1,5 +1,5 @@
 //
-//  Secrets.swift
+//  RBSecrets.swift
 //  Spotiqueue
 //
 //  Created by Paul on 18/5/21.
