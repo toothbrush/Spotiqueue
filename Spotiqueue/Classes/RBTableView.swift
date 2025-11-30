@@ -1,5 +1,5 @@
 //
-//  RBSearchTableView.swift
+//  RBTableView.swift
 //  Spotiqueue
 //
 //  Created by Paul on 20/5/21.
@@ -161,11 +161,11 @@ class RBTableView: NSTableView {
         } else if event.charactersIgnoringModifiers == "u",
                   flags == [.control]
         {
-            self.selectRow(row: selectedRow - self.nbVisibleRows()/2 + 1)
+            self.selectRow(row: selectedRow - self.nbVisibleRows() / 2 + 1)
         } else if event.charactersIgnoringModifiers == "d",
                   flags == [.control]
         {
-            self.selectRow(row: selectedRow + self.nbVisibleRows()/2 - 1)
+            self.selectRow(row: selectedRow + self.nbVisibleRows() / 2 - 1)
         } else {
             super.keyDown(with: event)
         }
@@ -174,7 +174,7 @@ class RBTableView: NSTableView {
     // return the number of visible rows
     func nbVisibleRows() -> Int {
         // minus 1, because of header row
-        Int(superview!.frame.size.height/rowHeight) - 1
+        Int(superview!.frame.size.height / rowHeight) - 1
     }
 
     override func resignFirstResponder() -> Bool {
@@ -183,8 +183,8 @@ class RBTableView: NSTableView {
     }
 
     override func becomeFirstResponder() -> Bool {
-        self.backgroundColor = NSColor(srgbRed: 187.0/255.0,
-                                       green: 202.0/255.0,
+        self.backgroundColor = NSColor(srgbRed: 187.0 / 255.0,
+                                       green: 202.0 / 255.0,
                                        blue: 1.0,
                                        alpha: 0.4)
         return super.becomeFirstResponder()
