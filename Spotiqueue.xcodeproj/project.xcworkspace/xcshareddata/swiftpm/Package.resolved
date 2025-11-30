@@ -1,4 +1,5 @@
 {
+  "originHash" : "8a8dbaf9ac133c9cb175ffefbf0eb06403c5e0a14b3d0115a265b4ef349457c4",
   "pins" : [
     {
       "identity" : "appmover",
@@ -41,7 +42,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Peter-Schorn/SpotifyAPI.git",
       "state" : {
-        "revision" : "e814a98f7d292ca7a05b52d524607fde1d1072c6"
+        "revision" : "391af49951fa2a854f63bde1e6f6726ba2763da7",
+        "version" : "4.0.2"
       }
     },
     {
@@ -66,10 +68,10 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-log.git",
       "state" : {
-        "revision" : "e97a6fcb1ab07462881ac165fdbb37f067e205d5",
-        "version" : "1.5.4"
+        "revision" : "ce592ae52f982c847a4efc0dd881cc9eb32d29f2",
+        "version" : "1.6.4"
       }
     }
   ],
-  "version" : 2
+  "version" : 3
 }
