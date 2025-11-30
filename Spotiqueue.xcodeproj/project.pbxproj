@@ -595,7 +595,7 @@
 					"@executable_path/../Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MARKETING_VERSION = 2.9.0;
+				MARKETING_VERSION = 2.10.0;
 				OTHER_CFLAGS = "-D_THREAD_SAFE";
 				OTHER_LDFLAGS = (
 					"$(SRCROOT)/vendor/lib/libgc.a",
@@ -639,7 +639,7 @@
 					"@executable_path/../Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MARKETING_VERSION = 2.9.0;
+				MARKETING_VERSION = 2.10.0;
 				OTHER_CFLAGS = "-D_THREAD_SAFE";
 				OTHER_LDFLAGS = (
 					"$(SRCROOT)/vendor/lib/libgc.a",
