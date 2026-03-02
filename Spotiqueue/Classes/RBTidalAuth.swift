@@ -113,7 +113,7 @@ final class RBTidalAuth: ObservableObject {
             URLQueryItem(name: "response_type", value: "code"),
             URLQueryItem(name: "client_id", value: Self.clientId),
             URLQueryItem(name: "redirect_uri", value: Self.redirectURI),
-            URLQueryItem(name: "scope", value: "r_usr w_usr"),
+            URLQueryItem(name: "scope", value: "user.read playback collection.read collection.write playlists.read playlists.write search.read"),
             URLQueryItem(name: "code_challenge", value: challenge),
             URLQueryItem(name: "code_challenge_method", value: "S256"),
             URLQueryItem(name: "state", value: stateValue),
