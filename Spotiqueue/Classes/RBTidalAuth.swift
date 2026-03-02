@@ -8,6 +8,7 @@
 
 import Cocoa
 import Combine
+import CommonCrypto
 
 struct TidalTokens: Codable {
     let accessToken: String
@@ -18,13 +19,13 @@ struct TidalTokens: Codable {
 
 final class RBTidalAuth: ObservableObject {
     static let clientId = "e4eyNkuykj92jZlc"
+    static let redirectURI = "spotiqueue://callback/tidal"
 
     @Published var isAuthorized = false
-    @Published var userCode: String?
-    @Published var verificationURL: String?
 
     private var tokens: TidalTokens?
-    private var pollingTimer: Timer?
+    private var codeVerifier: String?
+    private var state: String?
 
     var accessToken: String? { tokens?.accessToken }
     var refreshToken: String? { tokens?.refreshToken }
@@ -32,6 +33,32 @@ final class RBTidalAuth: ObservableObject {
 
     init() {
         loadTokens()
+    }
+
+    // MARK: - PKCE Helpers
+
+    private static func generateRandomString(length: Int) -> String {
+        let chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._~"
+        var result = ""
+        var bytes = [UInt8](repeating: 0, count: length)
+        _ = SecRandomCopyBytes(kSecRandomDefault, length, &bytes)
+        for byte in bytes {
+            result.append(chars[chars.index(chars.startIndex, offsetBy: Int(byte) % chars.count)])
+        }
+        return result
+    }
+
+    private static func sha256Base64URL(_ input: String) -> String {
+        let data = Data(input.utf8)
+        var hash = [UInt8](repeating: 0, count: Int(CC_SHA256_DIGEST_LENGTH))
+        data.withUnsafeBytes { buffer in
+            _ = CC_SHA256(buffer.baseAddress, CC_LONG(data.count), &hash)
+        }
+        return Data(hash)
+            .base64EncodedString()
+            .replacingOccurrences(of: "+", with: "-")
+            .replacingOccurrences(of: "/", with: "_")
+            .replacingOccurrences(of: "=", with: "")
     }
 
     // MARK: - Token Persistence
@@ -65,107 +92,102 @@ final class RBTidalAuth: ObservableObject {
     func deauthorize() {
         self.tokens = nil
         self.isAuthorized = false
-        self.userCode = nil
-        self.verificationURL = nil
-        self.pollingTimer?.invalidate()
-        self.pollingTimer = nil
+        self.codeVerifier = nil
+        self.state = nil
         RBSecrets.deleteSecret(s: .tidalAuth)
         logger.info("Tidal auth deauthorized and keychain cleared")
     }
 
-    // MARK: - Device Code Flow
+    // MARK: - PKCE Authorization Code Flow
 
-    func startDeviceCodeFlow() {
-        let url = URL(string: "https://auth.tidal.com/v1/oauth2/device_authorization")!
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+    func startLogin() {
+        let verifier = Self.generateRandomString(length: 128)
+        let challenge = Self.sha256Base64URL(verifier)
+        let stateValue = Self.generateRandomString(length: 32)
 
-        let body = "client_id=\(Self.clientId)&scope=r_usr+w_usr"
-        request.httpBody = body.data(using: .utf8)
+        self.codeVerifier = verifier
+        self.state = stateValue
 
-        URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
-            guard let self = self else { return }
-            if let error = error {
-                logger.error("Device auth request failed: \(error)")
-                return
-            }
-            guard let data = data else {
-                logger.error("Device auth returned no data")
-                return
-            }
+        var components = URLComponents(string: "https://login.tidal.com/authorize")!
+        components.queryItems = [
+            URLQueryItem(name: "response_type", value: "code"),
+            URLQueryItem(name: "client_id", value: Self.clientId),
+            URLQueryItem(name: "redirect_uri", value: Self.redirectURI),
+            URLQueryItem(name: "scope", value: "r_usr w_usr"),
+            URLQueryItem(name: "code_challenge", value: challenge),
+            URLQueryItem(name: "code_challenge_method", value: "S256"),
+            URLQueryItem(name: "state", value: stateValue),
+        ]
 
-            do {
-                guard let json = try JSONSerialization.jsonObject(with: data) as? [String: Any] else {
-                    logger.error("Device auth response is not a JSON object")
-                    return
-                }
-
-                guard let deviceCode = json["deviceCode"] as? String,
-                      let userCode = json["userCode"] as? String,
-                      let verificationUri = json["verificationUri"] as? String,
-                      let interval = json["interval"] as? Int
-                else {
-                    logger.error("Device auth response missing expected fields: \(json)")
-                    return
-                }
-
-                logger.info("Tidal device code received. User code: \(userCode)")
-
-                DispatchQueue.main.async {
-                    self.userCode = userCode
-                    self.verificationURL = verificationUri
-
-                    // Open browser for the user
-                    let fullURL = "\(verificationUri)/\(userCode)"
-                    if let url = URL(string: fullURL) {
-                        NSWorkspace.shared.open(url)
-                    }
-
-                    // Start polling for token
-                    self.startPolling(deviceCode: deviceCode, interval: TimeInterval(interval))
-                }
-            } catch {
-                logger.error("Failed to parse device auth response: \(error)")
-            }
-        }.resume()
-    }
-
-    private func startPolling(deviceCode: String, interval: TimeInterval) {
-        self.pollingTimer?.invalidate()
-        let pollInterval = max(interval, 5) // At least 5 seconds between polls
-        self.pollingTimer = Timer.scheduledTimer(withTimeInterval: TimeInterval(pollInterval), repeats: true) { [weak self] timer in
-            self?.pollForToken(deviceCode: deviceCode, timer: timer)
+        guard let url = components.url else {
+            logger.error("Failed to build Tidal authorize URL")
+            return
         }
+
+        logger.info("Opening Tidal authorization URL in browser")
+        NSWorkspace.shared.open(url)
     }
 
-    private func pollForToken(deviceCode: String, timer: Timer) {
+    func handleCallback(url: URL) {
+        guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
+            logger.error("Failed to parse callback URL: \(url)")
+            return
+        }
+
+        let params = Dictionary(uniqueKeysWithValues:
+            (components.queryItems ?? []).map { ($0.name, $0.value ?? "") }
+        )
+
+        // Validate state
+        guard let returnedState = params["state"], returnedState == self.state else {
+            logger.error("Tidal callback state mismatch (CSRF protection)")
+            return
+        }
+
+        guard let code = params["code"] else {
+            let error = params["error"] ?? "unknown"
+            logger.error("Tidal callback missing authorization code. Error: \(error)")
+            return
+        }
+
+        guard let verifier = self.codeVerifier else {
+            logger.error("No code verifier available — was startLogin() called?")
+            return
+        }
+
+        // Exchange authorization code for tokens
+        exchangeCodeForTokens(code: code, codeVerifier: verifier)
+    }
+
+    private func exchangeCodeForTokens(code: String, codeVerifier: String) {
         let url = URL(string: "https://auth.tidal.com/v1/oauth2/token")!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
 
-        let body = "client_id=\(Self.clientId)&device_code=\(deviceCode)&grant_type=urn:ietf:params:oauth:grant-type:device_code&scope=r_usr+w_usr"
-        request.httpBody = body.data(using: .utf8)
+        let bodyParts = [
+            "client_id=\(Self.clientId)",
+            "grant_type=authorization_code",
+            "code=\(code)",
+            "redirect_uri=\(Self.redirectURI)",
+            "code_verifier=\(codeVerifier)",
+        ]
+        request.httpBody = bodyParts.joined(separator: "&").data(using: .utf8)
 
         URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
             guard let self = self else { return }
             if let error = error {
-                logger.error("Token poll request failed: \(error)")
+                logger.error("Token exchange request failed: \(error)")
                 return
             }
-            guard let data = data else { return }
+            guard let data = data else {
+                logger.error("Token exchange returned no data")
+                return
+            }
 
-            if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 400 {
-                // Expected: authorization_pending — keep polling
-                if let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-                   let subStatus = json["sub_status"] as? Int, subStatus == 1002
-                {
-                    logger.debug("Tidal auth: authorization pending, continuing to poll...")
-                    return
-                }
-                // Some other 400 error — log but keep polling
-                logger.warning("Tidal token poll got 400: \(String(data: data, encoding: .utf8) ?? "?")")
+            if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode != 200 {
+                let body = String(data: data, encoding: .utf8) ?? "?"
+                logger.error("Token exchange failed (HTTP \(httpResponse.statusCode)): \(body)")
                 return
             }
 
@@ -201,12 +223,10 @@ final class RBTidalAuth: ObservableObject {
                 logger.info("Tidal auth successful! userId: \(userId)")
 
                 DispatchQueue.main.async {
-                    timer.invalidate()
-                    self.pollingTimer = nil
+                    self.codeVerifier = nil
+                    self.state = nil
                     self.tokens = tokens
                     self.saveTokens(tokens)
-                    self.userCode = nil
-                    self.verificationURL = nil
                     self.isAuthorized = true
                 }
             } catch {

@@ -476,7 +476,18 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     @objc func handleURL(event: NSAppleEventDescriptor, reply: NSAppleEventDescriptor) {
-        // Tidal uses device-code flow, not URL callbacks. Stub kept for #selector compatibility.
+        guard let urlString = event.paramDescriptor(forKeyword: keyDirectObject)?.stringValue,
+              let url = URL(string: urlString)
+        else {
+            logger.warning("handleURL: could not extract URL from Apple Event")
+            return
+        }
+
+        logger.info("handleURL: received \(urlString)")
+
+        if url.path == "/tidal" {
+            self.tidalAuth.handleCallback(url: url)
+        }
     }
 
     func retrieveAllSavedTracks() {
