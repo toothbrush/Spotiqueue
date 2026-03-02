@@ -250,7 +250,7 @@ fn internal_login_worker(
     let playback = Arc::new(Mutex::new(PlaybackInfo::new()));
     let preload_cache: Arc<Mutex<HashMap<u64, Vec<u8>>>> = Arc::new(Mutex::new(HashMap::new()));
 
-    let (tx, rx) = sync_channel::<Command>(0);
+    let (tx, rx) = sync_channel::<Command>(8);
 
     // ------- Command thread -------
     // OutputStream is !Send, so it must be created inside the thread that uses it.
