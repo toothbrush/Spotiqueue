@@ -39,16 +39,24 @@ void set_callback(void (*callback)(enum StatusUpdate status, uint32_t position_m
 void spotiqueue_initialize_worker(void);
 
 /**
- * Login with OAuth access token (new API for librespot 0.8+)
+ * Login with Tidal OAuth tokens.
+ * Swift handles the device-flow UI and passes the resulting tokens here.
+ *
+ * - `client_id`: Tidal API client ID
+ * - `access_token`, `refresh_token`: OAuth tokens from the device-flow
+ * - `user_id`: Tidal user ID
  */
-struct InitializationResult spotiqueue_login_worker(const char *access_token_raw);
+struct InitializationResult spotiqueue_login_worker(const char *client_id_raw,
+                                                    const char *access_token_raw,
+                                                    const char *refresh_token_raw,
+                                                    uint64_t user_id);
 
 bool spotiqueue_pause_playback(void);
 
 bool spotiqueue_unpause_playback(void);
 
-bool spotiqueue_preload_track(const char *spotify_uri_raw);
+bool spotiqueue_play_track(const char *track_id_raw, bool start, uint32_t position_ms);
 
-bool spotiqueue_play_track(const char *spotify_uri_raw, bool start, uint32_t position_ms);
+bool spotiqueue_preload_track(const char *track_id_raw);
 
 #endif  /* spotiqueue_worker_h */
