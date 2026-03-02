@@ -206,10 +206,9 @@ final class RBTidalAuth: ObservableObject {
                 }
 
                 // Extract user ID from the nested user object
-                guard let user = json["user"] as? [String: Any],
-                      let userId = user["userId"] as? UInt64
+                guard let userId = json["user_id"] as? UInt64
                 else {
-                    logger.error("Token response missing user.userId: \(json)")
+                    logger.error("Token response missing user_id: \(json)")
                     return
                 }
 
