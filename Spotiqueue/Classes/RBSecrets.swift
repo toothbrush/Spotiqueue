@@ -12,6 +12,7 @@ import KeychainSwift
 class RBSecrets: NSObject {
     enum Secret: String {
         case authorizationManager = "spotiqueue_authorization_manager_v3"
+        case tidalAuth = "spotiqueue_tidal_auth_v1"
     }
 
     static let keychain = KeychainSwift()

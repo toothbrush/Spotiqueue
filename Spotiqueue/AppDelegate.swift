@@ -205,6 +205,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     var spotify = RBSpotifyAPI()
+    var tidalAuth = RBTidalAuth()
     @objc dynamic var currentTrack: RBSpotifyItem?
 
     @IBAction func findCurrentTrackAlbum(_ sender: Any) {
@@ -231,8 +232,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         spotiqueue_initialize_worker()
         set_callback(player_update_hook(hook: position_ms:))
 
-        // Subscribe to authorization changes to initialize the worker when OAuth completes
-        self.spotify.$isAuthorized
+        // Subscribe to Tidal authorization changes to initialize the worker when OAuth completes
+        self.tidalAuth.$isAuthorized
             .receive(on: RunLoop.main)
             .sink { [weak self] isAuthorized in
                 if isAuthorized {
@@ -242,7 +243,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             .store(in: &self.cancellables)
 
         // Check if already authorized, otherwise show login window
-        if self.spotify.isAuthorized {
+        if self.tidalAuth.isAuthorized {
             self.initializeWorkerWithOAuth()
         } else {
             // Show login window instead of directly opening browser
@@ -475,87 +476,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     @objc func handleURL(event: NSAppleEventDescriptor, reply: NSAppleEventDescriptor) {
-        if let url = event.paramDescriptor(forKeyword: keyDirectObject)?.stringValue?.removingPercentEncoding {
-            if url.hasPrefix(RBSpotifyAPI.loginCallbackURL.description) {
-                logger.info("received redirect from Spotify: '\(url)'")
-                // This property is used to display an activity indicator in
-                // `LoginView` indicating that the access and refresh tokens
-                // are being retrieved.
-                self.spotify.isRetrievingTokens = true
-
-                // Complete the authorization process by requesting the
-                // access and refresh tokens.
-                self.spotify.api.authorizationManager.requestAccessAndRefreshTokens(
-                    redirectURIWithQuery: URL(string: url)!,
-                    codeVerifier: RBSpotifyAPI.codeVerifier,
-                    // This value must be the same as the one used to create the
-                    // authorization URL. Otherwise, an error will be thrown.
-                    state: self.spotify.authorizationState
-                )
-                .receive(on: RunLoop.main)
-                .sink(receiveCompletion: { completion in
-                    // Whether the request succeeded or not, we need to remove
-                    // the activity indicator.
-                    self.spotify.isRetrievingTokens = false
-
-                    /*
-                     After the access and refresh tokens are retrieved,
-                     `SpotifyAPI.authorizationManagerDidChange` will emit a
-                     signal, causing `Spotify.handleChangesToAuthorizationManager()`
-                     to be called, which will dismiss the loginView if the app was
-                     successfully authorized by setting the
-                     @Published `Spotify.isAuthorized` property to `true`.
-
-                     The only thing we need to do here is handle the error and
-                     show it to the user if one was received.
-                     */
-                    switch completion {
-                        case .failure(let error):
-                            logger.error("couldn't retrieve access and refresh tokens:\n\(error)")
-                            if let authError = error as? SpotifyAuthorizationError,
-                               authError.accessWasDenied
-                            {
-                                logger.error("Authorisation request denied!")
-                                let alert = NSAlert()
-                                alert.messageText = "Authorisation denied!"
-                                alert.informativeText = "Authorisation request denied."
-                                alert.addButton(withTitle: "OK")
-                                alert.runModal()
-                            } else {
-                                logger.error("Couldn't authorise: \(error.localizedDescription)")
-                                let alert = NSAlert()
-                                alert.messageText = "Authorisation failed!"
-                                alert.informativeText = "Authorisation request failed: \(error.localizedDescription)"
-                                alert.addButton(withTitle: "OK")
-                                alert.runModal()
-                            }
-                        case .finished:
-                            logger.info("Successfully received tokens from Spotify.")
-                            self.dismissLoginWindow()
-                            let alert = NSAlert()
-                            alert.messageText = "Authorised"
-                            let textField = NSTextField(wrappingLabelWithString: "Successfully authorised with Spotify.\nYou can safely close the web browser window.")
-                            textField.alignment = .center
-                            alert.accessoryView = textField
-                            alert.addButton(withTitle: "OK")
-                            alert.runModal()
-                    }
-                })
-                .store(in: &self.cancellables)
-
-                // MARK: IMPORTANT: generate a new value for the state parameter
-
-                // MARK: after each authorization request. This ensures an incoming
-
-                // MARK: redirect from Spotify was the result of a request made by
-
-                // MARK: this app, and not an attacker.
-
-                self.spotify.authorizationState = String.randomURLSafe(length: 128)
-            } else {
-                logger.error("not handling URL: unexpected scheme: '\(url)'")
-            }
-        }
+        // Tidal uses device-code flow, not URL callbacks. Stub kept for #selector compatibility.
     }
 
     func retrieveAllSavedTracks() {
@@ -904,7 +825,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         self.window.makeFirstResponder(self.searchTableView)
     }
 
-    /// Initialize the Rust worker with OAuth access token from SpotifyWebAPI
+    /// Initialize the Rust worker with Tidal OAuth tokens
     func initializeWorkerWithOAuth() {
         // Avoid re-initialization
         guard !self.workerInitialized else {
@@ -912,43 +833,32 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             return
         }
 
-        guard let accessToken = self.spotify.getAccessToken() else {
-            logger.error("No access token available from SpotifyWebAPI")
-            let alert = NSAlert()
-            alert.messageText = "Authentication Error"
-            alert.informativeText = "Could not get access token. Please try authorizing again."
-            alert.alertStyle = .critical
-            alert.addButton(withTitle: "Retry")
-            alert.addButton(withTitle: "Quit")
-            let response = alert.runModal()
-            if response == .alertFirstButtonReturn {
-                self.showLoginWindow()
-            } else {
-                NSApp.terminate(self)
-            }
+        guard let accessToken = self.tidalAuth.accessToken,
+              let refreshToken = self.tidalAuth.refreshToken,
+              let userId = self.tidalAuth.userId
+        else {
+            logger.error("No Tidal tokens available")
+            self.showLoginWindow()
             return
         }
 
-        guard !self.spotify.api.authorizationManager.accessTokenIsExpired() else {
-            logger.info("Access token expired - let's wait for SpotifyAPI to refresh for us.")
-            return
-        }
-        
-        logger.info("Initializing worker with OAuth token...")
+        logger.info("Initializing worker with Tidal OAuth tokens...")
 
-        let result = spotiqueue_login_worker(accessToken)
+        let result = spotiqueue_login_worker(RBTidalAuth.clientId, accessToken, refreshToken, userId)
         switch result.tag {
         case InitOkay:
-            logger.info("Worker initialized successfully with OAuth")
+            logger.info("Worker initialized successfully with Tidal OAuth")
             self.workerInitialized = true
-            // Now that worker is ready, try to restore previous playback
-            self.restore_previous_track_and_position()
+            self.dismissLoginWindow()
+            // Hard-coded test track to prove end-to-end flow
+            spotiqueue_play_track("012345", true, 0)
         case InitBadCredentials:
-            logger.error("Bad credentials - token may be invalid or expired")
-            self.showWorkerError(message: "Authentication failed. The access token may be invalid or expired. Try logging out and back in.")
+            logger.error("Bad Tidal credentials - tokens may be invalid or expired")
+            self.tidalAuth.deauthorize()
+            self.showLoginWindow()
         case InitNotPremium:
-            logger.error("Premium account required")
-            self.showWorkerError(message: "Spotify Premium is required to use Spotiqueue.")
+            logger.error("Tidal HiFi/Premium required")
+            self.showWorkerError(message: "A Tidal subscription is required to use Spotiqueue.")
         case InitProblem:
             let problem = String(cString: result.init_problem.description)
             logger.error("Worker init problem: \(problem)")

@@ -34,6 +34,7 @@
 		DAAE2F012653EA1F00FF0344 /* SpotifyAPI in Frameworks */ = {isa = PBXBuildFile; productRef = DAAE2F002653EA1F00FF0344 /* SpotifyAPI */; };
 		DABEC90D2653534300CA3F67 /* RBSpotifyItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABEC90C2653534300CA3F67 /* RBSpotifyItem.swift */; };
 		DABEC90F26536F5800CA3F67 /* RBSecrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABEC90E26536F5800CA3F67 /* RBSecrets.swift */; };
+		DA0B3F012ED4A00000TIDAL1 /* RBTidalAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0B3F002ED4A00000TIDAL1 /* RBTidalAuth.swift */; };
 		DABEC9122653799100CA3F67 /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = DABEC9112653799100CA3F67 /* KeychainSwift */; };
 		DACA708E268EA0D5009714DC /* RBFilterField.swift in Sources */ = {isa = PBXBuildFile; fileRef = DACA708D268EA0D5009714DC /* RBFilterField.swift */; };
 		DAE1F18226534D660013704F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE1F18126534D660013704F /* AppDelegate.swift */; };
@@ -119,6 +120,7 @@
 		DAA685542ED8895800196EBB /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		DABEC90C2653534300CA3F67 /* RBSpotifyItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RBSpotifyItem.swift; sourceTree = "<group>"; };
 		DABEC90E26536F5800CA3F67 /* RBSecrets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RBSecrets.swift; sourceTree = "<group>"; };
+		DA0B3F002ED4A00000TIDAL1 /* RBTidalAuth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RBTidalAuth.swift; sourceTree = "<group>"; };
 		DACA708D268EA0D5009714DC /* RBFilterField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RBFilterField.swift; sourceTree = "<group>"; };
 		DAE1F17E26534D660013704F /* Spotiqueue.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Spotiqueue.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAE1F18126534D660013704F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -206,6 +208,7 @@
 				EC90ED33267B446F003C3C0D /* Tables */,
 				DAFAB406265D1BE90096810C /* RBCachedImageView.swift */,
 				DABEC90E26536F5800CA3F67 /* RBSecrets.swift */,
+				DA0B3F002ED4A00000TIDAL1 /* RBTidalAuth.swift */,
 				DA5AFB0D26565CD300C6C468 /* RBSpotifyAPI.swift */,
 				DABEC90C2653534300CA3F67 /* RBSpotifyItem.swift */,
 				DACA708D268EA0D5009714DC /* RBFilterField.swift */,
@@ -427,6 +430,7 @@
 				DA5AFB31265BB59900C6C468 /* CalendarExtensions.swift in Sources */,
 				DA2E8A5726EF5D95003BF91C /* DateExtensions.swift in Sources */,
 				DABEC90F26536F5800CA3F67 /* RBSecrets.swift in Sources */,
+				DA0B3F012ED4A00000TIDAL1 /* RBTidalAuth.swift in Sources */,
 				DACA708E268EA0D5009714DC /* RBFilterField.swift in Sources */,
 				DA5AFB2D265A86FD00C6C468 /* RBTableView.swift in Sources */,
 				DA4F1AA926E61BDD00952E8F /* main.m in Sources */,

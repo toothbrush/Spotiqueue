@@ -16,7 +16,7 @@
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
-        <window title="Login to Spotify" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="F0z-JX-Cv5">
+        <window title="Login to Tidal" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="F0z-JX-Cv5">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="196" y="240" width="348" height="160"/>
@@ -31,7 +31,7 @@
                             <constraint firstAttribute="width" constant="176" id="UrW-7o-FYA"/>
                             <constraint firstAttribute="height" constant="31" id="hMz-Di-Vgp"/>
                         </constraints>
-                        <textFieldCell key="cell" lineBreakMode="clipping" title="Login to Spotify" id="UKk-nX-9Rn">
+                        <textFieldCell key="cell" lineBreakMode="clipping" title="Login to Tidal" id="UKk-nX-9Rn">
                             <font key="font" textStyle="largeTitle" name=".SFNS-Regular"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -39,7 +39,7 @@
                     </textField>
                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="TLt-ll-qev">
                         <rect key="frame" x="18" y="56" width="312" height="32"/>
-                        <textFieldCell key="cell" selectable="YES" title="Click the button below to open your browser and log in with your Spotify account." id="ad6-u3-Ezj">
+                        <textFieldCell key="cell" selectable="YES" title="Click the button below to start the Tidal device login flow." id="ad6-u3-Ezj">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
