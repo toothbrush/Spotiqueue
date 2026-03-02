@@ -850,8 +850,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             logger.info("Worker initialized successfully with Tidal OAuth")
             self.workerInitialized = true
             self.dismissLoginWindow()
-            // Hard-coded test track to prove end-to-end flow
-            spotiqueue_play_track("012345", true, 0)
+            // TODO: Hard-coded test track to prove end-to-end flow
+            spotiqueue_play_track("36336301", true, 0)
         case InitBadCredentials:
             logger.error("Bad Tidal credentials - tokens may be invalid or expired")
             self.tidalAuth.deauthorize()

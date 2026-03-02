@@ -6,8 +6,8 @@
 //  Copyright © 2026 Rustling Broccoli. All rights reserved.
 //
 
+import Cocoa
 import Combine
-import Foundation
 
 struct TidalTokens: Codable {
     let accessToken: String
@@ -17,8 +17,7 @@ struct TidalTokens: Codable {
 }
 
 final class RBTidalAuth: ObservableObject {
-    // TODO: Replace with your Tidal application client ID
-    static let clientId = "YOUR_TIDAL_CLIENT_ID"
+    static let clientId = "e4eyNkuykj92jZlc"
 
     @Published var isAuthorized = false
     @Published var userCode: String?
