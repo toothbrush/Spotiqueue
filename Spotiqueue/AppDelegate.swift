@@ -25,7 +25,7 @@ let logger = SXLogger(endpoints: [
 
 @_cdecl("player_update_hook")
 public func player_update_hook(hook: StatusUpdate, position_ms: UInt32) {
-    logger.info("Hook spotiqueue-worker hook ==> \(hook.rawValue)")
+    logger.info("Hook spotiqueue-worker hook ==> \(String(cString: status_update_name(hook)))")
     switch hook {
         case EndOfTrack:
             // We can't call end_of_track to Scheme inside the async / main-thread block, because we can't be sure when it'll be run, and want to grab the current track before it's obliterated by the "stopped" signal which comes right after the EndOfTrack signal.

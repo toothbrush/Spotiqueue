@@ -32,7 +32,7 @@ static CALLBACK: OnceCell<WorkerCallback> = OnceCell::new();
 // ---------------------------------------------------------------------------
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, strum::IntoStaticStr)]
 pub enum StatusUpdate {
     EndOfTrack,
     Paused,
@@ -190,6 +190,18 @@ fn fetch_track_audio(client: &TidalClient, track_id: u64) -> Result<Vec<u8>, Str
 // ---------------------------------------------------------------------------
 // FFI entry points
 // ---------------------------------------------------------------------------
+
+#[no_mangle]
+pub extern "C" fn status_update_name(status: StatusUpdate) -> *const c_char {
+    match status {
+        StatusUpdate::EndOfTrack => c"EndOfTrack",
+        StatusUpdate::Paused => c"Paused",
+        StatusUpdate::Playing => c"Playing",
+        StatusUpdate::Stopped => c"Stopped",
+        StatusUpdate::TimeToPreloadNextTrack => c"TimeToPreloadNextTrack",
+    }
+    .as_ptr()
+}
 
 #[no_mangle]
 pub extern "C" fn set_callback(callback: extern "C" fn(status: StatusUpdate, position_ms: u32)) {

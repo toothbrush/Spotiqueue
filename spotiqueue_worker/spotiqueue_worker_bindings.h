@@ -34,6 +34,8 @@ typedef struct InitializationResult {
   };
 } InitializationResult;
 
+const char *status_update_name(enum StatusUpdate status);
+
 void set_callback(void (*callback)(enum StatusUpdate status, uint32_t position_ms));
 
 void spotiqueue_initialize_worker(void);
