@@ -25,9 +25,9 @@ let logger = SXLogger(endpoints: [
 
 @_cdecl("player_update_hook")
 public func player_update_hook(hook: StatusUpdate, position_ms: UInt32) {
-    logger.info("Hook spotiqueue-worker hook ==> \(hook.rawValue)")
     switch hook {
         case EndOfTrack:
+            logger.info("Hook spotiqueue-worker hook ==> EndOfTrack")
             // We can't call end_of_track to Scheme inside the async / main-thread block, because we can't be sure when it'll be run, and want to grab the current track before it's obliterated by the "stopped" signal which comes right after the EndOfTrack signal.
             DispatchQueue.main.async {
                 AppDelegate.appDelegate().playerState = .Stopped
@@ -40,18 +40,21 @@ public func player_update_hook(hook: StatusUpdate, position_ms: UInt32) {
                 }
             }
         case Paused:
+            logger.info("Hook spotiqueue-worker hook ==> Paused")
             DispatchQueue.main.async {
                 AppDelegate.appDelegate().playerState = .Paused
                 AppDelegate.appDelegate().position = Double(position_ms / 1000)
                 AppDelegate.appDelegate().duration = AppDelegate.appDelegate().currentTrack?.durationSeconds ?? 0
             }
         case Playing:
+            // Not logging "Playing" event because it fires every second to update position_ms.
             DispatchQueue.main.async {
                 AppDelegate.appDelegate().playerState = .Playing
                 AppDelegate.appDelegate().position = Double(position_ms / 1000)
                 AppDelegate.appDelegate().duration = AppDelegate.appDelegate().currentTrack?.durationSeconds ?? 0
             }
         case Stopped:
+            logger.info("Hook spotiqueue-worker hook ==> Stopped")
             DispatchQueue.main.async {
                 AppDelegate.appDelegate().playerState = .Stopped
                 // Okay, it seems we get the "stop" signal from a previous track, like, halfway through the next one.  This is a bit confusing.  We could pass along the request_id, which seems to increment, and ignore "previous tracks'" stop signals.  Ugh.  You know what, probably nobody will use this anyway.
@@ -60,6 +63,7 @@ public func player_update_hook(hook: StatusUpdate, position_ms: UInt32) {
                 AppDelegate.appDelegate().duration = 0
             }
         case TimeToPreloadNextTrack:
+            logger.info("Hook spotiqueue-worker hook ==> TimeToPreloadNextTrack")
             DispatchQueue.main.async {
                 AppDelegate.appDelegate().preloadNextQueuedTrack()
             }
